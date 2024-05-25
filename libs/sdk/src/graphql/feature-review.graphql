@@ -1,0 +1,64 @@
+fragment ReviewDetails on Review {
+  createdAt
+  id
+  projectId
+  reviewerId
+  updatedAt
+  name
+  project {
+    ...ProjectDetails
+  }
+  reviewer {
+    ...UserDetails
+  }
+  viewUrl
+}
+
+query userFindManyReview($input: UserFindManyReviewInput!) {
+  items: userFindManyReview(input: $input) {
+    ...ReviewDetails
+  }
+}
+
+query userFindUserProjectReview($projectId: String!) {
+  item: userFindUserProjectReview(projectId: $projectId) {
+    ...ReviewDetails
+  }
+}
+
+query userFindOneReview($reviewId: String!) {
+  item: userFindOneReview(reviewId: $reviewId) {
+    ...ReviewDetails
+  }
+}
+
+mutation userCreateReview($projectId: String!) {
+  created: userCreateReview(projectId: $projectId) {
+    ...ReviewDetails
+  }
+}
+
+mutation userDeleteReview($reviewId: String!) {
+  deleted: userDeleteReview(reviewId: $reviewId)
+}
+
+query adminFindManyReview($input: AdminFindManyReviewInput!) {
+  paging: adminFindManyReview(input: $input) {
+    data {
+      ...ReviewDetails
+    }
+    meta {
+      ...PagingMetaDetails
+    }
+  }
+}
+
+query adminFindOneReview($reviewId: String!) {
+  item: adminFindOneReview(reviewId: $reviewId) {
+    ...ReviewDetails
+  }
+}
+
+mutation adminDeleteReview($reviewId: String!) {
+  deleted: adminDeleteReview(reviewId: $reviewId)
+}

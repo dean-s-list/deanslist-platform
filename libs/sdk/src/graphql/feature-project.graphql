@@ -1,0 +1,73 @@
+fragment ProjectDetails on Project {
+  createdAt
+  id
+  team {
+    ...TeamDetails
+  }
+  teamId
+  name
+  slug
+  avatarUrl
+  viewUrl
+  updatedAt
+}
+
+query userFindManyProject($input: UserFindManyProjectInput!) {
+  paging: userFindManyProject(input: $input) {
+    data {
+      ...ProjectDetails
+    }
+    meta {
+      ...PagingMetaDetails
+    }
+  }
+}
+
+query userFindOneProject($projectId: String!) {
+  item: userFindOneProject(projectId: $projectId) {
+    ...ProjectDetails
+  }
+}
+
+mutation userCreateProject($input: UserCreateProjectInput!) {
+  created: userCreateProject(input: $input) {
+    ...ProjectDetails
+  }
+}
+
+mutation userUpdateProject($projectId: String!, $input: UserUpdateProjectInput!) {
+  updated: userUpdateProject(projectId: $projectId, input: $input) {
+    ...ProjectDetails
+  }
+}
+
+mutation userDeleteProject($projectId: String!) {
+  deleted: userDeleteProject(projectId: $projectId)
+}
+
+query adminFindManyProject($input: AdminFindManyProjectInput!) {
+  paging: adminFindManyProject(input: $input) {
+    data {
+      ...ProjectDetails
+    }
+    meta {
+      ...PagingMetaDetails
+    }
+  }
+}
+
+query adminFindOneProject($projectId: String!) {
+  item: adminFindOneProject(projectId: $projectId) {
+    ...ProjectDetails
+  }
+}
+
+mutation adminUpdateProject($projectId: String!, $input: AdminUpdateProjectInput!) {
+  updated: adminUpdateProject(projectId: $projectId, input: $input) {
+    ...ProjectDetails
+  }
+}
+
+mutation adminDeleteProject($projectId: String!) {
+  deleted: adminDeleteProject(projectId: $projectId)
+}

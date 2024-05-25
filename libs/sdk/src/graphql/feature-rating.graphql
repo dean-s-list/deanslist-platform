@@ -1,0 +1,46 @@
+fragment RatingDetails on Rating {
+  createdAt
+  id
+  content
+  commentId
+  rating
+  updatedAt
+}
+
+query userFindManyRating($input: UserFindManyRatingInput!) {
+  items: userFindManyRating(input: $input) {
+    ...RatingDetails
+  }
+}
+
+mutation userCreateRating($input: UserCreateRatingInput!) {
+  created: userCreateRating(input: $input) {
+    ...RatingDetails
+  }
+}
+
+mutation userUpdateRating($ratingId: String!, $input: UserUpdateRatingInput!) {
+  updated: userUpdateRating(ratingId: $ratingId, input: $input) {
+    ...RatingDetails
+  }
+}
+
+mutation userDeleteRating($ratingId: String!) {
+  deleted: userDeleteRating(ratingId: $ratingId)
+}
+
+query adminFindManyRating($input: AdminFindManyRatingInput!) {
+  items: adminFindManyRating(input: $input) {
+    ...RatingDetails
+  }
+}
+
+mutation adminUpdateRating($ratingId: String!, $input: AdminUpdateRatingInput!) {
+  updated: adminUpdateRating(ratingId: $ratingId, input: $input) {
+    ...RatingDetails
+  }
+}
+
+mutation adminDeleteRating($ratingId: String!) {
+  deleted: adminDeleteRating(ratingId: $ratingId)
+}

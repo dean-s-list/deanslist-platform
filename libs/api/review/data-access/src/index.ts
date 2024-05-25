@@ -1,0 +1,7 @@
+export * from './lib/api-review.data-access.module'
+export * from './lib/api-review.service'
+export * from './lib/entity/review.entity'
+export * from './lib/dto/user-create-review.input'
+export * from './lib/dto/user-find-many-review.input'
+export * from './lib/entity/review-paging.entity'
+export * from './lib/dto/admin-find-many-review.input'

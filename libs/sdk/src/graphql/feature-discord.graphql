@@ -1,0 +1,112 @@
+fragment DiscordBotDetails on DiscordBot {
+  id
+  username
+  avatarUrl
+  inviteUrl
+  manageUrl
+}
+
+fragment DiscordServerDetails on DiscordServer {
+  id
+  name
+  avatarUrl
+  permissions
+  createChannels
+  logChannelId
+  projectCategoryId
+  teamCategoryId
+}
+
+fragment DiscordRoleDetails on DiscordRole {
+  id
+  name
+  managed
+  color
+  position
+}
+
+fragment DiscordChannelDetails on DiscordChannel {
+  id
+  name
+  type
+  parentId
+  guildId
+}
+
+query adminGetDiscordBot {
+  item: adminGetDiscordBot {
+    ...DiscordBotDetails
+  }
+}
+
+query adminGetDiscordServers {
+  items: adminGetDiscordServers {
+    ...DiscordServerDetails
+  }
+}
+query adminGetDiscordRoles($serverId: String!) {
+  items: adminGetDiscordRoles(serverId: $serverId) {
+    ...DiscordRoleDetails
+  }
+}
+query adminGetDiscordChannels($serverId: String!) {
+  items: adminGetDiscordChannels(serverId: $serverId) {
+    ...DiscordChannelDetails
+  }
+}
+
+query adminGetProjectChannels($projectId: String!) {
+  items: adminGetProjectChannels(projectId: $projectId) {
+    ...DiscordChannelDetails
+  }
+}
+query adminGetTeamChannels($teamId: String!) {
+  items: adminGetTeamChannels(teamId: $teamId) {
+    ...DiscordChannelDetails
+  }
+}
+
+mutation adminPingDiscordChannel($serverId: String!, $channelId: String!) {
+  pong: adminPingDiscordChannel(serverId: $serverId, channelId: $channelId)
+}
+
+mutation adminCreateProjectChannel($serverId: String!, $channelId: String!, $projectId: String!) {
+  created: adminCreateProjectChannel(serverId: $serverId, channelId: $channelId, projectId: $projectId)
+}
+
+mutation adminCreateTeamChannel($serverId: String!, $channelId: String!, $teamId: String!) {
+  created: adminCreateTeamChannel(serverId: $serverId, channelId: $channelId, teamId: $teamId)
+}
+
+mutation adminUpdateDiscordServer($serverId: String!, $input: AdminUpdateDiscordServerInput!) {
+  updated: adminUpdateDiscordServer(serverId: $serverId, input: $input)
+}
+
+mutation adminDeleteProjectChannel($channelId: String!, $projectId: String!) {
+  deleted: adminDeleteProjectChannel(channelId: $channelId, projectId: $projectId)
+}
+
+mutation adminDeleteTeamChannel($channelId: String!, $teamId: String!) {
+  deleted: adminDeleteTeamChannel(channelId: $channelId, teamId: $teamId)
+}
+
+mutation adminLeaveDiscordServer($serverId: String!) {
+  left: adminLeaveDiscordServer(serverId: $serverId)
+}
+
+query userGetDiscordServers {
+  items: userGetDiscordServers {
+    ...DiscordServerDetails
+  }
+}
+
+query userGetProjectChannels($projectId: String!) {
+  items: userGetProjectChannels(projectId: $projectId) {
+    ...DiscordChannelDetails
+  }
+}
+query userGetTeamChannels($teamId: String!) {
+  items: userGetTeamChannels(teamId: $teamId) {
+    ...DiscordChannelDetails
+  }
+}

@@ -1,0 +1,59 @@
+fragment CommentDetails on Comment {
+  authorId
+  category
+  content
+  createdAt
+  id
+  parentId
+  reviewId
+  updatedAt
+  versionBrowser
+  versionOs
+  author {
+    ...UserDetails
+  }
+}
+
+query userFindManyComment($input: UserFindManyCommentInput!) {
+  items: userFindManyComment(input: $input) {
+    ...CommentDetails
+    children {
+      ...CommentDetails
+    }
+  }
+}
+
+mutation userCreateComment($input: UserCreateCommentInput!) {
+  created: userCreateComment(input: $input) {
+    ...CommentDetails
+  }
+}
+
+mutation userUpdateComment($commentId: String!, $input: UserUpdateCommentInput!) {
+  updated: userUpdateComment(commentId: $commentId, input: $input) {
+    ...CommentDetails
+  }
+}
+
+mutation userDeleteComment($commentId: String!) {
+  deleted: userDeleteComment(commentId: $commentId)
+}
+
+query adminFindManyComment($input: AdminFindManyCommentInput!) {
+  items: adminFindManyComment(input: $input) {
+    ...CommentDetails
+    children {
+      ...CommentDetails
+    }
+  }
+}
+
+mutation adminUpdateComment($commentId: String!, $input: AdminUpdateCommentInput!) {
+  updated: adminUpdateComment(commentId: $commentId, input: $input) {
+    ...CommentDetails
+  }
+}
+
+mutation adminDeleteComment($commentId: String!) {
+  deleted: adminDeleteComment(commentId: $commentId)
+}

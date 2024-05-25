@@ -1,0 +1,120 @@
+fragment TeamDetails on Team {
+  createdAt
+  id
+  name
+  avatarUrl
+  homeServerId
+  updatedAt
+  viewUrl
+}
+
+fragment TeamMemberDetails on TeamMember {
+  createdAt
+  id
+  userId
+  user {
+    ...UserDetails
+  }
+  admin
+  updatedAt
+}
+
+query userGetTeamMembers($teamId: String!) {
+  items: userGetTeamMembers(teamId: $teamId) {
+    ...TeamMemberDetails
+  }
+}
+
+query userGetTeamMember($teamId: String!) {
+  item: userGetTeamMember(teamId: $teamId) {
+    ...TeamMemberDetails
+  }
+}
+
+query userFindManyTeam($input: UserFindManyTeamInput!) {
+  paging: userFindManyTeam(input: $input) {
+    data {
+      ...TeamDetails
+    }
+    meta {
+      ...PagingMetaDetails
+    }
+  }
+}
+
+query userFindOneTeam($teamId: String!) {
+  item: userFindOneTeam(teamId: $teamId) {
+    ...TeamDetails
+  }
+}
+
+mutation userCreateTeam($input: UserCreateTeamInput!) {
+  created: userCreateTeam(input: $input) {
+    ...TeamDetails
+  }
+}
+
+mutation userUpdateTeam($teamId: String!, $input: UserUpdateTeamInput!) {
+  updated: userUpdateTeam(teamId: $teamId, input: $input) {
+    ...TeamDetails
+  }
+}
+
+mutation userDeleteTeam($teamId: String!) {
+  deleted: userDeleteTeam(teamId: $teamId)
+}
+
+query adminFindManyTeam($input: AdminFindManyTeamInput!) {
+  paging: adminFindManyTeam(input: $input) {
+    data {
+      ...TeamDetails
+    }
+    meta {
+      ...PagingMetaDetails
+    }
+  }
+}
+
+query adminGetTeamMembers($teamId: String!) {
+  items: adminGetTeamMembers(teamId: $teamId) {
+    ...TeamMemberDetails
+  }
+}
+
+query adminFindOneTeam($teamId: String!) {
+  item: adminFindOneTeam(teamId: $teamId) {
+    ...TeamDetails
+  }
+}
+
+mutation adminUpdateTeam($teamId: String!, $input: AdminUpdateTeamInput!) {
+  updated: adminUpdateTeam(teamId: $teamId, input: $input) {
+    ...TeamDetails
+  }
+}
+
+mutation adminDeleteTeam($teamId: String!) {
+  deleted: adminDeleteTeam(teamId: $teamId)
+}
+
+mutation adminAddTeamMember($teamId: String!, $userId: String!) {
+  added: adminAddTeamMember(teamId: $teamId, userId: $userId)
+}
+mutation adminRemoveTeamMember($teamId: String!, $userId: String!) {
+  removed: adminRemoveTeamMember(teamId: $teamId, userId: $userId)
+}
+
+mutation adminToggleTeamAdmin($teamId: String!, $userId: String!) {
+  toggled: adminToggleTeamAdmin(teamId: $teamId, userId: $userId)
+}
+
+mutation userAddTeamMember($teamId: String!, $userId: String!) {
+  added: userAddTeamMember(teamId: $teamId, userId: $userId)
+}
+mutation userRemoveTeamMember($teamId: String!, $userId: String!) {
+  removed: userRemoveTeamMember(teamId: $teamId, userId: $userId)
+}
+
+mutation userToggleTeamAdmin($teamId: String!, $userId: String!) {
+  toggled: userToggleTeamAdmin(teamId: $teamId, userId: $userId)
+}

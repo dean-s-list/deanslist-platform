@@ -1,0 +1,12 @@
+{
+  "name": "web-review-feature",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/web/review/feature/src",
+  "projectType": "library",
+  "tags": ["app:web", "type:feature"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+import { <%= model.className %> } from '@deanslist-platform/sdk'
+import { UiAvatar, UiAvatarProps } from '@deanslist-platform/web-core-ui'
+
+export type <%= model.className %>UiAvatarProps = UiAvatarProps & {
+  <%= model.propertyName %>?: <%= model.className %>
+}
+
+export function <%= model.className %>UiAvatar({ <%= model.propertyName %>, ...props }: <%= model.className %>UiAvatarProps) {
+  return <UiAvatar avatarUrl={undefined} name={<%= model.propertyName %>?.<%= label.propertyName %>} {...props} />
+}

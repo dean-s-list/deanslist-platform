@@ -1,0 +1,530 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input AdminCreateIdentityInput {
+  ownerId: String!
+  provider: IdentityProvider!
+  providerId: String!
+}
+
+input AdminCreateUserInput {
+  password: String
+  username: String!
+}
+
+input AdminFindManyCommentInput {
+  reviewId: String!
+  search: String
+}
+
+input AdminFindManyIdentityInput {
+  ownerId: String
+  provider: IdentityProvider
+}
+
+input AdminFindManyProjectInput {
+  limit: Int = 10
+  page: Int = 1
+  search: String
+  teamId: String
+}
+
+input AdminFindManyRatingInput {
+  commentId: String
+  search: String
+}
+
+input AdminFindManyReviewInput {
+  limit: Int = 10
+  page: Int = 1
+  projectId: String!
+  search: String
+}
+
+input AdminFindManyTeamInput {
+  limit: Int = 10
+  page: Int = 1
+  search: String
+}
+
+input AdminFindManyUserInput {
+  limit: Int = 10
+  page: Int = 1
+  role: UserRole
+  search: String
+  status: UserStatus
+}
+
+input AdminUpdateCommentInput {
+  content: String
+}
+
+input AdminUpdateDiscordServerInput {
+  createChannels: Boolean
+  logChannelId: String
+  projectCategoryId: String
+  teamCategoryId: String
+}
+
+input AdminUpdateProjectInput {
+  avatarUrl: String
+  duration: Int
+  name: String
+  startDate: DateTime
+  teamId: String
+}
+
+input AdminUpdateRatingInput {
+  content: String
+  rating: Float!
+}
+
+input AdminUpdateTeamInput {
+  avatarUrl: String
+  homeServerId: String
+  name: String
+}
+
+input AdminUpdateUserInput {
+  avatarUrl: String
+  developer: Boolean
+  name: String
+  role: UserRole
+  status: UserStatus
+  username: String
+}
+
+type AppConfig {
+  authDiscordEnabled: Boolean!
+  authGithubEnabled: Boolean!
+  authGoogleEnabled: Boolean!
+  authPasswordEnabled: Boolean!
+  authRegisterEnabled: Boolean!
+  authSolanaEnabled: Boolean!
+  authTwitterEnabled: Boolean!
+}
+
+type Comment {
+  author: User
+  authorId: String!
+  category: CommentCategory!
+  children: [Comment!]
+  content: String!
+  createdAt: DateTime
+  id: String!
+  parentId: String
+  reviewId: String!
+  updatedAt: DateTime
+  versionBrowser: String
+  versionOs: String
+}
+
+enum CommentCategory {
+  Bug
+  Feature
+  Other
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type DiscordBot {
+  avatarUrl: String
+  id: String!
+  inviteUrl: String
+  manageUrl: String
+  username: String!
+}
+
+type DiscordChannel {
+  guildId: String
+  id: String!
+  name: String!
+  parentId: String
+  type: String!
+}
+
+type DiscordRole {
+  color: Int!
+  id: String!
+  managed: Boolean!
+  name: String!
+  position: Int!
+}
+
+type DiscordServer {
+  avatarUrl: String
+  createChannels: Boolean
+  id: String!
+  logChannelId: String
+  name: String!
+  permissions: [String!]
+  projectCategoryId: String
+  teamCategoryId: String
+}
+
+type Identity {
+  challenges: [IdentityChallenge!]
+  createdAt: DateTime!
+  expired: Boolean
+  id: String!
+  name: String
+  owner: User
+  profile: JSON
+  provider: IdentityProvider!
+  providerId: String!
+  updatedAt: DateTime!
+  url: String
+  verified: Boolean
+}
+
+type IdentityChallenge {
+  challenge: String!
+  createdAt: DateTime!
+  id: String!
+  ip: String!
+  provider: IdentityProvider!
+  providerId: String!
+  signature: String
+  updatedAt: DateTime!
+  userAgent: String!
+  verified: Boolean!
+}
+
+enum IdentityProvider {
+  Discord
+  GitHub
+  Google
+  Solana
+  Twitter
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
+
+input LinkIdentityInput {
+  provider: IdentityProvider!
+  providerId: String!
+}
+
+input LoginInput {
+  password: String!
+  username: String!
+}
+
+type Mutation {
+  adminAddTeamMember(teamId: String!, userId: String!): Boolean
+  adminCreateIdentity(input: AdminCreateIdentityInput!): Identity
+  adminCreateProjectChannel(channelId: String!, projectId: String!, serverId: String!): Boolean!
+  adminCreateTeamChannel(channelId: String!, serverId: String!, teamId: String!): Boolean!
+  adminCreateUser(input: AdminCreateUserInput!): User
+  adminDeleteComment(commentId: String!): Boolean
+  adminDeleteIdentity(identityId: String!): Boolean
+  adminDeleteProject(projectId: String!): Boolean
+  adminDeleteProjectChannel(channelId: String!, projectId: String!): Boolean!
+  adminDeleteRating(ratingId: String!): Boolean
+  adminDeleteReview(reviewId: String!): Boolean
+  adminDeleteTeam(teamId: String!): Boolean
+  adminDeleteTeamChannel(channelId: String!, teamId: String!): Boolean!
+  adminDeleteUser(userId: String!): Boolean
+  adminLeaveDiscordServer(serverId: String!): Boolean!
+  adminPingDiscordChannel(channelId: String!, serverId: String!): Boolean!
+  adminRemoveTeamMember(teamId: String!, userId: String!): Boolean
+  adminToggleTeamAdmin(teamId: String!, userId: String!): Boolean
+  adminUpdateComment(commentId: String!, input: AdminUpdateCommentInput!): Comment
+  adminUpdateDiscordServer(input: AdminUpdateDiscordServerInput!, serverId: String!): Boolean!
+  adminUpdateProject(input: AdminUpdateProjectInput!, projectId: String!): Project
+  adminUpdateRating(input: AdminUpdateRatingInput!, ratingId: String!): Rating
+  adminUpdateTeam(input: AdminUpdateTeamInput!, teamId: String!): Team
+  adminUpdateUser(input: AdminUpdateUserInput!, userId: String!): User
+  anonVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
+  login(input: LoginInput!): User
+  logout: Boolean
+  register(input: RegisterInput!): User
+  userAddTeamMember(teamId: String!, userId: String!): Boolean
+  userCreateComment(input: UserCreateCommentInput!): Comment
+  userCreateProject(input: UserCreateProjectInput!): Project
+  userCreateRating(input: UserCreateRatingInput!): Rating
+  userCreateReview(projectId: String!): Review
+  userCreateTeam(input: UserCreateTeamInput!): Team
+  userDeleteComment(commentId: String!): Boolean
+  userDeleteIdentity(identityId: String!): Boolean
+  userDeleteProject(projectId: String!): Boolean
+  userDeleteRating(ratingId: String!): Boolean
+  userDeleteReview(reviewId: String!): Boolean
+  userDeleteTeam(teamId: String!): Boolean
+  userLinkIdentity(input: LinkIdentityInput!): Identity
+  userRemoveTeamMember(teamId: String!, userId: String!): Boolean
+  userToggleTeamAdmin(teamId: String!, userId: String!): Boolean
+  userUpdateComment(commentId: String!, input: UserUpdateCommentInput!): Comment
+  userUpdateProject(input: UserUpdateProjectInput!, projectId: String!): Project
+  userUpdateRating(input: UserUpdateRatingInput!, ratingId: String!): Rating
+  userUpdateTeam(input: UserUpdateTeamInput!, teamId: String!): Team
+  userUpdateUser(input: UserUpdateUserInput!): User
+  userVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
+}
+
+type PagingMeta {
+  currentPage: Int!
+  isFirstPage: Boolean!
+  isLastPage: Boolean!
+  nextPage: Int
+  pageCount: Int
+  previousPage: Int
+  totalCount: Int
+}
+
+type Project {
+  avatarUrl: String
+  createdAt: DateTime
+  duration: Int
+  endDate: DateTime
+  id: String!
+  name: String!
+  slug: String!
+  startDate: DateTime
+  team: Team
+  teamId: String!
+  updatedAt: DateTime
+  viewUrl: String!
+}
+
+type ProjectPaging {
+  data: [Project!]!
+  meta: PagingMeta!
+}
+
+type Query {
+  adminFindManyComment(input: AdminFindManyCommentInput!): [Comment!]
+  adminFindManyIdentity(input: AdminFindManyIdentityInput!): [Identity!]
+  adminFindManyProject(input: AdminFindManyProjectInput!): ProjectPaging!
+  adminFindManyRating(input: AdminFindManyRatingInput!): [Rating!]!
+  adminFindManyReview(input: AdminFindManyReviewInput!): ReviewPaging!
+  adminFindManyTeam(input: AdminFindManyTeamInput!): TeamPaging!
+  adminFindManyUser(input: AdminFindManyUserInput!): UserPaging!
+  adminFindOneProject(projectId: String!): Project
+  adminFindOneReview(reviewId: String!): Review
+  adminFindOneTeam(teamId: String!): Team
+  adminFindOneUser(userId: String!): User
+  adminGetDiscordBot: DiscordBot!
+  adminGetDiscordChannels(serverId: String!): [DiscordChannel!]!
+  adminGetDiscordRoles(serverId: String!): [DiscordRole!]!
+  adminGetDiscordServers: [DiscordServer!]!
+  adminGetProjectChannels(projectId: String!): [DiscordChannel!]!
+  adminGetTeamChannels(teamId: String!): [DiscordChannel!]!
+  adminGetTeamMembers(teamId: String!): [TeamMember!]
+  anonRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
+  appConfig: AppConfig!
+  me: User
+  uptime: Float!
+  userFindManyComment(input: UserFindManyCommentInput!): [Comment!]
+  userFindManyIdentity(input: UserFindManyIdentityInput!): [Identity!]
+  userFindManyProject(input: UserFindManyProjectInput!): ProjectPaging!
+  userFindManyRating(input: UserFindManyRatingInput!): [Rating!]!
+  userFindManyReview(input: UserFindManyReviewInput!): [Review!]
+  userFindManyTeam(input: UserFindManyTeamInput!): TeamPaging!
+  userFindManyUser(input: UserFindManyUserInput!): UserPaging!
+  userFindOneProject(projectId: String!): Project
+  userFindOneReview(reviewId: String!): Review
+  userFindOneTeam(teamId: String!): Team
+  userFindOneUser(username: String!): User
+  userFindUserProjectReview(projectId: String!): Review
+  userGetDiscordServers: [DiscordServer!]!
+  userGetProjectChannels(projectId: String!): [DiscordChannel!]!
+  userGetTeamChannels(teamId: String!): [DiscordChannel!]!
+  userGetTeamMember(teamId: String!): TeamMember
+  userGetTeamMembers(teamId: String!): [TeamMember!]
+  userRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
+}
+
+type Rating {
+  commentId: String!
+  content: String
+  createdAt: DateTime
+  id: String!
+  rating: Float!
+  updatedAt: DateTime
+}
+
+input RegisterInput {
+  password: String!
+  username: String!
+}
+
+input RequestIdentityChallengeInput {
+  provider: IdentityProvider!
+  providerId: String!
+}
+
+type Review {
+  createdAt: DateTime
+  id: String!
+  name: String!
+  project: Project
+  projectId: String!
+  reviewer: User
+  reviewerId: String!
+  updatedAt: DateTime
+  viewUrl: String!
+}
+
+type ReviewPaging {
+  data: [Review!]!
+  meta: PagingMeta!
+}
+
+type Team {
+  avatarUrl: String
+  createdAt: DateTime
+  homeServerId: String
+  id: String!
+  members: [TeamMember!]
+  name: String!
+  updatedAt: DateTime
+  viewUrl: String!
+}
+
+type TeamMember {
+  admin: Boolean
+  createdAt: DateTime
+  id: String!
+  updatedAt: DateTime
+  user: User
+  userId: String!
+}
+
+type TeamPaging {
+  data: [Team!]!
+  meta: PagingMeta!
+}
+
+type User {
+  avatarUrl: String
+  createdAt: DateTime
+  developer: Boolean
+  id: String!
+  identities: [Identity!]
+  name: String
+  profileUrl: String!
+  role: UserRole
+  status: UserStatus
+  updatedAt: DateTime
+  username: String
+}
+
+input UserCreateCommentInput {
+  content: String!
+  parentId: String
+  reviewId: String!
+}
+
+input UserCreateProjectInput {
+  duration: Int
+  name: String!
+  startDate: DateTime
+  teamId: String!
+}
+
+input UserCreateRatingInput {
+  commentId: String!
+  content: String
+  rating: Float!
+}
+
+input UserCreateTeamInput {
+  name: String!
+}
+
+input UserFindManyCommentInput {
+  reviewId: String!
+  search: String
+}
+
+input UserFindManyIdentityInput {
+  username: String!
+}
+
+input UserFindManyProjectInput {
+  limit: Int = 10
+  page: Int = 1
+  search: String
+  teamId: String
+}
+
+input UserFindManyRatingInput {
+  search: String
+}
+
+input UserFindManyReviewInput {
+  projectId: String!
+  search: String
+}
+
+input UserFindManyTeamInput {
+  limit: Int = 10
+  page: Int = 1
+  search: String
+}
+
+input UserFindManyUserInput {
+  limit: Int = 10
+  page: Int = 1
+  search: String
+}
+
+type UserPaging {
+  data: [User!]!
+  meta: PagingMeta!
+}
+
+enum UserRole {
+  Admin
+  User
+}
+
+enum UserStatus {
+  Active
+  Created
+  Inactive
+}
+
+input UserUpdateCommentInput {
+  content: String
+}
+
+input UserUpdateProjectInput {
+  avatarUrl: String
+  duration: Int
+  name: String
+  startDate: DateTime
+}
+
+input UserUpdateRatingInput {
+  content: String
+  rating: Float
+}
+
+input UserUpdateTeamInput {
+  avatarUrl: String
+  homeServerId: String
+  name: String
+}
+
+input UserUpdateUserInput {
+  avatarUrl: String
+  developer: Boolean
+  name: String
+}
+
+input VerifyIdentityChallengeInput {
+  challenge: String!
+  provider: IdentityProvider!
+  providerId: String!
+  signature: String!
+  useLedger: Boolean = false
+}

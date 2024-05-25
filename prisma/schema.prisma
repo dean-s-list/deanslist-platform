@@ -1,0 +1,210 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Comment {
+  id             String          @id @default(cuid())
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  content        String
+  category       CommentCategory @default(Other)
+  versionBrowser String?
+  versionOs      String?
+  review         Review          @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+  reviewId       String
+  author         User            @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId       String
+  children       Comment[]       @relation(name: "CommentToComment")
+  parent         Comment?        @relation(name: "CommentToComment", fields: [parentId], references: [id])
+  parentId       String?
+  ratings        Rating[]
+}
+
+model DiscordBot {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DiscordChannel {
+  id        String        @id @default(cuid())
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  server    DiscordServer @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  serverId  String
+  projects  Project[]
+  teams     Team[]
+}
+
+model DiscordRole {
+  id        String         @id @default(cuid())
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  server    DiscordServer? @relation(fields: [serverId], references: [id])
+  serverId  String?
+}
+
+model DiscordServer {
+  id        String           @id @default(cuid())
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  roles     DiscordRole[]
+  channels  DiscordChannel[]
+
+  createChannels    Boolean @default(false)
+  logChannelId      String?
+  projectCategoryId String?
+  teamCategoryId    String?
+}
+
+model Identity {
+  id           String              @id @default(cuid())
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  provider     IdentityProvider
+  providerId   String
+  name         String?
+  accessToken  String?
+  refreshToken String?
+  profile      Json?
+  verified     Boolean             @default(false)
+  owner        User                @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId      String
+  challenges   IdentityChallenge[]
+
+  @@unique([provider, providerId])
+}
+
+model IdentityChallenge {
+  id         String           @id @default(cuid())
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+  challenge  String           @unique
+  signature  String?
+  ip         String
+  userAgent  String
+  verified   Boolean          @default(false)
+  identity   Identity         @relation(fields: [provider, providerId], references: [provider, providerId], onDelete: Cascade)
+  provider   IdentityProvider
+  providerId String
+}
+
+model Project {
+  id        String           @id @default(cuid())
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  team      Team             @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teamId    String
+  slug      String
+  duration  Int              @default(2)
+  startDate DateTime?
+  name      String
+  avatarUrl String?
+  channels  DiscordChannel[]
+  reviews   Review[]
+  managers  User[]           @relation(name: "ProjectManagers")
+
+  @@unique([teamId, name])
+  @@unique([teamId, slug])
+}
+
+model Review {
+  id         String    @id @default(cuid())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  project    Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId  String
+  reviewer   User      @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+  reviewerId String
+  comments   Comment[]
+
+  @@unique([projectId, reviewerId])
+}
+
+model Rating {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  rating    Int
+  content   String?
+  comment   Comment  @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String
+
+  @@unique([commentId, authorId])
+}
+
+model Team {
+  id           String           @id @default(cuid())
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  name         String
+  avatarUrl    String?
+  homeServerId String?
+  channels     DiscordChannel[]
+  members      TeamMember[]
+  projects     Project[]
+}
+
+model TeamMember {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  admin     Boolean  @default(false)
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teamId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+
+  @@unique([teamId, userId])
+}
+
+model User {
+  id              String       @id @default(cuid())
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  avatarUrl       String?
+  developer       Boolean      @default(false)
+  name            String?
+  password        String?
+  role            UserRole     @default(User)
+  status          UserStatus   @default(Created)
+  username        String       @unique
+  identities      Identity[]
+  teams           TeamMember[]
+  reviews         Review[]
+  projectManagers Project[]    @relation(name: "ProjectManagers")
+  comments        Comment[]
+  ratings         Rating[]
+}
+
+enum CommentCategory {
+  Bug
+  Feature
+  Other
+}
+
+enum IdentityProvider {
+  Discord
+  GitHub
+  Google
+  Solana
+  Twitter
+}
+
+enum UserRole {
+  Admin
+  User
+}
+
+enum UserStatus {
+  Active
+  Created
+  Inactive
+}
