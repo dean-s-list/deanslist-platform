@@ -5,8 +5,8 @@
 ### Prerequisites
 
 - Node v18 or higher
-- PNPM
-- Docker
+- PNPM: corepack prepare pnpm@latest
+- Docker: 
 
 ### Installation
 
@@ -15,7 +15,7 @@ Clone the repo and install dependencies:
 ```shell
 git clone git@github.com:pubkeyapp/deanslist-platform.git
 cd deanslist-platform
-pnpm
+pnpm install
 ```
 
 ### Automatic setup
@@ -33,6 +33,13 @@ Copy the `.env.example` file to `.env` and fill in the missing values.
 ```shell
 cp .env.example .env
 ```
+
+Create a `JWT_SECRET` and a `SESSION_SECRET`, using the command below, and update them in `.env` file:
+```shell
+openssl rand -hex 32
+```
+
+Get a Solana wallet ID and update the `AUTH_SOLANA_ADMIN_IDS` in `.env` file.
 
 ### Starting the services
 
