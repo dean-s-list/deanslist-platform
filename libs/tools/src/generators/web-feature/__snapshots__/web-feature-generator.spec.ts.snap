@@ -584,7 +584,7 @@ exports[`web-feature generator should run successfully with crud 20`] = `
 "import { Button, Group } from '@mantine/core';
 import { CoreUiPageLimit, CoreUiSearchField } from '@proj/web-core-ui';
 import { useUserFindManyTest } from '@proj/web-test-data-access';
-import { TestUiGrid } from '@proj/web-test-ui';
+import { TestCoreUiGrid } from '@proj/web-test-ui';
 import {
   CoreUiBack,
   UiDebugModal,
@@ -620,7 +620,7 @@ export function UserTestListFeature() {
       {query.isLoading ? (
         <UiLoader />
       ) : items?.length ? (
-        <TestUiGrid
+        <TestCoreUiGrid
           tests={items}
           page={pagination.page}
           totalRecords={pagination.total}
@@ -860,7 +860,7 @@ import { UiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core';
 import { DataTableProps } from 'mantine-datatable';
 import { TestUiGridItem } from './test-ui-grid-item';
 
-export function TestUiGrid({
+export function TestCoreUiGrid({
   tests = [],
   onPageChange,
   page,
