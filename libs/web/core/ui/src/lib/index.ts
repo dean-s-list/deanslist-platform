@@ -1,4 +1,5 @@
 export * from './core-ui-back'
+export * from './core-ui-button'
 export * from './core-ui-dashboard-grid'
 export * from './core-ui-data-label'
 export * from './core-ui-grid'
