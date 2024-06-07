@@ -39,7 +39,8 @@ Create a `JWT_SECRET` and a `SESSION_SECRET`, using the command below, and updat
 openssl rand -hex 32
 ```
 
-Get a Solana wallet ID and update the `AUTH_SOLANA_ADMIN_IDS` in `.env` file.
+Get your Solana wallet and update the `AUTH_SOLANA_ADMIN_IDS` in `.env` file.
+Once you start the app, if you connect with the same wallet id you will have admin rights.
 
 ### Starting the services
 
