@@ -41,7 +41,7 @@ export function UserProjectUiUpdateForm({
     <UiStack>
       <form
         onSubmit={form.onSubmit((values) =>
-          submit({ ...values, duration: parseInt(values.duration?.toString() ?? '2') }).then(() => {}),
+          submit({ ...values, duration: parseInt(values.duration?.toString() ?? '2') }),
         )}
       >
         <UiStack>

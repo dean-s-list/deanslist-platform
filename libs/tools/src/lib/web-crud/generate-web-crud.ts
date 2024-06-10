@@ -1,10 +1,12 @@
-import { generateFiles, type ProjectConfiguration, Tree } from '@nx/devkit'
-import type { NormalizedApiCrudSchema } from '../../generators/api-crud/api-crud-schema'
-import { addArrayItem } from '../utils/add-array-item'
-import { addExports } from '../utils/add-export'
-import { addNamedImport } from '../utils/add-named-import'
+import { generateFiles, ProjectConfiguration, Tree } from '@nx/devkit'
+
+import { NormalizedApiCrudSchema } from '../api-crud/normalized-api-crud.schema'
+import { addArrayItem } from '../utils/ast/add-array-item'
+import { addArrayItemInFunction } from '../utils/ast/add-array-item-in-function'
+import { addExports } from '../utils/ast/add-export'
+import { addNamedImport } from '../utils/ast/add-named-import'
+import { updateSourceFile } from '../utils/ast/update-source-file'
 import { ensureNxProjectExists } from '../utils/ensure-nx-project-exists'
-import { updateSourceFile } from '../utils/update-source-file'
 import { getWebCrudSubstitutions } from './get-web-crud-substitutions'
 
 const defaultIconMap: Record<string, string> = {
@@ -30,22 +32,23 @@ export function generateWebCrud(tree: Tree, options: NormalizedApiCrudSchema) {
     `${vars.app.fileName}-${vars.model.fileName}-feature`,
     `${vars.app.fileName}-${vars.model.fileName}-ui`,
     `${vars.app.fileName}-core-feature`,
+    `${vars.app.fileName}-user-feature`,
   ].map((project) => ensureNxProjectExists(tree, project))
 
-  const [dataAccess, feature, ui, shellFeature] = projects
+  const [dataAccess, feature, ui, coreFeature, userFeature] = projects
 
-  const requiredFields = [
-    `${shellFeature.sourceRoot}/lib/shell-${vars.actor.fileName}.routes.tsx`,
-    `${shellFeature.sourceRoot}/lib/shell-${vars.actor.fileName}.routes.tsx`,
+  const requiredFiles = [
+    `${coreFeature.sourceRoot}/lib/${options.app}-core-routes-${vars.actor.fileName}.tsx`,
+    `${coreFeature.sourceRoot}/lib/${options.app}-core-routes-${vars.actor.fileName}.tsx`,
     `${feature.sourceRoot}/index.ts`,
   ]
-  for (const field of requiredFields) {
-    if (!tree.exists(field)) {
-      throw new Error(`Required file not found: ${field}`)
+  for (const file of requiredFiles) {
+    if (!tree.exists(file)) {
+      throw new Error(`Required file not found: ${file}`)
     }
   }
 
-  const [adminRoutes, userRoutes, featureIndex] = requiredFields
+  const [adminRoutes, userRoutes, featureIndex] = requiredFiles
 
   const routesFile = vars.actorAdmin ? adminRoutes : userRoutes
 
@@ -68,7 +71,7 @@ export function generateWebCrud(tree: Tree, options: NormalizedApiCrudSchema) {
   const importSnippet = `import { lazy } from 'react'`
   // Check if the featureIndex file already has the above import featureIndex
   if (!tree.read(featureIndex).toString().includes(importSnippet)) {
-    imports.push(importSnippet)
+    imports.unshift(importSnippet)
   }
 
   // Add the imports to the featureIndex file
@@ -81,30 +84,50 @@ export function generateWebCrud(tree: Tree, options: NormalizedApiCrudSchema) {
     tree.write(routesFile, [`import { ${defaultIcon} } from '@tabler/icons-react'`, routesFileContent].join('\n'))
   }
 
+  const label = ucfirst(vars.plural.fileName)
+  const path = `${vars.plural.fileName}`
   const to = `${vars.actorAdmin ? '/admin/' : `/`}${vars.plural.fileName}`
   const link = {
     name: 'links',
-    content: `{ label: '${vars.plural.className}', icon: ${defaultIcon}, to: '${to}' },`,
+    content: `{ label: '${label}', icon: ${defaultIcon}, to: '${to}' },`,
   }
   const route = {
     name: 'routes',
-    content: `{ path: '${vars.plural.propertyName}/*', element: <${vars.actor.className}${vars.model.className}Feature /> },`,
+    content: `{ path: '/${path}/*', element: <${vars.actor.className}${vars.model.className}Feature /> },`,
+  }
+  const tabs = {
+    name: 'tabs',
+    content: `{ path: '${path}', label: '${label}', element: <${vars.actor.className}${vars.model.className}Feature ${vars.ownerId}={userId} /> },`,
   }
 
-  updateSourceFile(tree, routesFile, (source) => {
-    addArrayItem(source, link)
-    addArrayItem(source, route)
-    return source
-  })
-
-  updateSourceFile(tree, routesFile, (source) => {
-    addNamedImport(
-      source,
-      `@${vars.npmScope}/${vars.app.fileName}-${vars.model.fileName}-feature`,
-      `${vars.actor.className}${vars.model.className}Feature`,
-    )
-    return source
-  })
+  // If we add an owner, we want to add the admin link and route to the user detail feature
+  if (options.modelOwnerId && options.actor === 'admin') {
+    const userDetailFeature = `${userFeature.sourceRoot}/lib/admin-user-detail-feature.tsx`
+    if (tree.exists(userDetailFeature)) {
+      updateSourceFile(tree, userDetailFeature, (source) => {
+        addArrayItemInFunction(source, tabs, 'AdminUserDetailFeature')
+        addNamedImport(
+          source,
+          `@${vars.npmScope}/${vars.app.fileName}-${vars.model.fileName}-feature`,
+          `${vars.actor.className}${vars.model.className}Feature`,
+        )
+        return source
+      })
+    } else {
+      console.warn('File not found:', userDetailFeature)
+    }
+  } else {
+    updateSourceFile(tree, routesFile, (source) => {
+      addArrayItem(source, link)
+      addArrayItem(source, route)
+      addNamedImport(
+        source,
+        `@${vars.npmScope}/${vars.app.fileName}-${vars.model.fileName}-feature`,
+        `${vars.actor.className}${vars.model.className}Feature`,
+      )
+      return source
+    })
+  }
 
   // Generate the ui library
   generateFiles(tree, `${__dirname}/files/ui`, ui.sourceRoot, { ...vars })
@@ -117,6 +140,11 @@ export function generateWebCrud(tree: Tree, options: NormalizedApiCrudSchema) {
     `./lib/${vars.model.fileName}-ui-avatar`,
     `./lib/${vars.model.fileName}-ui-grid`,
     `./lib/${vars.model.fileName}-ui-grid-item`,
+    `./lib/${vars.model.fileName}-ui-info`,
     `./lib/${vars.model.fileName}-ui-item`,
   ])
+}
+
+function ucfirst(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1)
 }

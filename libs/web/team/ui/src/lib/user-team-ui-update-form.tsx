@@ -33,7 +33,7 @@ export function UserTeamUiUpdateForm({
 
   return (
     <UiStack>
-      <form onSubmit={form.onSubmit((values) => submit({ ...values }).then(() => {}))}>
+      <form onSubmit={form.onSubmit((values) => submit({ ...values }))}>
         <UiStack>
           <Fieldset legend="General information">
             <UiStack>
