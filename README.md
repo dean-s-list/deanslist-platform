@@ -4,9 +4,17 @@
 
 ### Prerequisites
 
-- Node v18 or higher
+- Node v20 or higher
 - PNPM
 - Docker
+
+> [!TIP]
+> If you don't have PNPM installed, you can install it using `corepack`:
+>
+> ```sh
+> corepack enable
+> corepack prepare pnpm@latest --activate
+> ```
 
 ### Installation
 
@@ -15,7 +23,7 @@ Clone the repo and install dependencies:
 ```shell
 git clone git@github.com:pubkeyapp/deanslist-platform.git
 cd deanslist-platform
-pnpm
+pnpm install
 ```
 
 ### Automatic setup
@@ -33,6 +41,15 @@ Copy the `.env.example` file to `.env` and fill in the missing values.
 ```shell
 cp .env.example .env
 ```
+
+Create a `JWT_SECRET` and a `SESSION_SECRET`, using the command below, and update them in `.env` file:
+
+```shell
+openssl rand -hex 32
+```
+
+Get your Solana wallet and update the `AUTH_SOLANA_ADMIN_IDS` in `.env` file.
+Once you start the app, if you connect with the same wallet id you will have admin rights.
 
 ### Starting the services
 
