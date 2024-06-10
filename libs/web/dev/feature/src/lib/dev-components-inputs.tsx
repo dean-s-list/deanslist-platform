@@ -5,9 +5,9 @@ export function DevComponentsInputs() {
   return (
     <UiCard title="Inputs">
       <UiStack align="flex-start">
-        <CoreUiInput/>
-        <CoreUiCurrencyInput currency="USDC"/>
-        <CoreUiDateInput/>
+        <CoreUiInput miw={240}/>
+        <CoreUiCurrencyInput miw={240} currency="USDC"/>
+        <CoreUiDateInput miw={240}/>
       </UiStack>
     </UiCard>
   )
