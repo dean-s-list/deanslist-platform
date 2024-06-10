@@ -15,6 +15,7 @@ export class ApiTeamResolveUserService {
   }
 
   async createTeam(userId: string, input: UserCreateTeamInput) {
+    await this.data.core.ensureUserRoleAdmin(userId)
     return this.data.createTeam(userId, input)
   }
 
@@ -44,7 +45,8 @@ export class ApiTeamResolveUserService {
     return this.data.findOneTeam(teamId)
   }
 
-  async updateTeam(teamId: string, input: UserUpdateTeamInput) {
+  async updateTeam(userId: string, teamId: string, input: UserUpdateTeamInput) {
+    await this.data.ensureTeamAdmin({ teamId, userId })
     return this.data.updateTeam(teamId, input)
   }
 

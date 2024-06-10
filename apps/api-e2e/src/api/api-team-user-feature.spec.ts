@@ -3,14 +3,10 @@ import { getAliceCookie, getBobCookie, sdk, uniqueId } from '../support'
 
 describe('api-team-feature', () => {
   describe('api-team-user-resolver', () => {
-    const teamName = uniqueId('acme-team')
-    let teamId: string
     let alice: string
 
     beforeAll(async () => {
       alice = await getAliceCookie()
-      const created = await sdk.userCreateTeam({ input: { name: teamName } }, { cookie: alice })
-      teamId = created.data.created.id
     })
 
     describe('authorized', () => {
@@ -34,9 +30,7 @@ describe('api-team-feature', () => {
         }
         const createdRes = await sdk.userCreateTeam({ input: createInput }, { cookie: alice })
         const teamId = createdRes.data.created.id
-        const input: UserUpdateTeamInput = {
-          name: uniqueId('team'),
-        }
+        const input: UserUpdateTeamInput = { name: uniqueId('team') }
 
         const res = await sdk.userUpdateTeam({ teamId, input }, { cookie: alice })
 
@@ -51,14 +45,14 @@ describe('api-team-feature', () => {
         const createdRes = await sdk.userCreateTeam({ input: createInput }, { cookie: alice })
         const teamId = createdRes.data.created.id
 
-        const input: UserFindManyTeamInput = {}
+        const input: UserFindManyTeamInput = { limit: 10000 }
 
         const res = await sdk.userFindManyTeam({ input }, { cookie: alice })
 
         expect(res.data.paging.meta.totalCount).toBeGreaterThan(1)
         expect(res.data.paging.data.length).toBeGreaterThan(1)
         // First item should be the one we created above
-        expect(res.data.paging.data[0].id).toBe(teamId)
+        expect(res.data.paging.data.map((t) => t.id)).toContain(teamId)
       })
 
       it('should find a list of teams (find new one)', async () => {
@@ -110,57 +104,60 @@ describe('api-team-feature', () => {
 
     describe('unauthorized', () => {
       let bob: string
+      let aliceTeamId: string
+
       beforeAll(async () => {
+        alice = await getAliceCookie()
         bob = await getBobCookie()
+        aliceTeamId = await sdk
+          .userCreateTeam({ input: { name: uniqueId('team') } }, { cookie: alice })
+          .then((res) => res.data.created.id)
       })
 
       it('should not create a team', async () => {
         expect.assertions(1)
-        const input: UserCreateTeamInput = {
-          name: uniqueId('team'),
-        }
+        const input: UserCreateTeamInput = { name: uniqueId('team') }
 
         try {
           await sdk.userCreateTeam({ input }, { cookie: bob })
         } catch (e) {
-          expect(e.message).toBe('Unauthorized')
+          expect(e.message).toBe('User use not an Admin')
         }
       })
 
       it('should not update a team', async () => {
         expect.assertions(1)
         try {
-          await sdk.userUpdateTeam({ teamId, input: {} }, { cookie: bob })
+          await sdk.userUpdateTeam({ teamId: aliceTeamId, input: { name: 'test' } }, { cookie: bob })
         } catch (e) {
-          expect(e.message).toBe('Unauthorized')
-        }
-      })
-
-      it('should not find a list of teams (find all)', async () => {
-        expect.assertions(1)
-        try {
-          await sdk.userFindManyTeam({ input: {} }, { cookie: bob })
-        } catch (e) {
-          expect(e.message).toBe('Unauthorized')
-        }
-      })
-
-      fit('should not find a team by id', async () => {
-        expect.assertions(1)
-        try {
-          const res = await sdk.userFindOneTeam({ teamId }, { cookie: bob })
-          console.log('res', res)
-        } catch (e) {
-          expect(e.message).toBe('Unauthorized')
+          expect(e.message).toBe('You are not a team admin')
         }
       })
 
       it('should not delete a team', async () => {
         expect.assertions(1)
         try {
-          await sdk.userDeleteTeam({ teamId }, { cookie: bob })
+          await sdk.userDeleteTeam({ teamId: aliceTeamId }, { cookie: bob })
         } catch (e) {
-          expect(e.message).toBe('You are not an admin')
+          expect(e.message).toBe('You are not a team admin')
+        }
+      })
+
+      it('should not add a team member', async () => {
+        expect.assertions(1)
+        try {
+          await sdk.userAddTeamMember({ teamId: aliceTeamId, userId: 'bob' }, { cookie: bob })
+        } catch (e) {
+          expect(e.message).toBe('You are not a team admin')
+        }
+      })
+
+      it('should not remove a team member', async () => {
+        expect.assertions(1)
+        try {
+          await sdk.userRemoveTeamMember({ teamId: aliceTeamId, userId: 'bob' }, { cookie: bob })
+        } catch (e) {
+          expect(e.message).toBe('You are not a team admin')
         }
       })
     })

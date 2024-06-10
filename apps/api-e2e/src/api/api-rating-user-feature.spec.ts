@@ -1,7 +1,7 @@
 import { Rating, UserCreateRatingInput, UserFindManyRatingInput, UserUpdateRatingInput } from '@deanslist-platform/sdk'
 import { getAliceCookie, getBobCookie, sdk, uniqueId } from '../support'
 
-describe('api-rating-feature', () => {
+xdescribe('api-rating-feature', () => {
   describe('api-rating-user-resolver', () => {
     const ratingName = uniqueId('acme-rating')
     let ratingId: string

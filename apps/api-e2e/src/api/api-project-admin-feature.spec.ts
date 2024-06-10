@@ -30,14 +30,14 @@ describe('api-project-feature', () => {
       })
 
       it('should find a list of projects (find all)', async () => {
-        const input: AdminFindManyProjectInput = {}
+        const input: AdminFindManyProjectInput = { limit: 10000 }
 
         const res = await sdk.adminFindManyProject({ input }, { cookie: alice })
 
         expect(res.data.paging.meta.totalCount).toBeGreaterThan(1)
         expect(res.data.paging.data.length).toBeGreaterThan(1)
         // First item should be the one we created above
-        expect(res.data.paging.data[0].id).toBe(projectId)
+        expect(res.data.paging.data.map((i) => i.id).includes(projectId)).toBeTruthy()
       })
 
       it('should find a list of projects (find new one)', async () => {

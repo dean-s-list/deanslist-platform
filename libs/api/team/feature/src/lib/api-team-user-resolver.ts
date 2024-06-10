@@ -61,7 +61,11 @@ export class ApiTeamUserResolver {
   }
 
   @Mutation(() => Team, { nullable: true })
-  userUpdateTeam(@Args('teamId') teamId: string, @Args('input') input: UserUpdateTeamInput) {
-    return this.service.user.updateTeam(teamId, input)
+  userUpdateTeam(
+    @CtxUserId() userId: string,
+    @Args('teamId') teamId: string,
+    @Args('input') input: UserUpdateTeamInput,
+  ) {
+    return this.service.user.updateTeam(userId, teamId, input)
   }
 }

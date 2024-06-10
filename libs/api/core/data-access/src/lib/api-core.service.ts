@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { EventEmitter2 } from '@nestjs/event-emitter'
-import { IdentityProvider } from '@prisma/client'
+import { IdentityProvider, UserRole } from '@prisma/client'
 import { ApiCoreConfigService } from './api-core-config.service'
 import { ApiCorePrismaClient, prismaClient } from './api-core-prisma-client'
 import { slugifyId } from './helpers/slugify-id'
@@ -9,6 +9,17 @@ import { slugifyId } from './helpers/slugify-id'
 export class ApiCoreService {
   readonly data: ApiCorePrismaClient = prismaClient
   constructor(readonly config: ApiCoreConfigService, readonly event: EventEmitter2) {}
+
+  async ensureUserRoleAdmin(userId: string) {
+    const user = await this.findUserById(userId)
+    if (!user) {
+      throw new Error('User not found')
+    }
+    if (user.role !== UserRole.Admin) {
+      throw new Error('User use not an Admin')
+    }
+    return user
+  }
 
   async findDiscordIdentity({ ownerId }: { ownerId: string }) {
     return this.data.identity.findFirst({

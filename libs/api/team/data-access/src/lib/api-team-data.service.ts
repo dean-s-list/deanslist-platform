@@ -9,7 +9,7 @@ import { TeamCreatedEvent } from './event/team-created-event'
 
 @Injectable()
 export class ApiTeamDataService {
-  constructor(private readonly core: ApiCoreService, private readonly event: ApiTeamEventService) {}
+  constructor(readonly core: ApiCoreService, private readonly event: ApiTeamEventService) {}
 
   async createTeam(userId: string, { ...input }: Prisma.TeamCreateInput): Promise<TeamCreatedEvent['team']> {
     const name = input.name.trim()
@@ -53,10 +53,11 @@ export class ApiTeamDataService {
     this.event.emitTeamDeleted({ team, userId })
     return !!team
   }
+
   async ensureTeamAdmin({ teamId, userId }: { teamId: string; userId: string }) {
     const member = await this.getTeamMember({ teamId, userId })
     if (!member || !member.admin) {
-      throw new Error('You are not an admin')
+      throw new Error('You are not a team admin')
     }
     return member
   }
