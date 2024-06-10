@@ -25,21 +25,6 @@ export interface ApiCoreConfig {
   authDiscordClientId: string
   authDiscordClientSecret: string
   authDiscordEnabled: boolean
-  // GitHub Authentication
-  authGithubAdminIds: string[]
-  authGithubClientId: string
-  authGithubClientSecret: string
-  authGithubEnabled: boolean
-  // Google Authentication
-  authGoogleAdminIds: string[]
-  authGoogleClientId: string
-  authGoogleClientSecret: string
-  authGoogleEnabled: boolean
-  // Twitter Authentication
-  authTwitterAdminIds: string[]
-  authTwitterConsumerKey: string
-  authTwitterConsumerSecret: string
-  authTwitterEnabled: boolean
   // Username and Password Authentication
   authPasswordEnabled: boolean
   authRegisterEnabled: boolean
@@ -73,18 +58,6 @@ export function configuration(): ApiCoreConfig {
     authDiscordClientId: process.env['AUTH_DISCORD_CLIENT_ID'] as string,
     authDiscordClientSecret: process.env['AUTH_DISCORD_CLIENT_SECRET'] as string,
     authDiscordEnabled: process.env['AUTH_DISCORD_ENABLED'] === 'true',
-    authGithubAdminIds: getFromEnvironment('AUTH_GITHUB_ADMIN_IDS'),
-    authGithubClientId: process.env['AUTH_GITHUB_CLIENT_ID'] as string,
-    authGithubClientSecret: process.env['AUTH_GITHUB_CLIENT_SECRET'] as string,
-    authGithubEnabled: process.env['AUTH_GITHUB_ENABLED'] === 'true',
-    authGoogleAdminIds: getFromEnvironment('AUTH_GOOGLE_ADMIN_IDS'),
-    authGoogleClientId: process.env['AUTH_GOOGLE_CLIENT_ID'] as string,
-    authGoogleClientSecret: process.env['AUTH_GOOGLE_CLIENT_SECRET'] as string,
-    authGoogleEnabled: process.env['AUTH_GOOGLE_ENABLED'] === 'true',
-    authTwitterAdminIds: getFromEnvironment('AUTH_TWITTER_ADMIN_IDS'),
-    authTwitterConsumerKey: process.env['AUTH_TWITTER_CONSUMER_KEY'] as string,
-    authTwitterConsumerSecret: process.env['AUTH_TWITTER_CONSUMER_SECRET'] as string,
-    authTwitterEnabled: process.env['AUTH_TWITTER_ENABLED'] === 'true',
     authPasswordEnabled: process.env['AUTH_PASSWORD_ENABLED'] === 'true',
     authRegisterEnabled: process.env['AUTH_REGISTER_ENABLED'] === 'true',
     authSolanaAdminIds: getFromEnvironment('AUTH_SOLANA_ADMIN_IDS'),

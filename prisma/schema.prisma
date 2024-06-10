@@ -192,10 +192,7 @@ enum CommentCategory {
 
 enum IdentityProvider {
   Discord
-  GitHub
-  Google
   Solana
-  Twitter
 }
 
 enum UserRole {

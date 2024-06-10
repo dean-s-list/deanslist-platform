@@ -120,12 +120,9 @@ export type AdminUpdateUserInput = {
 export type AppConfig = {
   __typename?: 'AppConfig'
   authDiscordEnabled: Scalars['Boolean']['output']
-  authGithubEnabled: Scalars['Boolean']['output']
-  authGoogleEnabled: Scalars['Boolean']['output']
   authPasswordEnabled: Scalars['Boolean']['output']
   authRegisterEnabled: Scalars['Boolean']['output']
   authSolanaEnabled: Scalars['Boolean']['output']
-  authTwitterEnabled: Scalars['Boolean']['output']
 }
 
 export type Comment = {
@@ -221,10 +218,7 @@ export type IdentityChallenge = {
 
 export enum IdentityProvider {
   Discord = 'Discord',
-  GitHub = 'GitHub',
-  Google = 'Google',
   Solana = 'Solana',
-  Twitter = 'Twitter',
 }
 
 export type LinkIdentityInput = {
@@ -1244,12 +1238,9 @@ export type AdminDeleteCommentMutation = { __typename?: 'Mutation'; deleted?: bo
 export type AppConfigDetailsFragment = {
   __typename?: 'AppConfig'
   authDiscordEnabled: boolean
-  authGithubEnabled: boolean
-  authGoogleEnabled: boolean
   authPasswordEnabled: boolean
   authRegisterEnabled: boolean
   authSolanaEnabled: boolean
-  authTwitterEnabled: boolean
 }
 
 export type PagingMetaDetailsFragment = {
@@ -1274,12 +1265,9 @@ export type AppConfigQuery = {
   config: {
     __typename?: 'AppConfig'
     authDiscordEnabled: boolean
-    authGithubEnabled: boolean
-    authGoogleEnabled: boolean
     authPasswordEnabled: boolean
     authRegisterEnabled: boolean
     authSolanaEnabled: boolean
-    authTwitterEnabled: boolean
   }
 }
 
@@ -3076,12 +3064,9 @@ export const CommentDetailsFragmentDoc = gql`
 export const AppConfigDetailsFragmentDoc = gql`
   fragment AppConfigDetails on AppConfig {
     authDiscordEnabled
-    authGithubEnabled
-    authGoogleEnabled
     authPasswordEnabled
     authRegisterEnabled
     authSolanaEnabled
-    authTwitterEnabled
   }
 `
 export const PagingMetaDetailsFragmentDoc = gql`

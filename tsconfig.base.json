@@ -17,6 +17,8 @@
     "paths": {
       "@deanslist-platform/api-auth-data-access": ["libs/api/auth/data-access/src/index.ts"],
       "@deanslist-platform/api-auth-feature": ["libs/api/auth/feature/src/index.ts"],
+      "@deanslist-platform/api-comment-data-access": ["libs/api/comment/data-access/src/index.ts"],
+      "@deanslist-platform/api-comment-feature": ["libs/api/comment/feature/src/index.ts"],
       "@deanslist-platform/api-core-data-access": ["libs/api/core/data-access/src/index.ts"],
       "@deanslist-platform/api-core-feature": ["libs/api/core/feature/src/index.ts"],
       "@deanslist-platform/api-discord-data-access": ["libs/api/discord/data-access/src/index.ts"],
@@ -26,11 +28,7 @@
       "@deanslist-platform/api-identity-feature": ["libs/api/identity/feature/src/index.ts"],
       "@deanslist-platform/api-project-data-access": ["libs/api/project/data-access/src/index.ts"],
       "@deanslist-platform/api-project-feature": ["libs/api/project/feature/src/index.ts"],
-      "@deanslist-platform/api-comment-data-access": ["libs/api/comment/data-access/src/index.ts"],
-      "@deanslist-platform/api-comment-feature": ["libs/api/comment/feature/src/index.ts"],
-      "@deanslist-platform/api-rating-data-access": [
-        "libs/api/rating/data-access/src/index.ts"
-      ],
+      "@deanslist-platform/api-rating-data-access": ["libs/api/rating/data-access/src/index.ts"],
       "@deanslist-platform/api-rating-feature": ["libs/api/rating/feature/src/index.ts"],
       "@deanslist-platform/api-review-data-access": ["libs/api/review/data-access/src/index.ts"],
       "@deanslist-platform/api-review-feature": ["libs/api/review/feature/src/index.ts"],
@@ -43,6 +41,9 @@
       "@deanslist-platform/web-auth-data-access": ["libs/web/auth/data-access/src/index.ts"],
       "@deanslist-platform/web-auth-feature": ["libs/web/auth/feature/src/index.ts"],
       "@deanslist-platform/web-auth-ui": ["libs/web/auth/ui/src/index.ts"],
+      "@deanslist-platform/web-comment-data-access": ["libs/web/comment/data-access/src/index.ts"],
+      "@deanslist-platform/web-comment-feature": ["libs/web/comment/feature/src/index.ts"],
+      "@deanslist-platform/web-comment-ui": ["libs/web/comment/ui/src/index.ts"],
       "@deanslist-platform/web-core-data-access": ["libs/web/core/data-access/src/index.ts"],
       "@deanslist-platform/web-core-feature": ["libs/web/core/feature/src/index.ts"],
       "@deanslist-platform/web-core-ui": ["libs/web/core/ui/src/index.ts"],
@@ -57,14 +58,9 @@
       "@deanslist-platform/web-project-data-access": ["libs/web/project/data-access/src/index.ts"],
       "@deanslist-platform/web-project-feature": ["libs/web/project/feature/src/index.ts"],
       "@deanslist-platform/web-project-ui": ["libs/web/project/ui/src/index.ts"],
-      "@deanslist-platform/web-comment-data-access": ["libs/web/comment/data-access/src/index.ts"],
-      "@deanslist-platform/web-comment-feature": ["libs/web/comment/feature/src/index.ts"],
-      "@deanslist-platform/web-rating-data-access": [
-        "libs/web/rating/data-access/src/index.ts"
-      ],
+      "@deanslist-platform/web-rating-data-access": ["libs/web/rating/data-access/src/index.ts"],
       "@deanslist-platform/web-rating-feature": ["libs/web/rating/feature/src/index.ts"],
       "@deanslist-platform/web-rating-ui": ["libs/web/rating/ui/src/index.ts"],
-      "@deanslist-platform/web-comment-ui": ["libs/web/comment/ui/src/index.ts"],
       "@deanslist-platform/web-review-data-access": ["libs/web/review/data-access/src/index.ts"],
       "@deanslist-platform/web-review-feature": ["libs/web/review/feature/src/index.ts"],
       "@deanslist-platform/web-review-ui": ["libs/web/review/ui/src/index.ts"],

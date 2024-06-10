@@ -17,12 +17,9 @@ export class ApiCoreConfigService {
   get appConfig(): AppConfig {
     return {
       authDiscordEnabled: this.authDiscordEnabled,
-      authGithubEnabled: this.authGithubEnabled,
-      authGoogleEnabled: this.authGoogleEnabled,
       authPasswordEnabled: this.authPasswordEnabled,
       authRegisterEnabled: this.authRegisterEnabled,
       authSolanaEnabled: this.authSolanaEnabled,
-      authTwitterEnabled: this.authTwitterEnabled,
     }
   }
 
@@ -58,94 +55,6 @@ export class ApiCoreConfigService {
       scope: this.authDiscordScope,
       passReqToCallback: true,
     }
-  }
-
-  get authGithubAdminIds() {
-    return this.service.get<string[]>('authGithubAdminIds')
-  }
-
-  get authGithubClientId() {
-    return this.service.get<string>('authGithubClientId')
-  }
-
-  get authGithubClientSecret() {
-    return this.service.get<string>('authGithubClientSecret')
-  }
-
-  get authGithubScope(): string[] {
-    return ['public_profile']
-  }
-
-  get authGithubStrategyOptions() {
-    return {
-      clientID: this.authGithubClientId,
-      clientSecret: this.authGithubClientSecret,
-      callbackURL: this.webUrl + '/api/auth/github/callback',
-      scope: this.authGithubScope,
-      passReqToCallback: true,
-    }
-  }
-
-  get authGithubEnabled(): boolean {
-    return !(
-      !this.authGithubClientId ||
-      !this.authGithubClientSecret ||
-      !this.service.get<boolean>('authGithubEnabled')
-    )
-  }
-
-  get authGoogleAdminIds() {
-    return this.service.get<string[]>('authGoogleAdminIds')
-  }
-
-  get authGoogleClientId() {
-    return this.service.get<string>('authGoogleClientId')
-  }
-
-  get authGoogleClientSecret() {
-    return this.service.get<string>('authGoogleClientSecret')
-  }
-
-  get authGoogleScope(): string[] {
-    return ['email', 'profile']
-  }
-
-  get authGoogleStrategyOptions() {
-    return {
-      clientID: this.authGoogleClientId,
-      clientSecret: this.authGoogleClientSecret,
-      callbackURL: this.webUrl + '/api/auth/google/callback',
-      scope: this.authGoogleScope,
-      passReqToCallback: true,
-    }
-  }
-
-  get authGoogleEnabled(): boolean {
-    return !(
-      !this.authGoogleClientId ||
-      !this.authGoogleClientSecret ||
-      !this.service.get<boolean>('authGoogleEnabled')
-    )
-  }
-
-  get authTwitterAdminIds() {
-    return this.service.get<string[]>('authTwitterAdminIds')
-  }
-
-  get authTwitterConsumerKey() {
-    return this.service.get<string>('authTwitterConsumerKey')
-  }
-
-  get authTwitterConsumerSecret() {
-    return this.service.get<string>('authTwitterConsumerSecret')
-  }
-
-  get authTwitterEnabled(): boolean {
-    return !(
-      !this.authTwitterConsumerKey ||
-      !this.authTwitterConsumerSecret ||
-      !this.service.get<boolean>('authTwitterEnabled')
-    )
   }
 
   get authPasswordEnabled(): boolean {
@@ -246,14 +155,8 @@ export class ApiCoreConfigService {
     switch (provider) {
       case IdentityProvider.Discord:
         return this.authDiscordAdminIds?.includes(providerId) ?? false
-      case IdentityProvider.GitHub:
-        return this.authGithubAdminIds?.includes(providerId) ?? false
-      case IdentityProvider.Google:
-        return this.authGoogleAdminIds?.includes(providerId) ?? false
       case IdentityProvider.Solana:
         return this.authSolanaAdminIds?.includes(providerId) ?? false
-      case IdentityProvider.Twitter:
-        return this.authTwitterAdminIds?.includes(providerId) ?? false
       default:
         return false
     }
