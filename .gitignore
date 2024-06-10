@@ -36,6 +36,7 @@ nx-cloud.env
 .DS_Store
 Thumbs.db
 .nx/cache
+.nx/workspace-data
 .anchor
 libs/anchor/target/deploy
 libs/anchor/target/debug
