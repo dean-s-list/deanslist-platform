@@ -1,31 +1,28 @@
 import { NumberInput, NumberInputProps } from '@mantine/core'
 
 export interface CoreUiCurrencyInputProps extends NumberInputProps {
-  currency: string;
+  currency: string
 }
 
 function CurrencySection({ currency }: { currency: string }) {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', paddingRight: 35 }}>
-      {currency}
-    </div>
-  );
+  return <div>{currency}</div>
 }
 
-export function CoreUiCurrencyInput({
-  currency,
-  ...props
-}: CoreUiCurrencyInputProps) {
+export function CoreUiCurrencyInput({ currency, ...props }: CoreUiCurrencyInputProps) {
+  const currencyWidth = currency.length * 16
   const extraProps: NumberInputProps = {
-    rightSection: currency && <CurrencySection currency={currency}/>,
+    rightSection: currency,
+    rightSectionProps: {
+      style: {
+        width: currencyWidth,
+      },
+    },
     styles: {
       input: {
-        paddingRight: currency && `${currency.length * 8 + 25}px`,
+        paddingRight: currencyWidth,
       },
     },
   }
 
-  return (
-    <NumberInput {...extraProps} {...props} />
-  )
+  return <NumberInput {...extraProps} {...props} />
 }
