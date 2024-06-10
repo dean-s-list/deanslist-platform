@@ -4,9 +4,17 @@
 
 ### Prerequisites
 
-- Node v18 or higher
-- PNPM: corepack prepare pnpm@latest
-- Docker: 
+- Node v20 or higher
+- PNPM
+- Docker
+
+> [!TIP]
+> If you don't have PNPM installed, you can install it using `corepack`:
+>
+> ```sh
+> corepack enable
+> corepack prepare pnpm@latest --activate
+> ```
 
 ### Installation
 
@@ -35,6 +43,7 @@ cp .env.example .env
 ```
 
 Create a `JWT_SECRET` and a `SESSION_SECRET`, using the command below, and update them in `.env` file:
+
 ```shell
 openssl rand -hex 32
 ```
