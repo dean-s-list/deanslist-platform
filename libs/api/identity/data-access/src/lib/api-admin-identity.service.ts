@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common'
-import { Identity as PrismaIdentity } from '@prisma/client'
 import { ApiCoreService } from '@deanslist-platform/api-core-data-access'
+import { Injectable } from '@nestjs/common'
+import { Identity as PrismaIdentity, IdentityProvider } from '@prisma/client'
 import { AdminCreateIdentityInput } from './dto/admin-create-identity.input'
 import { AdminFindManyIdentityInput } from './dto/admin-find-many-identity.input'
 
@@ -32,6 +32,9 @@ export class ApiAdminIdentityService {
     const found = await this.core.data.identity.findUnique({ where: { id: identityId } })
     if (!found) {
       throw new Error(`Identity ${identityId} not found`)
+    }
+    if (found.provider === IdentityProvider.Discord) {
+      throw new Error(`Cannot delete Discord identity`)
     }
     const deleted = await this.core.data.identity.delete({ where: { id: identityId } })
     if (!deleted) {

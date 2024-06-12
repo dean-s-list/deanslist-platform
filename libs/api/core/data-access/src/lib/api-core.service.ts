@@ -3,7 +3,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter'
 import { IdentityProvider, UserRole } from '@prisma/client'
 import { ApiCoreConfigService } from './api-core-config.service'
 import { ApiCorePrismaClient, prismaClient } from './api-core-prisma-client'
-import { slugifyId } from './helpers/slugify-id'
+import { slugifyUsername } from './helpers/slugify-id'
 
 @Injectable()
 export class ApiCoreService {
@@ -44,7 +44,7 @@ export class ApiCoreService {
   }
 
   async findAvailableUsername(username: string): Promise<string> {
-    username = slugifyId(username)
+    username = slugifyUsername(username)
     const exists = await this.data.user.findUnique({ where: { username } })
     if (!exists) {
       return username

@@ -28,7 +28,7 @@ export const provisionDataUsers: Prisma.UserCreateInput[] = [
     status: UserStatus.Inactive,
   },
   {
-    username: 'beemandev',
+    username: 'beeman.dev',
     avatarUrl: 'https://avatars.githubusercontent.com/u/36491',
     name: 'beeman',
     role: UserRole.Admin,

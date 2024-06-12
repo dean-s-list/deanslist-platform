@@ -4,6 +4,10 @@ export function slugifyId(id: string, lower = false): string {
   return slugify(id, { lower, strict: true })
 }
 
+export function slugifyUsername(id: string): string {
+  return slugify(id, { lower: false, strict: false })
+}
+
 export function getEndDate(input: { duration?: number | null; startDate?: Date | null }) {
   // Duration in weeks
   const duration = input.duration || 0

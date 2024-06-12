@@ -1,7 +1,7 @@
-import { ApiCoreService, hashPassword, slugifyId } from '@deanslist-platform/api-core-data-access'
-import { AdminCreateUserInput } from './dto/admin-create-user.input'
+import { ApiCoreService, hashPassword, slugifyUsername } from '@deanslist-platform/api-core-data-access'
 import { Injectable } from '@nestjs/common'
 import { Prisma, User as PrismaUser } from '@prisma/client'
+import { AdminCreateUserInput } from './dto/admin-create-user.input'
 import { AdminUpdateUserInput } from './dto/admin-update-user.input'
 import { UserUpdateUserInput } from './dto/user-update-user.input'
 import { UserPaging } from './entity/user-paging.entity'
@@ -11,7 +11,7 @@ export class ApiUserDataService {
   constructor(private readonly core: ApiCoreService) {}
 
   async createUser(input: AdminCreateUserInput): Promise<PrismaUser> {
-    const username = slugifyId(input.username)
+    const username = slugifyUsername(input.username)
     if (!username.length) {
       throw new Error(`Username ${input.username} is not valid`)
     }

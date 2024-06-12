@@ -7,7 +7,7 @@ import { UserPaging } from './entity/user-paging.entity'
 import { getUserUserWhereInput } from './helpers/get-user-user-where.input'
 
 @Injectable()
-export class ApiUserResolveUserService {
+export class ApiUserDataUserService {
   constructor(private readonly core: ApiCoreService, private readonly data: ApiUserDataService) {}
 
   async findManyUser(input: UserFindManyUserInput): Promise<UserPaging> {

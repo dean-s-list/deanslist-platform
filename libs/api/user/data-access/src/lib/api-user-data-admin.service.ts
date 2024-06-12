@@ -1,4 +1,4 @@
-import { ApiCoreService, slugifyId } from '@deanslist-platform/api-core-data-access'
+import { ApiCoreService, slugifyUsername } from '@deanslist-platform/api-core-data-access'
 import { Injectable, Logger } from '@nestjs/common'
 import { User as PrismaUser } from '@prisma/client'
 import { ApiUserDataService } from './api-user-data.service'
@@ -9,8 +9,8 @@ import { UserPaging } from './entity/user-paging.entity'
 import { getAdminUserWhereInput } from './helpers/get-admin-user-where.input'
 
 @Injectable()
-export class ApiUserResolveAdminService {
-  private readonly logger = new Logger(ApiUserResolveAdminService.name)
+export class ApiUserDataAdminService {
+  private readonly logger = new Logger(ApiUserDataAdminService.name)
   constructor(private readonly core: ApiCoreService, private readonly data: ApiUserDataService) {}
 
   async createUser(input: AdminCreateUserInput): Promise<PrismaUser> {
@@ -42,8 +42,8 @@ export class ApiUserResolveAdminService {
       throw new Error(`User ${userId} not found`)
     }
 
-    const newUsername = input.username ? slugifyId(input.username) : undefined
-    if (newUsername && newUsername !== slugifyId(exists.username)) {
+    const newUsername = input.username ? slugifyUsername(input.username) : undefined
+    if (newUsername && newUsername !== slugifyUsername(exists.username)) {
       const exists = await this.core.data.user.findUnique({
         where: { username: newUsername },
       })
