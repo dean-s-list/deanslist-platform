@@ -895,9 +895,7 @@ export type UserUpdateTeamInput = {
 }
 
 export type UserUpdateUserInput = {
-  avatarUrl?: InputMaybe<Scalars['String']['input']>
   developer?: InputMaybe<Scalars['Boolean']['input']>
-  name?: InputMaybe<Scalars['String']['input']>
 }
 
 export type VerifyIdentityChallengeInput = {
@@ -6160,9 +6158,7 @@ export function UserUpdateTeamInputSchema(): z.ZodObject<Properties<UserUpdateTe
 
 export function UserUpdateUserInputSchema(): z.ZodObject<Properties<UserUpdateUserInput>> {
   return z.object({
-    avatarUrl: z.string().nullish(),
     developer: z.boolean().nullish(),
-    name: z.string().nullish(),
   })
 }
 

@@ -511,9 +511,7 @@ input UserUpdateTeamInput {
 }
 
 input UserUpdateUserInput {
-  avatarUrl: String
   developer: Boolean
-  name: String
 }
 
 input VerifyIdentityChallengeInput {
