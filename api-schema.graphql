@@ -403,6 +403,7 @@ type User {
   developer: Boolean
   id: String!
   identities: [Identity!]
+  manager: Boolean
   name: String
   profileUrl: String!
   role: UserRole
