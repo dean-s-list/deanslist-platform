@@ -5,6 +5,7 @@ export interface CoreUiButtonProps extends ButtonProps {
   outline?: boolean
   iconLeft?: ComponentType<{ size?: number }>
   iconRight?: ComponentType<{ size?: number }>
+  onClick?: () => void
 }
 
 export function CoreUiButton({
@@ -12,6 +13,7 @@ export function CoreUiButton({
   iconRight: IconRight,
   outline,
   children,
+  onClick,
   ...props
 }: CoreUiButtonProps) {
   const extraProps: ButtonProps = {
@@ -22,7 +24,7 @@ export function CoreUiButton({
   }
 
   return (
-    <Button {...extraProps} {...props}>
+    <Button {...extraProps} {...props} onClick={onClick}>
       {children}
     </Button>
   )

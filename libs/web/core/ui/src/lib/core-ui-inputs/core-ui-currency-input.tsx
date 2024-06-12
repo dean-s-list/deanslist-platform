@@ -4,10 +4,6 @@ export interface CoreUiCurrencyInputProps extends NumberInputProps {
   currency: string
 }
 
-function CurrencySection({ currency }: { currency: string }) {
-  return <div>{currency}</div>
-}
-
 export function CoreUiCurrencyInput({ currency, ...props }: CoreUiCurrencyInputProps) {
   const currencyWidth = currency.length * 16
   const extraProps: NumberInputProps = {

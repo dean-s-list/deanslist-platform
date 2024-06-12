@@ -1,5 +1,7 @@
-import { Input, InputProps } from '@mantine/core'
+import { TextInput, TextInputProps } from '@mantine/core'
 
-export function CoreUiInput({ ...props }: InputProps) {
-  return <Input {...props} />
+export function CoreUiInput({ ...props }: TextInputProps) {
+  return (
+    <TextInput {...props} />
+  )
 }

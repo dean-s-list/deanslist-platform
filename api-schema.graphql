@@ -193,7 +193,10 @@ type IdentityChallenge {
 
 enum IdentityProvider {
   Discord
+  GitHub
+  Google
   Solana
+  Twitter
 }
 
 """
