@@ -189,7 +189,7 @@ pnpm nx g web-feature company
 
 Output:
 
-````shell
+```shell
 > NX Generating @deanslist-platform/tools:web-feature
 
 CREATE libs/web/company/data-access/...
@@ -197,5 +197,4 @@ CREATE libs/web/company/feature/...
 CREATE libs/web/company/ui/...
 UPDATE libs/web/shell/feature/src/lib/shell-admin-routes.tsx
 UPDATE tsconfig.base.json
-```_
-````
+```
