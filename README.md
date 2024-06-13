@@ -104,7 +104,7 @@ It is utilizing the below technologies for ease of development:
 - E2E APIs: [GraphQL](https://graphql.org/)
 - UI library: [Mantine](https://mantine.dev/)
 
-The diagram below show the dataflow E2E.
+The diagram below shows the dataflow E2E.
 
 ![Architecture](docs/Deanslist-Architecture.drawio.svg)
 
