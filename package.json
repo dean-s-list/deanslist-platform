@@ -22,7 +22,7 @@
     "setup": "pnpm nx generate setup",
     "start": "NODE_ENV=production node dist/apps/api/main.js",
     "test:all": "nx run-many --target=test --all",
-    "test": "node .github/setup.js"
+    "test": "node .github/setup.js; node .github/setup.js"
   },
   "private": true,
   "dependencies": {
