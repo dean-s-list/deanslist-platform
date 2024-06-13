@@ -1,4 +1,4 @@
-# Deanslist Platform
+\_# Deanslist Platform
 
 ## Getting Started
 
@@ -87,6 +87,52 @@ pnpm dev:web
 pnpm dev:sdk
 ```
 
+## Explaining the codebase
+
+This codebase is a [Nx Monorepo](https://nx.dev/).
+
+It includes:
+
+1. 2 app projects: `api`, `web`
+2. 2 e2e projects: `api-e2e`, `web-e2e`
+3. 2 lib projects: `sdk`, `tools`
+
+It is utilizing the below technologies for ease of development:
+
+- Database: [PostgreSQL](https://www.postgresql.org/)
+- Schema and database management: [Prisma](https://www.prisma.io/)
+- E2E APIs: [GraphQL](https://graphql.org/)
+- UI library: [Mantine](https://mantine.dev/)
+
+The diagram below show the dataflow E2E.
+
+![Architecture](docs/Deanslist-Architecture.drawio.svg)
+
+To get a detailed code structure run:
+
+```shell
+pnpm nx graph
+```
+
+### API code
+
+The backend code is located under `./libs/api`.
+
+- The `core` folder includes framework related and reusable functionality, e.g. app configuration, pagination, etc...
+- Each app `<ENTITY>` has its own folder, `./libs/api/<ENTITY>`
+  - the `data-access` folder has code to interact with the database
+  - the `feature` folder has code to return data to the UI
+
+### WEB code
+
+The WEB code is located under `./libs/web`.
+
+- The `core` folder includes framework related and reusable functionality, e.g. components, etc...
+- Each app `<ENTITY>` has its own folder, `./libs/web/<ENTITY>`
+  - the `data-access` folder has code to get data from the API
+  - the `feature` folder sets up the routes and the pages
+  - the `ui` folder holds simple UI elements to be used in the `feature` code
+
 ## Extending the application
 
 You can use the following commands to generate new models, API features, web features and SDK types.
@@ -143,7 +189,7 @@ pnpm nx g web-feature company
 
 Output:
 
-```shell
+````shell
 > NX Generating @deanslist-platform/tools:web-feature
 
 CREATE libs/web/company/data-access/...
@@ -151,4 +197,5 @@ CREATE libs/web/company/feature/...
 CREATE libs/web/company/ui/...
 UPDATE libs/web/shell/feature/src/lib/shell-admin-routes.tsx
 UPDATE tsconfig.base.json
-```
+```_
+````
