@@ -59,6 +59,7 @@
       "@deanslist-platform/web-leaderboard-data-access": ["libs/web/leaderboard/data-access/src/index.ts"],
       "@deanslist-platform/web-leaderboard-feature": ["libs/web/leaderboard/feature/src/index.ts"],
       "@deanslist-platform/web-leaderboard-ui": ["libs/web/leaderboard/ui/src/index.ts"],
+      "@deanslist-platform/web-onboarding-feature": ["libs/web/onboarding/feature/src/index.ts"],
       "@deanslist-platform/web-project-data-access": ["libs/web/project/data-access/src/index.ts"],
       "@deanslist-platform/web-project-feature": ["libs/web/project/feature/src/index.ts"],
       "@deanslist-platform/web-project-ui": ["libs/web/project/ui/src/index.ts"],

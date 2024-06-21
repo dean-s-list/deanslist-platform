@@ -28,7 +28,7 @@ const routes: RouteObject[] = [
   { path: 'ratings/*', element: <AdminRatingFeature /> },
 ]
 
-export default function ShellAdminRoutes() {
+export default function WebCoreRoutesAdmin() {
   return useRoutes([
     { index: true, element: <Navigate to="dashboard" replace /> },
     {

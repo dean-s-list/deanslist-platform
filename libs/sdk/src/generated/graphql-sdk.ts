@@ -971,6 +971,19 @@ export type MeQuery = {
     status?: UserStatus | null
     updatedAt?: Date | null
     username?: string | null
+    identities?: Array<{
+      __typename?: 'Identity'
+      createdAt: Date
+      expired?: boolean | null
+      id: string
+      name?: string | null
+      profile?: any | null
+      provider: IdentityProvider
+      providerId: string
+      updatedAt: Date
+      url?: string | null
+      verified?: boolean | null
+    }> | null
   } | null
 }
 
@@ -3272,9 +3285,13 @@ export const MeDocument = gql`
   query me {
     me {
       ...UserDetails
+      identities {
+        ...IdentityDetails
+      }
     }
   }
   ${UserDetailsFragmentDoc}
+  ${IdentityDetailsFragmentDoc}
 `
 export const UserFindManyCommentDocument = gql`
   query userFindManyComment($input: UserFindManyCommentInput!) {

@@ -30,6 +30,6 @@ const routes: RouteObject[] = [
   { path: 'ratings/*', element: <UserRatingFeature /> },
 ]
 
-export default function ShellUserRoutes() {
+export default function WebCoreRoutesUser() {
   return useRoutes(routes)
 }

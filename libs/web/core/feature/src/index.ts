@@ -1,1 +1,1 @@
-export * from './lib/shell-feature'
+export * from './lib/web-core.feature'

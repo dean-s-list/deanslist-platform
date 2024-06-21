@@ -25,7 +25,7 @@ const client = new QueryClient({
   },
 })
 
-export function ShellFeature() {
+export function WebCoreFeature() {
   return (
     <BrowserRouter>
       <QueryClientProvider client={client}>

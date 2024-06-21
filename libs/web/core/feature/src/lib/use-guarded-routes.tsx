@@ -1,9 +1,14 @@
 import { UserRole, UserStatus } from '@deanslist-platform/sdk'
-import { AuthUiRouteGuard, AuthUiUserRoleGuard, AuthUiUserStatusGuard } from '@deanslist-platform/web-auth-ui'
+import {
+  AuthUiOnboardedGuard,
+  AuthUiRouteGuard,
+  AuthUiUserRoleGuard,
+  AuthUiUserStatusGuard,
+} from '@deanslist-platform/web-auth-ui'
 import { UiLoader } from '@pubkey-ui/core'
 
 import { Navigate, Outlet, RouteObject, useRoutes } from 'react-router-dom'
-import { ShellLayout } from './shell-layout'
+import { WebCoreLayout } from './web-core-layout'
 
 export function useGuardedRoutes({
   admin,
@@ -29,20 +34,26 @@ export function useGuardedRoutes({
           element: <AuthUiUserStatusGuard status={UserStatus.Active} />,
           children: [
             {
-              // This adds the main layout to the routes
-              element: (
-                <ShellLayout>
-                  <Outlet />
-                </ShellLayout>
-              ),
+              // This guard makes sure that the user is onboarded
+              element: <AuthUiOnboardedGuard redirectTo="/onboarding" />,
               children: [
                 {
-                  path: '/admin/*',
-                  // This guard makes sure that the user has the admin role
-                  element: <AuthUiUserRoleGuard role={UserRole.Admin} />,
-                  children: [...admin],
+                  // This adds the main layout to the routes
+                  element: (
+                    <WebCoreLayout>
+                      <Outlet />
+                    </WebCoreLayout>
+                  ),
+                  children: [
+                    {
+                      path: '/admin/*',
+                      // This guard makes sure that the user has the admin role
+                      element: <AuthUiUserRoleGuard role={UserRole.Admin} />,
+                      children: [...admin],
+                    },
+                    ...layout,
+                  ],
                 },
-                ...layout,
               ],
             },
             // Here you can add routes that are not part of the main layout

@@ -7,7 +7,7 @@ import { IconBrandDiscord, IconShield } from '@tabler/icons-react'
 import { ReactNode, Suspense, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 
-export function ShellLayout({ children }: { children: ReactNode }) {
+export function WebCoreLayout({ children }: { children: ReactNode }) {
   const { user, isAdmin, logout } = useAuth()
   const [opened, { toggle }] = useDisclosure(false)
   const profile = <CoreUiHeaderProfile user={user} logout={logout} />

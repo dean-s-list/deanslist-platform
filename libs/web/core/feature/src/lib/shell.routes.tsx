@@ -1,12 +1,13 @@
 import { AuthLoginFeature, AuthRegisterFeature } from '@deanslist-platform/web-auth-feature'
 import { CoreUiNotFound } from '@deanslist-platform/web-core-ui'
 import { HomeFeature } from '@deanslist-platform/web-home-feature'
+import { OnboardingFeature } from '@deanslist-platform/web-onboarding-feature'
 import { lazy } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useGuardedRoutes } from './use-guarded-routes'
 
-export const LazyAdminFeature = lazy(() => import('./shell-admin.routes'))
-export const LazyUserFeature = lazy(() => import('./shell-user.routes'))
+export const LazyAdminFeature = lazy(() => import('./web-core-routes-admin'))
+export const LazyUserFeature = lazy(() => import('./web-core-routes-user'))
 
 export function ShellRoutes() {
   return useGuardedRoutes({
@@ -24,6 +25,7 @@ export function ShellRoutes() {
     full: [
       // Here you can add routes that are not part of the main layout, visit /custom-full-page to see this route
       // { path: 'custom-full-page', element: <div>CUSTOM FULL PAGE</div> },
+      { path: '/onboarding/*', element: <OnboardingFeature /> },
     ],
     public: [
       // Routes for the auth feature

@@ -26,8 +26,9 @@ export class ApiAuthStrategyJwt extends PassportStrategy(Strategy) {
     const user = await this.core.data.user.findUnique({
       where: { id: payload.id },
       include: {
-        teams: { select: { id: true } },
+        identities: { where: { verified: true } },
         projectManagers: { select: { id: true } },
+        teams: { select: { id: true } },
       },
     })
 

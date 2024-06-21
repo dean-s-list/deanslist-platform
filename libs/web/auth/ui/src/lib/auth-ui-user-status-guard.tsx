@@ -1,6 +1,6 @@
-import { Button } from '@mantine/core'
 import { UserStatus } from '@deanslist-platform/sdk'
 import { useAuth } from '@deanslist-platform/web-auth-data-access'
+import { Button } from '@mantine/core'
 import { UiStack, UiWarning } from '@pubkey-ui/core'
 import { Outlet } from 'react-router-dom'
 import { AuthUiFull } from './auth-ui-full'
