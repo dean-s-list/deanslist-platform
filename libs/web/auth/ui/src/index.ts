@@ -1,6 +1,7 @@
 export * from './lib/auth-ui-enabled'
 export * from './lib/auth-ui-form'
 export * from './lib/auth-ui-full'
+export * from './lib/auth-ui-management-guard'
 export * from './lib/auth-ui-onboarded-guard'
 export * from './lib/auth-ui-page'
 export * from './lib/auth-ui-route-guard'

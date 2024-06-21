@@ -8,14 +8,14 @@ import { ReactNode, Suspense, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 
 export function WebCoreLayout({ children }: { children: ReactNode }) {
-  const { user, isAdmin, logout } = useAuth()
+  const { user, isAdmin, isManager, logout } = useAuth()
   const [opened, { toggle }] = useDisclosure(false)
   const profile = <CoreUiHeaderProfile user={user} logout={logout} />
   const links: CoreUiHeaderLink[] = useMemo(
     () =>
       [
         { link: '/projects', label: 'Projects' },
-        user?.manager ? { link: '/teams', label: 'Teams' } : null,
+        isManager ? { link: '/management', label: 'Management' } : null,
         { link: `${user?.profileUrl}`, label: 'Profile' },
         { link: '/leaderboard', label: 'Leaderboard' },
       ].filter(Boolean) as CoreUiHeaderLink[],

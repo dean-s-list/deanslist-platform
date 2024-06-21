@@ -1,19 +1,22 @@
 import { Button, ButtonProps } from '@mantine/core'
+import { UiAnchor } from '@pubkey-ui/core'
 import { ComponentType } from 'react'
 
 export interface CoreUiButtonProps extends ButtonProps {
-  outline?: boolean
   iconLeft?: ComponentType<{ size?: number }>
   iconRight?: ComponentType<{ size?: number }>
   onClick?: () => void
+  outline?: boolean
+  to?: string
 }
 
 export function CoreUiButton({
+  children,
   iconLeft: IconLeft,
   iconRight: IconRight,
-  outline,
-  children,
   onClick,
+  outline,
+  to,
   ...props
 }: CoreUiButtonProps) {
   const extraProps: ButtonProps = {
@@ -24,8 +27,10 @@ export function CoreUiButton({
   }
 
   return (
-    <Button {...extraProps} {...props} onClick={onClick}>
-      {children}
-    </Button>
+    <UiAnchor to={to}>
+      <Button {...extraProps} {...props} onClick={onClick}>
+        {children}
+      </Button>
+    </UiAnchor>
   )
 }

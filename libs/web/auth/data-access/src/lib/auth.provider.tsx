@@ -23,6 +23,7 @@ export interface AuthProviderContext extends AuthState {
   error?: unknown | undefined
   hasSolana: boolean
   isAdmin: boolean
+  isManager: boolean
   isOnboarded: boolean
   loading: boolean
   login: (input: LoginInput) => Promise<User | undefined>
@@ -115,6 +116,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const hasSolana = (state.user?.identities ?? []).some(
     (identity) => identity.verified === true && identity.provider === IdentityProvider.Solana,
   )
+  const isAdmin = state.user?.role === UserRole.Admin
+  const isManager = state.user?.manager || isAdmin
 
   const value: AuthProviderContext = {
     appConfig: configQuery.data?.config,
@@ -126,7 +129,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     error: state.error,
     hasSolana,
     isOnboarded: hasSolana,
-    isAdmin: state.user?.role === UserRole.Admin,
+    isAdmin,
+    isManager,
     user: state.user,
     status: state.status,
     loading: state.status === 'loading',
