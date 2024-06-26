@@ -4,7 +4,7 @@ import {
   useAdminRemoveTeamMember,
   useAdminToggleTeamAdmin,
 } from '@deanslist-platform/web-team-data-access'
-import { TeamUiMembersPage } from '@deanslist-platform/web-team-ui'
+import { TeamUiSettingsMembers } from '@deanslist-platform/web-team-ui'
 
 export function AdminTeamDetailMembersTab({ teamId }: { teamId: string }) {
   const { items, query } = useAdminGetTeamMembers({ teamId })
@@ -18,7 +18,7 @@ export function AdminTeamDetailMembersTab({ teamId }: { teamId: string }) {
   }
 
   return (
-    <TeamUiMembersPage
+    <TeamUiSettingsMembers
       items={items}
       isLoading={query.isLoading}
       remove={(userId) => removeTeamMember.mutateAsync(userId).then(refresh)}

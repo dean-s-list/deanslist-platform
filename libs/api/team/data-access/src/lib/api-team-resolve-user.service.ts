@@ -38,6 +38,7 @@ export class ApiTeamResolveUserService {
       where: getUserTeamWhereInput(input),
       limit: input.limit ?? 10,
       page: input.page ?? 1,
+      include: { members: true, projects: true },
     })
   }
 

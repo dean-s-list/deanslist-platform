@@ -1,24 +1,25 @@
-import { CoreUiSearchField } from '@deanslist-platform/web-core-ui'
+import { CoreUiBackLink, CoreUiButton, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
 import { useUserFindManyTeam } from '@deanslist-platform/web-team-data-access'
 import { TeamUiGrid } from '@deanslist-platform/web-team-ui'
-import { Button, Group } from '@mantine/core'
+import { Group } from '@mantine/core'
 import { UiDebugModal, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
-import { Link } from 'react-router-dom'
+import { IconPlus } from '@tabler/icons-react'
 
-export function UserTeamListFeature() {
-  const { deleteTeam, items, pagination, query, setSearch } = useUserFindManyTeam({
+export function ManagerTeamListFeature() {
+  const { items, pagination, query, setSearch } = useUserFindManyTeam({
     limit: 12,
   })
 
   return (
     <UiPage
       title="Teams"
+      leftAction={<CoreUiBackLink label="Back to overview" to="/management" />}
       rightAction={
         <Group>
           <UiDebugModal data={items} />
-          <Button component={Link} to="create">
-            Create
-          </Button>
+          <CoreUiButton to="create" iconLeft={IconPlus}>
+            Add Team
+          </CoreUiButton>
         </Group>
       }
     >

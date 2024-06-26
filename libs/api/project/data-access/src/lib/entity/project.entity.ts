@@ -1,5 +1,6 @@
 import { Team } from '@deanslist-platform/api-team-data-access'
 import { Field, Int, ObjectType } from '@nestjs/graphql'
+import { ProjectStatus } from './project-status.enum'
 
 @ObjectType()
 export class Project {
@@ -17,6 +18,8 @@ export class Project {
   name!: string
   @Field()
   slug!: string
+  @Field(() => ProjectStatus, { nullable: true })
+  status!: ProjectStatus
   @Field(() => Int, { nullable: true })
   duration?: number | null
   @Field({ nullable: true })

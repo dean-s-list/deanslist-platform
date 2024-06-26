@@ -18,12 +18,12 @@ export function CoreUiLayout({
   return (
     <AppShell
       header={{ height: headerHeight }}
-      navbar={{ width: 300, breakpoint: 'md', ...navbarConfig }}
+      navbar={navbar ? { width: 300, breakpoint: 'md', ...navbarConfig } : undefined}
       padding="md"
       {...props}
     >
       <AppShell.Header>{header}</AppShell.Header>
-      <AppShell.Navbar p="md">{navbar}</AppShell.Navbar>
+      {navbar ? <AppShell.Navbar p="md">{navbar}</AppShell.Navbar> : null}
       <AppShell.Main>
         <Suspense fallback={<Loader />}>{children}</Suspense>
       </AppShell.Main>

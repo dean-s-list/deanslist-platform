@@ -6,5 +6,5 @@ export type TeamUiAvatarProps = UiAvatarProps & {
 }
 
 export function TeamUiAvatar({ team, ...props }: TeamUiAvatarProps) {
-  return <UiAvatar url={team?.avatarUrl ?? undefined} name={team?.name ?? '?'} {...props} />
+  return <UiAvatar url={team?.avatarUrl ?? undefined} name={team?.name ?? '?'} radius="md" {...props} />
 }

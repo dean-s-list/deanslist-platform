@@ -1,5 +1,5 @@
 import type { Team } from '@deanslist-platform/sdk'
-import { gridLimits, CoreUiPageLimit } from '@deanslist-platform/web-core-ui'
+import { CoreUiPageLimit, gridLimits } from '@deanslist-platform/web-core-ui'
 import { Group, Pagination, SimpleGrid } from '@mantine/core'
 import { UiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core'
 import { DataTableProps } from 'mantine-datatable'

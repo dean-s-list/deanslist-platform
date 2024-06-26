@@ -1,9 +1,11 @@
 fragment TeamDetails on Team {
-  createdAt
-  id
-  name
+  activeProjectsCount
   avatarUrl
+  createdAt
   homeServerId
+  id
+  memberCount
+  name
   updatedAt
   viewUrl
 }

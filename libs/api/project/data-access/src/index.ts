@@ -8,3 +8,5 @@ export * from './lib/dto/user-update-project.input'
 export * from './lib/entity/project-paging.entity'
 export * from './lib/entity/project.entity'
 export * from './lib/event/project-created.event'
+
+export * from './lib/entity/project-status.enum'

@@ -282,6 +282,7 @@ type Project {
   name: String!
   slug: String!
   startDate: DateTime
+  status: ProjectStatus
   team: Team
   teamId: String!
   updatedAt: DateTime
@@ -291,6 +292,12 @@ type Project {
 type ProjectPaging {
   data: [Project!]!
   meta: PagingMeta!
+}
+
+enum ProjectStatus {
+  Active
+  Draft
+  Inactive
 }
 
 type Query {
@@ -373,10 +380,12 @@ type ReviewPaging {
 }
 
 type Team {
+  activeProjectsCount: Int
   avatarUrl: String
   createdAt: DateTime
   homeServerId: String
   id: String!
+  memberCount: Int
   members: [TeamMember!]
   name: String!
   updatedAt: DateTime
@@ -497,6 +506,7 @@ input UserUpdateProjectInput {
   duration: Int
   name: String
   startDate: DateTime
+  status: ProjectStatus
 }
 
 input UserUpdateRatingInput {

@@ -3,7 +3,7 @@ import { useUserFindOneTeam } from '@deanslist-platform/web-team-data-access'
 import { UserTeamUiUpdateForm } from '@deanslist-platform/web-team-ui'
 import { UiError, UiLoader } from '@pubkey-ui/core'
 
-export function UserTeamSettingsGeneralTab({ teamId }: { teamId: string }) {
+export function ManagerTeamSettingsGeneralTab({ teamId }: { teamId: string }) {
   const { item, query, updateTeam } = useUserFindOneTeam({ teamId })
   const { items: servers } = useUserGetDiscordServers()
   if (query.isLoading) {

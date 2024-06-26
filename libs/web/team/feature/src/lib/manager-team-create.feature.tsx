@@ -5,7 +5,7 @@ import { UserTeamUiCreateForm } from '@deanslist-platform/web-team-ui'
 import { toastError, UiCard, UiPage } from '@pubkey-ui/core'
 import { useNavigate } from 'react-router-dom'
 
-export function UserTeamCreateFeature() {
+export function ManagerTeamCreateFeature() {
   const navigate = useNavigate()
   const { createTeam } = useUserFindManyTeam()
 

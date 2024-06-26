@@ -1,18 +1,20 @@
-import { CoreUiBack } from '@deanslist-platform/web-core-ui'
+import { useAuth } from '@deanslist-platform/web-auth-data-access'
+import { CoreUiBack, CoreUiButton } from '@deanslist-platform/web-core-ui'
 import { UserProjectTeamFeature } from '@deanslist-platform/web-project-feature'
 import { useUserFindOneTeam, useUserGetTeamMember } from '@deanslist-platform/web-team-data-access'
 import { TeamUiItem } from '@deanslist-platform/web-team-ui'
 import { Group } from '@mantine/core'
 import { UiDebugModal, UiError, UiLoader, UiPage, UiTabRoute, UiTabRoutes } from '@pubkey-ui/core'
+import { IconShield } from '@tabler/icons-react'
 import { useParams } from 'react-router-dom'
-import { UserTeamDetailChannelsTab } from './user-team-detail-channels-tab'
-import { UserTeamDetailMembersTab } from './user-team-detail-members-tab'
-import { UserTeamSettingsGeneralTab } from './user-team-settings-general.tab'
+import { ManagerTeamDetailMembersTab } from './manager-team-detail-members-tab'
+import { ManagerTeamSettingsGeneralTab } from './manager-team-settings-general.tab'
 
-export function UserTeamDetailFeature() {
+export function ManagerTeamDetailFeature() {
   const { teamId } = useParams<{ teamId: string }>() as { teamId: string }
   const { item, query } = useUserFindOneTeam({ teamId })
   const { isTeamAdmin } = useUserGetTeamMember({ teamId })
+  const { isAdmin } = useAuth()
 
   const tabs: UiTabRoute[] = [
     {
@@ -27,17 +29,12 @@ export function UserTeamDetailFeature() {
       {
         path: 'members',
         label: 'Members',
-        element: <UserTeamDetailMembersTab teamId={teamId} />,
-      },
-      {
-        path: 'channels',
-        label: 'Channels',
-        element: <UserTeamDetailChannelsTab teamId={teamId} />,
+        element: <ManagerTeamDetailMembersTab teamId={teamId} />,
       },
       {
         path: 'settings',
         label: 'Team Settings',
-        element: <UserTeamSettingsGeneralTab teamId={teamId} />,
+        element: <ManagerTeamSettingsGeneralTab teamId={teamId} />,
       },
     )
   }
@@ -55,6 +52,11 @@ export function UserTeamDetailFeature() {
       rightAction={
         <Group>
           <UiDebugModal data={item} />
+          {isAdmin ? (
+            <CoreUiButton to={`/admin/teams/${teamId}`} iconLeft={IconShield}>
+              Manage Team
+            </CoreUiButton>
+          ) : null}
         </Group>
       }
     >

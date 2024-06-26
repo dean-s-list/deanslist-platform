@@ -23,11 +23,8 @@ export function TeamUiItem({
       <Group gap="sm" {...groupProps}>
         <TeamUiAvatar team={team} {...avatarProps} />
         <Stack gap={0}>
-          <Text size="lg" fw={500}>
+          <Text size="xl" fw={500}>
             {team?.name}
-          </Text>
-          <Text size="xs" c="dimmed">
-            Team
           </Text>
         </Stack>
       </Group>

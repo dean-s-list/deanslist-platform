@@ -71,12 +71,12 @@ export class ApiTeamDataService {
     return this.core.data.teamMember.findMany({
       where: { teamId },
       include: { user: true },
-      orderBy: [{ admin: 'desc' }, { user: { username: 'asc' } }],
+      orderBy: [{ user: { username: 'asc' } }],
     })
   }
 
   async getTeamsForUser(userId: string) {
-    return await this.core.data.team.findMany({
+    return this.core.data.team.findMany({
       where: { members: { some: { userId } } },
       orderBy: { name: 'asc' },
       include: {

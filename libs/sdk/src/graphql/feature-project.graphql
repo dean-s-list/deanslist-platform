@@ -1,15 +1,16 @@
 fragment ProjectDetails on Project {
+  avatarUrl
   createdAt
   id
+  name
+  slug
+  status
+  teamId
   team {
     ...TeamDetails
   }
-  teamId
-  name
-  slug
-  avatarUrl
-  viewUrl
   updatedAt
+  viewUrl
 }
 
 query userFindManyProject($input: UserFindManyProjectInput!) {

@@ -22,14 +22,14 @@ export function TeamUiLink({
 
   return (
     <UiAnchor to={to ?? undefined} underline="never" {...anchorProps}>
-      <Group gap={4} {...groupProps}>
+      <Group gap="xs" {...groupProps}>
         {prefix ? (
-          <Text size="sm" c="dimmed">
+          <Text size="md" c="dimmed">
             {prefix}
           </Text>
         ) : null}
-        <TeamUiAvatar size="xs" team={team} {...avatarProps} />
-        <Text size="sm">{team?.name}</Text>
+        <TeamUiAvatar size="sm" team={team} {...avatarProps} />
+        <Text size="md">{team?.name}</Text>
       </Group>
     </UiAnchor>
   )

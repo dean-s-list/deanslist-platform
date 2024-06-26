@@ -1,4 +1,4 @@
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, HideField, ObjectType } from '@nestjs/graphql'
 import { TeamMember } from './team-member.entity'
 
 @ObjectType()
@@ -17,4 +17,6 @@ export class Team {
   homeServerId?: string | null
   @Field(() => [TeamMember], { nullable: true })
   members?: TeamMember[]
+  @HideField()
+  projects?: unknown[]
 }

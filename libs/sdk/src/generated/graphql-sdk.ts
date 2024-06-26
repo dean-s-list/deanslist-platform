@@ -520,6 +520,7 @@ export type Project = {
   name: Scalars['String']['output']
   slug: Scalars['String']['output']
   startDate?: Maybe<Scalars['DateTime']['output']>
+  status?: Maybe<ProjectStatus>
   team?: Maybe<Team>
   teamId: Scalars['String']['output']
   updatedAt?: Maybe<Scalars['DateTime']['output']>
@@ -530,6 +531,12 @@ export type ProjectPaging = {
   __typename?: 'ProjectPaging'
   data: Array<Project>
   meta: PagingMeta
+}
+
+export enum ProjectStatus {
+  Active = 'Active',
+  Draft = 'Draft',
+  Inactive = 'Inactive',
 }
 
 export type Query = {
@@ -753,10 +760,12 @@ export type ReviewPaging = {
 
 export type Team = {
   __typename?: 'Team'
+  activeProjectsCount?: Maybe<Scalars['Int']['output']>
   avatarUrl?: Maybe<Scalars['String']['output']>
   createdAt?: Maybe<Scalars['DateTime']['output']>
   homeServerId?: Maybe<Scalars['String']['output']>
   id: Scalars['String']['output']
+  memberCount?: Maybe<Scalars['Int']['output']>
   members?: Maybe<Array<TeamMember>>
   name: Scalars['String']['output']
   updatedAt?: Maybe<Scalars['DateTime']['output']>
@@ -881,6 +890,7 @@ export type UserUpdateProjectInput = {
   duration?: InputMaybe<Scalars['Int']['input']>
   name?: InputMaybe<Scalars['String']['input']>
   startDate?: InputMaybe<Scalars['DateTime']['input']>
+  status?: InputMaybe<ProjectStatus>
 }
 
 export type UserUpdateRatingInput = {
@@ -1764,21 +1774,24 @@ export type AnonVerifyIdentityChallengeMutation = {
 
 export type ProjectDetailsFragment = {
   __typename?: 'Project'
+  avatarUrl?: string | null
   createdAt?: Date | null
   id: string
-  teamId: string
   name: string
   slug: string
-  avatarUrl?: string | null
-  viewUrl: string
+  status?: ProjectStatus | null
+  teamId: string
   updatedAt?: Date | null
+  viewUrl: string
   team?: {
     __typename?: 'Team'
-    createdAt?: Date | null
-    id: string
-    name: string
+    activeProjectsCount?: number | null
     avatarUrl?: string | null
+    createdAt?: Date | null
     homeServerId?: string | null
+    id: string
+    memberCount?: number | null
+    name: string
     updatedAt?: Date | null
     viewUrl: string
   } | null
@@ -1794,21 +1807,24 @@ export type UserFindManyProjectQuery = {
     __typename?: 'ProjectPaging'
     data: Array<{
       __typename?: 'Project'
+      avatarUrl?: string | null
       createdAt?: Date | null
       id: string
-      teamId: string
       name: string
       slug: string
-      avatarUrl?: string | null
-      viewUrl: string
+      status?: ProjectStatus | null
+      teamId: string
       updatedAt?: Date | null
+      viewUrl: string
       team?: {
         __typename?: 'Team'
-        createdAt?: Date | null
-        id: string
-        name: string
+        activeProjectsCount?: number | null
         avatarUrl?: string | null
+        createdAt?: Date | null
         homeServerId?: string | null
+        id: string
+        memberCount?: number | null
+        name: string
         updatedAt?: Date | null
         viewUrl: string
       } | null
@@ -1834,21 +1850,24 @@ export type UserFindOneProjectQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'Project'
+    avatarUrl?: string | null
     createdAt?: Date | null
     id: string
-    teamId: string
     name: string
     slug: string
-    avatarUrl?: string | null
-    viewUrl: string
+    status?: ProjectStatus | null
+    teamId: string
     updatedAt?: Date | null
+    viewUrl: string
     team?: {
       __typename?: 'Team'
-      createdAt?: Date | null
-      id: string
-      name: string
+      activeProjectsCount?: number | null
       avatarUrl?: string | null
+      createdAt?: Date | null
       homeServerId?: string | null
+      id: string
+      memberCount?: number | null
+      name: string
       updatedAt?: Date | null
       viewUrl: string
     } | null
@@ -1863,21 +1882,24 @@ export type UserCreateProjectMutation = {
   __typename?: 'Mutation'
   created?: {
     __typename?: 'Project'
+    avatarUrl?: string | null
     createdAt?: Date | null
     id: string
-    teamId: string
     name: string
     slug: string
-    avatarUrl?: string | null
-    viewUrl: string
+    status?: ProjectStatus | null
+    teamId: string
     updatedAt?: Date | null
+    viewUrl: string
     team?: {
       __typename?: 'Team'
-      createdAt?: Date | null
-      id: string
-      name: string
+      activeProjectsCount?: number | null
       avatarUrl?: string | null
+      createdAt?: Date | null
       homeServerId?: string | null
+      id: string
+      memberCount?: number | null
+      name: string
       updatedAt?: Date | null
       viewUrl: string
     } | null
@@ -1893,21 +1915,24 @@ export type UserUpdateProjectMutation = {
   __typename?: 'Mutation'
   updated?: {
     __typename?: 'Project'
+    avatarUrl?: string | null
     createdAt?: Date | null
     id: string
-    teamId: string
     name: string
     slug: string
-    avatarUrl?: string | null
-    viewUrl: string
+    status?: ProjectStatus | null
+    teamId: string
     updatedAt?: Date | null
+    viewUrl: string
     team?: {
       __typename?: 'Team'
-      createdAt?: Date | null
-      id: string
-      name: string
+      activeProjectsCount?: number | null
       avatarUrl?: string | null
+      createdAt?: Date | null
       homeServerId?: string | null
+      id: string
+      memberCount?: number | null
+      name: string
       updatedAt?: Date | null
       viewUrl: string
     } | null
@@ -1930,21 +1955,24 @@ export type AdminFindManyProjectQuery = {
     __typename?: 'ProjectPaging'
     data: Array<{
       __typename?: 'Project'
+      avatarUrl?: string | null
       createdAt?: Date | null
       id: string
-      teamId: string
       name: string
       slug: string
-      avatarUrl?: string | null
-      viewUrl: string
+      status?: ProjectStatus | null
+      teamId: string
       updatedAt?: Date | null
+      viewUrl: string
       team?: {
         __typename?: 'Team'
-        createdAt?: Date | null
-        id: string
-        name: string
+        activeProjectsCount?: number | null
         avatarUrl?: string | null
+        createdAt?: Date | null
         homeServerId?: string | null
+        id: string
+        memberCount?: number | null
+        name: string
         updatedAt?: Date | null
         viewUrl: string
       } | null
@@ -1970,21 +1998,24 @@ export type AdminFindOneProjectQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'Project'
+    avatarUrl?: string | null
     createdAt?: Date | null
     id: string
-    teamId: string
     name: string
     slug: string
-    avatarUrl?: string | null
-    viewUrl: string
+    status?: ProjectStatus | null
+    teamId: string
     updatedAt?: Date | null
+    viewUrl: string
     team?: {
       __typename?: 'Team'
-      createdAt?: Date | null
-      id: string
-      name: string
+      activeProjectsCount?: number | null
       avatarUrl?: string | null
+      createdAt?: Date | null
       homeServerId?: string | null
+      id: string
+      memberCount?: number | null
+      name: string
       updatedAt?: Date | null
       viewUrl: string
     } | null
@@ -2000,21 +2031,24 @@ export type AdminUpdateProjectMutation = {
   __typename?: 'Mutation'
   updated?: {
     __typename?: 'Project'
+    avatarUrl?: string | null
     createdAt?: Date | null
     id: string
-    teamId: string
     name: string
     slug: string
-    avatarUrl?: string | null
-    viewUrl: string
+    status?: ProjectStatus | null
+    teamId: string
     updatedAt?: Date | null
+    viewUrl: string
     team?: {
       __typename?: 'Team'
-      createdAt?: Date | null
-      id: string
-      name: string
+      activeProjectsCount?: number | null
       avatarUrl?: string | null
+      createdAt?: Date | null
       homeServerId?: string | null
+      id: string
+      memberCount?: number | null
+      name: string
       updatedAt?: Date | null
       viewUrl: string
     } | null
@@ -2147,21 +2181,24 @@ export type ReviewDetailsFragment = {
   viewUrl: string
   project?: {
     __typename?: 'Project'
+    avatarUrl?: string | null
     createdAt?: Date | null
     id: string
-    teamId: string
     name: string
     slug: string
-    avatarUrl?: string | null
-    viewUrl: string
+    status?: ProjectStatus | null
+    teamId: string
     updatedAt?: Date | null
+    viewUrl: string
     team?: {
       __typename?: 'Team'
-      createdAt?: Date | null
-      id: string
-      name: string
+      activeProjectsCount?: number | null
       avatarUrl?: string | null
+      createdAt?: Date | null
       homeServerId?: string | null
+      id: string
+      memberCount?: number | null
+      name: string
       updatedAt?: Date | null
       viewUrl: string
     } | null
@@ -2199,21 +2236,24 @@ export type UserFindManyReviewQuery = {
     viewUrl: string
     project?: {
       __typename?: 'Project'
+      avatarUrl?: string | null
       createdAt?: Date | null
       id: string
-      teamId: string
       name: string
       slug: string
-      avatarUrl?: string | null
-      viewUrl: string
+      status?: ProjectStatus | null
+      teamId: string
       updatedAt?: Date | null
+      viewUrl: string
       team?: {
         __typename?: 'Team'
-        createdAt?: Date | null
-        id: string
-        name: string
+        activeProjectsCount?: number | null
         avatarUrl?: string | null
+        createdAt?: Date | null
         homeServerId?: string | null
+        id: string
+        memberCount?: number | null
+        name: string
         updatedAt?: Date | null
         viewUrl: string
       } | null
@@ -2252,21 +2292,24 @@ export type UserFindUserProjectReviewQuery = {
     viewUrl: string
     project?: {
       __typename?: 'Project'
+      avatarUrl?: string | null
       createdAt?: Date | null
       id: string
-      teamId: string
       name: string
       slug: string
-      avatarUrl?: string | null
-      viewUrl: string
+      status?: ProjectStatus | null
+      teamId: string
       updatedAt?: Date | null
+      viewUrl: string
       team?: {
         __typename?: 'Team'
-        createdAt?: Date | null
-        id: string
-        name: string
+        activeProjectsCount?: number | null
         avatarUrl?: string | null
+        createdAt?: Date | null
         homeServerId?: string | null
+        id: string
+        memberCount?: number | null
+        name: string
         updatedAt?: Date | null
         viewUrl: string
       } | null
@@ -2305,21 +2348,24 @@ export type UserFindOneReviewQuery = {
     viewUrl: string
     project?: {
       __typename?: 'Project'
+      avatarUrl?: string | null
       createdAt?: Date | null
       id: string
-      teamId: string
       name: string
       slug: string
-      avatarUrl?: string | null
-      viewUrl: string
+      status?: ProjectStatus | null
+      teamId: string
       updatedAt?: Date | null
+      viewUrl: string
       team?: {
         __typename?: 'Team'
-        createdAt?: Date | null
-        id: string
-        name: string
+        activeProjectsCount?: number | null
         avatarUrl?: string | null
+        createdAt?: Date | null
         homeServerId?: string | null
+        id: string
+        memberCount?: number | null
+        name: string
         updatedAt?: Date | null
         viewUrl: string
       } | null
@@ -2358,21 +2404,24 @@ export type UserCreateReviewMutation = {
     viewUrl: string
     project?: {
       __typename?: 'Project'
+      avatarUrl?: string | null
       createdAt?: Date | null
       id: string
-      teamId: string
       name: string
       slug: string
-      avatarUrl?: string | null
-      viewUrl: string
+      status?: ProjectStatus | null
+      teamId: string
       updatedAt?: Date | null
+      viewUrl: string
       team?: {
         __typename?: 'Team'
-        createdAt?: Date | null
-        id: string
-        name: string
+        activeProjectsCount?: number | null
         avatarUrl?: string | null
+        createdAt?: Date | null
         homeServerId?: string | null
+        id: string
+        memberCount?: number | null
+        name: string
         updatedAt?: Date | null
         viewUrl: string
       } | null
@@ -2419,21 +2468,24 @@ export type AdminFindManyReviewQuery = {
       viewUrl: string
       project?: {
         __typename?: 'Project'
+        avatarUrl?: string | null
         createdAt?: Date | null
         id: string
-        teamId: string
         name: string
         slug: string
-        avatarUrl?: string | null
-        viewUrl: string
+        status?: ProjectStatus | null
+        teamId: string
         updatedAt?: Date | null
+        viewUrl: string
         team?: {
           __typename?: 'Team'
-          createdAt?: Date | null
-          id: string
-          name: string
+          activeProjectsCount?: number | null
           avatarUrl?: string | null
+          createdAt?: Date | null
           homeServerId?: string | null
+          id: string
+          memberCount?: number | null
+          name: string
           updatedAt?: Date | null
           viewUrl: string
         } | null
@@ -2483,21 +2535,24 @@ export type AdminFindOneReviewQuery = {
     viewUrl: string
     project?: {
       __typename?: 'Project'
+      avatarUrl?: string | null
       createdAt?: Date | null
       id: string
-      teamId: string
       name: string
       slug: string
-      avatarUrl?: string | null
-      viewUrl: string
+      status?: ProjectStatus | null
+      teamId: string
       updatedAt?: Date | null
+      viewUrl: string
       team?: {
         __typename?: 'Team'
-        createdAt?: Date | null
-        id: string
-        name: string
+        activeProjectsCount?: number | null
         avatarUrl?: string | null
+        createdAt?: Date | null
         homeServerId?: string | null
+        id: string
+        memberCount?: number | null
+        name: string
         updatedAt?: Date | null
         viewUrl: string
       } | null
@@ -2527,11 +2582,13 @@ export type AdminDeleteReviewMutation = { __typename?: 'Mutation'; deleted?: boo
 
 export type TeamDetailsFragment = {
   __typename?: 'Team'
-  createdAt?: Date | null
-  id: string
-  name: string
+  activeProjectsCount?: number | null
   avatarUrl?: string | null
+  createdAt?: Date | null
   homeServerId?: string | null
+  id: string
+  memberCount?: number | null
+  name: string
   updatedAt?: Date | null
   viewUrl: string
 }
@@ -2629,11 +2686,13 @@ export type UserFindManyTeamQuery = {
     __typename?: 'TeamPaging'
     data: Array<{
       __typename?: 'Team'
-      createdAt?: Date | null
-      id: string
-      name: string
+      activeProjectsCount?: number | null
       avatarUrl?: string | null
+      createdAt?: Date | null
       homeServerId?: string | null
+      id: string
+      memberCount?: number | null
+      name: string
       updatedAt?: Date | null
       viewUrl: string
     }>
@@ -2658,11 +2717,13 @@ export type UserFindOneTeamQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'Team'
-    createdAt?: Date | null
-    id: string
-    name: string
+    activeProjectsCount?: number | null
     avatarUrl?: string | null
+    createdAt?: Date | null
     homeServerId?: string | null
+    id: string
+    memberCount?: number | null
+    name: string
     updatedAt?: Date | null
     viewUrl: string
   } | null
@@ -2676,11 +2737,13 @@ export type UserCreateTeamMutation = {
   __typename?: 'Mutation'
   created?: {
     __typename?: 'Team'
-    createdAt?: Date | null
-    id: string
-    name: string
+    activeProjectsCount?: number | null
     avatarUrl?: string | null
+    createdAt?: Date | null
     homeServerId?: string | null
+    id: string
+    memberCount?: number | null
+    name: string
     updatedAt?: Date | null
     viewUrl: string
   } | null
@@ -2695,11 +2758,13 @@ export type UserUpdateTeamMutation = {
   __typename?: 'Mutation'
   updated?: {
     __typename?: 'Team'
-    createdAt?: Date | null
-    id: string
-    name: string
+    activeProjectsCount?: number | null
     avatarUrl?: string | null
+    createdAt?: Date | null
     homeServerId?: string | null
+    id: string
+    memberCount?: number | null
+    name: string
     updatedAt?: Date | null
     viewUrl: string
   } | null
@@ -2721,11 +2786,13 @@ export type AdminFindManyTeamQuery = {
     __typename?: 'TeamPaging'
     data: Array<{
       __typename?: 'Team'
-      createdAt?: Date | null
-      id: string
-      name: string
+      activeProjectsCount?: number | null
       avatarUrl?: string | null
+      createdAt?: Date | null
       homeServerId?: string | null
+      id: string
+      memberCount?: number | null
+      name: string
       updatedAt?: Date | null
       viewUrl: string
     }>
@@ -2780,11 +2847,13 @@ export type AdminFindOneTeamQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'Team'
-    createdAt?: Date | null
-    id: string
-    name: string
+    activeProjectsCount?: number | null
     avatarUrl?: string | null
+    createdAt?: Date | null
     homeServerId?: string | null
+    id: string
+    memberCount?: number | null
+    name: string
     updatedAt?: Date | null
     viewUrl: string
   } | null
@@ -2799,11 +2868,13 @@ export type AdminUpdateTeamMutation = {
   __typename?: 'Mutation'
   updated?: {
     __typename?: 'Team'
-    createdAt?: Date | null
-    id: string
-    name: string
+    activeProjectsCount?: number | null
     avatarUrl?: string | null
+    createdAt?: Date | null
     homeServerId?: string | null
+    id: string
+    memberCount?: number | null
+    name: string
     updatedAt?: Date | null
     viewUrl: string
   } | null
@@ -3203,28 +3274,31 @@ export const RatingDetailsFragmentDoc = gql`
 `
 export const TeamDetailsFragmentDoc = gql`
   fragment TeamDetails on Team {
-    createdAt
-    id
-    name
+    activeProjectsCount
     avatarUrl
+    createdAt
     homeServerId
+    id
+    memberCount
+    name
     updatedAt
     viewUrl
   }
 `
 export const ProjectDetailsFragmentDoc = gql`
   fragment ProjectDetails on Project {
+    avatarUrl
     createdAt
     id
+    name
+    slug
+    status
+    teamId
     team {
       ...TeamDetails
     }
-    teamId
-    name
-    slug
-    avatarUrl
-    viewUrl
     updatedAt
+    viewUrl
   }
   ${TeamDetailsFragmentDoc}
 `
@@ -5906,6 +5980,8 @@ export const CommentCategorySchema = z.nativeEnum(CommentCategory)
 
 export const IdentityProviderSchema = z.nativeEnum(IdentityProvider)
 
+export const ProjectStatusSchema = z.nativeEnum(ProjectStatus)
+
 export const UserRoleSchema = z.nativeEnum(UserRole)
 
 export const UserStatusSchema = z.nativeEnum(UserStatus)
@@ -6155,6 +6231,7 @@ export function UserUpdateProjectInputSchema(): z.ZodObject<Properties<UserUpdat
     duration: z.number().nullish(),
     name: z.string().nullish(),
     startDate: definedNonNullAnySchema.nullish(),
+    status: ProjectStatusSchema.nullish(),
   })
 }
 
