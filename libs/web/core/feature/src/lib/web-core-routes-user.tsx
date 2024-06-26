@@ -1,6 +1,5 @@
 import { DashboardFeature } from '@deanslist-platform/web-dashboard-feature'
 import { UserLeaderboardFeature } from '@deanslist-platform/web-leaderboard-feature'
-import { UserManagementFeature } from '@deanslist-platform/web-management-feature'
 import { UserProjectFeature } from '@deanslist-platform/web-project-feature'
 import { UserRatingFeature } from '@deanslist-platform/web-rating-feature'
 import { SettingsFeature } from '@deanslist-platform/web-settings-feature'
@@ -9,7 +8,10 @@ import { UserTeamFeature } from '@deanslist-platform/web-team-feature'
 import { UserFeature } from '@deanslist-platform/web-user-feature'
 import { UiDashboardItem } from '@pubkey-ui/core'
 import { IconCube, IconSettings, IconUsers } from '@tabler/icons-react'
+import { lazy } from 'react'
 import { RouteObject, useRoutes } from 'react-router-dom'
+
+export const ManagementRoutes = lazy(() => import('./web-core-routes-management'))
 
 const links: UiDashboardItem[] = [
   // User Dashboard Links are added by the web-crud generator
@@ -21,7 +23,7 @@ const links: UiDashboardItem[] = [
 const routes: RouteObject[] = [
   // User Dashboard Routes are added by the web-crud generator
   { path: '/dashboard', element: <DashboardFeature links={links} /> },
-  { path: '/management/*', element: <UserManagementFeature /> },
+  { path: '/management/*', element: <ManagementRoutes /> },
   { path: '/projects/*', element: <UserProjectFeature /> },
   { path: '/settings/*', element: <SettingsFeature /> },
   { path: '/solana/*', element: <SolanaFeature /> },
