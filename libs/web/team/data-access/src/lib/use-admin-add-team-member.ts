@@ -13,9 +13,9 @@ export function useAdminAddTeamMember({ teamId }: { teamId: string }) {
         .then((res) => res.data)
         .then((res) => {
           if (res.added) {
-            toastSuccess('User added to team')
+            toastSuccess('Member added to team')
           } else {
-            toastError('User not added to team')
+            toastError('Member not added to team')
           }
         })
         .catch((err) => {

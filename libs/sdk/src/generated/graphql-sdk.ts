@@ -233,6 +233,22 @@ export type LoginInput = {
   username: Scalars['String']['input']
 }
 
+export type ManagerCreateTeamInput = {
+  name: Scalars['String']['input']
+}
+
+export type ManagerFindManyTeamInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>
+  page?: InputMaybe<Scalars['Int']['input']>
+  search?: InputMaybe<Scalars['String']['input']>
+}
+
+export type ManagerUpdateTeamInput = {
+  avatarUrl?: InputMaybe<Scalars['String']['input']>
+  homeServerId?: InputMaybe<Scalars['String']['input']>
+  name?: InputMaybe<Scalars['String']['input']>
+}
+
 export type Mutation = {
   __typename?: 'Mutation'
   adminAddTeamMember?: Maybe<Scalars['Boolean']['output']>
@@ -262,26 +278,26 @@ export type Mutation = {
   anonVerifyIdentityChallenge?: Maybe<IdentityChallenge>
   login?: Maybe<User>
   logout?: Maybe<Scalars['Boolean']['output']>
+  managerAddTeamMember?: Maybe<Scalars['Boolean']['output']>
+  managerCreateTeam?: Maybe<Team>
+  managerDeleteTeam?: Maybe<Scalars['Boolean']['output']>
+  managerRemoveTeamMember?: Maybe<Scalars['Boolean']['output']>
+  managerToggleTeamAdmin?: Maybe<Scalars['Boolean']['output']>
+  managerUpdateTeam?: Maybe<Team>
   register?: Maybe<User>
-  userAddTeamMember?: Maybe<Scalars['Boolean']['output']>
   userCreateComment?: Maybe<Comment>
   userCreateProject?: Maybe<Project>
   userCreateRating?: Maybe<Rating>
   userCreateReview?: Maybe<Review>
-  userCreateTeam?: Maybe<Team>
   userDeleteComment?: Maybe<Scalars['Boolean']['output']>
   userDeleteIdentity?: Maybe<Scalars['Boolean']['output']>
   userDeleteProject?: Maybe<Scalars['Boolean']['output']>
   userDeleteRating?: Maybe<Scalars['Boolean']['output']>
   userDeleteReview?: Maybe<Scalars['Boolean']['output']>
-  userDeleteTeam?: Maybe<Scalars['Boolean']['output']>
   userLinkIdentity?: Maybe<Identity>
-  userRemoveTeamMember?: Maybe<Scalars['Boolean']['output']>
-  userToggleTeamAdmin?: Maybe<Scalars['Boolean']['output']>
   userUpdateComment?: Maybe<Comment>
   userUpdateProject?: Maybe<Project>
   userUpdateRating?: Maybe<Rating>
-  userUpdateTeam?: Maybe<Team>
   userUpdateUser?: Maybe<User>
   userVerifyIdentityChallenge?: Maybe<IdentityChallenge>
 }
@@ -406,13 +422,36 @@ export type MutationLoginArgs = {
   input: LoginInput
 }
 
-export type MutationRegisterArgs = {
-  input: RegisterInput
-}
-
-export type MutationUserAddTeamMemberArgs = {
+export type MutationManagerAddTeamMemberArgs = {
   teamId: Scalars['String']['input']
   userId: Scalars['String']['input']
+}
+
+export type MutationManagerCreateTeamArgs = {
+  input: ManagerCreateTeamInput
+}
+
+export type MutationManagerDeleteTeamArgs = {
+  teamId: Scalars['String']['input']
+}
+
+export type MutationManagerRemoveTeamMemberArgs = {
+  teamId: Scalars['String']['input']
+  userId: Scalars['String']['input']
+}
+
+export type MutationManagerToggleTeamAdminArgs = {
+  teamId: Scalars['String']['input']
+  userId: Scalars['String']['input']
+}
+
+export type MutationManagerUpdateTeamArgs = {
+  input: ManagerUpdateTeamInput
+  teamId: Scalars['String']['input']
+}
+
+export type MutationRegisterArgs = {
+  input: RegisterInput
 }
 
 export type MutationUserCreateCommentArgs = {
@@ -429,10 +468,6 @@ export type MutationUserCreateRatingArgs = {
 
 export type MutationUserCreateReviewArgs = {
   projectId: Scalars['String']['input']
-}
-
-export type MutationUserCreateTeamArgs = {
-  input: UserCreateTeamInput
 }
 
 export type MutationUserDeleteCommentArgs = {
@@ -455,22 +490,8 @@ export type MutationUserDeleteReviewArgs = {
   reviewId: Scalars['String']['input']
 }
 
-export type MutationUserDeleteTeamArgs = {
-  teamId: Scalars['String']['input']
-}
-
 export type MutationUserLinkIdentityArgs = {
   input: LinkIdentityInput
-}
-
-export type MutationUserRemoveTeamMemberArgs = {
-  teamId: Scalars['String']['input']
-  userId: Scalars['String']['input']
-}
-
-export type MutationUserToggleTeamAdminArgs = {
-  teamId: Scalars['String']['input']
-  userId: Scalars['String']['input']
 }
 
 export type MutationUserUpdateCommentArgs = {
@@ -486,11 +507,6 @@ export type MutationUserUpdateProjectArgs = {
 export type MutationUserUpdateRatingArgs = {
   input: UserUpdateRatingInput
   ratingId: Scalars['String']['input']
-}
-
-export type MutationUserUpdateTeamArgs = {
-  input: UserUpdateTeamInput
-  teamId: Scalars['String']['input']
 }
 
 export type MutationUserUpdateUserArgs = {
@@ -564,6 +580,10 @@ export type Query = {
   adminGetTeamMembers?: Maybe<Array<TeamMember>>
   anonRequestIdentityChallenge?: Maybe<IdentityChallenge>
   appConfig: AppConfig
+  managerFindManyTeam: TeamPaging
+  managerFindOneTeam?: Maybe<Team>
+  managerGetTeamMember?: Maybe<TeamMember>
+  managerGetTeamMembers?: Maybe<Array<TeamMember>>
   me?: Maybe<User>
   uptime: Scalars['Float']['output']
   userFindManyComment?: Maybe<Array<Comment>>
@@ -581,8 +601,6 @@ export type Query = {
   userGetDiscordServers: Array<DiscordServer>
   userGetProjectChannels: Array<DiscordChannel>
   userGetTeamChannels: Array<DiscordChannel>
-  userGetTeamMember?: Maybe<TeamMember>
-  userGetTeamMembers?: Maybe<Array<TeamMember>>
   userRequestIdentityChallenge?: Maybe<IdentityChallenge>
 }
 
@@ -654,6 +672,22 @@ export type QueryAnonRequestIdentityChallengeArgs = {
   input: RequestIdentityChallengeInput
 }
 
+export type QueryManagerFindManyTeamArgs = {
+  input: ManagerFindManyTeamInput
+}
+
+export type QueryManagerFindOneTeamArgs = {
+  teamId: Scalars['String']['input']
+}
+
+export type QueryManagerGetTeamMemberArgs = {
+  teamId: Scalars['String']['input']
+}
+
+export type QueryManagerGetTeamMembersArgs = {
+  teamId: Scalars['String']['input']
+}
+
 export type QueryUserFindManyCommentArgs = {
   input: UserFindManyCommentInput
 }
@@ -707,14 +741,6 @@ export type QueryUserGetProjectChannelsArgs = {
 }
 
 export type QueryUserGetTeamChannelsArgs = {
-  teamId: Scalars['String']['input']
-}
-
-export type QueryUserGetTeamMemberArgs = {
-  teamId: Scalars['String']['input']
-}
-
-export type QueryUserGetTeamMembersArgs = {
   teamId: Scalars['String']['input']
 }
 
@@ -826,10 +852,6 @@ export type UserCreateRatingInput = {
   rating: Scalars['Float']['input']
 }
 
-export type UserCreateTeamInput = {
-  name: Scalars['String']['input']
-}
-
 export type UserFindManyCommentInput = {
   reviewId: Scalars['String']['input']
   search?: InputMaybe<Scalars['String']['input']>
@@ -900,12 +922,6 @@ export type UserUpdateProjectInput = {
 export type UserUpdateRatingInput = {
   content?: InputMaybe<Scalars['String']['input']>
   rating?: InputMaybe<Scalars['Float']['input']>
-}
-
-export type UserUpdateTeamInput = {
-  avatarUrl?: InputMaybe<Scalars['String']['input']>
-  homeServerId?: InputMaybe<Scalars['String']['input']>
-  name?: InputMaybe<Scalars['String']['input']>
 }
 
 export type UserUpdateUserInput = {
@@ -1799,6 +1815,28 @@ export type ProjectDetailsFragment = {
     name: string
     updatedAt?: Date | null
     viewUrl: string
+    members?: Array<{
+      __typename?: 'TeamMember'
+      createdAt?: Date | null
+      id: string
+      userId: string
+      admin?: boolean | null
+      updatedAt?: Date | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+      } | null
+    }> | null
   } | null
 }
 
@@ -1833,6 +1871,28 @@ export type UserFindManyProjectQuery = {
         name: string
         updatedAt?: Date | null
         viewUrl: string
+        members?: Array<{
+          __typename?: 'TeamMember'
+          createdAt?: Date | null
+          id: string
+          userId: string
+          admin?: boolean | null
+          updatedAt?: Date | null
+          user?: {
+            __typename?: 'User'
+            avatarUrl?: string | null
+            createdAt?: Date | null
+            developer?: boolean | null
+            id: string
+            name?: string | null
+            manager?: boolean | null
+            profileUrl: string
+            role?: UserRole | null
+            status?: UserStatus | null
+            updatedAt?: Date | null
+            username?: string | null
+          } | null
+        }> | null
       } | null
     }>
     meta: {
@@ -1877,6 +1937,28 @@ export type UserFindOneProjectQuery = {
       name: string
       updatedAt?: Date | null
       viewUrl: string
+      members?: Array<{
+        __typename?: 'TeamMember'
+        createdAt?: Date | null
+        id: string
+        userId: string
+        admin?: boolean | null
+        updatedAt?: Date | null
+        user?: {
+          __typename?: 'User'
+          avatarUrl?: string | null
+          createdAt?: Date | null
+          developer?: boolean | null
+          id: string
+          name?: string | null
+          manager?: boolean | null
+          profileUrl: string
+          role?: UserRole | null
+          status?: UserStatus | null
+          updatedAt?: Date | null
+          username?: string | null
+        } | null
+      }> | null
     } | null
   } | null
 }
@@ -1910,6 +1992,28 @@ export type UserCreateProjectMutation = {
       name: string
       updatedAt?: Date | null
       viewUrl: string
+      members?: Array<{
+        __typename?: 'TeamMember'
+        createdAt?: Date | null
+        id: string
+        userId: string
+        admin?: boolean | null
+        updatedAt?: Date | null
+        user?: {
+          __typename?: 'User'
+          avatarUrl?: string | null
+          createdAt?: Date | null
+          developer?: boolean | null
+          id: string
+          name?: string | null
+          manager?: boolean | null
+          profileUrl: string
+          role?: UserRole | null
+          status?: UserStatus | null
+          updatedAt?: Date | null
+          username?: string | null
+        } | null
+      }> | null
     } | null
   } | null
 }
@@ -1944,6 +2048,28 @@ export type UserUpdateProjectMutation = {
       name: string
       updatedAt?: Date | null
       viewUrl: string
+      members?: Array<{
+        __typename?: 'TeamMember'
+        createdAt?: Date | null
+        id: string
+        userId: string
+        admin?: boolean | null
+        updatedAt?: Date | null
+        user?: {
+          __typename?: 'User'
+          avatarUrl?: string | null
+          createdAt?: Date | null
+          developer?: boolean | null
+          id: string
+          name?: string | null
+          manager?: boolean | null
+          profileUrl: string
+          role?: UserRole | null
+          status?: UserStatus | null
+          updatedAt?: Date | null
+          username?: string | null
+        } | null
+      }> | null
     } | null
   } | null
 }
@@ -1985,6 +2111,28 @@ export type AdminFindManyProjectQuery = {
         name: string
         updatedAt?: Date | null
         viewUrl: string
+        members?: Array<{
+          __typename?: 'TeamMember'
+          createdAt?: Date | null
+          id: string
+          userId: string
+          admin?: boolean | null
+          updatedAt?: Date | null
+          user?: {
+            __typename?: 'User'
+            avatarUrl?: string | null
+            createdAt?: Date | null
+            developer?: boolean | null
+            id: string
+            name?: string | null
+            manager?: boolean | null
+            profileUrl: string
+            role?: UserRole | null
+            status?: UserStatus | null
+            updatedAt?: Date | null
+            username?: string | null
+          } | null
+        }> | null
       } | null
     }>
     meta: {
@@ -2029,6 +2177,28 @@ export type AdminFindOneProjectQuery = {
       name: string
       updatedAt?: Date | null
       viewUrl: string
+      members?: Array<{
+        __typename?: 'TeamMember'
+        createdAt?: Date | null
+        id: string
+        userId: string
+        admin?: boolean | null
+        updatedAt?: Date | null
+        user?: {
+          __typename?: 'User'
+          avatarUrl?: string | null
+          createdAt?: Date | null
+          developer?: boolean | null
+          id: string
+          name?: string | null
+          manager?: boolean | null
+          profileUrl: string
+          role?: UserRole | null
+          status?: UserStatus | null
+          updatedAt?: Date | null
+          username?: string | null
+        } | null
+      }> | null
     } | null
   } | null
 }
@@ -2063,6 +2233,28 @@ export type AdminUpdateProjectMutation = {
       name: string
       updatedAt?: Date | null
       viewUrl: string
+      members?: Array<{
+        __typename?: 'TeamMember'
+        createdAt?: Date | null
+        id: string
+        userId: string
+        admin?: boolean | null
+        updatedAt?: Date | null
+        user?: {
+          __typename?: 'User'
+          avatarUrl?: string | null
+          createdAt?: Date | null
+          developer?: boolean | null
+          id: string
+          name?: string | null
+          manager?: boolean | null
+          profileUrl: string
+          role?: UserRole | null
+          status?: UserStatus | null
+          updatedAt?: Date | null
+          username?: string | null
+        } | null
+      }> | null
     } | null
   } | null
 }
@@ -2214,6 +2406,28 @@ export type ReviewDetailsFragment = {
       name: string
       updatedAt?: Date | null
       viewUrl: string
+      members?: Array<{
+        __typename?: 'TeamMember'
+        createdAt?: Date | null
+        id: string
+        userId: string
+        admin?: boolean | null
+        updatedAt?: Date | null
+        user?: {
+          __typename?: 'User'
+          avatarUrl?: string | null
+          createdAt?: Date | null
+          developer?: boolean | null
+          id: string
+          name?: string | null
+          manager?: boolean | null
+          profileUrl: string
+          role?: UserRole | null
+          status?: UserStatus | null
+          updatedAt?: Date | null
+          username?: string | null
+        } | null
+      }> | null
     } | null
   } | null
   reviewer?: {
@@ -2270,6 +2484,28 @@ export type UserFindManyReviewQuery = {
         name: string
         updatedAt?: Date | null
         viewUrl: string
+        members?: Array<{
+          __typename?: 'TeamMember'
+          createdAt?: Date | null
+          id: string
+          userId: string
+          admin?: boolean | null
+          updatedAt?: Date | null
+          user?: {
+            __typename?: 'User'
+            avatarUrl?: string | null
+            createdAt?: Date | null
+            developer?: boolean | null
+            id: string
+            name?: string | null
+            manager?: boolean | null
+            profileUrl: string
+            role?: UserRole | null
+            status?: UserStatus | null
+            updatedAt?: Date | null
+            username?: string | null
+          } | null
+        }> | null
       } | null
     } | null
     reviewer?: {
@@ -2327,6 +2563,28 @@ export type UserFindUserProjectReviewQuery = {
         name: string
         updatedAt?: Date | null
         viewUrl: string
+        members?: Array<{
+          __typename?: 'TeamMember'
+          createdAt?: Date | null
+          id: string
+          userId: string
+          admin?: boolean | null
+          updatedAt?: Date | null
+          user?: {
+            __typename?: 'User'
+            avatarUrl?: string | null
+            createdAt?: Date | null
+            developer?: boolean | null
+            id: string
+            name?: string | null
+            manager?: boolean | null
+            profileUrl: string
+            role?: UserRole | null
+            status?: UserStatus | null
+            updatedAt?: Date | null
+            username?: string | null
+          } | null
+        }> | null
       } | null
     } | null
     reviewer?: {
@@ -2384,6 +2642,28 @@ export type UserFindOneReviewQuery = {
         name: string
         updatedAt?: Date | null
         viewUrl: string
+        members?: Array<{
+          __typename?: 'TeamMember'
+          createdAt?: Date | null
+          id: string
+          userId: string
+          admin?: boolean | null
+          updatedAt?: Date | null
+          user?: {
+            __typename?: 'User'
+            avatarUrl?: string | null
+            createdAt?: Date | null
+            developer?: boolean | null
+            id: string
+            name?: string | null
+            manager?: boolean | null
+            profileUrl: string
+            role?: UserRole | null
+            status?: UserStatus | null
+            updatedAt?: Date | null
+            username?: string | null
+          } | null
+        }> | null
       } | null
     } | null
     reviewer?: {
@@ -2441,6 +2721,28 @@ export type UserCreateReviewMutation = {
         name: string
         updatedAt?: Date | null
         viewUrl: string
+        members?: Array<{
+          __typename?: 'TeamMember'
+          createdAt?: Date | null
+          id: string
+          userId: string
+          admin?: boolean | null
+          updatedAt?: Date | null
+          user?: {
+            __typename?: 'User'
+            avatarUrl?: string | null
+            createdAt?: Date | null
+            developer?: boolean | null
+            id: string
+            name?: string | null
+            manager?: boolean | null
+            profileUrl: string
+            role?: UserRole | null
+            status?: UserStatus | null
+            updatedAt?: Date | null
+            username?: string | null
+          } | null
+        }> | null
       } | null
     } | null
     reviewer?: {
@@ -2506,6 +2808,28 @@ export type AdminFindManyReviewQuery = {
           name: string
           updatedAt?: Date | null
           viewUrl: string
+          members?: Array<{
+            __typename?: 'TeamMember'
+            createdAt?: Date | null
+            id: string
+            userId: string
+            admin?: boolean | null
+            updatedAt?: Date | null
+            user?: {
+              __typename?: 'User'
+              avatarUrl?: string | null
+              createdAt?: Date | null
+              developer?: boolean | null
+              id: string
+              name?: string | null
+              manager?: boolean | null
+              profileUrl: string
+              role?: UserRole | null
+              status?: UserStatus | null
+              updatedAt?: Date | null
+              username?: string | null
+            } | null
+          }> | null
         } | null
       } | null
       reviewer?: {
@@ -2574,6 +2898,28 @@ export type AdminFindOneReviewQuery = {
         name: string
         updatedAt?: Date | null
         viewUrl: string
+        members?: Array<{
+          __typename?: 'TeamMember'
+          createdAt?: Date | null
+          id: string
+          userId: string
+          admin?: boolean | null
+          updatedAt?: Date | null
+          user?: {
+            __typename?: 'User'
+            avatarUrl?: string | null
+            createdAt?: Date | null
+            developer?: boolean | null
+            id: string
+            name?: string | null
+            manager?: boolean | null
+            profileUrl: string
+            role?: UserRole | null
+            status?: UserStatus | null
+            updatedAt?: Date | null
+            username?: string | null
+          } | null
+        }> | null
       } | null
     } | null
     reviewer?: {
@@ -2610,6 +2956,28 @@ export type TeamDetailsFragment = {
   name: string
   updatedAt?: Date | null
   viewUrl: string
+  members?: Array<{
+    __typename?: 'TeamMember'
+    createdAt?: Date | null
+    id: string
+    userId: string
+    admin?: boolean | null
+    updatedAt?: Date | null
+    user?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      manager?: boolean | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+    } | null
+  }> | null
 }
 
 export type TeamMemberDetailsFragment = {
@@ -2635,66 +3003,6 @@ export type TeamMemberDetailsFragment = {
   } | null
 }
 
-export type UserGetTeamMembersQueryVariables = Exact<{
-  teamId: Scalars['String']['input']
-}>
-
-export type UserGetTeamMembersQuery = {
-  __typename?: 'Query'
-  items?: Array<{
-    __typename?: 'TeamMember'
-    createdAt?: Date | null
-    id: string
-    userId: string
-    admin?: boolean | null
-    updatedAt?: Date | null
-    user?: {
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
-      id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
-      updatedAt?: Date | null
-      username?: string | null
-    } | null
-  }> | null
-}
-
-export type UserGetTeamMemberQueryVariables = Exact<{
-  teamId: Scalars['String']['input']
-}>
-
-export type UserGetTeamMemberQuery = {
-  __typename?: 'Query'
-  item?: {
-    __typename?: 'TeamMember'
-    createdAt?: Date | null
-    id: string
-    userId: string
-    admin?: boolean | null
-    updatedAt?: Date | null
-    user?: {
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
-      id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
-      updatedAt?: Date | null
-      username?: string | null
-    } | null
-  } | null
-}
-
 export type UserFindManyTeamQueryVariables = Exact<{
   input: UserFindManyTeamInput
 }>
@@ -2714,6 +3022,28 @@ export type UserFindManyTeamQuery = {
       name: string
       updatedAt?: Date | null
       viewUrl: string
+      members?: Array<{
+        __typename?: 'TeamMember'
+        createdAt?: Date | null
+        id: string
+        userId: string
+        admin?: boolean | null
+        updatedAt?: Date | null
+        user?: {
+          __typename?: 'User'
+          avatarUrl?: string | null
+          createdAt?: Date | null
+          developer?: boolean | null
+          id: string
+          name?: string | null
+          manager?: boolean | null
+          profileUrl: string
+          role?: UserRole | null
+          status?: UserStatus | null
+          updatedAt?: Date | null
+          username?: string | null
+        } | null
+      }> | null
     }>
     meta: {
       __typename?: 'PagingMeta'
@@ -2745,14 +3075,193 @@ export type UserFindOneTeamQuery = {
     name: string
     updatedAt?: Date | null
     viewUrl: string
+    members?: Array<{
+      __typename?: 'TeamMember'
+      createdAt?: Date | null
+      id: string
+      userId: string
+      admin?: boolean | null
+      updatedAt?: Date | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+      } | null
+    }> | null
   } | null
 }
 
-export type UserCreateTeamMutationVariables = Exact<{
-  input: UserCreateTeamInput
+export type ManagerGetTeamMembersQueryVariables = Exact<{
+  teamId: Scalars['String']['input']
 }>
 
-export type UserCreateTeamMutation = {
+export type ManagerGetTeamMembersQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'TeamMember'
+    createdAt?: Date | null
+    id: string
+    userId: string
+    admin?: boolean | null
+    updatedAt?: Date | null
+    user?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      manager?: boolean | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+    } | null
+  }> | null
+}
+
+export type ManagerGetTeamMemberQueryVariables = Exact<{
+  teamId: Scalars['String']['input']
+}>
+
+export type ManagerGetTeamMemberQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'TeamMember'
+    createdAt?: Date | null
+    id: string
+    userId: string
+    admin?: boolean | null
+    updatedAt?: Date | null
+    user?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      manager?: boolean | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+    } | null
+  } | null
+}
+
+export type ManagerFindManyTeamQueryVariables = Exact<{
+  input: ManagerFindManyTeamInput
+}>
+
+export type ManagerFindManyTeamQuery = {
+  __typename?: 'Query'
+  paging: {
+    __typename?: 'TeamPaging'
+    data: Array<{
+      __typename?: 'Team'
+      activeProjectsCount?: number | null
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      homeServerId?: string | null
+      id: string
+      memberCount?: number | null
+      name: string
+      updatedAt?: Date | null
+      viewUrl: string
+      members?: Array<{
+        __typename?: 'TeamMember'
+        createdAt?: Date | null
+        id: string
+        userId: string
+        admin?: boolean | null
+        updatedAt?: Date | null
+        user?: {
+          __typename?: 'User'
+          avatarUrl?: string | null
+          createdAt?: Date | null
+          developer?: boolean | null
+          id: string
+          name?: string | null
+          manager?: boolean | null
+          profileUrl: string
+          role?: UserRole | null
+          status?: UserStatus | null
+          updatedAt?: Date | null
+          username?: string | null
+        } | null
+      }> | null
+    }>
+    meta: {
+      __typename?: 'PagingMeta'
+      currentPage: number
+      isFirstPage: boolean
+      isLastPage: boolean
+      nextPage?: number | null
+      pageCount?: number | null
+      previousPage?: number | null
+      totalCount?: number | null
+    }
+  }
+}
+
+export type ManagerFindOneTeamQueryVariables = Exact<{
+  teamId: Scalars['String']['input']
+}>
+
+export type ManagerFindOneTeamQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'Team'
+    activeProjectsCount?: number | null
+    avatarUrl?: string | null
+    createdAt?: Date | null
+    homeServerId?: string | null
+    id: string
+    memberCount?: number | null
+    name: string
+    updatedAt?: Date | null
+    viewUrl: string
+    members?: Array<{
+      __typename?: 'TeamMember'
+      createdAt?: Date | null
+      id: string
+      userId: string
+      admin?: boolean | null
+      updatedAt?: Date | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+      } | null
+    }> | null
+  } | null
+}
+
+export type ManagerCreateTeamMutationVariables = Exact<{
+  input: ManagerCreateTeamInput
+}>
+
+export type ManagerCreateTeamMutation = {
   __typename?: 'Mutation'
   created?: {
     __typename?: 'Team'
@@ -2765,15 +3274,37 @@ export type UserCreateTeamMutation = {
     name: string
     updatedAt?: Date | null
     viewUrl: string
+    members?: Array<{
+      __typename?: 'TeamMember'
+      createdAt?: Date | null
+      id: string
+      userId: string
+      admin?: boolean | null
+      updatedAt?: Date | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+      } | null
+    }> | null
   } | null
 }
 
-export type UserUpdateTeamMutationVariables = Exact<{
+export type ManagerUpdateTeamMutationVariables = Exact<{
   teamId: Scalars['String']['input']
-  input: UserUpdateTeamInput
+  input: ManagerUpdateTeamInput
 }>
 
-export type UserUpdateTeamMutation = {
+export type ManagerUpdateTeamMutation = {
   __typename?: 'Mutation'
   updated?: {
     __typename?: 'Team'
@@ -2786,14 +3317,36 @@ export type UserUpdateTeamMutation = {
     name: string
     updatedAt?: Date | null
     viewUrl: string
+    members?: Array<{
+      __typename?: 'TeamMember'
+      createdAt?: Date | null
+      id: string
+      userId: string
+      admin?: boolean | null
+      updatedAt?: Date | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+      } | null
+    }> | null
   } | null
 }
 
-export type UserDeleteTeamMutationVariables = Exact<{
+export type ManagerDeleteTeamMutationVariables = Exact<{
   teamId: Scalars['String']['input']
 }>
 
-export type UserDeleteTeamMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
+export type ManagerDeleteTeamMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
 
 export type AdminFindManyTeamQueryVariables = Exact<{
   input: AdminFindManyTeamInput
@@ -2814,6 +3367,28 @@ export type AdminFindManyTeamQuery = {
       name: string
       updatedAt?: Date | null
       viewUrl: string
+      members?: Array<{
+        __typename?: 'TeamMember'
+        createdAt?: Date | null
+        id: string
+        userId: string
+        admin?: boolean | null
+        updatedAt?: Date | null
+        user?: {
+          __typename?: 'User'
+          avatarUrl?: string | null
+          createdAt?: Date | null
+          developer?: boolean | null
+          id: string
+          name?: string | null
+          manager?: boolean | null
+          profileUrl: string
+          role?: UserRole | null
+          status?: UserStatus | null
+          updatedAt?: Date | null
+          username?: string | null
+        } | null
+      }> | null
     }>
     meta: {
       __typename?: 'PagingMeta'
@@ -2875,6 +3450,28 @@ export type AdminFindOneTeamQuery = {
     name: string
     updatedAt?: Date | null
     viewUrl: string
+    members?: Array<{
+      __typename?: 'TeamMember'
+      createdAt?: Date | null
+      id: string
+      userId: string
+      admin?: boolean | null
+      updatedAt?: Date | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+      } | null
+    }> | null
   } | null
 }
 
@@ -2896,6 +3493,28 @@ export type AdminUpdateTeamMutation = {
     name: string
     updatedAt?: Date | null
     viewUrl: string
+    members?: Array<{
+      __typename?: 'TeamMember'
+      createdAt?: Date | null
+      id: string
+      userId: string
+      admin?: boolean | null
+      updatedAt?: Date | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+      } | null
+    }> | null
   } | null
 }
 
@@ -2926,26 +3545,26 @@ export type AdminToggleTeamAdminMutationVariables = Exact<{
 
 export type AdminToggleTeamAdminMutation = { __typename?: 'Mutation'; toggled?: boolean | null }
 
-export type UserAddTeamMemberMutationVariables = Exact<{
+export type ManagerAddTeamMemberMutationVariables = Exact<{
   teamId: Scalars['String']['input']
   userId: Scalars['String']['input']
 }>
 
-export type UserAddTeamMemberMutation = { __typename?: 'Mutation'; added?: boolean | null }
+export type ManagerAddTeamMemberMutation = { __typename?: 'Mutation'; added?: boolean | null }
 
-export type UserRemoveTeamMemberMutationVariables = Exact<{
+export type ManagerRemoveTeamMemberMutationVariables = Exact<{
   teamId: Scalars['String']['input']
   userId: Scalars['String']['input']
 }>
 
-export type UserRemoveTeamMemberMutation = { __typename?: 'Mutation'; removed?: boolean | null }
+export type ManagerRemoveTeamMemberMutation = { __typename?: 'Mutation'; removed?: boolean | null }
 
-export type UserToggleTeamAdminMutationVariables = Exact<{
+export type ManagerToggleTeamAdminMutationVariables = Exact<{
   teamId: Scalars['String']['input']
   userId: Scalars['String']['input']
 }>
 
-export type UserToggleTeamAdminMutation = { __typename?: 'Mutation'; toggled?: boolean | null }
+export type ManagerToggleTeamAdminMutation = { __typename?: 'Mutation'; toggled?: boolean | null }
 
 export type UserDetailsFragment = {
   __typename?: 'User'
@@ -3291,6 +3910,19 @@ export const RatingDetailsFragmentDoc = gql`
     updatedAt
   }
 `
+export const TeamMemberDetailsFragmentDoc = gql`
+  fragment TeamMemberDetails on TeamMember {
+    createdAt
+    id
+    userId
+    user {
+      ...UserDetails
+    }
+    admin
+    updatedAt
+  }
+  ${UserDetailsFragmentDoc}
+`
 export const TeamDetailsFragmentDoc = gql`
   fragment TeamDetails on Team {
     activeProjectsCount
@@ -3302,7 +3934,11 @@ export const TeamDetailsFragmentDoc = gql`
     name
     updatedAt
     viewUrl
+    members {
+      ...TeamMemberDetails
+    }
   }
+  ${TeamMemberDetailsFragmentDoc}
 `
 export const ProjectDetailsFragmentDoc = gql`
   fragment ProjectDetails on Project {
@@ -3339,19 +3975,6 @@ export const ReviewDetailsFragmentDoc = gql`
     viewUrl
   }
   ${ProjectDetailsFragmentDoc}
-  ${UserDetailsFragmentDoc}
-`
-export const TeamMemberDetailsFragmentDoc = gql`
-  fragment TeamMemberDetails on TeamMember {
-    createdAt
-    id
-    userId
-    user {
-      ...UserDetails
-    }
-    admin
-    updatedAt
-  }
   ${UserDetailsFragmentDoc}
 `
 export const LoginDocument = gql`
@@ -3837,22 +4460,6 @@ export const AdminDeleteReviewDocument = gql`
     deleted: adminDeleteReview(reviewId: $reviewId)
   }
 `
-export const UserGetTeamMembersDocument = gql`
-  query userGetTeamMembers($teamId: String!) {
-    items: userGetTeamMembers(teamId: $teamId) {
-      ...TeamMemberDetails
-    }
-  }
-  ${TeamMemberDetailsFragmentDoc}
-`
-export const UserGetTeamMemberDocument = gql`
-  query userGetTeamMember($teamId: String!) {
-    item: userGetTeamMember(teamId: $teamId) {
-      ...TeamMemberDetails
-    }
-  }
-  ${TeamMemberDetailsFragmentDoc}
-`
 export const UserFindManyTeamDocument = gql`
   query userFindManyTeam($input: UserFindManyTeamInput!) {
     paging: userFindManyTeam(input: $input) {
@@ -3875,25 +4482,63 @@ export const UserFindOneTeamDocument = gql`
   }
   ${TeamDetailsFragmentDoc}
 `
-export const UserCreateTeamDocument = gql`
-  mutation userCreateTeam($input: UserCreateTeamInput!) {
-    created: userCreateTeam(input: $input) {
+export const ManagerGetTeamMembersDocument = gql`
+  query managerGetTeamMembers($teamId: String!) {
+    items: managerGetTeamMembers(teamId: $teamId) {
+      ...TeamMemberDetails
+    }
+  }
+  ${TeamMemberDetailsFragmentDoc}
+`
+export const ManagerGetTeamMemberDocument = gql`
+  query managerGetTeamMember($teamId: String!) {
+    item: managerGetTeamMember(teamId: $teamId) {
+      ...TeamMemberDetails
+    }
+  }
+  ${TeamMemberDetailsFragmentDoc}
+`
+export const ManagerFindManyTeamDocument = gql`
+  query managerFindManyTeam($input: ManagerFindManyTeamInput!) {
+    paging: managerFindManyTeam(input: $input) {
+      data {
+        ...TeamDetails
+      }
+      meta {
+        ...PagingMetaDetails
+      }
+    }
+  }
+  ${TeamDetailsFragmentDoc}
+  ${PagingMetaDetailsFragmentDoc}
+`
+export const ManagerFindOneTeamDocument = gql`
+  query managerFindOneTeam($teamId: String!) {
+    item: managerFindOneTeam(teamId: $teamId) {
       ...TeamDetails
     }
   }
   ${TeamDetailsFragmentDoc}
 `
-export const UserUpdateTeamDocument = gql`
-  mutation userUpdateTeam($teamId: String!, $input: UserUpdateTeamInput!) {
-    updated: userUpdateTeam(teamId: $teamId, input: $input) {
+export const ManagerCreateTeamDocument = gql`
+  mutation managerCreateTeam($input: ManagerCreateTeamInput!) {
+    created: managerCreateTeam(input: $input) {
       ...TeamDetails
     }
   }
   ${TeamDetailsFragmentDoc}
 `
-export const UserDeleteTeamDocument = gql`
-  mutation userDeleteTeam($teamId: String!) {
-    deleted: userDeleteTeam(teamId: $teamId)
+export const ManagerUpdateTeamDocument = gql`
+  mutation managerUpdateTeam($teamId: String!, $input: ManagerUpdateTeamInput!) {
+    updated: managerUpdateTeam(teamId: $teamId, input: $input) {
+      ...TeamDetails
+    }
+  }
+  ${TeamDetailsFragmentDoc}
+`
+export const ManagerDeleteTeamDocument = gql`
+  mutation managerDeleteTeam($teamId: String!) {
+    deleted: managerDeleteTeam(teamId: $teamId)
   }
 `
 export const AdminFindManyTeamDocument = gql`
@@ -3954,19 +4599,19 @@ export const AdminToggleTeamAdminDocument = gql`
     toggled: adminToggleTeamAdmin(teamId: $teamId, userId: $userId)
   }
 `
-export const UserAddTeamMemberDocument = gql`
-  mutation userAddTeamMember($teamId: String!, $userId: String!) {
-    added: userAddTeamMember(teamId: $teamId, userId: $userId)
+export const ManagerAddTeamMemberDocument = gql`
+  mutation managerAddTeamMember($teamId: String!, $userId: String!) {
+    added: managerAddTeamMember(teamId: $teamId, userId: $userId)
   }
 `
-export const UserRemoveTeamMemberDocument = gql`
-  mutation userRemoveTeamMember($teamId: String!, $userId: String!) {
-    removed: userRemoveTeamMember(teamId: $teamId, userId: $userId)
+export const ManagerRemoveTeamMemberDocument = gql`
+  mutation managerRemoveTeamMember($teamId: String!, $userId: String!) {
+    removed: managerRemoveTeamMember(teamId: $teamId, userId: $userId)
   }
 `
-export const UserToggleTeamAdminDocument = gql`
-  mutation userToggleTeamAdmin($teamId: String!, $userId: String!) {
-    toggled: userToggleTeamAdmin(teamId: $teamId, userId: $userId)
+export const ManagerToggleTeamAdminDocument = gql`
+  mutation managerToggleTeamAdmin($teamId: String!, $userId: String!) {
+    toggled: managerToggleTeamAdmin(teamId: $teamId, userId: $userId)
   }
 `
 export const AdminCreateUserDocument = gql`
@@ -4118,13 +4763,15 @@ const UserDeleteReviewDocumentString = print(UserDeleteReviewDocument)
 const AdminFindManyReviewDocumentString = print(AdminFindManyReviewDocument)
 const AdminFindOneReviewDocumentString = print(AdminFindOneReviewDocument)
 const AdminDeleteReviewDocumentString = print(AdminDeleteReviewDocument)
-const UserGetTeamMembersDocumentString = print(UserGetTeamMembersDocument)
-const UserGetTeamMemberDocumentString = print(UserGetTeamMemberDocument)
 const UserFindManyTeamDocumentString = print(UserFindManyTeamDocument)
 const UserFindOneTeamDocumentString = print(UserFindOneTeamDocument)
-const UserCreateTeamDocumentString = print(UserCreateTeamDocument)
-const UserUpdateTeamDocumentString = print(UserUpdateTeamDocument)
-const UserDeleteTeamDocumentString = print(UserDeleteTeamDocument)
+const ManagerGetTeamMembersDocumentString = print(ManagerGetTeamMembersDocument)
+const ManagerGetTeamMemberDocumentString = print(ManagerGetTeamMemberDocument)
+const ManagerFindManyTeamDocumentString = print(ManagerFindManyTeamDocument)
+const ManagerFindOneTeamDocumentString = print(ManagerFindOneTeamDocument)
+const ManagerCreateTeamDocumentString = print(ManagerCreateTeamDocument)
+const ManagerUpdateTeamDocumentString = print(ManagerUpdateTeamDocument)
+const ManagerDeleteTeamDocumentString = print(ManagerDeleteTeamDocument)
 const AdminFindManyTeamDocumentString = print(AdminFindManyTeamDocument)
 const AdminGetTeamMembersDocumentString = print(AdminGetTeamMembersDocument)
 const AdminFindOneTeamDocumentString = print(AdminFindOneTeamDocument)
@@ -4133,9 +4780,9 @@ const AdminDeleteTeamDocumentString = print(AdminDeleteTeamDocument)
 const AdminAddTeamMemberDocumentString = print(AdminAddTeamMemberDocument)
 const AdminRemoveTeamMemberDocumentString = print(AdminRemoveTeamMemberDocument)
 const AdminToggleTeamAdminDocumentString = print(AdminToggleTeamAdminDocument)
-const UserAddTeamMemberDocumentString = print(UserAddTeamMemberDocument)
-const UserRemoveTeamMemberDocumentString = print(UserRemoveTeamMemberDocument)
-const UserToggleTeamAdminDocumentString = print(UserToggleTeamAdminDocument)
+const ManagerAddTeamMemberDocumentString = print(ManagerAddTeamMemberDocument)
+const ManagerRemoveTeamMemberDocumentString = print(ManagerRemoveTeamMemberDocument)
+const ManagerToggleTeamAdminDocumentString = print(ManagerToggleTeamAdminDocument)
 const AdminCreateUserDocumentString = print(AdminCreateUserDocument)
 const AdminDeleteUserDocumentString = print(AdminDeleteUserDocument)
 const AdminFindManyUserDocumentString = print(AdminFindManyUserDocument)
@@ -5436,48 +6083,6 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
-    userGetTeamMembers(
-      variables: UserGetTeamMembersQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: UserGetTeamMembersQuery
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<UserGetTeamMembersQuery>(UserGetTeamMembersDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'userGetTeamMembers',
-        'query',
-        variables,
-      )
-    },
-    userGetTeamMember(
-      variables: UserGetTeamMemberQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: UserGetTeamMemberQuery
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<UserGetTeamMemberQuery>(UserGetTeamMemberDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'userGetTeamMember',
-        'query',
-        variables,
-      )
-    },
     userFindManyTeam(
       variables: UserFindManyTeamQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
@@ -5520,11 +6125,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
-    userCreateTeam(
-      variables: UserCreateTeamMutationVariables,
+    managerGetTeamMembers(
+      variables: ManagerGetTeamMembersQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: UserCreateTeamMutation
+      data: ManagerGetTeamMembersQuery
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -5532,20 +6137,104 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<UserCreateTeamMutation>(UserCreateTeamDocumentString, variables, {
+          client.rawRequest<ManagerGetTeamMembersQuery>(ManagerGetTeamMembersDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'userCreateTeam',
+        'managerGetTeamMembers',
+        'query',
+        variables,
+      )
+    },
+    managerGetTeamMember(
+      variables: ManagerGetTeamMemberQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: ManagerGetTeamMemberQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<ManagerGetTeamMemberQuery>(ManagerGetTeamMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'managerGetTeamMember',
+        'query',
+        variables,
+      )
+    },
+    managerFindManyTeam(
+      variables: ManagerFindManyTeamQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: ManagerFindManyTeamQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<ManagerFindManyTeamQuery>(ManagerFindManyTeamDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'managerFindManyTeam',
+        'query',
+        variables,
+      )
+    },
+    managerFindOneTeam(
+      variables: ManagerFindOneTeamQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: ManagerFindOneTeamQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<ManagerFindOneTeamQuery>(ManagerFindOneTeamDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'managerFindOneTeam',
+        'query',
+        variables,
+      )
+    },
+    managerCreateTeam(
+      variables: ManagerCreateTeamMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: ManagerCreateTeamMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<ManagerCreateTeamMutation>(ManagerCreateTeamDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'managerCreateTeam',
         'mutation',
         variables,
       )
     },
-    userUpdateTeam(
-      variables: UserUpdateTeamMutationVariables,
+    managerUpdateTeam(
+      variables: ManagerUpdateTeamMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: UserUpdateTeamMutation
+      data: ManagerUpdateTeamMutation
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -5553,20 +6242,20 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<UserUpdateTeamMutation>(UserUpdateTeamDocumentString, variables, {
+          client.rawRequest<ManagerUpdateTeamMutation>(ManagerUpdateTeamDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'userUpdateTeam',
+        'managerUpdateTeam',
         'mutation',
         variables,
       )
     },
-    userDeleteTeam(
-      variables: UserDeleteTeamMutationVariables,
+    managerDeleteTeam(
+      variables: ManagerDeleteTeamMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: UserDeleteTeamMutation
+      data: ManagerDeleteTeamMutation
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -5574,11 +6263,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<UserDeleteTeamMutation>(UserDeleteTeamDocumentString, variables, {
+          client.rawRequest<ManagerDeleteTeamMutation>(ManagerDeleteTeamDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'userDeleteTeam',
+        'managerDeleteTeam',
         'mutation',
         variables,
       )
@@ -5751,11 +6440,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
-    userAddTeamMember(
-      variables: UserAddTeamMemberMutationVariables,
+    managerAddTeamMember(
+      variables: ManagerAddTeamMemberMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: UserAddTeamMemberMutation
+      data: ManagerAddTeamMemberMutation
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -5763,20 +6452,20 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<UserAddTeamMemberMutation>(UserAddTeamMemberDocumentString, variables, {
+          client.rawRequest<ManagerAddTeamMemberMutation>(ManagerAddTeamMemberDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'userAddTeamMember',
+        'managerAddTeamMember',
         'mutation',
         variables,
       )
     },
-    userRemoveTeamMember(
-      variables: UserRemoveTeamMemberMutationVariables,
+    managerRemoveTeamMember(
+      variables: ManagerRemoveTeamMemberMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: UserRemoveTeamMemberMutation
+      data: ManagerRemoveTeamMemberMutation
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -5784,20 +6473,20 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<UserRemoveTeamMemberMutation>(UserRemoveTeamMemberDocumentString, variables, {
+          client.rawRequest<ManagerRemoveTeamMemberMutation>(ManagerRemoveTeamMemberDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'userRemoveTeamMember',
+        'managerRemoveTeamMember',
         'mutation',
         variables,
       )
     },
-    userToggleTeamAdmin(
-      variables: UserToggleTeamAdminMutationVariables,
+    managerToggleTeamAdmin(
+      variables: ManagerToggleTeamAdminMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: UserToggleTeamAdminMutation
+      data: ManagerToggleTeamAdminMutation
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -5805,11 +6494,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<UserToggleTeamAdminMutation>(UserToggleTeamAdminDocumentString, variables, {
+          client.rawRequest<ManagerToggleTeamAdminMutation>(ManagerToggleTeamAdminDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'userToggleTeamAdmin',
+        'managerToggleTeamAdmin',
         'mutation',
         variables,
       )
@@ -6145,6 +6834,28 @@ export function LoginInputSchema(): z.ZodObject<Properties<LoginInput>> {
   })
 }
 
+export function ManagerCreateTeamInputSchema(): z.ZodObject<Properties<ManagerCreateTeamInput>> {
+  return z.object({
+    name: z.string(),
+  })
+}
+
+export function ManagerFindManyTeamInputSchema(): z.ZodObject<Properties<ManagerFindManyTeamInput>> {
+  return z.object({
+    limit: z.number().nullish(),
+    page: z.number().nullish(),
+    search: z.string().nullish(),
+  })
+}
+
+export function ManagerUpdateTeamInputSchema(): z.ZodObject<Properties<ManagerUpdateTeamInput>> {
+  return z.object({
+    avatarUrl: z.string().nullish(),
+    homeServerId: z.string().nullish(),
+    name: z.string().nullish(),
+  })
+}
+
 export function RegisterInputSchema(): z.ZodObject<Properties<RegisterInput>> {
   return z.object({
     password: z.string(),
@@ -6181,12 +6892,6 @@ export function UserCreateRatingInputSchema(): z.ZodObject<Properties<UserCreate
     commentId: z.string(),
     content: z.string().nullish(),
     rating: z.number(),
-  })
-}
-
-export function UserCreateTeamInputSchema(): z.ZodObject<Properties<UserCreateTeamInput>> {
-  return z.object({
-    name: z.string(),
   })
 }
 
@@ -6262,14 +6967,6 @@ export function UserUpdateRatingInputSchema(): z.ZodObject<Properties<UserUpdate
   return z.object({
     content: z.string().nullish(),
     rating: z.number().nullish(),
-  })
-}
-
-export function UserUpdateTeamInputSchema(): z.ZodObject<Properties<UserUpdateTeamInput>> {
-  return z.object({
-    avatarUrl: z.string().nullish(),
-    homeServerId: z.string().nullish(),
-    name: z.string().nullish(),
   })
 }
 

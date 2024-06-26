@@ -1,6 +1,5 @@
-import { UserCreateTeamInput, UserFindManyTeamInput } from '@deanslist-platform/sdk'
+import { UserFindManyTeamInput } from '@deanslist-platform/sdk'
 import { useSdk } from '@deanslist-platform/web-core-data-access'
-import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
@@ -29,26 +28,5 @@ export function useUserFindManyTeam(props?: Partial<UserFindManyTeamInput>) {
       total,
     },
     setSearch,
-    createTeam: (input: UserCreateTeamInput) =>
-      sdk
-        .userCreateTeam({ input })
-        .then((res) => res.data)
-        .then((res) => {
-          if (res.created) {
-            toastSuccess(`Team created`)
-          } else {
-            toastError(`Team not created`)
-          }
-          return res.created
-        })
-        .catch((err) => {
-          toastError(err.message)
-          return undefined
-        }),
-    deleteTeam: (teamId: string) =>
-      sdk.userDeleteTeam({ teamId }).then(() => {
-        toastSuccess('Team deleted')
-        return query.refetch()
-      }),
   }
 }

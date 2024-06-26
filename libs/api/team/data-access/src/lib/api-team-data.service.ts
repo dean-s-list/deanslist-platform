@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
 import { ApiTeamEventService } from './api-team-event.service'
 import { AdminUpdateTeamInput } from './dto/admin-update-team.input'
-import { UserUpdateTeamInput } from './dto/user-update-team.input'
+import { ManagerUpdateTeamInput } from './dto/manager-update-team.input'
 import { TeamPaging } from './entity/team-paging.entity'
 import { TeamCreatedEvent } from './event/team-created-event'
 
@@ -61,12 +61,14 @@ export class ApiTeamDataService {
     }
     return member
   }
+
   async getTeamMember({ teamId, userId }: { teamId: string; userId: string }) {
     return this.core.data.teamMember.findUnique({
       where: { teamId_userId: { teamId, userId } },
       include: { user: true },
     })
   }
+
   async getTeamMembers(teamId: string) {
     return this.core.data.teamMember.findMany({
       where: { teamId },
@@ -100,6 +102,7 @@ export class ApiTeamDataService {
   async findOneTeam(teamId: string) {
     const found = await this.core.data.team.findUnique({
       where: { id: teamId },
+      include: { members: true },
     })
     if (!found) {
       throw new Error('Team not found')
@@ -107,7 +110,7 @@ export class ApiTeamDataService {
     return found
   }
 
-  async updateTeam(teamId: string, input: AdminUpdateTeamInput | UserUpdateTeamInput) {
+  async updateTeam(teamId: string, input: AdminUpdateTeamInput | ManagerUpdateTeamInput) {
     return this.core.data.team.update({ where: { id: teamId }, data: input })
   }
 

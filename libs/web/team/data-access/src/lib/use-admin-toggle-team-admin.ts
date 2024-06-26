@@ -13,9 +13,9 @@ export function useAdminToggleTeamAdmin({ teamId }: { teamId: string }) {
         .then((res) => res.data)
         .then((res) => {
           if (res.toggled) {
-            toastSuccess('User admin toggled successfully')
+            toastSuccess('Member admin toggled successfully')
           } else {
-            toastError('User admin not toggled')
+            toastError('Member admin not toggled')
           }
         })
         .catch((err) => {

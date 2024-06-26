@@ -8,6 +8,9 @@ fragment TeamDetails on Team {
   name
   updatedAt
   viewUrl
+  members {
+    ...TeamMemberDetails
+  }
 }
 
 fragment TeamMemberDetails on TeamMember {
@@ -19,18 +22,6 @@ fragment TeamMemberDetails on TeamMember {
   }
   admin
   updatedAt
-}
-
-query userGetTeamMembers($teamId: String!) {
-  items: userGetTeamMembers(teamId: $teamId) {
-    ...TeamMemberDetails
-  }
-}
-
-query userGetTeamMember($teamId: String!) {
-  item: userGetTeamMember(teamId: $teamId) {
-    ...TeamMemberDetails
-  }
 }
 
 query userFindManyTeam($input: UserFindManyTeamInput!) {
@@ -50,20 +41,49 @@ query userFindOneTeam($teamId: String!) {
   }
 }
 
-mutation userCreateTeam($input: UserCreateTeamInput!) {
-  created: userCreateTeam(input: $input) {
+query managerGetTeamMembers($teamId: String!) {
+  items: managerGetTeamMembers(teamId: $teamId) {
+    ...TeamMemberDetails
+  }
+}
+
+query managerGetTeamMember($teamId: String!) {
+  item: managerGetTeamMember(teamId: $teamId) {
+    ...TeamMemberDetails
+  }
+}
+
+query managerFindManyTeam($input: ManagerFindManyTeamInput!) {
+  paging: managerFindManyTeam(input: $input) {
+    data {
+      ...TeamDetails
+    }
+    meta {
+      ...PagingMetaDetails
+    }
+  }
+}
+
+query managerFindOneTeam($teamId: String!) {
+  item: managerFindOneTeam(teamId: $teamId) {
     ...TeamDetails
   }
 }
 
-mutation userUpdateTeam($teamId: String!, $input: UserUpdateTeamInput!) {
-  updated: userUpdateTeam(teamId: $teamId, input: $input) {
+mutation managerCreateTeam($input: ManagerCreateTeamInput!) {
+  created: managerCreateTeam(input: $input) {
     ...TeamDetails
   }
 }
 
-mutation userDeleteTeam($teamId: String!) {
-  deleted: userDeleteTeam(teamId: $teamId)
+mutation managerUpdateTeam($teamId: String!, $input: ManagerUpdateTeamInput!) {
+  updated: managerUpdateTeam(teamId: $teamId, input: $input) {
+    ...TeamDetails
+  }
+}
+
+mutation managerDeleteTeam($teamId: String!) {
+  deleted: managerDeleteTeam(teamId: $teamId)
 }
 
 query adminFindManyTeam($input: AdminFindManyTeamInput!) {
@@ -110,13 +130,13 @@ mutation adminToggleTeamAdmin($teamId: String!, $userId: String!) {
   toggled: adminToggleTeamAdmin(teamId: $teamId, userId: $userId)
 }
 
-mutation userAddTeamMember($teamId: String!, $userId: String!) {
-  added: userAddTeamMember(teamId: $teamId, userId: $userId)
+mutation managerAddTeamMember($teamId: String!, $userId: String!) {
+  added: managerAddTeamMember(teamId: $teamId, userId: $userId)
 }
-mutation userRemoveTeamMember($teamId: String!, $userId: String!) {
-  removed: userRemoveTeamMember(teamId: $teamId, userId: $userId)
+mutation managerRemoveTeamMember($teamId: String!, $userId: String!) {
+  removed: managerRemoveTeamMember(teamId: $teamId, userId: $userId)
 }
 
-mutation userToggleTeamAdmin($teamId: String!, $userId: String!) {
-  toggled: userToggleTeamAdmin(teamId: $teamId, userId: $userId)
+mutation managerToggleTeamAdmin($teamId: String!, $userId: String!) {
+  toggled: managerToggleTeamAdmin(teamId: $teamId, userId: $userId)
 }

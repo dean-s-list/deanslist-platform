@@ -2,7 +2,7 @@ import { Project } from '@deanslist-platform/sdk'
 import { CoreUiBack } from '@deanslist-platform/web-core-ui'
 import { ProjectUiItem } from '@deanslist-platform/web-project-ui'
 import { UserReviewFeature } from '@deanslist-platform/web-review-feature'
-import { useUserGetTeamMember } from '@deanslist-platform/web-team-data-access'
+import { useManagerGetTeamMember } from '@deanslist-platform/web-team-data-access'
 import { Group } from '@mantine/core'
 import { UiContainer, UiDebugModal, UiGroup, UiStack, UiTabRoute, UiTabRoutes } from '@pubkey-ui/core'
 import { UserProjectDetailChannelsTab } from './user-project-detail-channels-tab'
@@ -10,7 +10,7 @@ import { UserProjectDetailDashboard } from './user-project-detail-dashboard'
 import { UserProjectSettingsTab } from './user-project-settings-tab'
 
 export function UserProjectDetailPage({ project }: { project: Project }) {
-  const { isTeamAdmin } = useUserGetTeamMember({ teamId: project.teamId })
+  const { isTeamAdmin } = useManagerGetTeamMember({ teamId: project.teamId })
 
   const tabs: UiTabRoute[] = [
     {

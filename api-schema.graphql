@@ -213,6 +213,22 @@ input LoginInput {
   username: String!
 }
 
+input ManagerCreateTeamInput {
+  name: String!
+}
+
+input ManagerFindManyTeamInput {
+  limit: Int = 10
+  page: Int = 1
+  search: String
+}
+
+input ManagerUpdateTeamInput {
+  avatarUrl: String
+  homeServerId: String
+  name: String
+}
+
 type Mutation {
   adminAddTeamMember(teamId: String!, userId: String!): Boolean
   adminCreateIdentity(input: AdminCreateIdentityInput!): Identity
@@ -241,26 +257,26 @@ type Mutation {
   anonVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
   login(input: LoginInput!): User
   logout: Boolean
+  managerAddTeamMember(teamId: String!, userId: String!): Boolean
+  managerCreateTeam(input: ManagerCreateTeamInput!): Team
+  managerDeleteTeam(teamId: String!): Boolean
+  managerRemoveTeamMember(teamId: String!, userId: String!): Boolean
+  managerToggleTeamAdmin(teamId: String!, userId: String!): Boolean
+  managerUpdateTeam(input: ManagerUpdateTeamInput!, teamId: String!): Team
   register(input: RegisterInput!): User
-  userAddTeamMember(teamId: String!, userId: String!): Boolean
   userCreateComment(input: UserCreateCommentInput!): Comment
   userCreateProject(input: UserCreateProjectInput!): Project
   userCreateRating(input: UserCreateRatingInput!): Rating
   userCreateReview(projectId: String!): Review
-  userCreateTeam(input: UserCreateTeamInput!): Team
   userDeleteComment(commentId: String!): Boolean
   userDeleteIdentity(identityId: String!): Boolean
   userDeleteProject(projectId: String!): Boolean
   userDeleteRating(ratingId: String!): Boolean
   userDeleteReview(reviewId: String!): Boolean
-  userDeleteTeam(teamId: String!): Boolean
   userLinkIdentity(input: LinkIdentityInput!): Identity
-  userRemoveTeamMember(teamId: String!, userId: String!): Boolean
-  userToggleTeamAdmin(teamId: String!, userId: String!): Boolean
   userUpdateComment(commentId: String!, input: UserUpdateCommentInput!): Comment
   userUpdateProject(input: UserUpdateProjectInput!, projectId: String!): Project
   userUpdateRating(input: UserUpdateRatingInput!, ratingId: String!): Rating
-  userUpdateTeam(input: UserUpdateTeamInput!, teamId: String!): Team
   userUpdateUser(input: UserUpdateUserInput!): User
   userVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
 }
@@ -324,6 +340,10 @@ type Query {
   adminGetTeamMembers(teamId: String!): [TeamMember!]
   anonRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
   appConfig: AppConfig!
+  managerFindManyTeam(input: ManagerFindManyTeamInput!): TeamPaging!
+  managerFindOneTeam(teamId: String!): Team
+  managerGetTeamMember(teamId: String!): TeamMember
+  managerGetTeamMembers(teamId: String!): [TeamMember!]
   me: User
   uptime: Float!
   userFindManyComment(input: UserFindManyCommentInput!): [Comment!]
@@ -341,8 +361,6 @@ type Query {
   userGetDiscordServers: [DiscordServer!]!
   userGetProjectChannels(projectId: String!): [DiscordChannel!]!
   userGetTeamChannels(teamId: String!): [DiscordChannel!]!
-  userGetTeamMember(teamId: String!): TeamMember
-  userGetTeamMembers(teamId: String!): [TeamMember!]
   userRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
 }
 
@@ -443,10 +461,6 @@ input UserCreateRatingInput {
   rating: Float!
 }
 
-input UserCreateTeamInput {
-  name: String!
-}
-
 input UserFindManyCommentInput {
   reviewId: String!
   search: String
@@ -516,12 +530,6 @@ input UserUpdateProjectInput {
 input UserUpdateRatingInput {
   content: String
   rating: Float
-}
-
-input UserUpdateTeamInput {
-  avatarUrl: String
-  homeServerId: String
-  name: String
 }
 
 input UserUpdateUserInput {

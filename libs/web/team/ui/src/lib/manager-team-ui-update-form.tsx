@@ -1,18 +1,18 @@
-import { DiscordServer, Team, UserUpdateTeamInput } from '@deanslist-platform/sdk'
+import { DiscordServer, ManagerUpdateTeamInput, Team } from '@deanslist-platform/sdk'
 import { Button, Fieldset, Group, Select, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { UiStack } from '@pubkey-ui/core'
 
-export function UserTeamUiUpdateForm({
+export function ManagerTeamUiUpdateForm({
   submit,
   team,
   servers,
 }: {
-  submit: (res: UserUpdateTeamInput) => Promise<boolean>
+  submit: (res: ManagerUpdateTeamInput) => Promise<boolean>
   team: Team
   servers: DiscordServer[]
 }) {
-  const form = useForm<UserUpdateTeamInput>({
+  const form = useForm<ManagerUpdateTeamInput>({
     initialValues: {
       name: team.name ?? '',
       avatarUrl: team.avatarUrl ?? '',

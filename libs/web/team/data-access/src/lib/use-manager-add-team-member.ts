@@ -2,20 +2,20 @@ import { useSdk } from '@deanslist-platform/web-core-data-access'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useMutation } from '@tanstack/react-query'
 
-export function useUserToggleTeamAdmin({ teamId }: { teamId: string }) {
+export function useManagerAddTeamMember({ teamId }: { teamId: string }) {
   const sdk = useSdk()
 
   const mutation = useMutation({
-    mutationKey: ['user', 'userToggleTeamAdmin', { teamId }],
+    mutationKey: ['manager', 'managerAddTeamMember', { teamId }],
     mutationFn: (userId: string) =>
       sdk
-        .userToggleTeamAdmin({ teamId, userId })
+        .managerAddTeamMember({ teamId, userId })
         .then((res) => res.data)
         .then((res) => {
-          if (res.toggled) {
-            toastSuccess('User admin toggled successfully')
+          if (res.added) {
+            toastSuccess('Member added to team')
           } else {
-            toastError('User admin not toggled')
+            toastError('Member not added to team')
           }
         })
         .catch((err) => {

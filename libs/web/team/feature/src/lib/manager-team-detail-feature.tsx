@@ -1,7 +1,7 @@
 import { useAuth } from '@deanslist-platform/web-auth-data-access'
 import { CoreUiBack, CoreUiButton } from '@deanslist-platform/web-core-ui'
 import { UserProjectTeamFeature } from '@deanslist-platform/web-project-feature'
-import { useUserFindOneTeam, useUserGetTeamMember } from '@deanslist-platform/web-team-data-access'
+import { useManagerFindOneTeam, useManagerGetTeamMember } from '@deanslist-platform/web-team-data-access'
 import { TeamUiItem } from '@deanslist-platform/web-team-ui'
 import { Group } from '@mantine/core'
 import { UiDebugModal, UiError, UiLoader, UiPage, UiTabRoute, UiTabRoutes } from '@pubkey-ui/core'
@@ -12,8 +12,8 @@ import { ManagerTeamSettingsGeneralTab } from './manager-team-settings-general.t
 
 export function ManagerTeamDetailFeature() {
   const { teamId } = useParams<{ teamId: string }>() as { teamId: string }
-  const { item, query } = useUserFindOneTeam({ teamId })
-  const { isTeamAdmin } = useUserGetTeamMember({ teamId })
+  const { item, query } = useManagerFindOneTeam({ teamId })
+  const { isTeamAdmin } = useManagerGetTeamMember({ teamId })
   const { isAdmin } = useAuth()
 
   const tabs: UiTabRoute[] = [

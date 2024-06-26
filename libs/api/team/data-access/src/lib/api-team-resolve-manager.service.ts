@@ -4,23 +4,28 @@ import { ManagerCreateTeamInput } from './dto/manager-create-team.input'
 import { ManagerFindManyTeamInput } from './dto/manager-find-many-team.input'
 import { ManagerUpdateTeamInput } from './dto/manager-update-team.input'
 import { TeamPaging } from './entity/team-paging.entity'
-import { getUserTeamWhereInput } from './helpers/get-user-team-where.input'
+import { getManagerTeamWhereInput } from './helpers/get-manager-team-where.input'
 
 @Injectable()
-export class ApiTeamResolveUserService {
+export class ApiTeamResolveManagerService {
   constructor(private readonly data: ApiTeamDataService) {}
+
   async addTeamMember(userId: string, teamId: string, memberId: string) {
     await this.data.ensureTeamAdmin({ teamId, userId })
+
     return this.data.addTeamMember(userId, teamId, memberId)
   }
 
   async createTeam(userId: string, input: ManagerCreateTeamInput) {
+    // Only admins can create teams
     await this.data.core.ensureUserRoleAdmin(userId)
+
     return this.data.createTeam(userId, input)
   }
 
   async deleteTeam(userId: string, teamId: string) {
     await this.data.ensureTeamAdmin({ teamId, userId })
+
     return this.data.deleteTeam(userId, teamId)
   }
 
@@ -35,7 +40,7 @@ export class ApiTeamResolveUserService {
   async findManyTeam(input: ManagerFindManyTeamInput): Promise<TeamPaging> {
     return this.data.findManyTeam({
       orderBy: { createdAt: 'desc' },
-      where: getUserTeamWhereInput(input),
+      where: getManagerTeamWhereInput(input),
       limit: input.limit ?? 10,
       page: input.page ?? 1,
       include: { members: true, projects: true },

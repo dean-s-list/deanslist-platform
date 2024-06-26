@@ -20,6 +20,6 @@ export class ApiTeamResolver {
 
   @ResolveField(() => String)
   viewUrl(@Parent() team: Team) {
-    return `/management/teams/${team.id}`
+    return `/teams/${team.id}`
   }
 }

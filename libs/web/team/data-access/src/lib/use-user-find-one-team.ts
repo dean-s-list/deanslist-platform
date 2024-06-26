@@ -1,6 +1,4 @@
-import { UserUpdateTeamInput } from '@deanslist-platform/sdk'
 import { useSdk } from '@deanslist-platform/web-core-data-access'
-import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 
 export function useUserFindOneTeam({ teamId }: { teamId: string }) {
@@ -15,22 +13,5 @@ export function useUserFindOneTeam({ teamId }: { teamId: string }) {
   return {
     item,
     query,
-    updateTeam: async (input: UserUpdateTeamInput) =>
-      sdk
-        .userUpdateTeam({ teamId, input })
-        .then((res) => res.data)
-        .then(async (res) => {
-          if (res) {
-            toastSuccess('Team updated')
-            await query.refetch()
-            return true
-          }
-          toastError('Team not updated')
-          return false
-        })
-        .catch((err) => {
-          toastError(err.message)
-          return false
-        }),
   }
 }

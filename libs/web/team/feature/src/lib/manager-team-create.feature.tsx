@@ -1,15 +1,15 @@
-import { UserCreateTeamInput } from '@deanslist-platform/sdk'
+import { ManagerCreateTeamInput } from '@deanslist-platform/sdk'
 import { CoreUiBack } from '@deanslist-platform/web-core-ui'
-import { useUserFindManyTeam } from '@deanslist-platform/web-team-data-access'
-import { UserTeamUiCreateForm } from '@deanslist-platform/web-team-ui'
+import { useManagerFindManyTeam } from '@deanslist-platform/web-team-data-access'
+import { ManagerTeamUiCreateForm } from '@deanslist-platform/web-team-ui'
 import { toastError, UiCard, UiPage } from '@pubkey-ui/core'
 import { useNavigate } from 'react-router-dom'
 
 export function ManagerTeamCreateFeature() {
   const navigate = useNavigate()
-  const { createTeam } = useUserFindManyTeam()
+  const { createTeam } = useManagerFindManyTeam()
 
-  async function submit(input: UserCreateTeamInput) {
+  async function submit(input: ManagerCreateTeamInput) {
     return createTeam(input)
       .then((res) => {
         if (res) {
@@ -26,7 +26,7 @@ export function ManagerTeamCreateFeature() {
   return (
     <UiPage leftAction={<CoreUiBack />} title="Create Team">
       <UiCard>
-        <UserTeamUiCreateForm submit={submit} />
+        <ManagerTeamUiCreateForm submit={submit} />
       </UiCard>
     </UiPage>
   )

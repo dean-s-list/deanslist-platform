@@ -13,9 +13,9 @@ export function useAdminRemoveTeamMember({ teamId }: { teamId: string }) {
         .then((res) => res.data)
         .then((res) => {
           if (res.removed) {
-            toastSuccess('User removed from team')
+            toastSuccess('Member removed from team')
           } else {
-            toastError('User not removed from team')
+            toastError('Member not removed from team')
           }
         })
         .catch((err) => {

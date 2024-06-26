@@ -3,6 +3,7 @@ import { Module } from '@nestjs/common'
 import { ApiTeamDataService } from './api-team-data.service'
 import { ApiTeamEventService } from './api-team-event.service'
 import { ApiTeamResolveAdminService } from './api-team-resolve-admin.service'
+import { ApiTeamResolveManagerService } from './api-team-resolve-manager.service'
 import { ApiTeamResolveUserService } from './api-team-resolve-user.service'
 import { ApiTeamService } from './api-team.service'
 
@@ -12,8 +13,9 @@ import { ApiTeamService } from './api-team.service'
     ApiTeamService,
     ApiTeamDataService,
     ApiTeamEventService,
-    ApiTeamResolveUserService,
+    ApiTeamResolveManagerService,
     ApiTeamResolveAdminService,
+    ApiTeamResolveUserService,
   ],
   exports: [ApiTeamService],
 })

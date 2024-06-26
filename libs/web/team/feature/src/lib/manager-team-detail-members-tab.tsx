@@ -1,17 +1,17 @@
 import {
-  useUserAddTeamMember,
-  useUserGetTeamMembers,
-  useUserRemoveTeamMember,
-  useUserToggleTeamAdmin,
+  useManagerAddTeamMember,
+  useManagerGetTeamMembers,
+  useManagerRemoveTeamMember,
+  useManagerToggleTeamAdmin,
 } from '@deanslist-platform/web-team-data-access'
 import { TeamUiSettingsMembers } from '@deanslist-platform/web-team-ui'
 
 export function ManagerTeamDetailMembersTab({ teamId }: { teamId: string }) {
-  const { items, query } = useUserGetTeamMembers({ teamId })
-  const { mutation: addTeamMember } = useUserAddTeamMember({ teamId })
+  const { items, query } = useManagerGetTeamMembers({ teamId })
+  const { mutation: addTeamMember } = useManagerAddTeamMember({ teamId })
 
-  const { mutation: removeTeamMember } = useUserRemoveTeamMember({ teamId })
-  const { mutation: toggleTeamAdmin } = useUserToggleTeamAdmin({ teamId })
+  const { mutation: removeTeamMember } = useManagerRemoveTeamMember({ teamId })
+  const { mutation: toggleTeamAdmin } = useManagerToggleTeamAdmin({ teamId })
 
   function refresh() {
     query.refetch()

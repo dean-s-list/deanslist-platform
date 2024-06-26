@@ -1,5 +1,5 @@
 import { useAuth } from '@deanslist-platform/web-auth-data-access'
-import { UserTeamFeature } from '@deanslist-platform/web-team-feature'
+import { ManagerTeamFeature } from '@deanslist-platform/web-team-feature'
 import { Navigate, useRoutes } from 'react-router-dom'
 import { ManagementProjectsFeature } from './management-projects-feature'
 
@@ -13,6 +13,6 @@ export default function () {
   return useRoutes([
     { path: '', element: <Navigate to="projects" replace /> },
     { path: '/projects/*', element: <ManagementProjectsFeature /> },
-    { path: '/teams/*', element: <UserTeamFeature /> },
+    { path: '/teams/*', element: <ManagerTeamFeature /> },
   ])
 }
