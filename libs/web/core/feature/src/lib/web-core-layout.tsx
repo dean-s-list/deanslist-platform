@@ -1,5 +1,11 @@
 import { useAuth } from '@deanslist-platform/web-auth-data-access'
-import { CoreUiHeader, CoreUiHeaderLink, CoreUiHeaderProfile, CoreUiLayout } from '@deanslist-platform/web-core-ui'
+import {
+  CoreUiHeader,
+  CoreUiHeaderLink,
+  CoreUiHeaderProfile,
+  CoreUiLayout,
+  CoreUiNavbar,
+} from '@deanslist-platform/web-core-ui'
 import { ActionIcon, Group } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { UiLoader } from '@pubkey-ui/core'
@@ -28,7 +34,9 @@ export function WebCoreLayout({ children }: { children: ReactNode }) {
         <CoreUiHeader
           opened={opened}
           toggle={toggle}
-          links={links}
+          links={[]}
+          showBurger
+          showDrawer={false}
           profile={
             isAdmin ? (
               <Group gap="xs">
@@ -46,6 +54,8 @@ export function WebCoreLayout({ children }: { children: ReactNode }) {
           }
         />
       }
+      navbar={<CoreUiNavbar opened={opened} toggle={toggle} links={links} />}
+      navbarConfig={{ collapsed: { mobile: !opened } }}
     >
       <Suspense fallback={<UiLoader mt="xl" size="xl" type="dots" />}>{children}</Suspense>
     </CoreUiLayout>

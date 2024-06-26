@@ -16,6 +16,8 @@ export interface CoreUiHeaderProps {
   opened?: boolean
   profile?: ReactNode
   toggle?: () => void
+  showBurger?: boolean
+  showDrawer?: boolean
 }
 export interface CoreUiHeaderLink {
   link: string
@@ -27,7 +29,9 @@ export function CoreUiHeader(props: CoreUiHeaderProps) {
   const [drawerOpened, { toggle: drawerToggle }] = useDisclosure(false)
   const opened = props.opened ?? drawerOpened
   const toggle = props.toggle ?? drawerToggle
-  const burger = props.links?.length ? <Burger opened={opened} onClick={toggle} size="sm" hiddenFrom="md" /> : null
+  const showBurger = props.showBurger ?? props.links?.length
+  const showDrawer = props.showDrawer ?? true
+  const burger = showBurger ? <Burger opened={opened} onClick={toggle} size="sm" hiddenFrom="md" /> : null
 
   const items = props.links?.map((link) => (
     <Anchor
@@ -64,22 +68,24 @@ export function CoreUiHeader(props: CoreUiHeaderProps) {
 
         {props.profile ? <Group>{props.profile}</Group> : null}
       </div>
-      <Drawer
-        opened={opened}
-        onClose={toggle}
-        title={
-          <Group>
-            <Anchor component={Link} to={props.base ?? '/'} display="flex" onClick={close}>
-              {props.logo ?? <CoreUiLogoType height={28} />}
-            </Anchor>
-          </Group>
-        }
-        hiddenFrom="md"
-        scrollAreaComponent={ScrollArea}
-        {...props.drawerProps}
-      >
-        <Stack gap="sm">{items}</Stack>
-      </Drawer>
+      {showDrawer ? (
+        <Drawer
+          opened={opened}
+          onClose={toggle}
+          title={
+            <Group>
+              <Anchor component={Link} to={props.base ?? '/'} display="flex" onClick={close}>
+                {props.logo ?? <CoreUiLogoType height={28} />}
+              </Anchor>
+            </Group>
+          }
+          hiddenFrom="md"
+          scrollAreaComponent={ScrollArea}
+          {...props.drawerProps}
+        >
+          <Stack gap="sm">{items}</Stack>
+        </Drawer>
+      ) : null}
     </header>
   )
 }
