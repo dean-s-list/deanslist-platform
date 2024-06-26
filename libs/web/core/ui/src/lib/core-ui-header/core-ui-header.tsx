@@ -58,7 +58,7 @@ export function CoreUiHeader(props: CoreUiHeaderProps) {
             {burger}
             <Anchor component={Link} to={props.base ?? '/'} display="flex">
               <Group hiddenFrom="md">{props.logoSmall ?? <CoreUiLogo height={28} />}</Group>
-              <Group visibleFrom="md">{props.logo ?? <CoreUiLogoType height={28} />}</Group>
+              <Group visibleFrom="md">{props.logo ?? <CoreUiLogoType height={36} />}</Group>
             </Anchor>
           </Group>
           <Group gap={5} className={classes.links} visibleFrom="md">
@@ -75,7 +75,7 @@ export function CoreUiHeader(props: CoreUiHeaderProps) {
           title={
             <Group>
               <Anchor component={Link} to={props.base ?? '/'} display="flex" onClick={close}>
-                {props.logo ?? <CoreUiLogoType height={28} />}
+                {props.logo ?? <CoreUiLogoType height={36} />}
               </Anchor>
             </Group>
           }
