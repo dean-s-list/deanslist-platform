@@ -72,6 +72,8 @@ input AdminUpdateProjectInput {
   duration: Int
   name: String
   startDate: DateTime
+  status: ProjectStatus
+  tags: [String!]
   teamId: String
 }
 
@@ -283,6 +285,7 @@ type Project {
   slug: String!
   startDate: DateTime
   status: ProjectStatus
+  tags: [String!]
   team: Team
   teamId: String!
   updatedAt: DateTime
@@ -507,6 +510,7 @@ input UserUpdateProjectInput {
   name: String
   startDate: DateTime
   status: ProjectStatus
+  tags: [String!]
 }
 
 input UserUpdateRatingInput {

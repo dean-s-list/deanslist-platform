@@ -5,6 +5,7 @@ fragment ProjectDetails on Project {
   name
   slug
   status
+  tags
   teamId
   team {
     ...TeamDetails

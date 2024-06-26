@@ -13,4 +13,6 @@ export class UserUpdateProjectInput {
   startDate?: Date
   @Field(() => ProjectStatus, { nullable: true })
   status?: ProjectStatus
+  @Field(() => [String], { nullable: true })
+  tags!: string[]
 }

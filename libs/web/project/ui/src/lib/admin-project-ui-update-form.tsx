@@ -1,6 +1,8 @@
-import { AdminUpdateProjectInput, Project } from '@deanslist-platform/sdk'
-import { Button, Group } from '@mantine/core'
-import { formFieldText, UiForm, UiFormField } from '@pubkey-ui/core'
+import { AdminUpdateProjectInput, getEnumOptions, Project, ProjectStatus } from '@deanslist-platform/sdk'
+import { Button, Fieldset, Group, Select, TagsInput, TextInput } from '@mantine/core'
+import { DateInput } from '@mantine/dates'
+import { useForm } from '@mantine/form'
+import { UiStack } from '@pubkey-ui/core'
 
 export function AdminProjectUiUpdateForm({
   submit,
@@ -9,25 +11,103 @@ export function AdminProjectUiUpdateForm({
   submit: (res: AdminUpdateProjectInput) => Promise<boolean>
   project: Project
 }) {
-  const model: AdminUpdateProjectInput = {
-    teamId: project.teamId ?? '',
-    name: project.name ?? '',
-    avatarUrl: project.avatarUrl ?? '',
-  }
+  const form = useForm<AdminUpdateProjectInput>({
+    initialValues: {
+      name: project.name ?? '',
+      avatarUrl: project.avatarUrl ?? '',
+      duration: project.duration ?? 2,
+      startDate: project.startDate,
+      status: project.status ?? ProjectStatus.Draft,
+      tags: project.tags ?? [],
+    },
 
-  const fields: UiFormField<AdminUpdateProjectInput>[] = [
-    formFieldText('teamId', {
-      label: 'Team ID',
-      description: 'Enter the team ID to move the project to a different team.',
-    }),
-    formFieldText('name', { label: 'Name', description: 'The name of the project must be unique within the team.' }),
-    formFieldText('avatarUrl', { label: 'Avatar URL' }),
-  ]
+    validate: {
+      name: (value) => {
+        if (!value) return 'Name is required.'
+        if (value.length < 3) return 'Name must be at least 3 characters.'
+        if (value.length > 100) return 'Name must be less than 100 characters.'
+      },
+      avatarUrl: (value) => {
+        if (value && !value.startsWith('http')) return 'Avatar URL must be a valid URL.'
+      },
+      duration: (value) => {
+        if (value && value < 1) return 'Duration must be at least 1 week.'
+      },
+      startDate: (value) => {
+        if (value && new Date(value) < new Date()) return 'Start date must be in the future.'
+      },
+    },
+  })
+
   return (
-    <UiForm model={model} fields={fields} submit={(res) => submit(res as AdminUpdateProjectInput)}>
-      <Group justify="right">
-        <Button type="submit">Save</Button>
-      </Group>
-    </UiForm>
+    <UiStack>
+      <form
+        onSubmit={form.onSubmit((values) =>
+          submit({ ...values, duration: parseInt(values.duration?.toString() ?? '2') }),
+        )}
+      >
+        <UiStack>
+          <Fieldset legend="General information">
+            <UiStack>
+              <TextInput
+                withAsterisk
+                label="Slug"
+                description="The slug is a unique identifier for the project and cannot be changed."
+                disabled
+                defaultValue={project.slug}
+              />
+              <TextInput
+                withAsterisk
+                label="Name"
+                placeholder="Name"
+                description="The name of the project must be unique within the team."
+                {...form.getInputProps('name')}
+              />
+              <TextInput
+                label="Avatar URL"
+                placeholder="Avatar URL"
+                description="The URL of the project's avatar image. Leave blank to use the default avatar."
+                {...form.getInputProps('avatarUrl')}
+              />
+              <TagsInput
+                maxTags={2}
+                label="Tags"
+                placeholder="Tags"
+                description="Tags are used to categorize projects."
+                {...form.getInputProps('tags')}
+              />
+              <Select
+                label="Status"
+                placeholder="Status"
+                data={[...getEnumOptions(ProjectStatus)]}
+                {...form.getInputProps('status')}
+              />
+            </UiStack>
+          </Fieldset>
+
+          <Fieldset legend="Timeline">
+            <UiStack>
+              <TextInput
+                label="Duration"
+                type="number"
+                placeholder="Duration"
+                description="The duration of the project in weeks."
+                {...form.getInputProps('duration')}
+              />
+              <DateInput
+                label="Start Date"
+                placeholder="Start Date"
+                description="The start date of the project."
+                {...form.getInputProps('startDate')}
+              />
+            </UiStack>
+          </Fieldset>
+
+          <Group justify="flex-end" mt="md">
+            <Button type="submit">Save</Button>
+          </Group>
+        </UiStack>
+      </form>
+    </UiStack>
   )
 }

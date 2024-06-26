@@ -20,6 +20,8 @@ export class Project {
   slug!: string
   @Field(() => ProjectStatus, { nullable: true })
   status!: ProjectStatus
+  @Field(() => [String], { nullable: true })
+  tags!: string[]
   @Field(() => Int, { nullable: true })
   duration?: number | null
   @Field({ nullable: true })

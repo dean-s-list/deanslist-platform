@@ -1,5 +1,5 @@
 import { getEnumOptions, Project, ProjectStatus, UserUpdateProjectInput } from '@deanslist-platform/sdk'
-import { Button, Fieldset, Group, Select, TextInput } from '@mantine/core'
+import { Button, Fieldset, Group, Select, TagsInput, TextInput } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { useForm } from '@mantine/form'
 import { UiStack } from '@pubkey-ui/core'
@@ -18,6 +18,7 @@ export function UserProjectUiUpdateForm({
       duration: project.duration ?? 2,
       startDate: project.startDate,
       status: project.status ?? ProjectStatus.Draft,
+      tags: project.tags ?? [],
     },
 
     validate: {
@@ -68,7 +69,13 @@ export function UserProjectUiUpdateForm({
                 description="The URL of the project's avatar image. Leave blank to use the default avatar."
                 {...form.getInputProps('avatarUrl')}
               />
-
+              <TagsInput
+                maxTags={2}
+                label="Tags"
+                placeholder="Tags"
+                description="Tags are used to categorize projects."
+                {...form.getInputProps('tags')}
+              />
               <Select
                 label="Status"
                 placeholder="Status"

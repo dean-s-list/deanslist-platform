@@ -94,6 +94,8 @@ export type AdminUpdateProjectInput = {
   duration?: InputMaybe<Scalars['Int']['input']>
   name?: InputMaybe<Scalars['String']['input']>
   startDate?: InputMaybe<Scalars['DateTime']['input']>
+  status?: InputMaybe<ProjectStatus>
+  tags?: InputMaybe<Array<Scalars['String']['input']>>
   teamId?: InputMaybe<Scalars['String']['input']>
 }
 
@@ -521,6 +523,7 @@ export type Project = {
   slug: Scalars['String']['output']
   startDate?: Maybe<Scalars['DateTime']['output']>
   status?: Maybe<ProjectStatus>
+  tags?: Maybe<Array<Scalars['String']['output']>>
   team?: Maybe<Team>
   teamId: Scalars['String']['output']
   updatedAt?: Maybe<Scalars['DateTime']['output']>
@@ -891,6 +894,7 @@ export type UserUpdateProjectInput = {
   name?: InputMaybe<Scalars['String']['input']>
   startDate?: InputMaybe<Scalars['DateTime']['input']>
   status?: InputMaybe<ProjectStatus>
+  tags?: InputMaybe<Array<Scalars['String']['input']>>
 }
 
 export type UserUpdateRatingInput = {
@@ -1780,6 +1784,7 @@ export type ProjectDetailsFragment = {
   name: string
   slug: string
   status?: ProjectStatus | null
+  tags?: Array<string> | null
   teamId: string
   updatedAt?: Date | null
   viewUrl: string
@@ -1813,6 +1818,7 @@ export type UserFindManyProjectQuery = {
       name: string
       slug: string
       status?: ProjectStatus | null
+      tags?: Array<string> | null
       teamId: string
       updatedAt?: Date | null
       viewUrl: string
@@ -1856,6 +1862,7 @@ export type UserFindOneProjectQuery = {
     name: string
     slug: string
     status?: ProjectStatus | null
+    tags?: Array<string> | null
     teamId: string
     updatedAt?: Date | null
     viewUrl: string
@@ -1888,6 +1895,7 @@ export type UserCreateProjectMutation = {
     name: string
     slug: string
     status?: ProjectStatus | null
+    tags?: Array<string> | null
     teamId: string
     updatedAt?: Date | null
     viewUrl: string
@@ -1921,6 +1929,7 @@ export type UserUpdateProjectMutation = {
     name: string
     slug: string
     status?: ProjectStatus | null
+    tags?: Array<string> | null
     teamId: string
     updatedAt?: Date | null
     viewUrl: string
@@ -1961,6 +1970,7 @@ export type AdminFindManyProjectQuery = {
       name: string
       slug: string
       status?: ProjectStatus | null
+      tags?: Array<string> | null
       teamId: string
       updatedAt?: Date | null
       viewUrl: string
@@ -2004,6 +2014,7 @@ export type AdminFindOneProjectQuery = {
     name: string
     slug: string
     status?: ProjectStatus | null
+    tags?: Array<string> | null
     teamId: string
     updatedAt?: Date | null
     viewUrl: string
@@ -2037,6 +2048,7 @@ export type AdminUpdateProjectMutation = {
     name: string
     slug: string
     status?: ProjectStatus | null
+    tags?: Array<string> | null
     teamId: string
     updatedAt?: Date | null
     viewUrl: string
@@ -2187,6 +2199,7 @@ export type ReviewDetailsFragment = {
     name: string
     slug: string
     status?: ProjectStatus | null
+    tags?: Array<string> | null
     teamId: string
     updatedAt?: Date | null
     viewUrl: string
@@ -2242,6 +2255,7 @@ export type UserFindManyReviewQuery = {
       name: string
       slug: string
       status?: ProjectStatus | null
+      tags?: Array<string> | null
       teamId: string
       updatedAt?: Date | null
       viewUrl: string
@@ -2298,6 +2312,7 @@ export type UserFindUserProjectReviewQuery = {
       name: string
       slug: string
       status?: ProjectStatus | null
+      tags?: Array<string> | null
       teamId: string
       updatedAt?: Date | null
       viewUrl: string
@@ -2354,6 +2369,7 @@ export type UserFindOneReviewQuery = {
       name: string
       slug: string
       status?: ProjectStatus | null
+      tags?: Array<string> | null
       teamId: string
       updatedAt?: Date | null
       viewUrl: string
@@ -2410,6 +2426,7 @@ export type UserCreateReviewMutation = {
       name: string
       slug: string
       status?: ProjectStatus | null
+      tags?: Array<string> | null
       teamId: string
       updatedAt?: Date | null
       viewUrl: string
@@ -2474,6 +2491,7 @@ export type AdminFindManyReviewQuery = {
         name: string
         slug: string
         status?: ProjectStatus | null
+        tags?: Array<string> | null
         teamId: string
         updatedAt?: Date | null
         viewUrl: string
@@ -2541,6 +2559,7 @@ export type AdminFindOneReviewQuery = {
       name: string
       slug: string
       status?: ProjectStatus | null
+      tags?: Array<string> | null
       teamId: string
       updatedAt?: Date | null
       viewUrl: string
@@ -3293,6 +3312,7 @@ export const ProjectDetailsFragmentDoc = gql`
     name
     slug
     status
+    tags
     teamId
     team {
       ...TeamDetails
@@ -6079,6 +6099,8 @@ export function AdminUpdateProjectInputSchema(): z.ZodObject<Properties<AdminUpd
     duration: z.number().nullish(),
     name: z.string().nullish(),
     startDate: definedNonNullAnySchema.nullish(),
+    status: ProjectStatusSchema.nullish(),
+    tags: z.array(z.string()).nullish(),
     teamId: z.string().nullish(),
   })
 }
@@ -6232,6 +6254,7 @@ export function UserUpdateProjectInputSchema(): z.ZodObject<Properties<UserUpdat
     name: z.string().nullish(),
     startDate: definedNonNullAnySchema.nullish(),
     status: ProjectStatusSchema.nullish(),
+    tags: z.array(z.string()).nullish(),
   })
 }
 
