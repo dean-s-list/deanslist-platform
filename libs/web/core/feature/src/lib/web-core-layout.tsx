@@ -29,6 +29,7 @@ export function WebCoreLayout({ children }: { children: ReactNode }) {
 
   return (
     <CoreUiLayout
+      zIndex={0}
       header={
         <CoreUiHeader
           opened={opened}

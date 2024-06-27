@@ -36,7 +36,11 @@ export const provisionDataUsers: Prisma.UserCreateInput[] = [
     identities: {
       create: [
         { provider: IdentityProvider.Discord, providerId: '386584531353862154' },
-        { provider: IdentityProvider.Solana, providerId: 'BEEMANPx2jdmfR7jpn1hRdMuM2Vj4E3azBLb6RUBrCDY' },
+        {
+          provider: IdentityProvider.Solana,
+          providerId: 'BEEMANPx2jdmfR7jpn1hRdMuM2Vj4E3azBLb6RUBrCDY',
+          verified: true,
+        },
       ],
     },
   },

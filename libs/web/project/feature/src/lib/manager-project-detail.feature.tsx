@@ -1,7 +1,6 @@
-import { CoreUiBack } from '@deanslist-platform/web-core-ui'
 import { useManagerFindOneProject } from '@deanslist-platform/web-project-data-access'
 import { ProjectUiItem } from '@deanslist-platform/web-project-ui'
-import { Group } from '@mantine/core'
+import { Group, Paper } from '@mantine/core'
 import {
   UiAlert,
   UiContainer,
@@ -43,17 +42,22 @@ export function ManagerProjectDetailFeature() {
 
   return (
     <UiContainer>
-      <UiStack>
-        <UiGroup>
-          <Group>
-            <CoreUiBack />
-            <ProjectUiItem project={item} />
-          </Group>
-          <Group gap="xs">
-            <UiDebugModal data={item} />
-          </Group>
-        </UiGroup>
-        <UiTabRoutes variant="pills" radius="xl" tabs={tabs} />
+      <UiStack gap="xl">
+        <Paper radius="lg" withBorder p="lg" bg="dark.7">
+          <UiStack>
+            <UiGroup>
+              <Group>
+                <ProjectUiItem project={item} />
+              </Group>
+              <Group gap="xs">
+                <UiDebugModal data={item} />
+              </Group>
+            </UiGroup>
+          </UiStack>
+        </Paper>
+        <Paper radius="lg" withBorder p="lg" bg="dark.7">
+          <UiTabRoutes variant="pills" radius="xl" tabs={tabs} />
+        </Paper>
       </UiStack>
     </UiContainer>
   )
