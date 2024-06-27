@@ -109,6 +109,7 @@ export type AdminUpdateProjectInput = {
   linkTwitter?: InputMaybe<Scalars['String']['input']>
   linkWebsite?: InputMaybe<Scalars['String']['input']>
   name?: InputMaybe<Scalars['String']['input']>
+  reviewsOpen?: InputMaybe<Scalars['Boolean']['input']>
   startDate?: InputMaybe<Scalars['DateTime']['input']>
   status?: InputMaybe<ProjectStatus>
   tags?: InputMaybe<Array<Scalars['String']['input']>>
@@ -318,6 +319,7 @@ export type ManagerUpdateProjectInput = {
   linkWebsite?: InputMaybe<Scalars['String']['input']>
   name?: InputMaybe<Scalars['String']['input']>
   referralId?: InputMaybe<Scalars['String']['input']>
+  reviewsOpen?: InputMaybe<Scalars['Boolean']['input']>
   startDate?: InputMaybe<Scalars['DateTime']['input']>
   status?: InputMaybe<ProjectStatus>
   tags?: InputMaybe<Array<Scalars['String']['input']>>
@@ -703,6 +705,7 @@ export type Project = {
   referral?: Maybe<User>
   reviewCount?: Maybe<Scalars['Int']['output']>
   reviewers?: Maybe<Array<User>>
+  reviewsOpen?: Maybe<Scalars['Boolean']['output']>
   slug: Scalars['String']['output']
   startDate?: Maybe<Scalars['DateTime']['output']>
   status?: Maybe<ProjectStatus>
@@ -2636,6 +2639,7 @@ export type ProjectDetailsFragment = {
   manageUrl: string
   name: string
   reviewCount?: number | null
+  reviewsOpen?: boolean | null
   slug: string
   status?: ProjectStatus | null
   tags?: Array<string> | null
@@ -2720,6 +2724,7 @@ export type ReviewerFindManyProjectQuery = {
       manageUrl: string
       name: string
       reviewCount?: number | null
+      reviewsOpen?: boolean | null
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
@@ -2814,6 +2819,7 @@ export type ReviewerFindOneProjectQuery = {
     manageUrl: string
     name: string
     reviewCount?: number | null
+    reviewsOpen?: boolean | null
     slug: string
     status?: ProjectStatus | null
     tags?: Array<string> | null
@@ -2899,6 +2905,7 @@ export type AdminFindManyProjectQuery = {
       manageUrl: string
       name: string
       reviewCount?: number | null
+      reviewsOpen?: boolean | null
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
@@ -2993,6 +3000,7 @@ export type AdminFindOneProjectQuery = {
     manageUrl: string
     name: string
     reviewCount?: number | null
+    reviewsOpen?: boolean | null
     slug: string
     status?: ProjectStatus | null
     tags?: Array<string> | null
@@ -3107,6 +3115,7 @@ export type AdminUpdateProjectMutation = {
     manageUrl: string
     name: string
     reviewCount?: number | null
+    reviewsOpen?: boolean | null
     slug: string
     status?: ProjectStatus | null
     tags?: Array<string> | null
@@ -3240,6 +3249,7 @@ export type ManagerFindManyProjectQuery = {
       manageUrl: string
       name: string
       reviewCount?: number | null
+      reviewsOpen?: boolean | null
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
@@ -3334,6 +3344,7 @@ export type ManagerFindOneProjectQuery = {
     manageUrl: string
     name: string
     reviewCount?: number | null
+    reviewsOpen?: boolean | null
     slug: string
     status?: ProjectStatus | null
     tags?: Array<string> | null
@@ -3447,6 +3458,7 @@ export type ManagerCreateProjectMutation = {
     manageUrl: string
     name: string
     reviewCount?: number | null
+    reviewsOpen?: boolean | null
     slug: string
     status?: ProjectStatus | null
     tags?: Array<string> | null
@@ -3531,6 +3543,7 @@ export type ManagerUpdateProjectMutation = {
     manageUrl: string
     name: string
     reviewCount?: number | null
+    reviewsOpen?: boolean | null
     slug: string
     status?: ProjectStatus | null
     tags?: Array<string> | null
@@ -3774,6 +3787,7 @@ export type ReviewDetailsFragment = {
     manageUrl: string
     name: string
     reviewCount?: number | null
+    reviewsOpen?: boolean | null
     slug: string
     status?: ProjectStatus | null
     tags?: Array<string> | null
@@ -3881,6 +3895,7 @@ export type ReviewerFindManyReviewByProjectQuery = {
       manageUrl: string
       name: string
       reviewCount?: number | null
+      reviewsOpen?: boolean | null
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
@@ -3989,6 +4004,7 @@ export type ReviewerFindManyReviewByUsernameQuery = {
       manageUrl: string
       name: string
       reviewCount?: number | null
+      reviewsOpen?: boolean | null
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
@@ -4097,6 +4113,7 @@ export type ReviewerFindUserProjectReviewQuery = {
       manageUrl: string
       name: string
       reviewCount?: number | null
+      reviewsOpen?: boolean | null
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
@@ -4205,6 +4222,7 @@ export type ReviewerFindOneReviewQuery = {
       manageUrl: string
       name: string
       reviewCount?: number | null
+      reviewsOpen?: boolean | null
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
@@ -4313,6 +4331,7 @@ export type ReviewerCreateReviewMutation = {
       manageUrl: string
       name: string
       reviewCount?: number | null
+      reviewsOpen?: boolean | null
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
@@ -4429,6 +4448,7 @@ export type AdminFindManyReviewQuery = {
         manageUrl: string
         name: string
         reviewCount?: number | null
+        reviewsOpen?: boolean | null
         slug: string
         status?: ProjectStatus | null
         tags?: Array<string> | null
@@ -4548,6 +4568,7 @@ export type AdminFindOneReviewQuery = {
       manageUrl: string
       name: string
       reviewCount?: number | null
+      reviewsOpen?: boolean | null
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
@@ -5039,6 +5060,7 @@ export const ProjectDetailsFragmentDoc = gql`
     manageUrl
     name
     reviewCount
+    reviewsOpen
     slug
     status
     tags
@@ -8365,6 +8387,7 @@ export function AdminUpdateProjectInputSchema(): z.ZodObject<Properties<AdminUpd
     linkTwitter: z.string().nullish(),
     linkWebsite: z.string().nullish(),
     name: z.string().nullish(),
+    reviewsOpen: z.boolean().nullish(),
     startDate: definedNonNullAnySchema.nullish(),
     status: ProjectStatusSchema.nullish(),
     tags: z.array(z.string()).nullish(),
@@ -8458,6 +8481,7 @@ export function ManagerUpdateProjectInputSchema(): z.ZodObject<Properties<Manage
     linkWebsite: z.string().nullish(),
     name: z.string().nullish(),
     referralId: z.string().nullish(),
+    reviewsOpen: z.boolean().nullish(),
     startDate: definedNonNullAnySchema.nullish(),
     status: ProjectStatusSchema.nullish(),
     tags: z.array(z.string()).nullish(),

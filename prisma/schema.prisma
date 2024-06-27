@@ -138,6 +138,7 @@ model Project {
   amountManagerUsd  Int?
   amountReferralUsd Int?
   amountTotalUsd    Int?
+  reviewsOpen       Boolean          @default(true)
   endDate           DateTime?
   startDate         DateTime?
   avatarUrl         String?

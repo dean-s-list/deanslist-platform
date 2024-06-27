@@ -21,6 +21,7 @@ fragment ProjectDetails on Project {
   manageUrl
   name
   reviewCount
+  reviewsOpen
   slug
   status
   tags

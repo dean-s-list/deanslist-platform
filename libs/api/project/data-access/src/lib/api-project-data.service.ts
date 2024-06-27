@@ -25,7 +25,7 @@ export class ApiProjectDataService {
 
     const isCommunityAdmin = !!found.community.managers?.find((p) => (p.userId = userId))?.admin
     const isManager = found.managers.some((p) => p.id === userId)
-
+    console.log({ userId, isCommunityAdmin, isManager, managers: found.community.managers })
     if (!isCommunityAdmin && !isManager) {
       throw new Error(`You are not a project manager`)
     }

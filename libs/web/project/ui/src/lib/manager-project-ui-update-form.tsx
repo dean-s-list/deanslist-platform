@@ -3,6 +3,7 @@ import { UserUiItem, UserUiSearch } from '@deanslist-platform/web-user-ui'
 import {
   ActionIcon,
   Button,
+  Checkbox,
   Fieldset,
   Group,
   NumberInput,
@@ -33,6 +34,7 @@ export function ManagerProjectUiUpdateForm({
       amountTotalUsd: project.amountTotalUsd ?? 0,
       avatarUrl: project.avatarUrl ?? '',
       duration: project.duration ?? 2,
+      reviewsOpen: project.reviewsOpen ?? true,
       instructions: project.instructions ?? '',
       linkDiscord: project.linkDiscord ?? '',
       linkGithub: project.linkGithub ?? '',
@@ -106,9 +108,15 @@ export function ManagerProjectUiUpdateForm({
                 data={[...getEnumOptions(ProjectStatus)]}
                 {...form.getInputProps('status')}
               />
-
+              <Checkbox
+                label="Reviews open"
+                description="If checked, reviews can be created by anyone."
+                {...form.getInputProps('reviewsOpen', { type: 'checkbox' })}
+              />
               <Textarea
                 withAsterisk
+                rows={5}
+                autosize
                 label="Instructions"
                 placeholder="Write instructions for the project. You can use markdown."
                 description="The instructions for the project."

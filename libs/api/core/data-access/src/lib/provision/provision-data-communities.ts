@@ -15,7 +15,6 @@ export const provisionDataCommunities: Prisma.CommunityCreateInput[] = [
         {
           slug: 'pubkey-link',
           name: 'PubKey Link',
-          avatarUrl: 'https://avatars.githubusercontent.com/u/125477168?v=4',
           managers: { connect: [{ id: 'beeman.dev' }] },
           amountTotalUsd: 750,
           amountManagerUsd: 300,
@@ -92,5 +91,30 @@ export const provisionDataCommunities: Prisma.CommunityCreateInput[] = [
     name: `Gib Work`,
     avatarUrl: 'https://pbs.twimg.com/profile_images/1701414895613255680/xqejQpDn_400x400.jpg',
     managers: { create: { userId: 'beeman.dev', admin: true } },
+    projects: {
+      create: [
+        {
+          avatarUrl: 'https://pbs.twimg.com/profile_images/1764858894701015040/6lI5MAwe_400x400.jpg',
+          name: 'Triad',
+          slug: 'triad',
+          managers: { connect: [{ id: 'beeman.dev' }, { id: 'parzicano' }, { id: 'scientistjoe' }] },
+          amountTotalUsd: 1500,
+          amountManagerUsd: 500,
+          amountReferralUsd: 100,
+          duration: 2,
+          startDate: new Date(),
+          status: ProjectStatus.Active,
+          tags: ['defi', 'dapp'],
+          instructions: `1. Go to [app.triadfi.co](https://app.triadfi.co) to get started.
+2. Connect your wallet.
+3. Use the app and create positions.
+`,
+          linkDiscord: 'https://discord.gg/triadfi',
+          linkGithub: 'https://github.com/triadxyz',
+          linkTwitter: 'https://x.com/triadfi',
+          linkWebsite: 'https://triadfi.co/',
+        },
+      ],
+    },
   },
 ]

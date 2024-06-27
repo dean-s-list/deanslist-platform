@@ -1,4 +1,5 @@
 import { ApiCoreService } from '@deanslist-platform/api-core-data-access'
+import { ProjectStatus } from '@deanslist-platform/sdk'
 import { Injectable } from '@nestjs/common'
 import { ReviewerFindManyReviewByProjectInput } from './dto/reviewer-find-many-review-by-project-input'
 import { ReviewerFindManyReviewByUsernameInput } from './dto/reviewer-find-many-review-by-username-input'
@@ -11,6 +12,19 @@ export class ApiReviewResolveReviewerService {
   constructor(private readonly core: ApiCoreService) {}
 
   async createReview(userId: string, projectId: string) {
+    const project = await this.core.data.project.findUnique({
+      where: { id: projectId },
+      include: { reviews: true, reviewers: true },
+    })
+    if (!project) {
+      throw new Error('Project not found')
+    }
+    if (project.status !== ProjectStatus.Active) {
+      throw new Error('Project is not active')
+    }
+    if (!project.reviewsOpen && !project.reviewers.some((r) => r.id === userId)) {
+      throw new Error('Project is not open for reviews')
+    }
     return this.core.data.review.create({ data: { projectId, reviewerId: userId } })
   }
 

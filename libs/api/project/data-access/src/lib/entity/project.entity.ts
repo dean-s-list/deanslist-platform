@@ -43,6 +43,8 @@ export class Project {
   amountReferralUsd?: number | null
   @Field(() => Int, { nullable: true })
   amountTotalUsd?: number | null
+  @Field({ nullable: true })
+  reviewsOpen?: boolean
   @Field(() => ProjectStatus, { nullable: true })
   status!: ProjectStatus
   @Field(() => [String], { nullable: true })

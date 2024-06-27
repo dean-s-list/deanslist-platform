@@ -22,6 +22,8 @@ export class ManagerUpdateProjectInput {
   @Field(() => Int, { nullable: true })
   amountTotalUsd?: number
   @Field({ nullable: true })
+  reviewsOpen?: boolean
+  @Field({ nullable: true })
   instructions?: string
   @Field({ nullable: true })
   linkDiscord?: string
