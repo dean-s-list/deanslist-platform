@@ -1,7 +1,7 @@
 import { useSdk } from '@deanslist-platform/web-core-data-access'
 import { useQuery } from '@tanstack/react-query'
 
-export function useUserGetProjectChannels({ projectId }: { projectId: string }) {
+export function useManagerGetProjectChannels({ projectId }: { projectId: string }) {
   const sdk = useSdk()
   const query = useQuery({
     queryKey: ['userGetProjectChannels', { projectId }],

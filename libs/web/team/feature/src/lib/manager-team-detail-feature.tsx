@@ -1,6 +1,6 @@
 import { useAuth } from '@deanslist-platform/web-auth-data-access'
 import { CoreUiBack, CoreUiButton } from '@deanslist-platform/web-core-ui'
-import { UserProjectTeamFeature } from '@deanslist-platform/web-project-feature'
+import { ManagerProjectTeamFeature } from '@deanslist-platform/web-project-feature'
 import { useManagerFindOneTeam, useManagerGetTeamMember } from '@deanslist-platform/web-team-data-access'
 import { TeamUiItem } from '@deanslist-platform/web-team-ui'
 import { Group } from '@mantine/core'
@@ -20,7 +20,7 @@ export function ManagerTeamDetailFeature() {
     {
       path: 'projects',
       label: 'Projects',
-      element: <UserProjectTeamFeature teamId={teamId} />,
+      element: <ManagerProjectTeamFeature teamId={teamId} />,
     },
   ]
 

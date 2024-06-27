@@ -1,6 +1,4 @@
-import { UserUpdateProjectInput } from '@deanslist-platform/sdk'
 import { useSdk } from '@deanslist-platform/web-core-data-access'
-import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 
 export function useUserFindOneProject({ projectId }: { projectId: string }) {
@@ -15,22 +13,5 @@ export function useUserFindOneProject({ projectId }: { projectId: string }) {
   return {
     item,
     query,
-    updateProject: async (input: UserUpdateProjectInput) =>
-      sdk
-        .userUpdateProject({ projectId, input })
-        .then((res) => res.data)
-        .then(async (res) => {
-          if (res) {
-            toastSuccess('Project updated')
-            await query.refetch()
-            return true
-          }
-          toastError('Project not updated')
-          return false
-        })
-        .catch((err) => {
-          toastError(err.message)
-          return false
-        }),
   }
 }

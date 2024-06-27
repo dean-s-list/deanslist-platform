@@ -68,8 +68,18 @@ input AdminUpdateDiscordServerInput {
 }
 
 input AdminUpdateProjectInput {
+  amountManagerUsd: Int
+  amountReferralUsd: Int
+  amountTotalUsd: Int
   avatarUrl: String
   duration: Int
+  instructions: String
+  linkDiscord: String
+  linkGithub: String
+  linkTelegram: String
+  linkTwitter: String
+  linkWebsite: String
+  links: [String!]
   name: String
   startDate: DateTime
   status: ProjectStatus
@@ -213,14 +223,48 @@ input LoginInput {
   username: String!
 }
 
+input ManagerCreateProjectInput {
+  duration: Int
+  name: String!
+  startDate: DateTime
+  teamId: String!
+}
+
 input ManagerCreateTeamInput {
   name: String!
+}
+
+input ManagerFindManyProjectInput {
+  limit: Int = 10
+  page: Int = 1
+  search: String
+  teamId: String
 }
 
 input ManagerFindManyTeamInput {
   limit: Int = 10
   page: Int = 1
   search: String
+}
+
+input ManagerUpdateProjectInput {
+  amountManagerUsd: Int
+  amountReferralUsd: Int
+  amountTotalUsd: Int
+  avatarUrl: String
+  duration: Int
+  instructions: String
+  linkDiscord: String
+  linkGithub: String
+  linkTelegram: String
+  linkTwitter: String
+  linkWebsite: String
+  links: [String!]
+  name: String
+  referralId: String
+  startDate: DateTime
+  status: ProjectStatus
+  tags: [String!]
 }
 
 input ManagerUpdateTeamInput {
@@ -230,6 +274,9 @@ input ManagerUpdateTeamInput {
 }
 
 type Mutation {
+  adminAddProjectManager(managerUserId: String!, projectId: String!): Boolean
+  adminAddProjectMember(memberUserId: String!, projectId: String!): Boolean
+  adminAddProjectReferral(projectId: String!, referralUserId: String!): Boolean
   adminAddTeamMember(teamId: String!, userId: String!): Boolean
   adminCreateIdentity(input: AdminCreateIdentityInput!): Identity
   adminCreateProjectChannel(channelId: String!, projectId: String!, serverId: String!): Boolean!
@@ -246,6 +293,9 @@ type Mutation {
   adminDeleteUser(userId: String!): Boolean
   adminLeaveDiscordServer(serverId: String!): Boolean!
   adminPingDiscordChannel(channelId: String!, serverId: String!): Boolean!
+  adminRemoveProjectManager(managerUserId: String!, projectId: String!): Boolean
+  adminRemoveProjectMember(memberUserId: String!, projectId: String!): Boolean
+  adminRemoveProjectReferral(projectId: String!, referralUserId: String!): Boolean
   adminRemoveTeamMember(teamId: String!, userId: String!): Boolean
   adminToggleTeamAdmin(teamId: String!, userId: String!): Boolean
   adminUpdateComment(commentId: String!, input: AdminUpdateCommentInput!): Comment
@@ -257,25 +307,31 @@ type Mutation {
   anonVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
   login(input: LoginInput!): User
   logout: Boolean
+  managerAddProjectManager(managerUserId: String!, projectId: String!): Boolean
+  managerAddProjectMember(memberUserId: String!, projectId: String!): Boolean
+  managerAddProjectReferral(projectId: String!, referralUserId: String!): Boolean
   managerAddTeamMember(teamId: String!, userId: String!): Boolean
+  managerCreateProject(input: ManagerCreateProjectInput!): Project
   managerCreateTeam(input: ManagerCreateTeamInput!): Team
+  managerDeleteProject(projectId: String!): Boolean
   managerDeleteTeam(teamId: String!): Boolean
+  managerRemoveProjectManager(managerUserId: String!, projectId: String!): Boolean
+  managerRemoveProjectMember(memberUserId: String!, projectId: String!): Boolean
+  managerRemoveProjectReferral(projectId: String!, referralUserId: String!): Boolean
   managerRemoveTeamMember(teamId: String!, userId: String!): Boolean
   managerToggleTeamAdmin(teamId: String!, userId: String!): Boolean
+  managerUpdateProject(input: ManagerUpdateProjectInput!, projectId: String!): Project
   managerUpdateTeam(input: ManagerUpdateTeamInput!, teamId: String!): Team
   register(input: RegisterInput!): User
   userCreateComment(input: UserCreateCommentInput!): Comment
-  userCreateProject(input: UserCreateProjectInput!): Project
   userCreateRating(input: UserCreateRatingInput!): Rating
   userCreateReview(projectId: String!): Review
   userDeleteComment(commentId: String!): Boolean
   userDeleteIdentity(identityId: String!): Boolean
-  userDeleteProject(projectId: String!): Boolean
   userDeleteRating(ratingId: String!): Boolean
   userDeleteReview(reviewId: String!): Boolean
   userLinkIdentity(input: LinkIdentityInput!): Identity
   userUpdateComment(commentId: String!, input: UserUpdateCommentInput!): Comment
-  userUpdateProject(input: UserUpdateProjectInput!, projectId: String!): Project
   userUpdateRating(input: UserUpdateRatingInput!, ratingId: String!): Rating
   userUpdateUser(input: UserUpdateUserInput!): User
   userVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
@@ -292,12 +348,25 @@ type PagingMeta {
 }
 
 type Project {
+  amountManagerUsd: Int
+  amountReferralUsd: Int
+  amountTotalUsd: Int
   avatarUrl: String
   createdAt: DateTime
   duration: Int
   endDate: DateTime
   id: String!
+  instructions: String
+  linkDiscord: String
+  linkGithub: String
+  linkTelegram: String
+  linkTwitter: String
+  linkWebsite: String
+  links: [String!]
+  managers: [User!]
+  members: [User!]
   name: String!
+  referral: User
   slug: String!
   startDate: DateTime
   status: ProjectStatus
@@ -340,7 +409,9 @@ type Query {
   adminGetTeamMembers(teamId: String!): [TeamMember!]
   anonRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
   appConfig: AppConfig!
+  managerFindManyProject(input: ManagerFindManyProjectInput!): ProjectPaging!
   managerFindManyTeam(input: ManagerFindManyTeamInput!): TeamPaging!
+  managerFindOneProject(projectId: String!): Project
   managerFindOneTeam(teamId: String!): Team
   managerGetTeamMember(teamId: String!): TeamMember
   managerGetTeamMembers(teamId: String!): [TeamMember!]
@@ -448,13 +519,6 @@ input UserCreateCommentInput {
   reviewId: String!
 }
 
-input UserCreateProjectInput {
-  duration: Int
-  name: String!
-  startDate: DateTime
-  teamId: String!
-}
-
 input UserCreateRatingInput {
   commentId: String!
   content: String
@@ -474,6 +538,7 @@ input UserFindManyProjectInput {
   limit: Int = 10
   page: Int = 1
   search: String
+  status: ProjectStatus
   teamId: String
 }
 
@@ -516,15 +581,6 @@ enum UserStatus {
 
 input UserUpdateCommentInput {
   content: String
-}
-
-input UserUpdateProjectInput {
-  avatarUrl: String
-  duration: Int
-  name: String
-  startDate: DateTime
-  status: ProjectStatus
-  tags: [String!]
 }
 
 input UserUpdateRatingInput {

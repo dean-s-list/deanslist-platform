@@ -1,13 +1,13 @@
-import { AdminUpdateProjectInput } from '@deanslist-platform/sdk'
+import { ManagerUpdateProjectInput } from '@deanslist-platform/sdk'
 import { useSdk } from '@deanslist-platform/web-core-data-access'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 
-export function useAdminFindOneProject({ projectId }: { projectId: string }) {
+export function useManagerFindOneProject({ projectId }: { projectId: string }) {
   const sdk = useSdk()
   const query = useQuery({
-    queryKey: ['admin', 'find-one-project', projectId],
-    queryFn: () => sdk.adminFindOneProject({ projectId }).then((res) => res.data),
+    queryKey: ['manager', 'find-one-project', projectId],
+    queryFn: () => sdk.managerFindOneProject({ projectId }).then((res) => res.data),
     retry: 0,
   })
   const item = query.data?.item ?? undefined
@@ -17,7 +17,7 @@ export function useAdminFindOneProject({ projectId }: { projectId: string }) {
     query,
     addProjectManager: (managerUserId: string) =>
       sdk
-        .adminAddProjectManager({ projectId, managerUserId })
+        .managerAddProjectManager({ projectId, managerUserId })
         .then((res) => res.data)
         .then(async (res) => {
           if (res) {
@@ -34,7 +34,7 @@ export function useAdminFindOneProject({ projectId }: { projectId: string }) {
         }),
     removeProjectManager: (managerUserId: string) =>
       sdk
-        .adminRemoveProjectManager({ projectId, managerUserId })
+        .managerRemoveProjectManager({ projectId, managerUserId })
         .then((res) => res.data)
         .then(async (res) => {
           if (res) {
@@ -51,7 +51,7 @@ export function useAdminFindOneProject({ projectId }: { projectId: string }) {
         }),
     addProjectMember: (memberUserId: string) =>
       sdk
-        .adminAddProjectMember({ projectId, memberUserId })
+        .managerAddProjectMember({ projectId, memberUserId })
         .then((res) => res.data)
         .then(async (res) => {
           if (res) {
@@ -68,7 +68,7 @@ export function useAdminFindOneProject({ projectId }: { projectId: string }) {
         }),
     removeProjectMember: (memberUserId: string) =>
       sdk
-        .adminRemoveProjectMember({ projectId, memberUserId })
+        .managerRemoveProjectMember({ projectId, memberUserId })
         .then((res) => res.data)
         .then(async (res) => {
           if (res) {
@@ -85,7 +85,7 @@ export function useAdminFindOneProject({ projectId }: { projectId: string }) {
         }),
     addProjectReferral: (referralUserId: string) =>
       sdk
-        .adminAddProjectReferral({ projectId, referralUserId })
+        .managerAddProjectReferral({ projectId, referralUserId })
         .then((res) => res.data)
         .then(async (res) => {
           if (res) {
@@ -102,7 +102,7 @@ export function useAdminFindOneProject({ projectId }: { projectId: string }) {
         }),
     removeProjectReferral: (referralUserId: string) =>
       sdk
-        .adminRemoveProjectReferral({ projectId, referralUserId })
+        .managerRemoveProjectReferral({ projectId, referralUserId })
         .then((res) => res.data)
         .then(async (res) => {
           if (res) {
@@ -117,22 +117,22 @@ export function useAdminFindOneProject({ projectId }: { projectId: string }) {
           toastError(err.message)
           return null
         }),
-    updateProject: async (input: AdminUpdateProjectInput) =>
+    updateProject: async (input: ManagerUpdateProjectInput) =>
       sdk
-        .adminUpdateProject({ projectId, input })
+        .managerUpdateProject({ projectId, input })
         .then((res) => res.data)
         .then(async (res) => {
           if (res) {
             toastSuccess('Project updated')
             await query.refetch()
-            return res.updated
+            return true
           }
           toastError('Project not updated')
-          return null
+          return false
         })
         .catch((err) => {
           toastError(err.message)
-          return null
+          return false
         }),
   }
 }

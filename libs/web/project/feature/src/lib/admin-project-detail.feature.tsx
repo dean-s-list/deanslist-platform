@@ -5,6 +5,7 @@ import { AdminReviewFeature } from '@deanslist-platform/web-review-feature'
 import { UiDebugModal, UiError, UiLoader, UiPage, UiTabRoutes } from '@pubkey-ui/core'
 import { useParams } from 'react-router-dom'
 import { AdminProjectDetailChannelsTab } from './admin-project-detail-channels-tab'
+import { AdminProjectDetailMembersTab } from './admin-project-detail-members-tab'
 import { AdminProjectDetailSettingsTab } from './admin-project-detail-settings.tab'
 
 export function AdminProjectDetailFeature() {
@@ -27,6 +28,7 @@ export function AdminProjectDetailFeature() {
       <UiTabRoutes
         tabs={[
           { path: 'reviews', label: 'Reviews', element: <AdminReviewFeature projectId={projectId} /> },
+          { path: 'members', label: 'Members', element: <AdminProjectDetailMembersTab projectId={projectId} /> },
           { path: 'channels', label: 'Channels', element: <AdminProjectDetailChannelsTab projectId={projectId} /> },
           {
             path: 'settings',

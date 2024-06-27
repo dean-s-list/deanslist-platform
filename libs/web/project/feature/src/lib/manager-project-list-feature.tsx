@@ -1,12 +1,12 @@
 import { CoreUiSearchField } from '@deanslist-platform/web-core-ui'
-import { useUserFindManyProject } from '@deanslist-platform/web-project-data-access'
+import { useManagerFindManyProject } from '@deanslist-platform/web-project-data-access'
 import { ProjectUiGrid } from '@deanslist-platform/web-project-ui'
 import { Button, Group } from '@mantine/core'
 import { UiDebugModal, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
 import { Link } from 'react-router-dom'
 
-export function UserProjectTeamListFeature({ teamId }: { teamId: string }) {
-  const { items, pagination, query, setSearch } = useUserFindManyProject({
+export function ManagerProjectListFeature({ teamId }: { teamId?: string }) {
+  const { items, pagination, query, setSearch } = useManagerFindManyProject({
     teamId,
     limit: 12,
   })

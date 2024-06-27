@@ -1,11 +1,11 @@
 import { DiscordChannel } from '@deanslist-platform/sdk'
-import { useUserGetDiscordServers } from '@deanslist-platform/web-discord-data-access'
+import { useManagerGetDiscordServers } from '@deanslist-platform/web-discord-data-access'
 import { DiscordUiServerItem } from '@deanslist-platform/web-discord-ui'
 import { Anchor, Group, Text, Tooltip } from '@mantine/core'
 import { UiCard, UiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core'
 
-export function UserProjectDetailChannel({ channel }: { channel: DiscordChannel }) {
-  const { items: servers } = useUserGetDiscordServers()
+export function ManagerProjectDetailChannel({ channel }: { channel: DiscordChannel }) {
+  const { items: servers } = useManagerGetDiscordServers()
   const server = servers.find((server) => server.id === channel.guildId)
 
   return (

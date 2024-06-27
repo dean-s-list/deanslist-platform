@@ -2,7 +2,7 @@ import { DiscordServer } from '@deanslist-platform/sdk'
 import { useSdk } from '@deanslist-platform/web-core-data-access'
 import { useQuery } from '@tanstack/react-query'
 
-export function useUserGetDiscordServers() {
+export function useManagerGetDiscordServers() {
   const sdk = useSdk()
 
   const query = useQuery({

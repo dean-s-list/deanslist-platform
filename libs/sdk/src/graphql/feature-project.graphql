@@ -1,7 +1,20 @@
 fragment ProjectDetails on Project {
+  amountManagerUsd
+  amountReferralUsd
+  amountTotalUsd
   avatarUrl
   createdAt
   id
+  instructions
+  linkDiscord
+  linkGithub
+  linkTelegram
+  linkTwitter
+  linkWebsite
+  links
+  managers {
+    ...UserDetails
+  }
   name
   slug
   status
@@ -31,22 +44,6 @@ query userFindOneProject($projectId: String!) {
   }
 }
 
-mutation userCreateProject($input: UserCreateProjectInput!) {
-  created: userCreateProject(input: $input) {
-    ...ProjectDetails
-  }
-}
-
-mutation userUpdateProject($projectId: String!, $input: UserUpdateProjectInput!) {
-  updated: userUpdateProject(projectId: $projectId, input: $input) {
-    ...ProjectDetails
-  }
-}
-
-mutation userDeleteProject($projectId: String!) {
-  deleted: userDeleteProject(projectId: $projectId)
-}
-
 query adminFindManyProject($input: AdminFindManyProjectInput!) {
   paging: adminFindManyProject(input: $input) {
     data {
@@ -61,6 +58,12 @@ query adminFindManyProject($input: AdminFindManyProjectInput!) {
 query adminFindOneProject($projectId: String!) {
   item: adminFindOneProject(projectId: $projectId) {
     ...ProjectDetails
+    referral {
+      ...UserDetails
+    }
+    members {
+      ...UserDetails
+    }
   }
 }
 
@@ -72,4 +75,91 @@ mutation adminUpdateProject($projectId: String!, $input: AdminUpdateProjectInput
 
 mutation adminDeleteProject($projectId: String!) {
   deleted: adminDeleteProject(projectId: $projectId)
+}
+
+mutation adminAddProjectManager($projectId: String!, $managerUserId: String!) {
+  added: adminAddProjectManager(projectId: $projectId, managerUserId: $managerUserId)
+}
+
+mutation adminRemoveProjectManager($projectId: String!, $managerUserId: String!) {
+  removed: adminRemoveProjectManager(projectId: $projectId, managerUserId: $managerUserId)
+}
+
+mutation adminAddProjectMember($projectId: String!, $memberUserId: String!) {
+  added: adminAddProjectMember(projectId: $projectId, memberUserId: $memberUserId)
+}
+
+mutation adminRemoveProjectMember($projectId: String!, $memberUserId: String!) {
+  removed: adminRemoveProjectMember(projectId: $projectId, memberUserId: $memberUserId)
+}
+
+mutation adminAddProjectReferral($projectId: String!, $referralUserId: String!) {
+  added: adminAddProjectReferral(projectId: $projectId, referralUserId: $referralUserId)
+}
+
+mutation adminRemoveProjectReferral($projectId: String!, $referralUserId: String!) {
+  removed: adminRemoveProjectReferral(projectId: $projectId, referralUserId: $referralUserId)
+}
+
+query managerFindManyProject($input: ManagerFindManyProjectInput!) {
+  paging: managerFindManyProject(input: $input) {
+    data {
+      ...ProjectDetails
+    }
+    meta {
+      ...PagingMetaDetails
+    }
+  }
+}
+
+query managerFindOneProject($projectId: String!) {
+  item: managerFindOneProject(projectId: $projectId) {
+    ...ProjectDetails
+    referral {
+      ...UserDetails
+    }
+    members {
+      ...UserDetails
+    }
+  }
+}
+
+mutation managerCreateProject($input: ManagerCreateProjectInput!) {
+  created: managerCreateProject(input: $input) {
+    ...ProjectDetails
+  }
+}
+
+mutation managerUpdateProject($projectId: String!, $input: ManagerUpdateProjectInput!) {
+  updated: managerUpdateProject(projectId: $projectId, input: $input) {
+    ...ProjectDetails
+  }
+}
+
+mutation managerDeleteProject($projectId: String!) {
+  deleted: managerDeleteProject(projectId: $projectId)
+}
+
+mutation managerAddProjectManager($projectId: String!, $managerUserId: String!) {
+  added: managerAddProjectManager(projectId: $projectId, managerUserId: $managerUserId)
+}
+
+mutation managerRemoveProjectManager($projectId: String!, $managerUserId: String!) {
+  removed: managerRemoveProjectManager(projectId: $projectId, managerUserId: $managerUserId)
+}
+
+mutation managerAddProjectMember($projectId: String!, $memberUserId: String!) {
+  added: managerAddProjectMember(projectId: $projectId, memberUserId: $memberUserId)
+}
+
+mutation managerRemoveProjectMember($projectId: String!, $memberUserId: String!) {
+  removed: managerRemoveProjectMember(projectId: $projectId, memberUserId: $memberUserId)
+}
+
+mutation managerAddProjectReferral($projectId: String!, $referralUserId: String!) {
+  added: managerAddProjectReferral(projectId: $projectId, referralUserId: $referralUserId)
+}
+
+mutation managerRemoveProjectReferral($projectId: String!, $referralUserId: String!) {
+  removed: managerRemoveProjectReferral(projectId: $projectId, referralUserId: $referralUserId)
 }

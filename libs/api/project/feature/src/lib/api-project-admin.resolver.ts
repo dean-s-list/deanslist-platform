@@ -15,6 +15,33 @@ export class ApiProjectAdminResolver {
   constructor(private readonly service: ApiProjectService) {}
 
   @Mutation(() => Boolean, { nullable: true })
+  adminAddProjectManager(
+    @CtxUserId() userId: string,
+    @Args('projectId') projectId: string,
+    @Args('managerUserId') managerUserId: string,
+  ) {
+    return this.service.admin.addProjectManager(userId, projectId, managerUserId)
+  }
+
+  @Mutation(() => Boolean, { nullable: true })
+  adminAddProjectMember(
+    @CtxUserId() userId: string,
+    @Args('projectId') projectId: string,
+    @Args('memberUserId') memberUserId: string,
+  ) {
+    return this.service.admin.addProjectMember(userId, projectId, memberUserId)
+  }
+
+  @Mutation(() => Boolean, { nullable: true })
+  adminAddProjectReferral(
+    @CtxUserId() userId: string,
+    @Args('projectId') projectId: string,
+    @Args('referralUserId') referralUserId: string,
+  ) {
+    return this.service.admin.addProjectReferral(userId, projectId, referralUserId)
+  }
+
+  @Mutation(() => Boolean, { nullable: true })
   adminDeleteProject(@CtxUserId() userId: string, @Args('projectId') projectId: string) {
     return this.service.admin.deleteProject(userId, projectId)
   }
@@ -27,6 +54,33 @@ export class ApiProjectAdminResolver {
   @Query(() => Project, { nullable: true })
   adminFindOneProject(@Args('projectId') projectId: string) {
     return this.service.admin.findOneProject(projectId)
+  }
+
+  @Mutation(() => Boolean, { nullable: true })
+  adminRemoveProjectManager(
+    @CtxUserId() userId: string,
+    @Args('projectId') projectId: string,
+    @Args('managerUserId') managerUserId: string,
+  ) {
+    return this.service.admin.removeProjectManager(userId, projectId, managerUserId)
+  }
+
+  @Mutation(() => Boolean, { nullable: true })
+  adminRemoveProjectMember(
+    @CtxUserId() userId: string,
+    @Args('projectId') projectId: string,
+    @Args('memberUserId') memberUserId: string,
+  ) {
+    return this.service.admin.removeProjectMember(userId, projectId, memberUserId)
+  }
+
+  @Mutation(() => Boolean, { nullable: true })
+  adminRemoveProjectReferral(
+    @CtxUserId() userId: string,
+    @Args('projectId') projectId: string,
+    @Args('referralUserId') referralUserId: string,
+  ) {
+    return this.service.admin.removeProjectReferral(userId, projectId, referralUserId)
   }
 
   @Mutation(() => Project, { nullable: true })

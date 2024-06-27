@@ -1,5 +1,5 @@
 import { UserCommentFeature } from '@deanslist-platform/web-comment-feature'
-import { CoreUiBack, CoreUiGrid } from '@deanslist-platform/web-core-ui'
+import { CoreUiBack } from '@deanslist-platform/web-core-ui'
 import { useUserFindOneReview } from '@deanslist-platform/web-review-data-access'
 import { ReviewUiItem } from '@deanslist-platform/web-review-ui'
 import { Group } from '@mantine/core'
@@ -32,13 +32,7 @@ export function UserReviewDetailFeature() {
         </Group>
       </UiGroup>
 
-      <CoreUiGrid sidebar={<UserReviewSidebar />}>
-        <UserCommentFeature reviewId={reviewId} />
-      </CoreUiGrid>
+      <UserCommentFeature reviewId={reviewId} />
     </UiStack>
   )
-}
-
-function UserReviewSidebar() {
-  return <div>sidebar</div>
 }

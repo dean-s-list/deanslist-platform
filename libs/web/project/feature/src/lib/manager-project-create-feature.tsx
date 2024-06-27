@@ -1,15 +1,15 @@
-import { UserCreateProjectInput } from '@deanslist-platform/sdk'
+import { ManagerCreateProjectInput } from '@deanslist-platform/sdk'
 import { CoreUiBack } from '@deanslist-platform/web-core-ui'
-import { useUserFindManyProject } from '@deanslist-platform/web-project-data-access'
-import { UserProjectUiCreateForm } from '@deanslist-platform/web-project-ui'
+import { useManagerFindManyProject } from '@deanslist-platform/web-project-data-access'
+import { ManagerProjectUiCreateForm } from '@deanslist-platform/web-project-ui'
 import { toastError, UiCard, UiPage } from '@pubkey-ui/core'
 import { useNavigate } from 'react-router-dom'
 
-export function UserProjectTeamCreateFeature({ teamId }: { teamId: string }) {
+export function ManagerProjectCreateFeature({ teamId }: { teamId: string }) {
   const navigate = useNavigate()
-  const { createProject } = useUserFindManyProject({ teamId })
+  const { createProject } = useManagerFindManyProject({ teamId })
 
-  async function submit(input: UserCreateProjectInput) {
+  async function submit(input: ManagerCreateProjectInput) {
     return createProject(input)
       .then((res) => {
         if (res) {
@@ -26,7 +26,7 @@ export function UserProjectTeamCreateFeature({ teamId }: { teamId: string }) {
   return (
     <UiPage leftAction={<CoreUiBack />} title="Create Project">
       <UiCard>
-        <UserProjectUiCreateForm submit={submit} />
+        <ManagerProjectUiCreateForm submit={submit} />
       </UiCard>
     </UiPage>
   )

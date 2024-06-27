@@ -95,21 +95,35 @@ model IdentityChallenge {
 }
 
 model Project {
-  id        String           @id @default(cuid())
-  createdAt DateTime         @default(now())
-  updatedAt DateTime         @updatedAt
-  team      Team             @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  teamId    String
-  slug      String
-  duration  Int              @default(2)
-  startDate DateTime?
-  name      String
-  avatarUrl String?
-  status    ProjectStatus    @default(Draft)
-  tags      String[]
-  channels  DiscordChannel[]
-  reviews   Review[]
-  managers  User[]           @relation(name: "ProjectManagers")
+  id                String           @id @default(cuid())
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  team              Team             @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teamId            String
+  slug              String
+  name              String
+  instructions      String?
+  linkDiscord       String?
+  linkGithub        String?
+  linkTelegram      String?
+  linkTwitter       String?
+  linkWebsite       String?
+  links             String[]
+  duration          Int              @default(2)
+  amountManagerUsd  Int?
+  amountReferralUsd Int?
+  amountTotalUsd    Int?
+  endDate           DateTime?
+  startDate         DateTime?
+  avatarUrl         String?
+  status            ProjectStatus    @default(Draft)
+  tags              String[]
+  channels          DiscordChannel[]
+  reviews           Review[]
+  managers          User[]           @relation(name: "ProjectManagers")
+  members           User[]           @relation(name: "ProjectMembers")
+  referral          User?            @relation(name: "ProjectReferral", fields: [referralId], references: [id])
+  referralId        String?
 
   @@unique([teamId, name])
   @@unique([teamId, slug])
@@ -182,6 +196,8 @@ model User {
   teams           TeamMember[]
   reviews         Review[]
   projectManagers Project[]    @relation(name: "ProjectManagers")
+  projectMembers  Project[]    @relation(name: "ProjectMembers")
+  projectReferral Project[]    @relation(name: "ProjectReferral")
   comments        Comment[]
   ratings         Rating[]
 }

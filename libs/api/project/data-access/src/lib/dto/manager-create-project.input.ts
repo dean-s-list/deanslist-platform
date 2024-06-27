@@ -1,7 +1,7 @@
 import { Field, InputType, Int } from '@nestjs/graphql'
 
 @InputType()
-export class UserCreateProjectInput {
+export class ManagerCreateProjectInput {
   @Field()
   teamId!: string
   @Field()

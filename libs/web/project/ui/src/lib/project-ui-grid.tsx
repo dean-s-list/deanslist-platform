@@ -1,5 +1,5 @@
 import type { Project } from '@deanslist-platform/sdk'
-import { gridLimits, CoreUiPageLimit } from '@deanslist-platform/web-core-ui'
+import { CoreUiPageLimit, gridLimits } from '@deanslist-platform/web-core-ui'
 import { Group, Pagination, SimpleGrid } from '@mantine/core'
 import { UiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core'
 import { DataTableProps } from 'mantine-datatable'
@@ -25,9 +25,9 @@ export function ProjectUiGrid({
   const totalPages = totalRecords / limit + 1
   return (
     <UiStack>
-      <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="md">
+      <SimpleGrid cols={{ base: 1, sm: 2, xl: 3 }} spacing="md">
         {projects.map((project) => (
-          <ProjectUiGridItem key={project.id} to={project.viewUrl} project={project} />
+          <ProjectUiGridItem key={project.id} to={`./${project.id}`} project={project} />
         ))}
       </SimpleGrid>
       <UiGroup>

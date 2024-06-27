@@ -1,25 +1,34 @@
+import { getEnumOptions, ProjectStatus } from '@deanslist-platform/sdk'
 import { CoreUiSearchField } from '@deanslist-platform/web-core-ui'
 import { useUserFindManyProject } from '@deanslist-platform/web-project-data-access'
 import { ProjectUiGrid } from '@deanslist-platform/web-project-ui'
-import { Group } from '@mantine/core'
-import { UiDebugModal, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
+import { Group, Select } from '@mantine/core'
+import { UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
+import { IconSearch } from '@tabler/icons-react'
 
 export default function UserProjectListFeature() {
-  const { items, pagination, query, setSearch } = useUserFindManyProject({
+  const { items, pagination, query, setSearch, status, setStatus } = useUserFindManyProject({
     limit: 24,
   })
 
   return (
-    <UiPage
-      title="Projects"
-      rightAction={
-        <Group>
-          <UiDebugModal data={items} />
-        </Group>
-      }
-    >
+    <UiPage>
       <Group>
-        <CoreUiSearchField placeholder="Search project" setSearch={setSearch} />
+        <CoreUiSearchField
+          leftSection={<IconSearch size={24} />}
+          size="lg"
+          radius="xl"
+          placeholder="Search project"
+          setSearch={setSearch}
+        />
+        <Select
+          radius="xl"
+          size="lg"
+          value={status}
+          allowDeselect={false}
+          onChange={(status) => setStatus((status === '' ? undefined : status) as ProjectStatus)}
+          data={[...getEnumOptions(ProjectStatus).map((o) => ({ ...o, label: `State: ${o.value}` }))]}
+        />
       </Group>
 
       {query.isLoading ? (

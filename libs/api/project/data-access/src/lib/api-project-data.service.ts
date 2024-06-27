@@ -1,4 +1,5 @@
 import { ApiCoreService, slugifyId } from '@deanslist-platform/api-core-data-access'
+import { ApiTeamService } from '@deanslist-platform/api-team-data-access'
 import { Injectable } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
 import { ApiProjectEventService } from './api-project-event.service'
@@ -7,7 +8,21 @@ import { ProjectCreatedEvent } from './event/project-created.event'
 
 @Injectable()
 export class ApiProjectDataService {
-  constructor(private readonly core: ApiCoreService, private readonly event: ApiProjectEventService) {}
+  constructor(
+    private readonly core: ApiCoreService,
+    private readonly event: ApiProjectEventService,
+    private readonly team: ApiTeamService,
+  ) {}
+
+  async ensureProjectAdmin({ projectId, userId }: { projectId: string; userId: string }) {
+    const found = await this.findOneProject(projectId)
+    await this.ensureTeamAdmin({ teamId: found.teamId, userId })
+    return found
+  }
+
+  async ensureTeamAdmin({ teamId, userId }: { teamId: string; userId: string }) {
+    return this.team.data.ensureTeamAdmin({ teamId, userId })
+  }
 
   async createProject(
     userId: string,
@@ -16,7 +31,7 @@ export class ApiProjectDataService {
     const name = input.name.trim()
     const slug = slugifyId(name, true)
 
-    const [foundName, foundFlug] = await Promise.all([
+    const [foundName, foundSlug] = await Promise.all([
       this.core.data.project.findUnique({ where: { teamId_name: { teamId, name } } }),
       this.core.data.project.findUnique({ where: { teamId_slug: { teamId, slug } } }),
     ])
@@ -24,7 +39,7 @@ export class ApiProjectDataService {
     if (foundName) {
       throw new Error('Project with this name already exists')
     }
-    if (foundFlug) {
+    if (foundSlug) {
       throw new Error('Project with this slug already exists')
     }
     const team = await this.core.data.team.findUnique({ where: { id: teamId } })
@@ -74,10 +89,14 @@ export class ApiProjectDataService {
       .then(([data, meta]) => ({ data, meta }))
   }
 
-  async findOneProject(projectId: string) {
+  async findOneProject(
+    projectId: string,
+    include: Prisma.ProjectInclude = {},
+    where: Omit<Prisma.ProjectWhereInput, 'id'> = {},
+  ) {
     const found = await this.core.data.project.findUnique({
-      where: { id: projectId },
-      include: { team: true },
+      where: { id: projectId, ...where },
+      include: { team: true, ...include },
     })
     if (!found) {
       throw new Error('Project not found')
@@ -89,5 +108,59 @@ export class ApiProjectDataService {
     const found = await this.findOneProject(projectId)
 
     return this.core.data.project.update({ where: { id: found.id }, data })
+  }
+
+  async addProjectManager(userId: string, projectId: string, managerUserId: string) {
+    const added = await this.core.data.project.update({
+      where: { id: projectId },
+      data: { managers: { connect: { id: managerUserId } } },
+    })
+    // TODO: Emit events, announce in Discord.
+    return !!added
+  }
+
+  async removeProjectManager(userId: string, projectId: string, managerUserId: string) {
+    const removed = await this.core.data.project.update({
+      where: { id: projectId },
+      data: { managers: { disconnect: { id: managerUserId } } },
+    })
+    // TODO: Emit events, announce in Discord.
+    return !!removed
+  }
+
+  async addProjectMember(userId: string, projectId: string, memberUserId: string) {
+    const added = await this.core.data.project.update({
+      where: { id: projectId },
+      data: { members: { connect: { id: memberUserId } } },
+    })
+    // TODO: Emit events, announce in Discord.
+    return !!added
+  }
+
+  async removeProjectMember(userId: string, projectId: string, memberUserId: string) {
+    const removed = await this.core.data.project.update({
+      where: { id: projectId },
+      data: { members: { disconnect: { id: memberUserId } } },
+    })
+    // TODO: Emit events, announce in Discord.
+    return !!removed
+  }
+
+  async addProjectReferral(userId: string, projectId: string, referralUserId: string) {
+    const added = await this.core.data.project.update({
+      where: { id: projectId },
+      data: { referral: { connect: { id: referralUserId } } },
+    })
+    // TODO: Emit events, announce in Discord.
+    return !!added
+  }
+
+  async removeProjectReferral(userId: string, projectId: string, referralUserId: string) {
+    const removed = await this.core.data.project.update({
+      where: { id: projectId },
+      data: { referral: { disconnect: { id: referralUserId } } },
+    })
+    // TODO: Emit events, announce in Discord.
+    return !!removed
   }
 }

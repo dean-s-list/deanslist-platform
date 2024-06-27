@@ -1,4 +1,5 @@
 import { Team } from '@deanslist-platform/api-team-data-access'
+import { User } from '@deanslist-platform/api-user-data-access'
 import { Field, Int, ObjectType } from '@nestjs/graphql'
 import { ProjectStatus } from './project-status.enum'
 
@@ -12,12 +13,38 @@ export class Project {
   updatedAt?: Date
   @Field(() => Team, { nullable: true })
   team?: Team
+  @Field(() => [User], { nullable: true })
+  managers?: User[]
+  @Field(() => [User], { nullable: true })
+  members?: User[]
+  @Field(() => User, { nullable: true })
+  referral?: User
   @Field()
   teamId!: string
   @Field()
   name!: string
   @Field()
   slug!: string
+  @Field({ nullable: true })
+  instructions?: string | null
+  @Field({ nullable: true })
+  linkDiscord?: string | null
+  @Field({ nullable: true })
+  linkGithub?: string | null
+  @Field({ nullable: true })
+  linkTelegram?: string | null
+  @Field({ nullable: true })
+  linkTwitter?: string | null
+  @Field({ nullable: true })
+  linkWebsite?: string | null
+  @Field(() => [String], { nullable: true })
+  links?: string[]
+  @Field(() => Int, { nullable: true })
+  amountManagerUsd?: number | null
+  @Field(() => Int, { nullable: true })
+  amountReferralUsd?: number | null
+  @Field(() => Int, { nullable: true })
+  amountTotalUsd?: number | null
   @Field(() => ProjectStatus, { nullable: true })
   status!: ProjectStatus
   @Field(() => [String], { nullable: true })
