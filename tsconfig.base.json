@@ -48,7 +48,6 @@
       "@deanslist-platform/web-core-data-access": ["libs/web/core/data-access/src/index.ts"],
       "@deanslist-platform/web-core-feature": ["libs/web/core/feature/src/index.ts"],
       "@deanslist-platform/web-core-ui": ["libs/web/core/ui/src/index.ts"],
-      "@deanslist-platform/web-dashboard-feature": ["libs/web/dashboard/feature/src/index.ts"],
       "@deanslist-platform/web-dev-feature": ["libs/web/dev/feature/src/index.ts"],
       "@deanslist-platform/web-discord-data-access": ["libs/web/discord/data-access/src/index.ts"],
       "@deanslist-platform/web-discord-feature": ["libs/web/discord/feature/src/index.ts"],

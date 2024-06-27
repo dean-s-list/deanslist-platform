@@ -8,23 +8,14 @@ import { SettingsFeature } from '@deanslist-platform/web-settings-feature'
 import { SolanaFeature } from '@deanslist-platform/web-solana-feature'
 import { UserTeamFeature } from '@deanslist-platform/web-team-feature'
 import { UserFeature } from '@deanslist-platform/web-user-feature'
-import { UiDashboardItem } from '@pubkey-ui/core'
-import { IconCube, IconSettings, IconUsers } from '@tabler/icons-react'
 import { lazy } from 'react'
-import { RouteObject, useRoutes } from 'react-router-dom'
+import { Navigate, RouteObject, useRoutes } from 'react-router-dom'
 
 export const ManagementRoutes = lazy(() => import('./web-core-routes-management'))
 
-const links: UiDashboardItem[] = [
-  // User Dashboard Links are added by the web-crud generator
-  { label: 'Projects', icon: IconCube, to: '/projects' },
-  { label: 'Settings', icon: IconSettings, to: '/settings' },
-  { label: 'Users', icon: IconUsers, to: '/u' },
-]
-
 const routes: RouteObject[] = [
   // User Dashboard Routes are added by the web-crud generator
-  { path: '/dashboard', element: <DashboardFeature links={links} /> },
+  { path: '/dashboard', element: <Navigate to="/projects" replace /> },
   { path: '/management/*', element: <ManagementRoutes /> },
   { path: '/projects/*', element: <ReviewerProjectFeature /> },
   { path: '/settings/*', element: <SettingsFeature /> },
