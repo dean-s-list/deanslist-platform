@@ -55,6 +55,9 @@
       "@deanslist-platform/web-home-feature": ["libs/web/home/feature/src/index.ts"],
       "@deanslist-platform/web-identity-data-access": ["libs/web/identity/data-access/src/index.ts"],
       "@deanslist-platform/web-identity-ui": ["libs/web/identity/ui/src/index.ts"],
+      "@deanslist-platform/web-leaderboard-data-access": ["libs/web/leaderboard/data-access/src/index.ts"],
+      "@deanslist-platform/web-leaderboard-feature": ["libs/web/leaderboard/feature/src/index.ts"],
+      "@deanslist-platform/web-leaderboard-ui": ["libs/web/leaderboard/ui/src/index.ts"],
       "@deanslist-platform/web-project-data-access": ["libs/web/project/data-access/src/index.ts"],
       "@deanslist-platform/web-project-feature": ["libs/web/project/feature/src/index.ts"],
       "@deanslist-platform/web-project-ui": ["libs/web/project/ui/src/index.ts"],
@@ -73,7 +76,8 @@
       "@deanslist-platform/web-team-ui": ["libs/web/team/ui/src/index.ts"],
       "@deanslist-platform/web-user-data-access": ["libs/web/user/data-access/src/index.ts"],
       "@deanslist-platform/web-user-feature": ["libs/web/user/feature/src/index.ts"],
-      "@deanslist-platform/web-user-ui": ["libs/web/user/ui/src/index.ts"]
+      "@deanslist-platform/web-user-ui": ["libs/web/user/ui/src/index.ts"],
+      "@realms/*": ["libs/web/realms/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

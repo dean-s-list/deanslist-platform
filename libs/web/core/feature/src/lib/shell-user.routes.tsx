@@ -8,6 +8,7 @@ import { UserFeature } from '@deanslist-platform/web-user-feature'
 import { UiDashboardItem } from '@pubkey-ui/core'
 import { IconCube, IconSettings, IconUsers } from '@tabler/icons-react'
 import { RouteObject, useRoutes } from 'react-router-dom'
+import { UserLeaderboardFeature } from '@deanslist-platform/web-leaderboard-feature'
 
 const links: UiDashboardItem[] = [
   // User Dashboard Links are added by the web-crud generator
@@ -24,6 +25,7 @@ const routes: RouteObject[] = [
   { path: '/u/*', element: <UserFeature /> },
   { path: '/projects/*', element: <UserProjectFeature /> },
   { path: '/teams/*', element: <UserTeamFeature /> },
+  { path: '/leaderboard/*', element: <UserLeaderboardFeature /> },
 
   { path: 'ratings/*', element: <UserRatingFeature /> },
 ]

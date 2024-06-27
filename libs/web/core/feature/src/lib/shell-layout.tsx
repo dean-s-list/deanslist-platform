@@ -21,6 +21,7 @@ export function ShellLayout({ children }: { children: ReactNode }) {
           links={[
             { link: '/projects', label: 'Projects' },
             { link: '/teams', label: 'Teams' },
+            { link: '/leaderboard', label: 'Leaderboard' },
             { link: `${user?.profileUrl}`, label: 'Profile' },
           ]}
           profile={
