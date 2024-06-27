@@ -25,14 +25,14 @@ function _UserLeaderboardFeature() {
       <Title>Governance Leaderboard</Title>
       <Grid>
         <Grid.Col span={7}>
-          <Card radius="lg" pt={3}>
+          <Card radius="lg">
             <LeaderboardUiTable leaders={leaders} loading={loading} perks={perks} />
           </Card>
         </Grid.Col>
         <Grid.Col span={5}>
           <Card radius="lg" pos="sticky" top="60px">
             <Stack w="100%">
-              <Center>
+              <Center pb={14}>
                 <Title order={2}>Package Proposals</Title>
               </Center>
               <Divider />
