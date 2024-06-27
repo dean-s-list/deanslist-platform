@@ -16,7 +16,7 @@ export function useUserFindManyIdentity({ username }: { username: string }) {
     if (!query.data) {
       return []
     }
-    const items = query.data?.items ?? []
+    const items = (query.data?.items ?? []).filter((item) => item.provider !== IdentityProvider.Discord)
     return items.reduce(
       (acc, item) => {
         const existing = acc.find((x) => x.provider === item.provider)
@@ -27,10 +27,7 @@ export function useUserFindManyIdentity({ username }: { username: string }) {
         }
         return acc
       },
-      [
-        { provider: IdentityProvider.Discord, items: [] },
-        { provider: IdentityProvider.Solana, items: [] },
-      ] as { provider: IdentityProvider; items: Identity[] }[],
+      [{ provider: IdentityProvider.Solana, items: [] }] as { provider: IdentityProvider; items: Identity[] }[],
     )
   }, [query.data])
 

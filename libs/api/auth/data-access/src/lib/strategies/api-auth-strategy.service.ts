@@ -34,10 +34,17 @@ export class ApiAuthStrategyService {
     }
 
     if (found) {
-      await this.core.data.identity.update({
-        where: { id: found.id },
-        data: { accessToken, refreshToken, verified: true, profile },
-      })
+      await Promise.all([
+        this.core.data.identity.update({
+          where: { id: found.id },
+          data: { accessToken, refreshToken, verified: true, profile },
+        }),
+        this.updateUserProfile(found.ownerId, {
+          avatarUrl: (profile as { avatarUrl?: string })?.avatarUrl,
+          username: (profile as { username?: string })?.username,
+          name: (profile as { name?: string })?.name,
+        }),
+      ])
       return found.owner
     }
 
@@ -82,6 +89,21 @@ export class ApiAuthStrategyService {
     )
 
     return user
+  }
+
+  async updateUserProfile(
+    userId: string,
+    profile: {
+      username?: string
+      name?: string
+      avatarUrl?: string
+    },
+  ) {
+    const updated = await this.core.data.user.update({ where: { id: userId }, data: { ...profile } })
+    this.logger.verbose(
+      `Updated user ${updated.username} (${updated.id}), updated profile ${profile.name}, ${profile.username}, ${profile.avatarUrl}`,
+    )
+    return updated
   }
 
   async updateUserWithIdentity(userId: string, identity: Prisma.IdentityCreateWithoutOwnerInput) {

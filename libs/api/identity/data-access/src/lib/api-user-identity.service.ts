@@ -1,6 +1,6 @@
-import { Injectable, Logger } from '@nestjs/common'
-import { Identity as PrismaIdentity } from '@prisma/client'
 import { ApiCoreService, BaseContext, getRequestDetails } from '@deanslist-platform/api-core-data-access'
+import { Injectable, Logger } from '@nestjs/common'
+import { Identity as PrismaIdentity, IdentityProvider } from '@prisma/client'
 import { verifySignature } from '@pubkeyapp/solana-verify-wallet'
 import { ApiSolanaIdentityService } from './api-solana-identity.service'
 import { LinkIdentityInput } from './dto/link-identity-input'
@@ -21,6 +21,9 @@ export class ApiUserIdentityService {
     })
     if (!found) {
       throw new Error(`Identity ${identityId} not found`)
+    }
+    if (found.provider === IdentityProvider.Discord) {
+      throw new Error(`Cannot delete Discord identity`)
     }
     if (found.owner.identities.length === 1 && !found.owner.password) {
       throw new Error(`Cannot delete last identity`)

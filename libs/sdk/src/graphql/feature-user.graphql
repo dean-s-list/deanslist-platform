@@ -4,6 +4,7 @@ fragment UserDetails on User {
   developer
   id
   name
+  manager
   profileUrl
   role
   status

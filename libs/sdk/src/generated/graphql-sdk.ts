@@ -786,6 +786,7 @@ export type User = {
   developer?: Maybe<Scalars['Boolean']['output']>
   id: Scalars['String']['output']
   identities?: Maybe<Array<Identity>>
+  manager?: Maybe<Scalars['Boolean']['output']>
   name?: Maybe<Scalars['String']['output']>
   profileUrl: Scalars['String']['output']
   role?: Maybe<UserRole>
@@ -894,9 +895,7 @@ export type UserUpdateTeamInput = {
 }
 
 export type UserUpdateUserInput = {
-  avatarUrl?: InputMaybe<Scalars['String']['input']>
   developer?: InputMaybe<Scalars['Boolean']['input']>
-  name?: InputMaybe<Scalars['String']['input']>
 }
 
 export type VerifyIdentityChallengeInput = {
@@ -920,6 +919,7 @@ export type LoginMutation = {
     developer?: boolean | null
     id: string
     name?: string | null
+    manager?: boolean | null
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
@@ -945,6 +945,7 @@ export type RegisterMutation = {
     developer?: boolean | null
     id: string
     name?: string | null
+    manager?: boolean | null
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
@@ -964,6 +965,7 @@ export type MeQuery = {
     developer?: boolean | null
     id: string
     name?: string | null
+    manager?: boolean | null
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
@@ -991,6 +993,7 @@ export type CommentDetailsFragment = {
     developer?: boolean | null
     id: string
     name?: string | null
+    manager?: boolean | null
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
@@ -1036,6 +1039,7 @@ export type UserFindManyCommentQuery = {
         developer?: boolean | null
         id: string
         name?: string | null
+        manager?: boolean | null
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
@@ -1050,6 +1054,7 @@ export type UserFindManyCommentQuery = {
       developer?: boolean | null
       id: string
       name?: string | null
+      manager?: boolean | null
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
@@ -1084,6 +1089,7 @@ export type UserCreateCommentMutation = {
       developer?: boolean | null
       id: string
       name?: string | null
+      manager?: boolean | null
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
@@ -1119,6 +1125,7 @@ export type UserUpdateCommentMutation = {
       developer?: boolean | null
       id: string
       name?: string | null
+      manager?: boolean | null
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
@@ -1171,6 +1178,7 @@ export type AdminFindManyCommentQuery = {
         developer?: boolean | null
         id: string
         name?: string | null
+        manager?: boolean | null
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
@@ -1185,6 +1193,7 @@ export type AdminFindManyCommentQuery = {
       developer?: boolean | null
       id: string
       name?: string | null
+      manager?: boolean | null
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
@@ -1220,6 +1229,7 @@ export type AdminUpdateCommentMutation = {
       developer?: boolean | null
       id: string
       name?: string | null
+      manager?: boolean | null
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
@@ -1570,6 +1580,7 @@ export type AdminFindManyIdentityQuery = {
       developer?: boolean | null
       id: string
       name?: string | null
+      manager?: boolean | null
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
@@ -2149,6 +2160,7 @@ export type ReviewDetailsFragment = {
     developer?: boolean | null
     id: string
     name?: string | null
+    manager?: boolean | null
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
@@ -2200,6 +2212,7 @@ export type UserFindManyReviewQuery = {
       developer?: boolean | null
       id: string
       name?: string | null
+      manager?: boolean | null
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
@@ -2252,6 +2265,7 @@ export type UserFindUserProjectReviewQuery = {
       developer?: boolean | null
       id: string
       name?: string | null
+      manager?: boolean | null
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
@@ -2304,6 +2318,7 @@ export type UserFindOneReviewQuery = {
       developer?: boolean | null
       id: string
       name?: string | null
+      manager?: boolean | null
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
@@ -2356,6 +2371,7 @@ export type UserCreateReviewMutation = {
       developer?: boolean | null
       id: string
       name?: string | null
+      manager?: boolean | null
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
@@ -2416,6 +2432,7 @@ export type AdminFindManyReviewQuery = {
         developer?: boolean | null
         id: string
         name?: string | null
+        manager?: boolean | null
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
@@ -2479,6 +2496,7 @@ export type AdminFindOneReviewQuery = {
       developer?: boolean | null
       id: string
       name?: string | null
+      manager?: boolean | null
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
@@ -2519,6 +2537,7 @@ export type TeamMemberDetailsFragment = {
     developer?: boolean | null
     id: string
     name?: string | null
+    manager?: boolean | null
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
@@ -2547,6 +2566,7 @@ export type UserGetTeamMembersQuery = {
       developer?: boolean | null
       id: string
       name?: string | null
+      manager?: boolean | null
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
@@ -2576,6 +2596,7 @@ export type UserGetTeamMemberQuery = {
       developer?: boolean | null
       id: string
       name?: string | null
+      manager?: boolean | null
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
@@ -2728,6 +2749,7 @@ export type AdminGetTeamMembersQuery = {
       developer?: boolean | null
       id: string
       name?: string | null
+      manager?: boolean | null
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
@@ -2829,6 +2851,7 @@ export type UserDetailsFragment = {
   developer?: boolean | null
   id: string
   name?: string | null
+  manager?: boolean | null
   profileUrl: string
   role?: UserRole | null
   status?: UserStatus | null
@@ -2849,6 +2872,7 @@ export type AdminCreateUserMutation = {
     developer?: boolean | null
     id: string
     name?: string | null
+    manager?: boolean | null
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
@@ -2878,6 +2902,7 @@ export type AdminFindManyUserQuery = {
       developer?: boolean | null
       id: string
       name?: string | null
+      manager?: boolean | null
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
@@ -2923,6 +2948,7 @@ export type AdminFindOneUserQuery = {
     developer?: boolean | null
     id: string
     name?: string | null
+    manager?: boolean | null
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
@@ -2945,6 +2971,7 @@ export type AdminUpdateUserMutation = {
     developer?: boolean | null
     id: string
     name?: string | null
+    manager?: boolean | null
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
@@ -2968,6 +2995,7 @@ export type UserFindManyUserQuery = {
       developer?: boolean | null
       id: string
       name?: string | null
+      manager?: boolean | null
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
@@ -3000,6 +3028,7 @@ export type UserFindOneUserQuery = {
     developer?: boolean | null
     id: string
     name?: string | null
+    manager?: boolean | null
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
@@ -3021,6 +3050,7 @@ export type UserUpdateUserMutation = {
     developer?: boolean | null
     id: string
     name?: string | null
+    manager?: boolean | null
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
@@ -3036,6 +3066,7 @@ export const UserDetailsFragmentDoc = gql`
     developer
     id
     name
+    manager
     profileUrl
     role
     status
@@ -6127,9 +6158,7 @@ export function UserUpdateTeamInputSchema(): z.ZodObject<Properties<UserUpdateTe
 
 export function UserUpdateUserInputSchema(): z.ZodObject<Properties<UserUpdateUserInput>> {
   return z.object({
-    avatarUrl: z.string().nullish(),
     developer: z.boolean().nullish(),
-    name: z.string().nullish(),
   })
 }
 

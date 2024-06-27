@@ -1,13 +1,13 @@
-import { Injectable, Logger, Res } from '@nestjs/common'
-import { JwtService } from '@nestjs/jwt'
-import { User, UserStatus } from '@prisma/client'
 import {
   ApiCoreService,
   AppContext,
   hashPassword,
-  slugifyId,
+  slugifyUsername,
   validatePassword,
 } from '@deanslist-platform/api-core-data-access'
+import { Injectable, Logger, Res } from '@nestjs/common'
+import { JwtService } from '@nestjs/jwt'
+import { User, UserStatus } from '@prisma/client'
 import { Response } from 'express-serve-static-core'
 import { LoginInput } from './dto/login.input'
 import { RegisterInput } from './dto/register.input'
@@ -43,7 +43,7 @@ export class ApiAuthService {
     if (input?.password.length < 8) {
       throw new Error('Password is too short.')
     }
-    const username = slugifyId(input.username)
+    const username = slugifyUsername(input.username)
     const exists = await this.core.data.user.findUnique({ where: { username } })
     if (exists) {
       throw new Error('User already exists.')

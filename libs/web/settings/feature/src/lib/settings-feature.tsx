@@ -1,6 +1,6 @@
 import { CoreUiGrid } from '@deanslist-platform/web-core-ui'
 import { useUserProfile } from '@deanslist-platform/web-user-data-access'
-import { UserUiProfile, UserUiUpdateForm } from '@deanslist-platform/web-user-ui'
+import { UserUiProfile, UserUiToggleDeveloperMode } from '@deanslist-platform/web-user-ui'
 import { Button } from '@mantine/core'
 import { UiCard, UiContainer, UiLoader, UiStack, UiWarning } from '@pubkey-ui/core'
 import { Link } from 'react-router-dom'
@@ -32,11 +32,11 @@ export default function SettingsFeature() {
         }
       >
         <UiStack gap="xl">
-          <UiCard title="Edit profile">
-            <UserUiUpdateForm user={user} submit={updateUser} />
-          </UiCard>
           <UiCard title="Manage Identities">
             <SettingsIdentityFeature />
+          </UiCard>
+          <UiCard title="Advanced Settings">
+            <UserUiToggleDeveloperMode user={user} updateUser={updateUser} />
           </UiCard>
         </UiStack>
       </CoreUiGrid>

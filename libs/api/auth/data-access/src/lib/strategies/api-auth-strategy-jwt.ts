@@ -1,7 +1,7 @@
+import { ApiCoreService } from '@deanslist-platform/api-core-data-access'
 import { Injectable, UnauthorizedException } from '@nestjs/common'
 import { PassportStrategy } from '@nestjs/passport'
 import { UserStatus } from '@prisma/client'
-import { ApiCoreService } from '@deanslist-platform/api-core-data-access'
 import { Request } from 'express-serve-static-core'
 import { Strategy } from 'passport-jwt'
 
@@ -23,7 +23,14 @@ export class ApiAuthStrategyJwt extends PassportStrategy(Strategy) {
     if (!payload.id) {
       throw new UnauthorizedException()
     }
-    const user = await this.core.data.user.findUnique({ where: { id: payload.id } })
+    const user = await this.core.data.user.findUnique({
+      where: { id: payload.id },
+      include: {
+        teams: { select: { id: true } },
+        projectManagers: { select: { id: true } },
+      },
+    })
+
     if (!user) {
       throw new UnauthorizedException()
     }

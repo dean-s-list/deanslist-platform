@@ -1,17 +1,17 @@
-import { Injectable, Logger } from '@nestjs/common'
+import { ApiAuthService } from '@deanslist-platform/api-auth-data-access'
 import {
   ApiCoreService,
   BaseContext,
   ellipsify,
   getRequestDetails,
-  slugifyId,
+  slugifyUsername,
 } from '@deanslist-platform/api-core-data-access'
+import { Injectable, Logger } from '@nestjs/common'
+import { IdentityProvider, UserRole, UserStatus } from '@prisma/client'
+import { ApiSolanaIdentityService } from './api-solana-identity.service'
 import { RequestIdentityChallengeInput } from './dto/request-identity-challenge.input'
 import { VerifyIdentityChallengeInput } from './dto/verify-identity-challenge-input'
 import { sha256 } from './helpers/sha256'
-import { ApiSolanaIdentityService } from './api-solana-identity.service'
-import { ApiAuthService } from '@deanslist-platform/api-auth-data-access'
-import { IdentityProvider, UserRole, UserStatus } from '@prisma/client'
 
 @Injectable()
 export class ApiAnonIdentityService {
@@ -49,7 +49,7 @@ export class ApiAnonIdentityService {
               verified: false,
               owner: {
                 create: {
-                  username: slugifyId(`${ellipsify(providerId)}-${provider}`),
+                  username: slugifyUsername(`${ellipsify(providerId)}-${provider}`),
                   role: admin ? UserRole.Admin : UserRole.User,
                   status: UserStatus.Active,
                   developer: admin,

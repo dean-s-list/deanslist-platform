@@ -403,6 +403,7 @@ type User {
   developer: Boolean
   id: String!
   identities: [Identity!]
+  manager: Boolean
   name: String
   profileUrl: String!
   role: UserRole
@@ -510,9 +511,7 @@ input UserUpdateTeamInput {
 }
 
 input UserUpdateUserInput {
-  avatarUrl: String
   developer: Boolean
-  name: String
 }
 
 input VerifyIdentityChallengeInput {

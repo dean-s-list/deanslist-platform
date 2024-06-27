@@ -8,7 +8,7 @@ export const provisionDataTeams: Prisma.TeamCreateInput[] = [
     avatarUrl: 'https://avatars.githubusercontent.com/u/125477168?v=4',
     name: 'PubKey',
     homeServerId: '1083213946078625853',
-    members: { create: { userId: 'beemandev', admin: true } },
+    members: { create: { userId: 'beeman.dev', admin: true } },
     projects: {
       create: [
         {
@@ -26,7 +26,7 @@ export const provisionDataTeams: Prisma.TeamCreateInput[] = [
     avatarUrl: avatarDeansList,
     members: {
       create: [
-        { userId: 'beemandev', admin: true },
+        { userId: 'beeman.dev', admin: true },
         { userId: 'parzicano', admin: true },
         { userId: 'scientistjoe', admin: true },
       ],
@@ -71,5 +71,5 @@ export const provisionDataTeams: Prisma.TeamCreateInput[] = [
       ],
     },
   },
-  { id: 'gibwork', name: `Gib Work`, members: { create: { userId: 'beemandev', admin: true } } },
+  { id: 'gibwork', name: `Gib Work`, members: { create: { userId: 'beeman.dev', admin: true } } },
 ]

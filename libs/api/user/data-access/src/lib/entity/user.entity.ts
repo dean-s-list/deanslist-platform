@@ -24,4 +24,8 @@ export class User {
   username!: string
   @HideField()
   identities?: unknown[] | null
+  @HideField()
+  projectManagers?: unknown[] | null
+  @HideField()
+  teams?: unknown[] | null
 }
