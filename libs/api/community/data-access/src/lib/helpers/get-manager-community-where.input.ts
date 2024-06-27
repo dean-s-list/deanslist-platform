@@ -1,8 +1,13 @@
 import { Prisma } from '@prisma/client'
 import { ManagerFindManyCommunityInput } from '../dto/manager-find-many-community.input'
 
-export function getManagerCommunityWhereInput(input: ManagerFindManyCommunityInput): Prisma.CommunityWhereInput {
-  const where: Prisma.CommunityWhereInput = {}
+export function getManagerCommunityWhereInput(
+  userId: string,
+  input: ManagerFindManyCommunityInput,
+): Prisma.CommunityWhereInput {
+  const where: Prisma.CommunityWhereInput = {
+    managers: { some: { userId } },
+  }
 
   if (input.search) {
     where.OR = [

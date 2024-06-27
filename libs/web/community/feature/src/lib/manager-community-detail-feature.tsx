@@ -4,10 +4,10 @@ import {
   useManagerGetCommunityManager,
 } from '@deanslist-platform/web-community-data-access'
 import { CommunityUiItem } from '@deanslist-platform/web-community-ui'
-import { CoreUiBackLink, CoreUiButton, CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
+import { CoreUiButton, CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
 import { ManagerProjectCommunityFeature } from '@deanslist-platform/web-project-feature'
 import { Group } from '@mantine/core'
-import { UiError, UiGroup, UiLoader, UiPage } from '@pubkey-ui/core'
+import { UiContainer, UiError, UiGroup, UiLoader, UiStack } from '@pubkey-ui/core'
 import { IconSettings, IconShield, IconUsers } from '@tabler/icons-react'
 import { useMemo } from 'react'
 import { Navigate, RouteObject, useLocation, useParams, useRoutes } from 'react-router-dom'
@@ -21,25 +21,27 @@ export function ManagerCommunityDetailFeature() {
   const { isAdmin } = useAuth()
   const { pathname } = useLocation()
 
-  const routes: RouteObject[] = useMemo(() => {
-    const res: RouteObject[] = [
-      { index: true, element: <Navigate to="projects" replace /> },
-      { path: 'projects/*', element: <ManagerProjectCommunityFeature communityId={communityId} /> },
-    ]
-    if (isCommunityAdmin) {
-      res.push(
-        {
-          path: 'managers',
-          element: <ManagerCommunityDetailManagersTab communityId={communityId} />,
-        },
-        {
-          path: 'settings',
-          element: <ManagerCommunitySettingsGeneralTab communityId={communityId} />,
-        },
-      )
-    }
-    return res
-  }, [])
+  const routes: RouteObject[] = useMemo(
+    () => [
+      {
+        index: true,
+        element: <Navigate to="projects" replace />,
+      },
+      {
+        path: 'projects/*',
+        element: <ManagerProjectCommunityFeature communityId={communityId} />,
+      },
+      {
+        path: 'managers',
+        element: isCommunityAdmin ? <ManagerCommunityDetailManagersTab communityId={communityId} /> : null,
+      },
+      {
+        path: 'settings',
+        element: isCommunityAdmin ? <ManagerCommunitySettingsGeneralTab communityId={communityId} /> : null,
+      },
+    ],
+    [isCommunityAdmin],
+  )
 
   const router = useRoutes(routes)
 
@@ -51,37 +53,39 @@ export function ManagerCommunityDetailFeature() {
   }
 
   return (
-    <UiPage leftAction={<CoreUiBackLink label="Back to communities" />}>
-      <UiGroup>
-        <CommunityUiItem community={item} to={item.manageUrl} />
-        {isCommunityAdmin ? (
-          <Group>
-            <CoreUiDebugModal data={item} />
-            <CoreUiButton
-              to={`${item.manageUrl}/managers`}
-              variant={pathname.startsWith(`${item.manageUrl}/managers`) ? 'primary' : 'light'}
-              size="xs"
-              iconLeft={IconUsers}
-            >
-              Managers
-            </CoreUiButton>
-            <CoreUiButton
-              to={`${item.manageUrl}/settings`}
-              variant={pathname.startsWith(`${item.manageUrl}/settings`) ? 'primary' : 'light'}
-              size="xs"
-              iconLeft={IconSettings}
-            >
-              Settings
-            </CoreUiButton>
-            {isAdmin ? (
-              <CoreUiButton to={`/admin/communities/${communityId}`} variant="light" size="xs" iconLeft={IconShield}>
-                Admin
+    <UiContainer>
+      <UiStack>
+        <UiGroup>
+          <CommunityUiItem community={item} to={item.manageUrl} />
+          {isCommunityAdmin ? (
+            <Group>
+              <CoreUiDebugModal data={item} />
+              <CoreUiButton
+                to={`${item.manageUrl}/managers`}
+                variant={pathname.startsWith(`${item.manageUrl}/managers`) ? 'primary' : 'light'}
+                size="xs"
+                iconLeft={IconUsers}
+              >
+                Managers
               </CoreUiButton>
-            ) : null}
-          </Group>
-        ) : null}
-      </UiGroup>
-      {router}
-    </UiPage>
+              <CoreUiButton
+                to={`${item.manageUrl}/settings`}
+                variant={pathname.startsWith(`${item.manageUrl}/settings`) ? 'primary' : 'light'}
+                size="xs"
+                iconLeft={IconSettings}
+              >
+                Settings
+              </CoreUiButton>
+              {isAdmin ? (
+                <CoreUiButton to={`/admin/communities/${communityId}`} variant="light" size="xs" iconLeft={IconShield}>
+                  Admin
+                </CoreUiButton>
+              ) : null}
+            </Group>
+          ) : null}
+        </UiGroup>
+        {router}
+      </UiStack>
+    </UiContainer>
   )
 }

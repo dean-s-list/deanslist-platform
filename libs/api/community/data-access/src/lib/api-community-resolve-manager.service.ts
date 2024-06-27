@@ -37,18 +37,18 @@ export class ApiCommunityResolveManagerService {
     return this.data.getCommunityManager({ userId, communityId })
   }
 
-  async findManyCommunity(input: ManagerFindManyCommunityInput): Promise<CommunityPaging> {
+  async findManyCommunity(userId: string, input: ManagerFindManyCommunityInput): Promise<CommunityPaging> {
     return this.data.findManyCommunity({
       orderBy: { name: 'asc' },
-      where: getManagerCommunityWhereInput(input),
+      where: getManagerCommunityWhereInput(userId, input),
       limit: input.limit ?? 10,
       page: input.page ?? 1,
       include: { managers: true, projects: true },
     })
   }
 
-  async findOneCommunity(communityId: string) {
-    return this.data.findOneCommunity(communityId)
+  async findOneCommunity(userId: string, communityId: string) {
+    return this.data.findOneCommunity(communityId, { userId })
   }
 
   async updateCommunity(userId: string, communityId: string, input: ManagerUpdateCommunityInput) {

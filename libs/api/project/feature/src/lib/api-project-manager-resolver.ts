@@ -12,7 +12,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 
 @Resolver()
 @UseGuards(ApiAuthGraphQLUserGuard)
-export class ApiProjectManagementResolver {
+export class ApiProjectManagerResolver {
   constructor(private readonly service: ApiProjectService) {}
 
   @Mutation(() => Boolean, { nullable: true })

@@ -20,8 +20,24 @@ export class ApiProjectDataService {
     return found
   }
 
+  async ensureProjectManager({ projectId, userId }: { projectId: string; userId: string }) {
+    const found = await this.findOneProject(projectId)
+
+    const isCommunityAdmin = !!found.community.managers?.find((p) => (p.userId = userId))?.admin
+    const isManager = found.managers.some((p) => p.id === userId)
+
+    if (!isCommunityAdmin && !isManager) {
+      throw new Error(`You are not a project manager`)
+    }
+    return found
+  }
+
   async ensureCommunityAdmin({ communityId, userId }: { communityId: string; userId: string }) {
     return this.community.data.ensureCommunityAdmin({ communityId, userId })
+  }
+
+  async ensureCommunityManager({ communityId, userId }: { communityId: string; userId: string }) {
+    return this.community.data.ensureCommunityManager({ communityId, userId })
   }
 
   async createProject(
@@ -52,7 +68,6 @@ export class ApiProjectDataService {
       ...input,
       slug,
       community: { connect: { id: communityId } },
-      avatarUrl: community.avatarUrl ?? undefined,
       managers: { connect: { id: userId } },
     }
 
@@ -97,7 +112,7 @@ export class ApiProjectDataService {
   ) {
     const found = await this.core.data.project.findUnique({
       where: { id: projectId, ...where },
-      include: { community: true, managers: true, ...include },
+      include: { ...include, community: { include: { managers: true } }, managers: true },
     })
     if (!found) {
       throw new Error('Project not found')

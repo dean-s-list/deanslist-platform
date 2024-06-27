@@ -46,13 +46,13 @@ export class ApiCommunityManagerResolver {
   }
 
   @Query(() => CommunityPaging)
-  managerFindManyCommunity(@Args('input') input: ManagerFindManyCommunityInput) {
-    return this.service.manager.findManyCommunity(input)
+  managerFindManyCommunity(@CtxUserId() userId: string, @Args('input') input: ManagerFindManyCommunityInput) {
+    return this.service.manager.findManyCommunity(userId, input)
   }
 
   @Query(() => Community, { nullable: true })
-  managerFindOneCommunity(@Args('communityId') communityId: string) {
-    return this.service.manager.findOneCommunity(communityId)
+  managerFindOneCommunity(@CtxUserId() userId: string, @Args('communityId') communityId: string) {
+    return this.service.manager.findOneCommunity(userId, communityId)
   }
 
   @Mutation(() => Boolean, { nullable: true })

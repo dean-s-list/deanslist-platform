@@ -1,5 +1,5 @@
 import { getEnumOptions, ManagerUpdateProjectInput, Project, ProjectStatus, type User } from '@deanslist-platform/sdk'
-import { AdminUserUiSearch, UserUiItem } from '@deanslist-platform/web-user-ui'
+import { UserUiItem, UserUiSearch } from '@deanslist-platform/web-user-ui'
 import {
   ActionIcon,
   Button,
@@ -15,7 +15,7 @@ import {
 } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { useForm } from '@mantine/form'
-import { toastError, toastSuccess, UiStack } from '@pubkey-ui/core'
+import { UiStack } from '@pubkey-ui/core'
 import { IconTrash } from '@tabler/icons-react'
 import { useState } from 'react'
 
@@ -221,18 +221,12 @@ export function ProjectUiMemberManager({
   return (
     <UiStack>
       <ProjectUiMemberTable users={users} delete={removeUser} />
-      <AdminUserUiSearch select={setUser} />
+      <UserUiSearch select={setUser} />
       {user ? (
         <UnstyledButton
           onClick={() => {
             console.log(user)
             addUser(user.id)
-              .then(() => {
-                toastSuccess('Manager added')
-              })
-              .catch((err) => {
-                toastError(err.message)
-              })
           }}
         >
           <UserUiItem user={user} />

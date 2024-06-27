@@ -7,7 +7,14 @@ export function getProjectWhereManagerInput(
 ): Prisma.ProjectWhereInput {
   const where: Prisma.ProjectWhereInput = {
     communityId: input.communityId ?? undefined,
-    managers: { some: { id: userId } },
+    OR: [
+      {
+        managers: { some: { id: userId } },
+      },
+      {
+        community: { managers: { some: { userId, admin: true } } },
+      },
+    ],
   }
 
   if (input.search) {

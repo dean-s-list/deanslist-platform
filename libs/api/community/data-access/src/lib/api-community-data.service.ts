@@ -58,9 +58,17 @@ export class ApiCommunityDataService {
   }
 
   async ensureCommunityAdmin({ communityId, userId }: { communityId: string; userId: string }) {
-    const manager = await this.getCommunityManager({ communityId, userId })
-    if (!manager || !manager.admin) {
+    const manager = await this.ensureCommunityManager({ communityId, userId })
+    if (!manager.admin) {
       throw new Error('You are not a community admin')
+    }
+    return manager
+  }
+
+  async ensureCommunityManager({ communityId, userId }: { communityId: string; userId: string }) {
+    const manager = await this.getCommunityManager({ communityId, userId })
+    if (!manager) {
+      throw new Error('You are not a community manager')
     }
     return manager
   }
@@ -102,9 +110,9 @@ export class ApiCommunityDataService {
       .then(([data, meta]) => ({ data, meta }))
   }
 
-  async findOneCommunity(communityId: string) {
+  async findOneCommunity(communityId: string, { userId }: { userId?: string } = {}) {
     const found = await this.core.data.community.findUnique({
-      where: { id: communityId },
+      where: { id: communityId, managers: userId ? { some: { userId } } : undefined },
       include: { managers: true },
     })
     if (!found) {

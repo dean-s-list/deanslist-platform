@@ -20,7 +20,6 @@ export class ApiProjectResolveReviewerService {
 
   async findOneProject(projectId: string) {
     return this.data.findOneProject(projectId, {
-      managers: true,
       reviewers: true,
       reviews: {
         include: {

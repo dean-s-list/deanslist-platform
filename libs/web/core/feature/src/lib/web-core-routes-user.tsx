@@ -10,12 +10,12 @@ import { UserFeature } from '@deanslist-platform/web-user-feature'
 import { lazy } from 'react'
 import { Navigate, RouteObject, useRoutes } from 'react-router-dom'
 
-export const ManagementRoutes = lazy(() => import('./web-core-routes-management'))
+export const ManagerRoutes = lazy(() => import('./web-core-routes-manager'))
 
 const routes: RouteObject[] = [
   // User Dashboard Routes are added by the web-crud generator
   { path: '/dashboard', element: <Navigate to="/projects" replace /> },
-  { path: '/management/*', element: <ManagementRoutes /> },
+  { path: '/manager/*', element: <ManagerRoutes /> },
   { path: '/projects/*', element: <ReviewerProjectFeature /> },
   { path: '/settings/*', element: <SettingsFeature /> },
   { path: '/reviews/*', element: <ReviewerUsernameReviewFeature /> },

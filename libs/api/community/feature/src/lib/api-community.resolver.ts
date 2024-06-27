@@ -15,7 +15,7 @@ export class ApiCommunityResolver {
 
   @ResolveField(() => String)
   manageUrl(@Parent() community: Community) {
-    return `/management/communities/${community.id}`
+    return `/manager/communities/${community.id}`
   }
 
   @ResolveField(() => Int, { nullable: true })
