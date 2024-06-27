@@ -1,8 +1,9 @@
-import { CoreUiSearchField } from '@deanslist-platform/web-core-ui'
+import { CoreUiDebugModal, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
 import { useReviewerFindManyReviewByUsername } from '@deanslist-platform/web-review-data-access'
 import { ReviewerReviewUsernameUiTable } from '@deanslist-platform/web-review-ui'
 import { Group } from '@mantine/core'
-import { UiDebugModal, UiInfo, UiLoader, UiPage, UiStack } from '@pubkey-ui/core'
+import { UiInfo, UiLoader, UiPage, UiStack } from '@pubkey-ui/core'
+import { IconCheckupList } from '@tabler/icons-react'
 
 export function ReviewerUsernameReviewListFeature({ username }: { username: string }) {
   const { items, query, setSearch } = useReviewerFindManyReviewByUsername({
@@ -12,16 +13,17 @@ export function ReviewerUsernameReviewListFeature({ username }: { username: stri
   return (
     <UiPage
       title={`Reviews for ${username}`}
+      leftAction={<IconCheckupList size={28} />}
       rightAction={
         <Group>
-          <UiDebugModal data={items} />
+          <CoreUiDebugModal data={items} />
         </Group>
       }
     >
       <UiStack>
         <Group>
           <CoreUiSearchField placeholder="Search review" setSearch={setSearch} />
-          <UiDebugModal data={items} />
+          <CoreUiDebugModal data={items} />
         </Group>
 
         {query.isLoading ? (

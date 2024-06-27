@@ -13,7 +13,7 @@ export function ManagerProjectCreateFeature({ communityId }: { communityId: stri
     return createProject(input)
       .then((res) => {
         if (res) {
-          navigate(res.viewUrl)
+          navigate(`../${res.id}`)
         }
       })
       .then(() => true)

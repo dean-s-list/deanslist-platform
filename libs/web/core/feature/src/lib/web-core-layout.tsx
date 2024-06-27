@@ -10,7 +10,14 @@ import { Group } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { UiLoader } from '@pubkey-ui/core'
 import { WalletMultiIcon } from '@pubkeyapp/wallet-adapter-mantine-ui'
-import { IconChairDirector, IconChecks, IconCube, IconListNumbers, IconSettings, IconShield } from '@tabler/icons-react'
+import {
+  IconChairDirector,
+  IconCheckupList,
+  IconCube,
+  IconListNumbers,
+  IconSettings,
+  IconShield,
+} from '@tabler/icons-react'
 import { ReactNode, Suspense, useMemo } from 'react'
 
 export function WebCoreLayout({ children }: { children: ReactNode }) {
@@ -20,7 +27,7 @@ export function WebCoreLayout({ children }: { children: ReactNode }) {
     () =>
       [
         { link: '/projects', label: 'Projects', icon: IconCube },
-        { link: '/reviews', label: 'My reviews', icon: IconChecks },
+        { link: '/reviews', label: 'My reviews', icon: IconCheckupList },
         { link: '/leaderboard', label: 'Leaderboard', icon: IconListNumbers },
         isManager ? { link: '/management', label: 'Management', icon: IconChairDirector } : null,
         isAdmin ? { link: '/admin', label: 'Admin', icon: IconShield } : null,

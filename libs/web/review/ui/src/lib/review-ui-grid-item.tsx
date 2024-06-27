@@ -1,6 +1,7 @@
-import { Paper } from '@mantine/core'
 import type { Review } from '@deanslist-platform/sdk'
-import { UiDebugModal, UiGroup } from '@pubkey-ui/core'
+import { CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
+import { Paper } from '@mantine/core'
+import { UiGroup } from '@pubkey-ui/core'
 import { ReviewUiItem } from './review-ui-item'
 
 export function ReviewUiGridItem({ review, to }: { review: Review; to?: string }) {
@@ -8,7 +9,7 @@ export function ReviewUiGridItem({ review, to }: { review: Review; to?: string }
     <Paper withBorder p="md">
       <UiGroup>
         <ReviewUiItem review={review} to={to} />
-        <UiDebugModal data={review} />
+        <CoreUiDebugModal data={review} />
       </UiGroup>
     </Paper>
   )

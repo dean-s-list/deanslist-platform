@@ -1,7 +1,7 @@
 import { Group, Pagination, SimpleGrid } from '@mantine/core'
 import { <%= model.className %> } from '@<%= npmScope %>/sdk'
 import { gridLimits, UiPageLimit } from '@<%= npmScope %>/<%= app.fileName %>-core-ui'
-import { UiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core'
+import { CoreUiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core'
 import { DataTableProps } from 'mantine-datatable'
 import { <%= model.className %>UiGridItem } from './<%= model.fileName %>-ui-grid-item'
 
@@ -33,7 +33,7 @@ export function <%= model.className %>UiGrid({
       <UiGroup>
         <Pagination disabled={totalPages < 2} total={totalPages} value={page} onChange={onPageChange} />
         <Group>
-          <UiDebugModal data={<%= plural.propertyName %>} />
+          <CoreUiDebugModal data={<%= plural.propertyName %>} />
           <UiPageLimit data={gridLimits} limit={limit} setLimit={setLimit} setPage={setPage} />
         </Group>
       </UiGroup>

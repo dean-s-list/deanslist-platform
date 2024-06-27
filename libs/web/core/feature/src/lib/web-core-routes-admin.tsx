@@ -5,8 +5,9 @@ import { AdminDiscordFeature } from '@deanslist-platform/web-discord-feature'
 import { AdminProjectFeature } from '@deanslist-platform/web-project-feature'
 import { AdminRatingFeature } from '@deanslist-platform/web-rating-feature'
 import { AdminUserFeature } from '@deanslist-platform/web-user-feature'
-import { UiContainer } from '@pubkey-ui/core'
-import { IconBrandDiscord, IconCube, IconUsers, IconUsersGroup } from '@tabler/icons-react'
+import { Box } from '@mantine/core'
+import { UiPage } from '@pubkey-ui/core'
+import { IconBrandDiscord, IconCube, IconShield, IconUsers, IconUsersGroup } from '@tabler/icons-react'
 import { Navigate, RouteObject, useRoutes } from 'react-router-dom'
 
 const links: CoreUiDashboardItem[] = [
@@ -29,17 +30,19 @@ const routes: RouteObject[] = [
 ]
 
 export default function WebCoreRoutesAdmin() {
-  return useRoutes([
+  const router = useRoutes([
     { index: true, element: <Navigate to="dashboard" replace /> },
     {
       path: 'dashboard/*',
-      element: (
-        <UiContainer>
-          <CoreUiDashboardGrid links={links} />
-        </UiContainer>
-      ),
+      element: <CoreUiDashboardGrid links={links} />,
     },
     ...routes,
     { path: '*', element: <CoreUiNotFound to="/admin" /> },
   ])
+
+  return (
+    <UiPage leftAction={<IconShield size={28} />} title="Admin">
+      <Box>{router}</Box>
+    </UiPage>
+  )
 }

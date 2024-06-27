@@ -2,7 +2,7 @@ import { Button, Group } from '@mantine/core'
 import { UiPageLimit, UiSearchField } from '@<%= npmScope %>/<%= app.fileName %>-core-ui'
 import { use<%= actor.className %>FindMany<%= model.className %> } from '@<%= npmScope %>/<%= app.fileName %>-<%= model.fileName %>-data-access'
 import { <% if(actorAdmin){ %><%= actor.className %><%= model.className %>UiTable<% } else { %><%= model.className %>UiGrid<% } %> } from '@<%= npmScope %>/<%= app.fileName %>-<%= model.fileName %>-ui'
-import { UiBack, UiDebugModal, UiInfo, UiLoader, <% if(ownerId && actor.className === 'Admin'){ %>UiStack<% } else { %>UiPage<% } %> } from '@pubkey-ui/core'
+import { UiBack, CoreUiDebugModal, UiInfo, UiLoader, <% if(ownerId && actor.className === 'Admin'){ %>UiStack<% } else { %>CoreUiPage<% } %> } from '@pubkey-ui/core'
 import { Link } from 'react-router-dom'
 
 export default function <%= actor.className %><%= model.className %>ListFeature(<% if(ownerId && actor.className === 'Admin'){ %>{ <%= ownerId %> }: { <%= ownerId %>: string } <% } %>) {
@@ -15,12 +15,12 @@ export default function <%= actor.className %><%= model.className %>ListFeature(
   <% if(ownerId && actor.className === 'Admin'){ %>
     <UiStack>
   <% } else { %>
-    <UiPage
+    <CoreUiPage
       title="<%= plural.className %>"
       leftAction={<UiBack />}
       rightAction={
         <Group>
-          <UiDebugModal data={items} />
+          <CoreUiDebugModal data={items} />
           <Button component={Link} to="create">
             Create
           </Button>
@@ -32,7 +32,7 @@ export default function <%= actor.className %><%= model.className %>ListFeature(
         <UiSearchField placeholder="Search <%= model.propertyName %>" setSearch={setSearch} />
         <% if(actorAdmin){ %><UiPageLimit limit={pagination.limit} setLimit={pagination.setLimit} setPage={pagination.setPage} /><% } %>
         <% if(ownerId && actor.className === 'Admin'){ %>
-          <UiDebugModal data={items} />
+          <CoreUiDebugModal data={items} />
           <Button component={Link} to="create">
             Create
           </Button>
@@ -66,7 +66,7 @@ export default function <%= actor.className %><%= model.className %>ListFeature(
     <% if(ownerId && actor.className === 'Admin'){ %>
     </UiStack>
     <% } else { %>
-    </UiPage>
+    </CoreUiPage>
     <% } %>
   )
 }

@@ -1,8 +1,14 @@
-import { CoreUiBack, CoreUiPageLimit, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
+import {
+  CoreUiBack,
+  CoreUiDebugModal,
+  CoreUiPage,
+  CoreUiPageLimit,
+  CoreUiSearchField,
+} from '@deanslist-platform/web-core-ui'
 import { useAdminFindManyUser } from '@deanslist-platform/web-user-data-access'
 import { AdminUserUiTable } from '@deanslist-platform/web-user-ui'
 import { Button, Group } from '@mantine/core'
-import { UiDebugModal, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
+import { UiInfo, UiLoader } from '@pubkey-ui/core'
 import { Link } from 'react-router-dom'
 import { AdminUserUiSelectRole } from './admin-user-ui-select-role'
 import { AdminUserUiSelectStatus } from './admin-user-ui-select-status'
@@ -11,12 +17,13 @@ export function AdminUserListFeature() {
   const { deleteUser, items, pagination, query, role, setRole, setSearch, setStatus, status } = useAdminFindManyUser()
 
   return (
-    <UiPage
+    <CoreUiPage
+      withContainer={false}
       title="Users"
       leftAction={<CoreUiBack />}
       rightAction={
         <Group>
-          <UiDebugModal data={items} />
+          <CoreUiDebugModal data={items} />
           <Button component={Link} to="create">
             Create
           </Button>
@@ -47,6 +54,6 @@ export function AdminUserListFeature() {
       ) : (
         <UiInfo message="User not found" />
       )}
-    </UiPage>
+    </CoreUiPage>
   )
 }

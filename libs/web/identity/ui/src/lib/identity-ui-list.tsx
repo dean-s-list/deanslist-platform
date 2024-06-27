@@ -1,6 +1,7 @@
 import { ellipsify, Identity } from '@deanslist-platform/sdk'
+import { CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
 import { ActionIcon, Badge, Code, Group, Menu, Text } from '@mantine/core'
-import { UiCard, UiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core'
+import { UiCard, UiGroup, UiStack } from '@pubkey-ui/core'
 import { IconDotsVertical, IconTrash } from '@tabler/icons-react'
 import { IdentityUiAvatar } from './identity-ui-avatar'
 import { IdentityUiLink } from './identity-ui-link'
@@ -47,7 +48,7 @@ export function IdentityUiList({
               </UiGroup>
             </Group>
             <Group gap="xs">
-              <UiDebugModal data={item} />
+              <CoreUiDebugModal data={item} />
               <IdentityUiLink item={item} />
               {deleteIdentity && (
                 <Menu shadow="md" width={200}>

@@ -1,8 +1,8 @@
 import { useUserFindManyCommunity } from '@deanslist-platform/web-community-data-access'
 import { CommunityUiGrid } from '@deanslist-platform/web-community-ui'
-import { CoreUiSearchField } from '@deanslist-platform/web-core-ui'
+import { CoreUiDebugModal, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
 import { Group } from '@mantine/core'
-import { UiDebugModal, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
+import { UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
 
 export function UserCommunityListFeature() {
   const { items, pagination, query, setSearch } = useUserFindManyCommunity({
@@ -14,7 +14,7 @@ export function UserCommunityListFeature() {
       title="Communities"
       rightAction={
         <Group>
-          <UiDebugModal data={items} />
+          <CoreUiDebugModal data={items} />
         </Group>
       }
     >

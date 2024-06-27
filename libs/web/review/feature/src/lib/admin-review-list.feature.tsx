@@ -1,8 +1,8 @@
-import { CoreUiPageLimit, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
+import { CoreUiDebugModal, CoreUiPageLimit, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
 import { useAdminFindManyReview } from '@deanslist-platform/web-review-data-access'
 import { AdminReviewUiTable } from '@deanslist-platform/web-review-ui'
 import { Group } from '@mantine/core'
-import { UiDebugModal, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
+import { UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
 
 export function AdminReviewListFeature({ projectId }: { projectId: string }) {
   const { deleteReview, items, pagination, query, setSearch } = useAdminFindManyReview({
@@ -14,7 +14,7 @@ export function AdminReviewListFeature({ projectId }: { projectId: string }) {
     <UiStack>
       <Group>
         <CoreUiSearchField placeholder="Search review" setSearch={setSearch} />
-        <UiDebugModal data={items} />
+        <CoreUiDebugModal data={items} />
         <CoreUiPageLimit limit={pagination.limit} setLimit={pagination.setLimit} setPage={pagination.setPage} />
       </Group>
 

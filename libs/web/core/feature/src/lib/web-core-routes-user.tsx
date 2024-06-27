@@ -20,7 +20,6 @@ const routes: RouteObject[] = [
   { path: '/settings/*', element: <SettingsFeature /> },
   { path: '/reviews/*', element: <ReviewerUsernameReviewFeature /> },
   { path: '/solana/*', element: <SolanaFeature /> },
-  { path: '/teams/*', element: <UserTeamFeature /> },
   { path: '/leaderboard/*', element: <UserLeaderboardFeature /> },
   { path: '/communities/*', element: <UserCommunityFeature /> },
   { path: '/u/*', element: <UserFeature /> },

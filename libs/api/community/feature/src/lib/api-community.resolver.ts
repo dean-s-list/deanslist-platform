@@ -13,6 +13,11 @@ export class ApiCommunityResolver {
     return projects.filter((project) => project.status === ProjectStatus.Active)?.length
   }
 
+  @ResolveField(() => String)
+  manageUrl(@Parent() community: Community) {
+    return `/management/communities/${community.id}`
+  }
+
   @ResolveField(() => Int, { nullable: true })
   memberCount(@Parent() community: Community) {
     return community.members?.length ?? 0

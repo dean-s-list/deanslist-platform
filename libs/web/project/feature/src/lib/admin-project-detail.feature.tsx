@@ -1,8 +1,8 @@
-import { CoreUiBack } from '@deanslist-platform/web-core-ui'
+import { CoreUiBack, CoreUiDebugModal, CoreUiPage } from '@deanslist-platform/web-core-ui'
 import { useAdminFindOneProject } from '@deanslist-platform/web-project-data-access'
 import { ProjectUiItem } from '@deanslist-platform/web-project-ui'
 import { AdminReviewFeature } from '@deanslist-platform/web-review-feature'
-import { UiDebugModal, UiError, UiLoader, UiPage, UiTabRoutes } from '@pubkey-ui/core'
+import { UiError, UiLoader, UiTabRoutes } from '@pubkey-ui/core'
 import { useParams } from 'react-router-dom'
 import { AdminProjectDetailChannelsTab } from './admin-project-detail-channels-tab'
 import { AdminProjectDetailMembersTab } from './admin-project-detail-members-tab'
@@ -20,9 +20,10 @@ export function AdminProjectDetailFeature() {
   }
 
   return (
-    <UiPage
+    <CoreUiPage
+      withContainer={false}
       leftAction={<CoreUiBack />}
-      rightAction={<UiDebugModal data={item} />}
+      rightAction={<CoreUiDebugModal data={item} />}
       title={<ProjectUiItem project={item} />}
     >
       <UiTabRoutes
@@ -37,6 +38,6 @@ export function AdminProjectDetailFeature() {
           },
         ]}
       />
-    </UiPage>
+    </CoreUiPage>
   )
 }

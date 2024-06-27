@@ -1,9 +1,9 @@
-import { CoreUiBackLink, CoreUiButton, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
 import { useManagerFindManyCommunity } from '@deanslist-platform/web-community-data-access'
 import { CommunityUiGrid } from '@deanslist-platform/web-community-ui'
+import { CoreUiButton, CoreUiDebugModal, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
 import { Group } from '@mantine/core'
 import { UiDebugModal, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
-import { IconPlus } from '@tabler/icons-react'
+import { IconPlus, IconUsersGroup } from '@tabler/icons-react'
 
 export function ManagerCommunityListFeature() {
   const { items, pagination, query, setSearch } = useManagerFindManyCommunity({
@@ -13,11 +13,11 @@ export function ManagerCommunityListFeature() {
   return (
     <UiPage
       title="Communities"
-      leftAction={<CoreUiBackLink label="Back to overview" to="/management" />}
+      leftAction={<IconUsersGroup size={28} />}
       rightAction={
         <Group>
-          <UiDebugModal data={items} />
-          <CoreUiButton to="create" iconLeft={IconPlus}>
+          <CoreUiDebugModal data={items} />
+          <CoreUiButton size="xs" variant="light" to="create" iconLeft={IconPlus}>
             Add Community
           </CoreUiButton>
         </Group>

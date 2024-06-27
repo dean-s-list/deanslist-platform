@@ -1,7 +1,8 @@
+import { CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
 import { useAdminGetDiscordBot } from '@deanslist-platform/web-discord-data-access'
 import { DiscordUiBotItem } from '@deanslist-platform/web-discord-ui'
 import { Group, Paper } from '@mantine/core'
-import { UiDebugModal, UiGroup, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
+import { UiGroup, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
 import { AdminDiscordServersFeature } from './admin-discord-servers-feature'
 import { DiscordUiBotInviteButton } from './discord-ui-bot-invite-button'
 import { DiscordUiBotManageButton } from './discord-ui-bot-manage-button'
@@ -19,7 +20,7 @@ export function AdminDiscordBotFeature() {
             <UiGroup>
               <DiscordUiBotItem bot={item} />
               <Group>
-                <UiDebugModal data={item} />
+                <CoreUiDebugModal data={item} />
                 <DiscordUiBotManageButton item={item} />
                 <DiscordUiBotInviteButton item={item} />
               </Group>

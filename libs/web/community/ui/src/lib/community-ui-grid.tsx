@@ -1,7 +1,7 @@
 import type { Community } from '@deanslist-platform/sdk'
-import { CoreUiPageLimit, gridLimits } from '@deanslist-platform/web-core-ui'
+import { CoreUiDebugModal, CoreUiPageLimit, gridLimits } from '@deanslist-platform/web-core-ui'
 import { Group, Pagination, SimpleGrid } from '@mantine/core'
-import { UiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core'
+import { UiGroup, UiStack } from '@pubkey-ui/core'
 import { DataTableProps } from 'mantine-datatable'
 import { CommunityUiGridItem } from './community-ui-grid-item'
 
@@ -33,7 +33,7 @@ export function CommunityUiGrid({
       <UiGroup>
         <Pagination disabled={totalPages < 2} total={totalPages} value={page} onChange={onPageChange} />
         <Group>
-          <UiDebugModal data={communities} />
+          <CoreUiDebugModal data={communities} />
           <CoreUiPageLimit data={gridLimits} limit={limit} setLimit={setLimit} setPage={setPage} />
         </Group>
       </UiGroup>

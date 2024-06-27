@@ -1,7 +1,7 @@
 import { ManagerCreateCommunityInput } from '@deanslist-platform/sdk'
-import { CoreUiBack } from '@deanslist-platform/web-core-ui'
 import { useManagerFindManyCommunity } from '@deanslist-platform/web-community-data-access'
 import { ManagerCommunityUiCreateForm } from '@deanslist-platform/web-community-ui'
+import { CoreUiBack } from '@deanslist-platform/web-core-ui'
 import { toastError, UiCard, UiPage } from '@pubkey-ui/core'
 import { useNavigate } from 'react-router-dom'
 
@@ -13,7 +13,7 @@ export function ManagerCommunityCreateFeature() {
     return createCommunity(input)
       .then((res) => {
         if (res) {
-          navigate(`/communities/${res?.id}`)
+          navigate(`../${res?.id}`)
         }
       })
       .then(() => true)

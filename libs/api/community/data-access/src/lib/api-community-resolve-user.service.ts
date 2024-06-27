@@ -34,7 +34,7 @@ export class ApiCommunityResolveUserService {
 
   async findManyCommunity(input: ManagerFindManyCommunityInput): Promise<CommunityPaging> {
     return this.data.findManyCommunity({
-      orderBy: { createdAt: 'desc' },
+      orderBy: { name: 'asc' },
       where: getUserCommunityWhereInput(input),
       limit: input.limit ?? 10,
       page: input.page ?? 1,

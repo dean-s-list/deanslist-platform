@@ -1,9 +1,9 @@
 import { AdminCommentFeature } from '@deanslist-platform/web-comment-feature'
-import { CoreUiBack } from '@deanslist-platform/web-core-ui'
+import { CoreUiBack, CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
 import { useAdminFindOneReview } from '@deanslist-platform/web-review-data-access'
 import { ReviewUiItem } from '@deanslist-platform/web-review-ui'
 import { Group } from '@mantine/core'
-import { UiDebugModal, UiError, UiGroup, UiLoader, UiStack } from '@pubkey-ui/core'
+import { UiError, UiGroup, UiLoader, UiStack } from '@pubkey-ui/core'
 import { useParams } from 'react-router-dom'
 
 export function AdminReviewDetailFeature() {
@@ -26,7 +26,7 @@ export function AdminReviewDetailFeature() {
         </Group>
 
         <Group>
-          <UiDebugModal data={item} />
+          <CoreUiDebugModal data={item} />
         </Group>
       </UiGroup>
       <AdminCommentFeature reviewId={reviewId} />

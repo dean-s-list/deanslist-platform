@@ -1,4 +1,5 @@
 import { DiscordServer } from '@deanslist-platform/sdk'
+import { CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
 import { useAdminGetDiscordChannels } from '@deanslist-platform/web-discord-data-access'
 import { AdminDiscordUiChannelPingButton, DiscordUiChannelSelect } from '@deanslist-platform/web-discord-ui'
 import { Fieldset, Grid, Group, Text } from '@mantine/core'
@@ -51,7 +52,7 @@ export function AdminDiscordServersCard({ server, refresh }: { server: DiscordSe
             </Grid.Col>
           </Grid>
           <Group justify="end" gap="xs">
-            <UiDebugModal data={{ server }} />
+            <CoreUiDebugModal data={{ server }} />
             <AdminDiscordBotLeaveButton server={server} refresh={refresh} />
           </Group>
         </UiStack>

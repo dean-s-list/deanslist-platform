@@ -1,7 +1,7 @@
 import type { User } from '@deanslist-platform/sdk'
-import { gridLimits, CoreUiPageLimit } from '@deanslist-platform/web-core-ui'
+import { CoreUiDebugModal, CoreUiPageLimit, gridLimits } from '@deanslist-platform/web-core-ui'
 import { Group, Pagination, SimpleGrid } from '@mantine/core'
-import { UiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core'
+import { UiGroup, UiStack } from '@pubkey-ui/core'
 import { DataTableProps } from 'mantine-datatable'
 import { UserUiGridItem } from './user-ui-grid-item'
 
@@ -33,7 +33,7 @@ export function UserUiGrid({
       <UiGroup>
         <Pagination disabled={totalPages < 2} total={totalPages} value={page} onChange={onPageChange} />
         <Group>
-          <UiDebugModal data={users} />
+          <CoreUiDebugModal data={users} />
           <CoreUiPageLimit data={gridLimits} limit={limit} setLimit={setLimit} setPage={setPage} />
         </Group>
       </UiGroup>

@@ -1,21 +1,20 @@
-import { CoreUiSearchField } from '@deanslist-platform/web-core-ui'
+import { CoreUiDebugModal, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
 import { useManagerFindManyProject } from '@deanslist-platform/web-project-data-access'
 import { ProjectUiGrid } from '@deanslist-platform/web-project-ui'
 import { Button, Group } from '@mantine/core'
-import { UiDebugModal, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
+import { UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
 import { Link } from 'react-router-dom'
 
 export function ManagerProjectListFeature({ communityId }: { communityId?: string }) {
   const { items, pagination, query, setSearch } = useManagerFindManyProject({
     communityId,
-    limit: 12,
   })
 
   return (
     <UiStack>
       <Group>
         <CoreUiSearchField placeholder="Search project" setSearch={setSearch} />
-        <UiDebugModal data={items} />
+        <CoreUiDebugModal data={items} />
         <Button component={Link} to="create">
           Create
         </Button>

@@ -1,8 +1,14 @@
 import { useAdminFindManyCommunity } from '@deanslist-platform/web-community-data-access'
 import { AdminCommunityUiTable } from '@deanslist-platform/web-community-ui'
-import { CoreUiBack, CoreUiPageLimit, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
+import {
+  CoreUiBack,
+  CoreUiDebugModal,
+  CoreUiPage,
+  CoreUiPageLimit,
+  CoreUiSearchField,
+} from '@deanslist-platform/web-core-ui'
 import { Group } from '@mantine/core'
-import { UiDebugModal, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
+import { UiInfo, UiLoader } from '@pubkey-ui/core'
 
 export function AdminCommunityListFeature() {
   const { deleteCommunity, items, pagination, query, setSearch } = useAdminFindManyCommunity({
@@ -10,12 +16,13 @@ export function AdminCommunityListFeature() {
   })
 
   return (
-    <UiPage
+    <CoreUiPage
+      withContainer={false}
       title="Communities"
       leftAction={<CoreUiBack />}
       rightAction={
         <Group>
-          <UiDebugModal data={items} />
+          <CoreUiDebugModal data={items} />
         </Group>
       }
     >
@@ -41,6 +48,6 @@ export function AdminCommunityListFeature() {
       ) : (
         <UiInfo message="No communities found" />
       )}
-    </UiPage>
+    </CoreUiPage>
   )
 }

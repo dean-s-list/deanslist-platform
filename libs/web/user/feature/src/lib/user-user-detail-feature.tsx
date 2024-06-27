@@ -1,12 +1,12 @@
 import { ellipsify } from '@deanslist-platform/sdk'
 import { useAuth } from '@deanslist-platform/web-auth-data-access'
-import { CoreUiGrid } from '@deanslist-platform/web-core-ui'
+import { CoreUiDebugModal, CoreUiGrid } from '@deanslist-platform/web-core-ui'
 import { useUserFindManyIdentity } from '@deanslist-platform/web-identity-data-access'
 import { IdentityUiAvatar, IdentityUiBadge, IdentityUiLink } from '@deanslist-platform/web-identity-ui'
 import { useUserFineOneUser } from '@deanslist-platform/web-user-data-access'
 import { UserUiProfile } from '@deanslist-platform/web-user-ui'
 import { Button, Group, SimpleGrid, Stack, Text } from '@mantine/core'
-import { UiCard, UiContainer, UiDebugModal, UiGroup, UiLoader, UiStack, UiWarning } from '@pubkey-ui/core'
+import { UiCard, UiContainer, UiGroup, UiLoader, UiStack, UiWarning } from '@pubkey-ui/core'
 import { Link, useParams } from 'react-router-dom'
 
 export function UserUserDetailFeature() {
@@ -56,7 +56,7 @@ export function UserUserDetailFeature() {
                     </Stack>
                   </Group>
                   <Group gap={2}>
-                    <UiDebugModal data={identity} />
+                    <CoreUiDebugModal data={identity} />
                     <IdentityUiLink item={identity} />
                   </Group>
                 </UiGroup>

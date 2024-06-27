@@ -1,6 +1,7 @@
-import { ActionIcon, Anchor, Group, ScrollArea, Stack, Text } from '@mantine/core'
 import { ellipsify, Identity } from '@deanslist-platform/sdk'
-import { UiCopy, UiDebugModal } from '@pubkey-ui/core'
+import { CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
+import { ActionIcon, Anchor, Group, ScrollArea, Stack, Text } from '@mantine/core'
+import { UiCopy } from '@pubkey-ui/core'
 import { IconTrash } from '@tabler/icons-react'
 import { DataTable } from 'mantine-datatable'
 import { IdentityUiAvatar } from './identity-ui-avatar'
@@ -42,7 +43,7 @@ export function AdminIdentityUiTable({ deleteIdentity, identities = [] }: AdminI
             textAlign: 'right',
             render: (item) => (
               <Group gap="xs" justify="right">
-                <UiDebugModal data={item} />
+                <CoreUiDebugModal data={item} />
                 <UiCopy text={item.providerId} tooltip="Copy the providerId" />
                 <ActionIcon
                   variant="light"

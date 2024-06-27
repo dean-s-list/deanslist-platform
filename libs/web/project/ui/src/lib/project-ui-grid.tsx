@@ -1,7 +1,7 @@
 import type { Project } from '@deanslist-platform/sdk'
-import { CoreUiPageLimit, gridLimits } from '@deanslist-platform/web-core-ui'
+import { CoreUiDebugModal, CoreUiPageLimit, gridLimits } from '@deanslist-platform/web-core-ui'
 import { Group, Pagination, SimpleGrid } from '@mantine/core'
-import { UiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core'
+import { UiGroup, UiStack } from '@pubkey-ui/core'
 import { DataTableProps } from 'mantine-datatable'
 import { ProjectUiGridItem } from './project-ui-grid-item'
 
@@ -33,7 +33,7 @@ export function ProjectUiGrid({
       <UiGroup>
         <Pagination disabled={totalPages < 2} total={totalPages} value={page} onChange={onPageChange} />
         <Group>
-          <UiDebugModal data={projects} />
+          <CoreUiDebugModal data={projects} />
           <CoreUiPageLimit data={gridLimits} limit={limit} setLimit={setLimit} setPage={setPage} />
         </Group>
       </UiGroup>

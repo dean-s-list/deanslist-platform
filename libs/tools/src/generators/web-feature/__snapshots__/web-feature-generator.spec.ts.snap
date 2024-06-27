@@ -226,7 +226,7 @@ exports[`web-feature generator should run successfully with crud 10`] = `
 "import { TestAdminCreateInput } from '@proj/sdk';
 import { useAdminFindManyTest } from '@proj/web-test-data-access';
 import { AdminTestUiCreateForm } from '@proj/web-test-ui';
-import { toastError, UiBack, UiCard, UiPage } from '@pubkey-ui/core';
+import { toastError, UiBack, UiCard, CoreUiPage } from '@pubkey-ui/core';
 import { useNavigate } from 'react-router-dom';
 
 export default function AdminTestCreateFeature() {
@@ -248,11 +248,11 @@ export default function AdminTestCreateFeature() {
   }
 
   return (
-    <UiPage leftAction={<UiBack />} title="Create Test">
+    <CoreUiPage leftAction={<UiBack />} title="Create Test">
       <UiCard>
         <AdminTestUiCreateForm submit={submit} />
       </UiCard>
-    </UiPage>
+    </CoreUiPage>
   );
 }
 "
@@ -310,10 +310,10 @@ exports[`web-feature generator should run successfully with crud 13`] = `
 "import { Group } from '@mantine/core';
 import {
   UiBack,
-  UiDebugModal,
+  CoreUiDebugModal,
   UiError,
   UiLoader,
-  UiPage,
+  CoreUiPage,
   UiTabRoute,
   UiTabRoutes,
 } from '@pubkey-ui/core';
@@ -348,17 +348,17 @@ export default function AdminTestDetailFeature() {
   ];
 
   return (
-    <UiPage
+    <CoreUiPage
       title={<TestUiItem test={item} />}
       leftAction={<UiBack />}
       rightAction={
         <Group>
-          <UiDebugModal data={item} />
+          <CoreUiDebugModal data={item} />
         </Group>
       }
     >
       <UiTabRoutes tabs={tabs} />
-    </UiPage>
+    </CoreUiPage>
   );
 }
 "
@@ -371,10 +371,10 @@ import { useAdminFindManyTest } from '@proj/web-test-data-access';
 import { AdminTestUiTable } from '@proj/web-test-ui';
 import {
   UiBack,
-  UiDebugModal,
+  CoreUiDebugModal,
   UiInfo,
   UiLoader,
-  UiPage,
+  CoreUiPage,
 } from '@pubkey-ui/core';
 import { Link } from 'react-router-dom';
 
@@ -384,12 +384,12 @@ export default function AdminTestListFeature() {
   });
 
   return (
-    <UiPage
+    <CoreUiPage
       title="Tests"
       leftAction={<UiBack />}
       rightAction={
         <Group>
-          <UiDebugModal data={items} />
+          <CoreUiDebugModal data={items} />
           <Button component={Link} to="create">
             Create
           </Button>
@@ -422,7 +422,7 @@ export default function AdminTestListFeature() {
       ) : (
         <UiInfo message="No tests found" />
       )}
-    </UiPage>
+    </CoreUiPage>
   );
 }
 "
@@ -450,7 +450,7 @@ exports[`web-feature generator should run successfully with crud 16`] = `
 "import { TestUserCreateInput } from '@proj/sdk';
 import { useUserFindManyTest } from '@proj/web-test-data-access';
 import { UserTestUiCreateForm } from '@proj/web-test-ui';
-import { toastError, UiBack, UiCard, UiPage } from '@pubkey-ui/core';
+import { toastError, UiBack, UiCard, CoreUiPage } from '@pubkey-ui/core';
 import { useNavigate } from 'react-router-dom';
 
 export default function UserTestCreateFeature() {
@@ -472,11 +472,11 @@ export default function UserTestCreateFeature() {
   }
 
   return (
-    <UiPage leftAction={<UiBack />} title="Create Test">
+    <CoreUiPage leftAction={<UiBack />} title="Create Test">
       <UiCard>
         <UserTestUiCreateForm submit={submit} />
       </UiCard>
-    </UiPage>
+    </CoreUiPage>
   );
 }
 "
@@ -534,10 +534,10 @@ exports[`web-feature generator should run successfully with crud 19`] = `
 "import { Group } from '@mantine/core';
 import {
   UiBack,
-  UiDebugModal,
+  CoreUiDebugModal,
   UiError,
   UiLoader,
-  UiPage,
+  CoreUiPage,
   UiTabRoute,
   UiTabRoutes,
 } from '@pubkey-ui/core';
@@ -572,17 +572,17 @@ export default function UserTestDetailFeature() {
   ];
 
   return (
-    <UiPage
+    <CoreUiPage
       title={<TestUiItem test={item} />}
       leftAction={<UiBack />}
       rightAction={
         <Group>
-          <UiDebugModal data={item} />
+          <CoreUiDebugModal data={item} />
         </Group>
       }
     >
       <UiTabRoutes tabs={tabs} />
-    </UiPage>
+    </CoreUiPage>
   );
 }
 "
@@ -595,10 +595,10 @@ import { useUserFindManyTest } from '@proj/web-test-data-access';
 import { TestUiGrid } from '@proj/web-test-ui';
 import {
   UiBack,
-  UiDebugModal,
+  CoreUiDebugModal,
   UiInfo,
   UiLoader,
-  UiPage,
+  CoreUiPage,
 } from '@pubkey-ui/core';
 import { Link } from 'react-router-dom';
 
@@ -608,12 +608,12 @@ export default function UserTestListFeature() {
   });
 
   return (
-    <UiPage
+    <CoreUiPage
       title="Tests"
       leftAction={<UiBack />}
       rightAction={
         <Group>
-          <UiDebugModal data={items} />
+          <CoreUiDebugModal data={items} />
           <Button component={Link} to="create">
             Create
           </Button>
@@ -639,7 +639,7 @@ export default function UserTestListFeature() {
       ) : (
         <UiInfo message="No tests found" />
       )}
-    </UiPage>
+    </CoreUiPage>
   );
 }
 "
@@ -842,7 +842,7 @@ export function TestUiAvatar({ test, ...props }: TestUiAvatarProps) {
 exports[`web-feature generator should run successfully with crud 27`] = `
 "import { Paper } from '@mantine/core';
 import { Test } from '@proj/sdk';
-import { UiDebugModal, UiGroup } from '@pubkey-ui/core';
+import { CoreUiDebugModal, UiGroup } from '@pubkey-ui/core';
 import { TestUiItem } from './test-ui-item';
 
 export function TestUiGridItem({ test, to }: { test: Test; to?: string }) {
@@ -850,7 +850,7 @@ export function TestUiGridItem({ test, to }: { test: Test; to?: string }) {
     <Paper withBorder p="md">
       <UiGroup>
         <TestUiItem test={test} to={to} />
-        <UiDebugModal data={test} />
+        <CoreUiDebugModal data={test} />
       </UiGroup>
     </Paper>
   );
@@ -862,7 +862,7 @@ exports[`web-feature generator should run successfully with crud 28`] = `
 "import { Group, Pagination, SimpleGrid } from '@mantine/core';
 import { Test } from '@proj/sdk';
 import { gridLimits, UiPageLimit } from '@proj/web-core-ui';
-import { UiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core';
+import { CoreUiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core';
 import { DataTableProps } from 'mantine-datatable';
 import { TestUiGridItem } from './test-ui-grid-item';
 
@@ -899,7 +899,7 @@ export function TestUiGrid({
           onChange={onPageChange}
         />
         <Group>
-          <UiDebugModal data={tests} />
+          <CoreUiDebugModal data={tests} />
           <UiPageLimit
             data={gridLimits}
             limit={limit}

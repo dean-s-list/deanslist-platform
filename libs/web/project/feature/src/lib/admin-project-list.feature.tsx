@@ -1,25 +1,32 @@
-import { CoreUiBack, CoreUiPageLimit, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
+import {
+  CoreUiBack,
+  CoreUiDebugModal,
+  CoreUiPage,
+  CoreUiPageLimit,
+  CoreUiSearchField,
+} from '@deanslist-platform/web-core-ui'
 import { useAdminFindManyProject } from '@deanslist-platform/web-project-data-access'
 import { AdminProjectUiTable } from '@deanslist-platform/web-project-ui'
 import { Group } from '@mantine/core'
-import { UiDebugModal, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
+import { UiInfo, UiLoader } from '@pubkey-ui/core'
 
 export function AdminProjectListFeature() {
   const { deleteProject, items, pagination, query, setSearch } = useAdminFindManyProject()
 
   return (
-    <UiPage
+    <CoreUiPage
+      withContainer={false}
       title="Projects"
       leftAction={<CoreUiBack />}
       rightAction={
         <Group>
-          <UiDebugModal data={items} />
+          <CoreUiDebugModal data={items} />
         </Group>
       }
     >
       <Group>
         <CoreUiSearchField placeholder="Search project" setSearch={setSearch} />
-        <UiDebugModal data={items} />
+        <CoreUiDebugModal data={items} />
         <CoreUiPageLimit limit={pagination.limit} setLimit={pagination.setLimit} setPage={pagination.setPage} />
       </Group>
 
@@ -40,6 +47,6 @@ export function AdminProjectListFeature() {
       ) : (
         <UiInfo message="No projects found" />
       )}
-    </UiPage>
+    </CoreUiPage>
   )
 }

@@ -1,4 +1,5 @@
 import { TextInput, TextInputProps } from '@mantine/core'
+import { IconSearch } from '@tabler/icons-react'
 import { ChangeEvent, KeyboardEvent, useState } from 'react'
 
 export function CoreUiSearchField({
@@ -14,6 +15,9 @@ export function CoreUiSearchField({
 
   return (
     <TextInput
+      leftSection={<IconSearch size={24} />}
+      size="lg"
+      radius="xl"
       style={{ flexGrow: 1 }}
       placeholder={placeholder}
       value={value}

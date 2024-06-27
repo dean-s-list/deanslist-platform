@@ -1,7 +1,7 @@
 import { <%= model.className %><%= actor.className %>CreateInput } from '@<%= npmScope %>/sdk'
 import { use<%= actor.className %>FindMany<%= model.className %> } from '@<%= npmScope %>/<%= app.fileName %>-<%= model.fileName %>-data-access'
 import { <%= actor.className %><%= model.className %>UiCreateForm } from '@<%= npmScope %>/<%= app.fileName %>-<%= model.fileName %>-ui'
-import { toastError, UiBack, UiCard<% if(ownerId && actor.className === 'Admin'){ %><% } else { %>, UiPage<% } %> } from '@pubkey-ui/core'
+import { toastError, UiBack, UiCard<% if(ownerId && actor.className === 'Admin'){ %><% } else { %>, CoreUiPage<% } %> } from '@pubkey-ui/core'
 import { useNavigate } from 'react-router-dom'
 <% if(ownerId && actor.className === 'Admin'){ %>import { Group, Text } from '@mantine/core'<% } %>
 
@@ -29,11 +29,11 @@ export default function <%= actor.className %><%= model.className %>CreateFeatur
       <<%= actor.className %><%= model.className %>UiCreateForm submit={submit} />
     </UiCard>
     <% } else { %>
-    <UiPage leftAction={<UiBack />} title="Create <%= model.className %>">
+    <CoreUiPage leftAction={<UiBack />} title="Create <%= model.className %>">
       <UiCard>
         <<%= actor.className %><%= model.className %>UiCreateForm submit={submit} />
       </UiCard>
-    </UiPage>
+    </CoreUiPage>
     <% } %>
   )
 }

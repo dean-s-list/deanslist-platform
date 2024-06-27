@@ -1,5 +1,5 @@
 import { User, UserUpdateUserInput } from '@deanslist-platform/sdk'
-import { Checkbox } from '@mantine/core'
+import { Switch } from '@mantine/core'
 import { toastInfo } from '@pubkey-ui/core'
 
 export function UserUiToggleDeveloperMode({
@@ -10,7 +10,7 @@ export function UserUiToggleDeveloperMode({
   updateUser: (input: UserUpdateUserInput) => Promise<boolean>
 }) {
   return (
-    <Checkbox
+    <Switch
       label="Developer Mode"
       description="Developer Mode exposes debug buttons helpful for people developing and testing the platform."
       checked={user?.developer ?? false}

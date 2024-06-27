@@ -1,8 +1,9 @@
 import { Comment } from '@deanslist-platform/sdk'
 import { useAuth } from '@deanslist-platform/web-auth-data-access'
+import { CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
 import { UserUiItem } from '@deanslist-platform/web-user-ui'
 import { Group, Text } from '@mantine/core'
-import { UiDebugModal, UiGroup, UiStack, UiTime } from '@pubkey-ui/core'
+import { UiGroup, UiStack, UiTime } from '@pubkey-ui/core'
 import { CommentUiIconDelete } from './comment-ui-icon-delete'
 
 export function CommentUiItem({
@@ -21,7 +22,7 @@ export function CommentUiItem({
         {comment.author ? <UserUiItem user={comment.author} /> : <div />}
         <Group>
           {comment.createdAt ? <UiTime c="dimmed" size="sm" date={new Date(comment.createdAt)} /> : null}
-          <UiDebugModal data={comment} />
+          <CoreUiDebugModal data={comment} />
           {user?.id === comment.authorId ? (
             <CommentUiIconDelete comment={comment} deleteComment={deleteComment} />
           ) : null}

@@ -1,4 +1,5 @@
 import type { CommunityMember } from '@deanslist-platform/sdk'
+import { useAuth } from '@deanslist-platform/web-auth-data-access'
 import { UserUiItem } from '@deanslist-platform/web-user-ui'
 import { ActionIcon, Group, Switch } from '@mantine/core'
 import { modals } from '@mantine/modals'
@@ -14,6 +15,7 @@ export function CommunityUiMemberListItem({
   toggle: () => Promise<void>
   remove: () => Promise<void>
 }) {
+  const { user } = useAuth()
   return (
     <UiCard key={item.id}>
       <UiStack>
@@ -21,8 +23,14 @@ export function CommunityUiMemberListItem({
           {item.user ? <UserUiItem user={item.user} /> : <div />}
 
           <Group>
-            <Switch label={item.admin ? 'Admin' : 'Member'} checked={item.admin ?? false} onChange={toggle} />
+            <Switch
+              disabled={user?.id === item.userId}
+              label={item.admin ? 'Admin' : 'Member'}
+              checked={item.admin ?? false}
+              onChange={toggle}
+            />
             <ActionIcon
+              disabled={!!item.admin}
               size="sm"
               color="red"
               variant="light"

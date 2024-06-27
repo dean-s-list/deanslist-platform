@@ -1,4 +1,5 @@
 import { useAuth } from '@deanslist-platform/web-auth-data-access'
+import { CommunityUiLink } from '@deanslist-platform/web-community-ui'
 import { CoreUiBackLink, CoreUiButton } from '@deanslist-platform/web-core-ui'
 import { useReviewerFindOneProject } from '@deanslist-platform/web-project-data-access'
 import {
@@ -11,7 +12,6 @@ import {
   ProjectUiTags,
 } from '@deanslist-platform/web-project-ui'
 import { ReviewerProjectReviewFeature } from '@deanslist-platform/web-review-feature'
-import { CommunityUiLink } from '@deanslist-platform/web-community-ui'
 import { Button, Collapse, Group, Paper } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { UiContainer, UiError, UiGroup, UiLoader, UiStack } from '@pubkey-ui/core'
@@ -52,7 +52,7 @@ export function ReviewerProjectDetailFeature() {
             </CoreUiButton>
           ) : null}
         </UiGroup>
-        <Paper radius="lg" withBorder p="lg" bg="dark.7">
+        <Paper radius="xl" withBorder p="xl" bg="dark.7">
           <UiStack>
             <UiGroup>
               <Group>

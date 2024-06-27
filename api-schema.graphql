@@ -140,6 +140,7 @@ type Community {
   createdAt: DateTime
   homeServerId: String
   id: String!
+  manageUrl: String!
   memberCount: Int
   members: [CommunityMember!]
   name: String!

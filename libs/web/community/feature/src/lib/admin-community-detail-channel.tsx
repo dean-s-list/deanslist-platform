@@ -1,4 +1,5 @@
 import { DiscordChannel } from '@deanslist-platform/sdk'
+import { CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
 import { useAdminGetDiscordServers } from '@deanslist-platform/web-discord-data-access'
 import {
   AdminDiscordUiChannelPingIcon,
@@ -6,7 +7,7 @@ import {
   DiscordUiServerItem,
 } from '@deanslist-platform/web-discord-ui'
 import { Anchor, Group, Text, Tooltip } from '@mantine/core'
-import { UiCard, UiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core'
+import { UiCard, UiGroup, UiStack } from '@pubkey-ui/core'
 
 export function AdminCommunityDetailChannel({
   communityId,
@@ -43,7 +44,7 @@ export function AdminCommunityDetailChannel({
         </UiStack>
         <Group gap="xs">
           <AdminDiscordUiChannelPingIcon channelId={channel.id} serverId={channel.guildId ?? ''} />
-          <UiDebugModal data={channel} />
+          <CoreUiDebugModal data={channel} />
           <AdminDiscordUiCommunityChannelDeleteButton
             size="sm"
             communityId={communityId}

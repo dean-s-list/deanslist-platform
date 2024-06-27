@@ -1,17 +1,8 @@
+import { CoreUiBackLink, CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
 import { useManagerFindOneProject } from '@deanslist-platform/web-project-data-access'
 import { ProjectUiItem } from '@deanslist-platform/web-project-ui'
-import { Group, Paper } from '@mantine/core'
-import {
-  UiAlert,
-  UiContainer,
-  UiDebugModal,
-  UiError,
-  UiGroup,
-  UiLoader,
-  UiStack,
-  UiTabRoute,
-  UiTabRoutes,
-} from '@pubkey-ui/core'
+import { Box, Group, Paper } from '@mantine/core'
+import { UiAlert, UiError, UiGroup, UiLoader, UiStack, UiTabRoute, UiTabRoutes } from '@pubkey-ui/core'
 import { useParams } from 'react-router-dom'
 import { ManagerProjectDetailChannelsTab } from './manager-project-detail-channels-tab'
 import { ManagerProjectDetailMembersTab } from './manager-project-detail-members-tab'
@@ -41,8 +32,9 @@ export function ManagerProjectDetailFeature() {
   }
 
   return (
-    <UiContainer>
-      <UiStack gap="xl">
+    <Box>
+      <CoreUiBackLink label="Back to projects" />
+      <UiStack gap="xl" mt="sm">
         <Paper radius="lg" withBorder p="lg" bg="dark.7">
           <UiStack>
             <UiGroup>
@@ -50,7 +42,7 @@ export function ManagerProjectDetailFeature() {
                 <ProjectUiItem project={item} />
               </Group>
               <Group gap="xs">
-                <UiDebugModal data={item} />
+                <CoreUiDebugModal data={item} />
               </Group>
             </UiGroup>
           </UiStack>
@@ -59,6 +51,6 @@ export function ManagerProjectDetailFeature() {
           <UiTabRoutes variant="pills" radius="xl" tabs={tabs} />
         </Paper>
       </UiStack>
-    </UiContainer>
+    </Box>
   )
 }

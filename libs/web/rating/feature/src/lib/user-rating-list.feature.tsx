@@ -1,8 +1,8 @@
-import { CoreUiBack, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
+import { CoreUiBack, CoreUiDebugModal, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
 import { useUserFindManyRating } from '@deanslist-platform/web-rating-data-access'
 import { RatingUiGrid } from '@deanslist-platform/web-rating-ui'
 import { Button, Group } from '@mantine/core'
-import { UiDebugModal, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
+import { UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
 import { Link } from 'react-router-dom'
 
 export function UserRatingListFeature() {
@@ -14,7 +14,7 @@ export function UserRatingListFeature() {
       leftAction={<CoreUiBack />}
       rightAction={
         <Group>
-          <UiDebugModal data={items} />
+          <CoreUiDebugModal data={items} />
           <Button component={Link} to="create">
             Create
           </Button>

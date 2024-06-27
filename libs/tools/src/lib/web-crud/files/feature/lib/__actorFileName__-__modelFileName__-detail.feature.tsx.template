@@ -1,5 +1,5 @@
 import { Group } from '@mantine/core'
-import { UiBack, UiDebugModal, UiError, UiLoader, <% if(ownerId && actor.className === 'Admin'){ %>UiStack<% } else { %>UiPage<% } %>, UiTabRoute, UiTabRoutes } from '@pubkey-ui/core'
+import { UiBack, CoreUiDebugModal, UiError, UiLoader, <% if(ownerId && actor.className === 'Admin'){ %>UiStack<% } else { %>CoreUiPage<% } %>, UiTabRoute, UiTabRoutes } from '@pubkey-ui/core'
 import { use<%= actor.className %>FindOne<%= model.className %> } from '@<%= npmScope %>/<%= app.fileName %>-<%= model.fileName %>-data-access'
 import { <%= model.className %>UiItem } from '@<%= npmScope %>/<%= app.fileName %>-<%= model.fileName %>-ui'
 import { useParams } from 'react-router-dom'
@@ -36,15 +36,15 @@ export default function <%= actor.className %><%= model.className %>DetailFeatur
         <Group>
           <UiBack />
           <<%= model.className %>UiItem <%= model.propertyName %>={item} />
-          <UiDebugModal data={item} />
+          <CoreUiDebugModal data={item} />
         </Group>
     <% } else { %>
-    <UiPage
+    <CoreUiPage
       title={<<%= model.className %>UiItem <%= model.propertyName %>={item} />}
       leftAction={<UiBack />}
       rightAction={
         <Group>
-          <UiDebugModal data={item} />
+          <CoreUiDebugModal data={item} />
         </Group>
       }
     >
@@ -53,7 +53,7 @@ export default function <%= actor.className %><%= model.className %>DetailFeatur
     <% if(ownerId && actor.className === 'Admin'){ %>
     </UiStack>
     <% } else { %>
-    </UiPage>
+    </CoreUiPage>
     <% } %>
   )
 }

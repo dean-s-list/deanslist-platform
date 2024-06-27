@@ -1,8 +1,8 @@
 import { UserCommentFeature } from '@deanslist-platform/web-comment-feature'
-import { CoreUiBackLink } from '@deanslist-platform/web-core-ui'
+import { CoreUiBackLink, CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
 import { useReviewerFindOneReview } from '@deanslist-platform/web-review-data-access'
 import { Group } from '@mantine/core'
-import { UiDebugModal, UiError, UiGroup, UiLoader, UiStack } from '@pubkey-ui/core'
+import { UiError, UiGroup, UiLoader, UiStack } from '@pubkey-ui/core'
 import { useParams } from 'react-router-dom'
 
 export function ReviewerReviewDetailFeature() {
@@ -26,7 +26,7 @@ export function ReviewerReviewDetailFeature() {
           <CoreUiBackLink label="Back to all reviews" />
         </Group>
         <Group>
-          <UiDebugModal data={item} />
+          <CoreUiDebugModal data={item} />
         </Group>
       </UiGroup>
 

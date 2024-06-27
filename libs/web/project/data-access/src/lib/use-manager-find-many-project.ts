@@ -6,7 +6,7 @@ import { useState } from 'react'
 
 export function useManagerFindManyProject(props: Partial<ManagerFindManyProjectInput> & { communityId?: string }) {
   const sdk = useSdk()
-  const [limit, setLimit] = useState(props?.limit ?? 10)
+  const [limit, setLimit] = useState(props?.limit ?? 24)
   const [page, setPage] = useState(props?.page ?? 1)
   const [search, setSearch] = useState<string>(props?.search ?? '')
 

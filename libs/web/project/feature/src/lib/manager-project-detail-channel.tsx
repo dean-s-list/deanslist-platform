@@ -1,8 +1,9 @@
 import { DiscordChannel } from '@deanslist-platform/sdk'
+import { CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
 import { useManagerGetDiscordServers } from '@deanslist-platform/web-discord-data-access'
 import { DiscordUiServerItem } from '@deanslist-platform/web-discord-ui'
 import { Anchor, Group, Text, Tooltip } from '@mantine/core'
-import { UiCard, UiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core'
+import { UiCard, UiGroup, UiStack } from '@pubkey-ui/core'
 
 export function ManagerProjectDetailChannel({ channel }: { channel: DiscordChannel }) {
   const { items: servers } = useManagerGetDiscordServers()
@@ -30,7 +31,7 @@ export function ManagerProjectDetailChannel({ channel }: { channel: DiscordChann
           </DiscordUiServerItem>
         </UiStack>
         <Group gap="xs">
-          <UiDebugModal data={channel} />
+          <CoreUiDebugModal data={channel} />
         </Group>
       </UiGroup>
     </UiCard>

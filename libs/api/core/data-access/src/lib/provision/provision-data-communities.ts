@@ -87,5 +87,10 @@ export const provisionDataCommunities: Prisma.CommunityCreateInput[] = [
       ],
     },
   },
-  { id: 'gibwork', name: `Gib Work`, members: { create: { userId: 'beeman.dev', admin: true } } },
+  {
+    id: 'gibwork',
+    name: `Gib Work`,
+    avatarUrl: 'https://pbs.twimg.com/profile_images/1701414895613255680/xqejQpDn_400x400.jpg',
+    members: { create: { userId: 'beeman.dev', admin: true } },
+  },
 ]

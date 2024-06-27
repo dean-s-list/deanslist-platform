@@ -4,7 +4,7 @@ import { useReviewerFindManyProject } from '@deanslist-platform/web-project-data
 import { ProjectUiGrid } from '@deanslist-platform/web-project-ui'
 import { Group, Select } from '@mantine/core'
 import { UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
-import { IconSearch } from '@tabler/icons-react'
+import { IconCube } from '@tabler/icons-react'
 
 export default function ReviewerProjectListFeature() {
   const { items, pagination, query, setSearch, status, setStatus } = useReviewerFindManyProject({
@@ -12,15 +12,9 @@ export default function ReviewerProjectListFeature() {
   })
 
   return (
-    <UiPage>
+    <UiPage title="Projects" leftAction={<IconCube size={28} />}>
       <Group>
-        <CoreUiSearchField
-          leftSection={<IconSearch size={24} />}
-          size="lg"
-          radius="xl"
-          placeholder="Search project"
-          setSearch={setSearch}
-        />
+        <CoreUiSearchField placeholder="Search project" setSearch={setSearch} />
         <Select
           radius="xl"
           size="lg"

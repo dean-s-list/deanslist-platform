@@ -3,6 +3,10 @@ fragment ProjectDetails on Project {
   amountReferralUsd
   amountTotalUsd
   avatarUrl
+  communityId
+  community {
+    ...CommunityDetails
+  }
   createdAt
   id
   instructions
@@ -20,10 +24,6 @@ fragment ProjectDetails on Project {
   slug
   status
   tags
-  communityId
-  community {
-    ...CommunityDetails
-  }
   updatedAt
   viewUrl
 }

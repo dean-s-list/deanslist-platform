@@ -1,5 +1,5 @@
-import { ApiCoreService, slugifyId } from '@deanslist-platform/api-core-data-access'
 import { ApiCommunityService } from '@deanslist-platform/api-community-data-access'
+import { ApiCoreService, slugifyId } from '@deanslist-platform/api-core-data-access'
 import { Injectable } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
 import { ApiProjectEventService } from './api-project-event.service'
@@ -53,6 +53,7 @@ export class ApiProjectDataService {
       slug,
       community: { connect: { id: communityId } },
       avatarUrl: community.avatarUrl ?? undefined,
+      managers: { connect: { id: userId } },
     }
 
     const project = await this.core.data.project.create({ data, include: { community: true } })

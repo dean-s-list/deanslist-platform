@@ -1,8 +1,8 @@
 import { useAdminFindManyComment } from '@deanslist-platform/web-comment-data-access'
 import { AdminCommentUiTable } from '@deanslist-platform/web-comment-ui'
-import { CoreUiSearchField } from '@deanslist-platform/web-core-ui'
+import { CoreUiDebugModal, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
 import { Group } from '@mantine/core'
-import { UiDebugModal, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
+import { UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
 
 export function AdminCommentListFeature({ reviewId }: { reviewId: string }) {
   const { deleteComment, items, query, setSearch } = useAdminFindManyComment({
@@ -13,7 +13,7 @@ export function AdminCommentListFeature({ reviewId }: { reviewId: string }) {
     <UiStack>
       <Group>
         <CoreUiSearchField placeholder="Search comment" setSearch={setSearch} />
-        <UiDebugModal data={items} />
+        <CoreUiDebugModal data={items} />
       </Group>
 
       {query.isLoading ? (
