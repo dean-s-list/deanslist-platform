@@ -19,7 +19,7 @@ export class ApiDiscordUserResolver {
   }
 
   @Query(() => [DiscordChannel])
-  userGetTeamChannels(@Args('teamId') teamId: string) {
-    return this.service.channel.getTeamChannels(teamId)
+  userGetCommunityChannels(@Args('communityId') communityId: string) {
+    return this.service.channel.getCommunityChannels(communityId)
   }
 }

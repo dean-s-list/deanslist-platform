@@ -26,12 +26,12 @@ export function WebCoreLayout({ children }: { children: ReactNode }) {
         isAdmin ? { link: '/admin', label: 'Admin', icon: IconShield } : null,
         { link: `/settings`, label: 'Settings', icon: IconSettings },
       ].filter(Boolean) as CoreUiNavbarLink[],
-    [user, isManager],
+    [isAdmin, isManager],
   )
 
   return (
     <CoreUiLayout
-      zIndex={0}
+      zIndex={50}
       header={
         <CoreUiHeader
           opened={opened}

@@ -4,7 +4,7 @@ import { ApiCoreService } from './api-core.service'
 import { hashPassword } from './helpers/hash-validate-password'
 import { slugifyId, slugifyUsername } from './helpers/slugify-id'
 import { provisionDataDiscordServers } from './provision/provision-data-discord-servers'
-import { provisionDataTeams } from './provision/provision-data-teams'
+import { provisionDataCommunities } from './provision/provision-data-communities'
 import { provisionDataUsers } from './provision/provision-data-users'
 
 @Injectable()
@@ -26,7 +26,7 @@ export class ApiCoreProvisionService implements OnModuleInit {
 
   private async provisionDatabase() {
     await this.provisionUsers()
-    await this.provisionTeams()
+    await this.provisionCommunities()
     await this.provisionDiscordServers()
   }
 
@@ -56,21 +56,21 @@ export class ApiCoreProvisionService implements OnModuleInit {
     )
   }
 
-  private async provisionTeams() {
-    await Promise.all(provisionDataTeams.map((team) => this.provisionTeam(team)))
+  private async provisionCommunities() {
+    await Promise.all(provisionDataCommunities.map((community) => this.provisionCommunity(community)))
   }
 
-  private async provisionTeam(input: Prisma.TeamCreateInput) {
+  private async provisionCommunity(input: Prisma.CommunityCreateInput) {
     const id = input.id ?? slugifyId(input.name)
-    const existing = await this.core.data.team.count({ where: { id } })
+    const existing = await this.core.data.community.count({ where: { id } })
     if (existing < 1) {
-      await this.core.data.team.create({
+      await this.core.data.community.create({
         data: {
           ...input,
           id,
         },
       })
-      this.logger.verbose(`Provisioned team ${input.name}`)
+      this.logger.verbose(`Provisioned community ${input.name}`)
       return
     }
   }

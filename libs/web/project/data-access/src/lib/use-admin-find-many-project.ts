@@ -10,7 +10,7 @@ export function useAdminFindManyProject(props?: Partial<AdminFindManyProjectInpu
   const [page, setPage] = useState(props?.page ?? 1)
   const [search, setSearch] = useState<string>(props?.search ?? '')
 
-  const input: AdminFindManyProjectInput = { page, limit, search, teamId: props?.teamId }
+  const input: AdminFindManyProjectInput = { page, limit, search, communityId: props?.communityId }
   const query = useQuery({
     queryKey: ['admin', 'find-many-project', input],
     queryFn: () => sdk.adminFindManyProject({ input }).then((res) => res.data),

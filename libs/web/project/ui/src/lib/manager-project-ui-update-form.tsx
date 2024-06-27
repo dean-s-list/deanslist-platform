@@ -84,7 +84,7 @@ export function ManagerProjectUiUpdateForm({
                 withAsterisk
                 label="Name"
                 placeholder="Name"
-                description="The name of the project must be unique within the team."
+                description="The name of the project must be unique within the community."
                 {...form.getInputProps('name')}
               />
               <TextInput

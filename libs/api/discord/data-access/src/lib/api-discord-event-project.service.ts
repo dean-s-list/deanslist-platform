@@ -12,7 +12,7 @@ export class ApiDiscordEventProjectService {
   @OnEvent(ProjectCreatedEvent.event, { async: true })
   async handleProjectCreatedEvent(payload: ProjectCreatedEvent) {
     this.logger.debug(
-      `Received ${ProjectCreatedEvent.event} event [${payload.project.id}] ${payload.project.name} in team ${payload.project.team.name}`,
+      `Received ${ProjectCreatedEvent.event} event [${payload.project.id}] ${payload.project.name} in community ${payload.project.community.name}`,
     )
     const servers = await this.findProjectChannelServers()
     if (!servers.length) {
@@ -21,7 +21,7 @@ export class ApiDiscordEventProjectService {
 
     this.logger.debug(`Sending message to servers ${servers.map((s) => s.id).join(', ')}`)
 
-    const { project, projectUrl, author, discordUserId, team } = await this.extractPayload(payload)
+    const { project, projectUrl, author, discordUserId, community } = await this.extractPayload(payload)
 
     const channelName = project.slug
 
@@ -95,7 +95,7 @@ export class ApiDiscordEventProjectService {
             thumbnail: project.avatarUrl ? { url: project.avatarUrl } : undefined,
             url: `${projectUrl}`,
             fields: [
-              { name: 'Team', value: `[${team.name}](${author.url})` },
+              { name: 'Community', value: `[${community.name}](${author.url})` },
               { name: 'Project', value: `[${project.name}](${projectUrl})` },
               { name: 'Created by', value: `<@${discordUserId}>` },
             ],
@@ -108,9 +108,9 @@ export class ApiDiscordEventProjectService {
   @OnEvent(ProjectDeletedEvent.event, { async: true })
   async handleProjectDeletedEvent(payload: ProjectDeletedEvent) {
     this.logger.debug(
-      `Received ${ProjectDeletedEvent.event} event [${payload.project.id}] ${payload.project.name} in team ${payload.project.team.name}`,
+      `Received ${ProjectDeletedEvent.event} event [${payload.project.id}] ${payload.project.name} in community ${payload.project.community.name}`,
     )
-    const { channels, project, author, discordUserId, team } = await this.extractPayload(payload)
+    const { channels, project, author, discordUserId, community } = await this.extractPayload(payload)
 
     for (const channel of channels) {
       await this.bot.sendMessage(channel.id, {
@@ -119,7 +119,7 @@ export class ApiDiscordEventProjectService {
             author,
             title: `Project deleted`,
             fields: [
-              { name: 'Team', value: `[${team.name}](${author.url})` },
+              { name: 'Community', value: `[${community.name}](${author.url})` },
               { name: 'Project', value: `${project.name}` },
               { name: 'Deleted by', value: `<@${discordUserId}>` },
             ],
@@ -134,11 +134,11 @@ export class ApiDiscordEventProjectService {
     const discordUserId = identity?.providerId
     const channels = payload instanceof ProjectDeletedEvent ? payload.project.channels : []
     const project = payload.project
-    const team = project.team
+    const community = project.community
     const author = {
-      name: team.name,
-      icon_url: team.avatarUrl ?? undefined,
-      url: `${this.core.config.webUrl}/teams/${team.id}`,
+      name: community.name,
+      icon_url: community.avatarUrl ?? undefined,
+      url: `${this.core.config.webUrl}/communities/${community.id}`,
     }
     const projectUrl = `${this.core.config.webUrl}/projects/${project.id}`
 
@@ -148,7 +148,7 @@ export class ApiDiscordEventProjectService {
       discordUserId,
       project,
       projectUrl,
-      team,
+      community,
     }
   }
 

@@ -29,7 +29,13 @@ export class ApiDiscordService {
     const [bot, db] = await Promise.all([
       this.bot.getServers(),
       this.core.data.discordServer.findMany({
-        select: { id: true, createChannels: true, logChannelId: true, projectCategoryId: true, teamCategoryId: true },
+        select: {
+          id: true,
+          createChannels: true,
+          logChannelId: true,
+          projectCategoryId: true,
+          communityCategoryId: true,
+        },
       }),
     ])
     return bot.map((server) => {
@@ -39,7 +45,7 @@ export class ApiDiscordService {
         createChannels: found?.createChannels,
         logChannelId: found?.logChannelId,
         projectCategoryId: found?.projectCategoryId,
-        teamCategoryId: found?.teamCategoryId,
+        communityCategoryId: found?.communityCategoryId,
       }
     })
   }

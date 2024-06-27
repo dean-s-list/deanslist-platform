@@ -15,7 +15,9 @@ export function AdminDiscordServerProjectChannels({
   const { mutation } = useAdminUpdateDiscordServer({ serverId: server.id })
   const [logChannelId, setlogChannelId] = useState<string | undefined>(server?.logChannelId ?? undefined)
   const [projectCategoryId, setProjectCategoryId] = useState<string | undefined>(server?.projectCategoryId ?? undefined)
-  const [teamCategoryId, setTeamCategoryId] = useState<string | undefined>(server?.teamCategoryId ?? undefined)
+  const [communityCategoryId, setCommunityCategoryId] = useState<string | undefined>(
+    server?.communityCategoryId ?? undefined,
+  )
   const [createChannels, setCreateChannels] = useState<boolean>(server?.createChannels ?? false)
 
   return (
@@ -37,8 +39,8 @@ export function AdminDiscordServerProjectChannels({
 
         <UiStack gap="xs">
           <Text size="sm" c="dimmed">
-            Automatically create channels for projects and teams inside this server. You can select the category for
-            project channels and team channels.
+            Automatically create channels for projects and communities inside this server. You can select the category
+            for project channels and community channels.
           </Text>
         </UiStack>
         <Checkbox
@@ -58,11 +60,11 @@ export function AdminDiscordServerProjectChannels({
         />
         <DiscordUiCategorySelect
           disabled={!createChannels}
-          label="Team Category"
-          description={`Select the category for team channels`}
-          category={teamCategoryId}
+          label="Community Category"
+          description={`Select the category for community channels`}
+          category={communityCategoryId}
           channels={items}
-          setCategory={setTeamCategoryId}
+          setCategory={setCommunityCategoryId}
         />
         <Group justify="end">
           <Button
@@ -73,7 +75,7 @@ export function AdminDiscordServerProjectChannels({
                 createChannels,
                 logChannelId: logChannelId ?? null,
                 projectCategoryId: projectCategoryId ?? null,
-                teamCategoryId: teamCategoryId ?? null,
+                communityCategoryId: communityCategoryId ?? null,
               })
             }
           >

@@ -3,7 +3,7 @@ import { Field, InputType, Int } from '@nestjs/graphql'
 @InputType()
 export class ManagerCreateProjectInput {
   @Field()
-  teamId!: string
+  communityId!: string
   @Field()
   name!: string
   @Field(() => Int, { nullable: true })

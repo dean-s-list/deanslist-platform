@@ -19,7 +19,7 @@ export class ApiProjectResolveAdminService {
       page: input.page ?? 1,
       orderBy: { createdAt: 'desc' },
       where: getProjectWhereAdminInput(input),
-      include: { team: true },
+      include: { community: true },
     })
   }
 

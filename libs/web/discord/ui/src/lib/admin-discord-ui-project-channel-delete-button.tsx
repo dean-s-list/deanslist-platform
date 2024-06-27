@@ -1,4 +1,7 @@
-import { useAdminDeleteProjectChannel, useAdminDeleteTeamChannel } from '@deanslist-platform/web-discord-data-access'
+import {
+  useAdminDeleteProjectChannel,
+  useAdminDeleteCommunityChannel,
+} from '@deanslist-platform/web-discord-data-access'
 import { ActionIcon, ActionIconProps } from '@mantine/core'
 import { modals } from '@mantine/modals'
 import { IconTrash } from '@tabler/icons-react'
@@ -35,17 +38,17 @@ export function AdminDiscordUiProjectChannelDeleteButton({
     </ActionIcon>
   )
 }
-export function AdminDiscordUiTeamChannelDeleteButton({
-  teamId,
+export function AdminDiscordUiCommunityChannelDeleteButton({
+  communityId,
   channelId,
   refresh,
   ...props
 }: ActionIconProps & {
   channelId: string
-  teamId: string
+  communityId: string
   refresh: () => void
 }) {
-  const { mutation } = useAdminDeleteTeamChannel({ channelId, teamId })
+  const { mutation } = useAdminDeleteCommunityChannel({ channelId, communityId })
 
   return (
     <ActionIcon
@@ -54,7 +57,7 @@ export function AdminDiscordUiTeamChannelDeleteButton({
       onClick={() => {
         modals.openConfirmModal({
           title: 'Delete channel',
-          children: `Are you sure you want to remove this channel from the team?`,
+          children: `Are you sure you want to remove this channel from the community?`,
           labels: { confirm: 'Leave', cancel: 'Cancel' },
           confirmProps: { loading: mutation.isPending },
           onConfirm: () => mutation.mutateAsync().then(() => refresh()),

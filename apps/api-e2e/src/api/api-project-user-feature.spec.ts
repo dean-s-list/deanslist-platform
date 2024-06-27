@@ -9,24 +9,24 @@ import { getAliceCookie, sdk, uniqueId } from '../support'
 describe('api-project-feature', () => {
   describe('api-project-user-resolver', () => {
     const projectName = uniqueId('acme-project')
-    let teamId: string
+    let communityId: string
     let projectId: string
     let alice: string
 
     beforeAll(async () => {
       alice = await getAliceCookie()
-      teamId = await sdk
-        .userCreateTeam({ input: { name: uniqueId('team') } }, { cookie: alice })
+      communityId = await sdk
+        .userCreateCommunity({ input: { name: uniqueId('community') } }, { cookie: alice })
         .then((res) => res.data.created.id)
       projectId = await sdk
-        .userCreateProject({ input: { teamId, name: projectName } }, { cookie: alice })
+        .userCreateProject({ input: { communityId, name: projectName } }, { cookie: alice })
         .then((res) => res.data.created.id)
     })
 
     describe('authorized', () => {
       it('should create a project', async () => {
         const input: UserCreateProjectInput = {
-          teamId,
+          communityId,
           name: uniqueId('project'),
         }
 
@@ -41,7 +41,7 @@ describe('api-project-feature', () => {
 
       it('should update a project', async () => {
         const createInput: UserCreateProjectInput = {
-          teamId,
+          communityId,
           name: uniqueId('project'),
         }
         const createdRes = await sdk.userCreateProject({ input: createInput }, { cookie: alice })
@@ -58,7 +58,7 @@ describe('api-project-feature', () => {
 
       it('should find a list of projects (find all)', async () => {
         const createInput: UserCreateProjectInput = {
-          teamId,
+          communityId,
           name: uniqueId('project'),
         }
         const createdRes = await sdk.userCreateProject({ input: createInput }, { cookie: alice })
@@ -76,7 +76,7 @@ describe('api-project-feature', () => {
 
       it('should find a list of projects (find new one)', async () => {
         const createInput: UserCreateProjectInput = {
-          teamId,
+          communityId,
           name: uniqueId('project'),
         }
         const createdRes = await sdk.userCreateProject({ input: createInput }, { cookie: alice })
@@ -95,7 +95,7 @@ describe('api-project-feature', () => {
 
       it('should find a project by id', async () => {
         const createInput: UserCreateProjectInput = {
-          teamId,
+          communityId,
           name: uniqueId('project'),
         }
         const createdRes = await sdk.userCreateProject({ input: createInput }, { cookie: alice })
@@ -108,7 +108,7 @@ describe('api-project-feature', () => {
 
       it('should delete a project', async () => {
         const createInput: UserCreateProjectInput = {
-          teamId,
+          communityId,
           name: uniqueId('project'),
         }
         const createdRes = await sdk.userCreateProject({ input: createInput }, { cookie: alice })

@@ -1,5 +1,5 @@
 import { ApiCoreDataAccessModule } from '@deanslist-platform/api-core-data-access'
-import { ApiTeamDataAccessModule } from '@deanslist-platform/api-team-data-access'
+import { ApiCommunityDataAccessModule } from '@deanslist-platform/api-community-data-access'
 import { Module } from '@nestjs/common'
 import { ApiProjectDataService } from './api-project-data.service'
 import { ApiProjectEventService } from './api-project-event.service'
@@ -9,7 +9,7 @@ import { ApiProjectResolveReviewerService } from './api-project-resolve-reviewer
 import { ApiProjectService } from './api-project.service'
 
 @Module({
-  imports: [ApiCoreDataAccessModule, ApiTeamDataAccessModule],
+  imports: [ApiCoreDataAccessModule, ApiCommunityDataAccessModule],
   providers: [
     ApiProjectDataService,
     ApiProjectEventService,

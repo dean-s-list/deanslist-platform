@@ -1,4 +1,4 @@
-import { Team } from '@deanslist-platform/api-team-data-access'
+import { Community } from '@deanslist-platform/api-community-data-access'
 import { User } from '@deanslist-platform/api-user-data-access'
 import { Field, HideField, Int, ObjectType } from '@nestjs/graphql'
 import { ProjectStatus } from './project-status.enum'
@@ -11,8 +11,8 @@ export class Project {
   createdAt?: Date
   @Field({ nullable: true })
   updatedAt?: Date
-  @Field(() => Team, { nullable: true })
-  team?: Team
+  @Field(() => Community, { nullable: true })
+  community?: Community
   @Field(() => [User], { nullable: true })
   managers?: User[]
   @Field(() => [User], { nullable: true })
@@ -20,7 +20,7 @@ export class Project {
   @Field(() => User, { nullable: true })
   referral?: User
   @Field()
-  teamId!: string
+  communityId!: string
   @Field()
   name!: string
   @Field()

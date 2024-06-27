@@ -10,8 +10,8 @@ export function AdminProjectDetailSettingsTab({ projectId }: { projectId: string
 
   async function update(input: AdminUpdateProjectInput) {
     return updateProject(input).then((res) => {
-      if (res?.teamId && res?.teamId !== item?.teamId) {
-        navigate(`/admin/teams/${res.teamId}/projects/${res.id}/settings`)
+      if (res?.communityId && res?.communityId !== item?.communityId) {
+        navigate(`/admin/communities/${res.communityId}/projects/${res.id}/settings`)
       }
       return !!res
     })

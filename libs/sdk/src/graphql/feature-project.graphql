@@ -20,9 +20,9 @@ fragment ProjectDetails on Project {
   slug
   status
   tags
-  teamId
-  team {
-    ...TeamDetails
+  communityId
+  community {
+    ...CommunityDetails
   }
   updatedAt
   viewUrl

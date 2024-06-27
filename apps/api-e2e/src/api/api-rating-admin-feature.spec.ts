@@ -3,7 +3,7 @@ import { getAliceCookie, getBobCookie, sdk, uniqueId } from '../support'
 describe('api-rating-feature', () => {
   describe('api-rating-admin-resolver', () => {
     let ratingId: string
-    let teamId: string
+    let communityId: string
     let projectId: string
     let reviewId: string
     let commentId: string
@@ -12,13 +12,13 @@ describe('api-rating-feature', () => {
 
     beforeAll(async () => {
       alice = await getAliceCookie()
-      teamId = await sdk
-        .userCreateTeam({ input: { name: uniqueId('team') } }, { cookie: alice })
+      communityId = await sdk
+        .managerCreateCommunity({ input: { name: uniqueId('community') } }, { cookie: alice })
         .then((res) => res.data.created.id)
       projectId = await sdk
-        .userCreateProject({ input: { teamId, name: uniqueId('project') } }, { cookie: alice })
+        .managerCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
         .then((res) => res.data.created.id)
-      reviewId = await sdk.userCreateReview({ projectId }, { cookie: alice }).then((res) => res.data.created.id)
+      reviewId = await sdk.reviewerCreateReview({ projectId }, { cookie: alice }).then((res) => res.data.created.id)
       commentId = await sdk
         .userCreateComment({ input: { reviewId, content: uniqueId('comment') } }, { cookie: alice })
         .then((res) => res.data.created.id)

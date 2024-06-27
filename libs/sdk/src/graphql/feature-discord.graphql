@@ -14,7 +14,7 @@ fragment DiscordServerDetails on DiscordServer {
   createChannels
   logChannelId
   projectCategoryId
-  teamCategoryId
+  communityCategoryId
 }
 
 fragment DiscordRoleDetails on DiscordRole {
@@ -60,8 +60,8 @@ query adminGetProjectChannels($projectId: String!) {
     ...DiscordChannelDetails
   }
 }
-query adminGetTeamChannels($teamId: String!) {
-  items: adminGetTeamChannels(teamId: $teamId) {
+query adminGetCommunityChannels($communityId: String!) {
+  items: adminGetCommunityChannels(communityId: $communityId) {
     ...DiscordChannelDetails
   }
 }
@@ -74,8 +74,8 @@ mutation adminCreateProjectChannel($serverId: String!, $channelId: String!, $pro
   created: adminCreateProjectChannel(serverId: $serverId, channelId: $channelId, projectId: $projectId)
 }
 
-mutation adminCreateTeamChannel($serverId: String!, $channelId: String!, $teamId: String!) {
-  created: adminCreateTeamChannel(serverId: $serverId, channelId: $channelId, teamId: $teamId)
+mutation adminCreateCommunityChannel($serverId: String!, $channelId: String!, $communityId: String!) {
+  created: adminCreateCommunityChannel(serverId: $serverId, channelId: $channelId, communityId: $communityId)
 }
 
 mutation adminUpdateDiscordServer($serverId: String!, $input: AdminUpdateDiscordServerInput!) {
@@ -86,8 +86,8 @@ mutation adminDeleteProjectChannel($channelId: String!, $projectId: String!) {
   deleted: adminDeleteProjectChannel(channelId: $channelId, projectId: $projectId)
 }
 
-mutation adminDeleteTeamChannel($channelId: String!, $teamId: String!) {
-  deleted: adminDeleteTeamChannel(channelId: $channelId, teamId: $teamId)
+mutation adminDeleteCommunityChannel($channelId: String!, $communityId: String!) {
+  deleted: adminDeleteCommunityChannel(channelId: $channelId, communityId: $communityId)
 }
 
 mutation adminLeaveDiscordServer($serverId: String!) {
@@ -105,8 +105,8 @@ query userGetProjectChannels($projectId: String!) {
     ...DiscordChannelDetails
   }
 }
-query userGetTeamChannels($teamId: String!) {
-  items: userGetTeamChannels(teamId: $teamId) {
+query userGetCommunityChannels($communityId: String!) {
+  items: userGetCommunityChannels(communityId: $communityId) {
     ...DiscordChannelDetails
   }
 }

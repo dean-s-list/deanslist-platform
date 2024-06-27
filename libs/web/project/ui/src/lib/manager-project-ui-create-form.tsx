@@ -9,13 +9,13 @@ export function ManagerProjectUiCreateForm({
 }) {
   const model: ManagerCreateProjectInput = {
     name: '',
-    teamId: '',
+    communityId: '',
   }
 
   const fields: UiFormField<ManagerCreateProjectInput>[] = [
     formFieldText('name', {
       label: 'Name',
-      description: 'The name of the project must be unique within the team.',
+      description: 'The name of the project must be unique within the community.',
       required: true,
     }),
   ]

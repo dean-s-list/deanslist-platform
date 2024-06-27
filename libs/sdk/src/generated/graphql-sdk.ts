@@ -40,16 +40,22 @@ export type AdminFindManyCommentInput = {
   search?: InputMaybe<Scalars['String']['input']>
 }
 
+export type AdminFindManyCommunityInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>
+  page?: InputMaybe<Scalars['Int']['input']>
+  search?: InputMaybe<Scalars['String']['input']>
+}
+
 export type AdminFindManyIdentityInput = {
   ownerId?: InputMaybe<Scalars['String']['input']>
   provider?: InputMaybe<IdentityProvider>
 }
 
 export type AdminFindManyProjectInput = {
+  communityId?: InputMaybe<Scalars['String']['input']>
   limit?: InputMaybe<Scalars['Int']['input']>
   page?: InputMaybe<Scalars['Int']['input']>
   search?: InputMaybe<Scalars['String']['input']>
-  teamId?: InputMaybe<Scalars['String']['input']>
 }
 
 export type AdminFindManyRatingInput = {
@@ -61,12 +67,6 @@ export type AdminFindManyReviewInput = {
   limit?: InputMaybe<Scalars['Int']['input']>
   page?: InputMaybe<Scalars['Int']['input']>
   projectId: Scalars['String']['input']
-  search?: InputMaybe<Scalars['String']['input']>
-}
-
-export type AdminFindManyTeamInput = {
-  limit?: InputMaybe<Scalars['Int']['input']>
-  page?: InputMaybe<Scalars['Int']['input']>
   search?: InputMaybe<Scalars['String']['input']>
 }
 
@@ -82,11 +82,17 @@ export type AdminUpdateCommentInput = {
   content?: InputMaybe<Scalars['String']['input']>
 }
 
+export type AdminUpdateCommunityInput = {
+  avatarUrl?: InputMaybe<Scalars['String']['input']>
+  homeServerId?: InputMaybe<Scalars['String']['input']>
+  name?: InputMaybe<Scalars['String']['input']>
+}
+
 export type AdminUpdateDiscordServerInput = {
+  communityCategoryId?: InputMaybe<Scalars['String']['input']>
   createChannels?: InputMaybe<Scalars['Boolean']['input']>
   logChannelId?: InputMaybe<Scalars['String']['input']>
   projectCategoryId?: InputMaybe<Scalars['String']['input']>
-  teamCategoryId?: InputMaybe<Scalars['String']['input']>
 }
 
 export type AdminUpdateProjectInput = {
@@ -94,6 +100,7 @@ export type AdminUpdateProjectInput = {
   amountReferralUsd?: InputMaybe<Scalars['Int']['input']>
   amountTotalUsd?: InputMaybe<Scalars['Int']['input']>
   avatarUrl?: InputMaybe<Scalars['String']['input']>
+  communityId?: InputMaybe<Scalars['String']['input']>
   duration?: InputMaybe<Scalars['Int']['input']>
   instructions?: InputMaybe<Scalars['String']['input']>
   linkDiscord?: InputMaybe<Scalars['String']['input']>
@@ -105,18 +112,11 @@ export type AdminUpdateProjectInput = {
   startDate?: InputMaybe<Scalars['DateTime']['input']>
   status?: InputMaybe<ProjectStatus>
   tags?: InputMaybe<Array<Scalars['String']['input']>>
-  teamId?: InputMaybe<Scalars['String']['input']>
 }
 
 export type AdminUpdateRatingInput = {
   content?: InputMaybe<Scalars['String']['input']>
   rating: Scalars['Float']['input']
-}
-
-export type AdminUpdateTeamInput = {
-  avatarUrl?: InputMaybe<Scalars['String']['input']>
-  homeServerId?: InputMaybe<Scalars['String']['input']>
-  name?: InputMaybe<Scalars['String']['input']>
 }
 
 export type AdminUpdateUserInput = {
@@ -158,6 +158,36 @@ export enum CommentCategory {
   Other = 'Other',
 }
 
+export type Community = {
+  __typename?: 'Community'
+  activeProjectsCount?: Maybe<Scalars['Int']['output']>
+  avatarUrl?: Maybe<Scalars['String']['output']>
+  createdAt?: Maybe<Scalars['DateTime']['output']>
+  homeServerId?: Maybe<Scalars['String']['output']>
+  id: Scalars['String']['output']
+  memberCount?: Maybe<Scalars['Int']['output']>
+  members?: Maybe<Array<CommunityMember>>
+  name: Scalars['String']['output']
+  updatedAt?: Maybe<Scalars['DateTime']['output']>
+  viewUrl: Scalars['String']['output']
+}
+
+export type CommunityMember = {
+  __typename?: 'CommunityMember'
+  admin?: Maybe<Scalars['Boolean']['output']>
+  createdAt?: Maybe<Scalars['DateTime']['output']>
+  id: Scalars['String']['output']
+  updatedAt?: Maybe<Scalars['DateTime']['output']>
+  user?: Maybe<User>
+  userId: Scalars['String']['output']
+}
+
+export type CommunityPaging = {
+  __typename?: 'CommunityPaging'
+  data: Array<Community>
+  meta: PagingMeta
+}
+
 export type DiscordBot = {
   __typename?: 'DiscordBot'
   avatarUrl?: Maybe<Scalars['String']['output']>
@@ -188,13 +218,13 @@ export type DiscordRole = {
 export type DiscordServer = {
   __typename?: 'DiscordServer'
   avatarUrl?: Maybe<Scalars['String']['output']>
+  communityCategoryId?: Maybe<Scalars['String']['output']>
   createChannels?: Maybe<Scalars['Boolean']['output']>
   id: Scalars['String']['output']
   logChannelId?: Maybe<Scalars['String']['output']>
   name: Scalars['String']['output']
   permissions?: Maybe<Array<Scalars['String']['output']>>
   projectCategoryId?: Maybe<Scalars['String']['output']>
-  teamCategoryId?: Maybe<Scalars['String']['output']>
 }
 
 export type Identity = {
@@ -243,28 +273,34 @@ export type LoginInput = {
   username: Scalars['String']['input']
 }
 
+export type ManagerCreateCommunityInput = {
+  name: Scalars['String']['input']
+}
+
 export type ManagerCreateProjectInput = {
+  communityId: Scalars['String']['input']
   duration?: InputMaybe<Scalars['Int']['input']>
   name: Scalars['String']['input']
   startDate?: InputMaybe<Scalars['DateTime']['input']>
-  teamId: Scalars['String']['input']
 }
 
-export type ManagerCreateTeamInput = {
-  name: Scalars['String']['input']
+export type ManagerFindManyCommunityInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>
+  page?: InputMaybe<Scalars['Int']['input']>
+  search?: InputMaybe<Scalars['String']['input']>
 }
 
 export type ManagerFindManyProjectInput = {
+  communityId?: InputMaybe<Scalars['String']['input']>
   limit?: InputMaybe<Scalars['Int']['input']>
   page?: InputMaybe<Scalars['Int']['input']>
   search?: InputMaybe<Scalars['String']['input']>
-  teamId?: InputMaybe<Scalars['String']['input']>
 }
 
-export type ManagerFindManyTeamInput = {
-  limit?: InputMaybe<Scalars['Int']['input']>
-  page?: InputMaybe<Scalars['Int']['input']>
-  search?: InputMaybe<Scalars['String']['input']>
+export type ManagerUpdateCommunityInput = {
+  avatarUrl?: InputMaybe<Scalars['String']['input']>
+  homeServerId?: InputMaybe<Scalars['String']['input']>
+  name?: InputMaybe<Scalars['String']['input']>
 }
 
 export type ManagerUpdateProjectInput = {
@@ -286,62 +322,56 @@ export type ManagerUpdateProjectInput = {
   tags?: InputMaybe<Array<Scalars['String']['input']>>
 }
 
-export type ManagerUpdateTeamInput = {
-  avatarUrl?: InputMaybe<Scalars['String']['input']>
-  homeServerId?: InputMaybe<Scalars['String']['input']>
-  name?: InputMaybe<Scalars['String']['input']>
-}
-
 export type Mutation = {
   __typename?: 'Mutation'
+  adminAddCommunityMember?: Maybe<Scalars['Boolean']['output']>
   adminAddProjectManager?: Maybe<Scalars['Boolean']['output']>
   adminAddProjectMember?: Maybe<Scalars['Boolean']['output']>
   adminAddProjectReferral?: Maybe<Scalars['Boolean']['output']>
-  adminAddTeamMember?: Maybe<Scalars['Boolean']['output']>
+  adminCreateCommunityChannel: Scalars['Boolean']['output']
   adminCreateIdentity?: Maybe<Identity>
   adminCreateProjectChannel: Scalars['Boolean']['output']
-  adminCreateTeamChannel: Scalars['Boolean']['output']
   adminCreateUser?: Maybe<User>
   adminDeleteComment?: Maybe<Scalars['Boolean']['output']>
+  adminDeleteCommunity?: Maybe<Scalars['Boolean']['output']>
+  adminDeleteCommunityChannel: Scalars['Boolean']['output']
   adminDeleteIdentity?: Maybe<Scalars['Boolean']['output']>
   adminDeleteProject?: Maybe<Scalars['Boolean']['output']>
   adminDeleteProjectChannel: Scalars['Boolean']['output']
   adminDeleteRating?: Maybe<Scalars['Boolean']['output']>
   adminDeleteReview?: Maybe<Scalars['Boolean']['output']>
-  adminDeleteTeam?: Maybe<Scalars['Boolean']['output']>
-  adminDeleteTeamChannel: Scalars['Boolean']['output']
   adminDeleteUser?: Maybe<Scalars['Boolean']['output']>
   adminLeaveDiscordServer: Scalars['Boolean']['output']
   adminPingDiscordChannel: Scalars['Boolean']['output']
+  adminRemoveCommunityMember?: Maybe<Scalars['Boolean']['output']>
   adminRemoveProjectManager?: Maybe<Scalars['Boolean']['output']>
   adminRemoveProjectMember?: Maybe<Scalars['Boolean']['output']>
   adminRemoveProjectReferral?: Maybe<Scalars['Boolean']['output']>
-  adminRemoveTeamMember?: Maybe<Scalars['Boolean']['output']>
-  adminToggleTeamAdmin?: Maybe<Scalars['Boolean']['output']>
+  adminToggleCommunityAdmin?: Maybe<Scalars['Boolean']['output']>
   adminUpdateComment?: Maybe<Comment>
+  adminUpdateCommunity?: Maybe<Community>
   adminUpdateDiscordServer: Scalars['Boolean']['output']
   adminUpdateProject?: Maybe<Project>
   adminUpdateRating?: Maybe<Rating>
-  adminUpdateTeam?: Maybe<Team>
   adminUpdateUser?: Maybe<User>
   anonVerifyIdentityChallenge?: Maybe<IdentityChallenge>
   login?: Maybe<User>
   logout?: Maybe<Scalars['Boolean']['output']>
+  managerAddCommunityMember?: Maybe<Scalars['Boolean']['output']>
   managerAddProjectManager?: Maybe<Scalars['Boolean']['output']>
   managerAddProjectMember?: Maybe<Scalars['Boolean']['output']>
   managerAddProjectReferral?: Maybe<Scalars['Boolean']['output']>
-  managerAddTeamMember?: Maybe<Scalars['Boolean']['output']>
+  managerCreateCommunity?: Maybe<Community>
   managerCreateProject?: Maybe<Project>
-  managerCreateTeam?: Maybe<Team>
+  managerDeleteCommunity?: Maybe<Scalars['Boolean']['output']>
   managerDeleteProject?: Maybe<Scalars['Boolean']['output']>
-  managerDeleteTeam?: Maybe<Scalars['Boolean']['output']>
+  managerRemoveCommunityMember?: Maybe<Scalars['Boolean']['output']>
   managerRemoveProjectManager?: Maybe<Scalars['Boolean']['output']>
   managerRemoveProjectMember?: Maybe<Scalars['Boolean']['output']>
   managerRemoveProjectReferral?: Maybe<Scalars['Boolean']['output']>
-  managerRemoveTeamMember?: Maybe<Scalars['Boolean']['output']>
-  managerToggleTeamAdmin?: Maybe<Scalars['Boolean']['output']>
+  managerToggleCommunityAdmin?: Maybe<Scalars['Boolean']['output']>
+  managerUpdateCommunity?: Maybe<Community>
   managerUpdateProject?: Maybe<Project>
-  managerUpdateTeam?: Maybe<Team>
   register?: Maybe<User>
   reviewerCreateReview?: Maybe<Review>
   reviewerDeleteReview?: Maybe<Scalars['Boolean']['output']>
@@ -356,6 +386,11 @@ export type Mutation = {
   userUpdateRating?: Maybe<Rating>
   userUpdateUser?: Maybe<User>
   userVerifyIdentityChallenge?: Maybe<IdentityChallenge>
+}
+
+export type MutationAdminAddCommunityMemberArgs = {
+  communityId: Scalars['String']['input']
+  userId: Scalars['String']['input']
 }
 
 export type MutationAdminAddProjectManagerArgs = {
@@ -373,9 +408,10 @@ export type MutationAdminAddProjectReferralArgs = {
   referralUserId: Scalars['String']['input']
 }
 
-export type MutationAdminAddTeamMemberArgs = {
-  teamId: Scalars['String']['input']
-  userId: Scalars['String']['input']
+export type MutationAdminCreateCommunityChannelArgs = {
+  channelId: Scalars['String']['input']
+  communityId: Scalars['String']['input']
+  serverId: Scalars['String']['input']
 }
 
 export type MutationAdminCreateIdentityArgs = {
@@ -388,18 +424,21 @@ export type MutationAdminCreateProjectChannelArgs = {
   serverId: Scalars['String']['input']
 }
 
-export type MutationAdminCreateTeamChannelArgs = {
-  channelId: Scalars['String']['input']
-  serverId: Scalars['String']['input']
-  teamId: Scalars['String']['input']
-}
-
 export type MutationAdminCreateUserArgs = {
   input: AdminCreateUserInput
 }
 
 export type MutationAdminDeleteCommentArgs = {
   commentId: Scalars['String']['input']
+}
+
+export type MutationAdminDeleteCommunityArgs = {
+  communityId: Scalars['String']['input']
+}
+
+export type MutationAdminDeleteCommunityChannelArgs = {
+  channelId: Scalars['String']['input']
+  communityId: Scalars['String']['input']
 }
 
 export type MutationAdminDeleteIdentityArgs = {
@@ -423,15 +462,6 @@ export type MutationAdminDeleteReviewArgs = {
   reviewId: Scalars['String']['input']
 }
 
-export type MutationAdminDeleteTeamArgs = {
-  teamId: Scalars['String']['input']
-}
-
-export type MutationAdminDeleteTeamChannelArgs = {
-  channelId: Scalars['String']['input']
-  teamId: Scalars['String']['input']
-}
-
 export type MutationAdminDeleteUserArgs = {
   userId: Scalars['String']['input']
 }
@@ -443,6 +473,11 @@ export type MutationAdminLeaveDiscordServerArgs = {
 export type MutationAdminPingDiscordChannelArgs = {
   channelId: Scalars['String']['input']
   serverId: Scalars['String']['input']
+}
+
+export type MutationAdminRemoveCommunityMemberArgs = {
+  communityId: Scalars['String']['input']
+  userId: Scalars['String']['input']
 }
 
 export type MutationAdminRemoveProjectManagerArgs = {
@@ -460,19 +495,19 @@ export type MutationAdminRemoveProjectReferralArgs = {
   referralUserId: Scalars['String']['input']
 }
 
-export type MutationAdminRemoveTeamMemberArgs = {
-  teamId: Scalars['String']['input']
-  userId: Scalars['String']['input']
-}
-
-export type MutationAdminToggleTeamAdminArgs = {
-  teamId: Scalars['String']['input']
+export type MutationAdminToggleCommunityAdminArgs = {
+  communityId: Scalars['String']['input']
   userId: Scalars['String']['input']
 }
 
 export type MutationAdminUpdateCommentArgs = {
   commentId: Scalars['String']['input']
   input: AdminUpdateCommentInput
+}
+
+export type MutationAdminUpdateCommunityArgs = {
+  communityId: Scalars['String']['input']
+  input: AdminUpdateCommunityInput
 }
 
 export type MutationAdminUpdateDiscordServerArgs = {
@@ -490,11 +525,6 @@ export type MutationAdminUpdateRatingArgs = {
   ratingId: Scalars['String']['input']
 }
 
-export type MutationAdminUpdateTeamArgs = {
-  input: AdminUpdateTeamInput
-  teamId: Scalars['String']['input']
-}
-
 export type MutationAdminUpdateUserArgs = {
   input: AdminUpdateUserInput
   userId: Scalars['String']['input']
@@ -506,6 +536,11 @@ export type MutationAnonVerifyIdentityChallengeArgs = {
 
 export type MutationLoginArgs = {
   input: LoginInput
+}
+
+export type MutationManagerAddCommunityMemberArgs = {
+  communityId: Scalars['String']['input']
+  userId: Scalars['String']['input']
 }
 
 export type MutationManagerAddProjectManagerArgs = {
@@ -523,25 +558,25 @@ export type MutationManagerAddProjectReferralArgs = {
   referralUserId: Scalars['String']['input']
 }
 
-export type MutationManagerAddTeamMemberArgs = {
-  teamId: Scalars['String']['input']
-  userId: Scalars['String']['input']
+export type MutationManagerCreateCommunityArgs = {
+  input: ManagerCreateCommunityInput
 }
 
 export type MutationManagerCreateProjectArgs = {
   input: ManagerCreateProjectInput
 }
 
-export type MutationManagerCreateTeamArgs = {
-  input: ManagerCreateTeamInput
+export type MutationManagerDeleteCommunityArgs = {
+  communityId: Scalars['String']['input']
 }
 
 export type MutationManagerDeleteProjectArgs = {
   projectId: Scalars['String']['input']
 }
 
-export type MutationManagerDeleteTeamArgs = {
-  teamId: Scalars['String']['input']
+export type MutationManagerRemoveCommunityMemberArgs = {
+  communityId: Scalars['String']['input']
+  userId: Scalars['String']['input']
 }
 
 export type MutationManagerRemoveProjectManagerArgs = {
@@ -559,24 +594,19 @@ export type MutationManagerRemoveProjectReferralArgs = {
   referralUserId: Scalars['String']['input']
 }
 
-export type MutationManagerRemoveTeamMemberArgs = {
-  teamId: Scalars['String']['input']
+export type MutationManagerToggleCommunityAdminArgs = {
+  communityId: Scalars['String']['input']
   userId: Scalars['String']['input']
 }
 
-export type MutationManagerToggleTeamAdminArgs = {
-  teamId: Scalars['String']['input']
-  userId: Scalars['String']['input']
+export type MutationManagerUpdateCommunityArgs = {
+  communityId: Scalars['String']['input']
+  input: ManagerUpdateCommunityInput
 }
 
 export type MutationManagerUpdateProjectArgs = {
   input: ManagerUpdateProjectInput
   projectId: Scalars['String']['input']
-}
-
-export type MutationManagerUpdateTeamArgs = {
-  input: ManagerUpdateTeamInput
-  teamId: Scalars['String']['input']
 }
 
 export type MutationRegisterArgs = {
@@ -654,6 +684,8 @@ export type Project = {
   amountReferralUsd?: Maybe<Scalars['Int']['output']>
   amountTotalUsd?: Maybe<Scalars['Int']['output']>
   avatarUrl?: Maybe<Scalars['String']['output']>
+  community?: Maybe<Community>
+  communityId: Scalars['String']['output']
   createdAt?: Maybe<Scalars['DateTime']['output']>
   duration?: Maybe<Scalars['Int']['output']>
   endDate?: Maybe<Scalars['DateTime']['output']>
@@ -674,8 +706,6 @@ export type Project = {
   startDate?: Maybe<Scalars['DateTime']['output']>
   status?: Maybe<ProjectStatus>
   tags?: Maybe<Array<Scalars['String']['output']>>
-  team?: Maybe<Team>
-  teamId: Scalars['String']['output']
   updatedAt?: Maybe<Scalars['DateTime']['output']>
   viewUrl: Scalars['String']['output']
 }
@@ -695,31 +725,31 @@ export enum ProjectStatus {
 export type Query = {
   __typename?: 'Query'
   adminFindManyComment?: Maybe<Array<Comment>>
+  adminFindManyCommunity: CommunityPaging
   adminFindManyIdentity?: Maybe<Array<Identity>>
   adminFindManyProject: ProjectPaging
   adminFindManyRating: Array<Rating>
   adminFindManyReview: ReviewPaging
-  adminFindManyTeam: TeamPaging
   adminFindManyUser: UserPaging
+  adminFindOneCommunity?: Maybe<Community>
   adminFindOneProject?: Maybe<Project>
   adminFindOneReview?: Maybe<Review>
-  adminFindOneTeam?: Maybe<Team>
   adminFindOneUser?: Maybe<User>
+  adminGetCommunityChannels: Array<DiscordChannel>
+  adminGetCommunityMembers?: Maybe<Array<CommunityMember>>
   adminGetDiscordBot: DiscordBot
   adminGetDiscordChannels: Array<DiscordChannel>
   adminGetDiscordRoles: Array<DiscordRole>
   adminGetDiscordServers: Array<DiscordServer>
   adminGetProjectChannels: Array<DiscordChannel>
-  adminGetTeamChannels: Array<DiscordChannel>
-  adminGetTeamMembers?: Maybe<Array<TeamMember>>
   anonRequestIdentityChallenge?: Maybe<IdentityChallenge>
   appConfig: AppConfig
+  managerFindManyCommunity: CommunityPaging
   managerFindManyProject: ProjectPaging
-  managerFindManyTeam: TeamPaging
+  managerFindOneCommunity?: Maybe<Community>
   managerFindOneProject?: Maybe<Project>
-  managerFindOneTeam?: Maybe<Team>
-  managerGetTeamMember?: Maybe<TeamMember>
-  managerGetTeamMembers?: Maybe<Array<TeamMember>>
+  managerGetCommunityMember?: Maybe<CommunityMember>
+  managerGetCommunityMembers?: Maybe<Array<CommunityMember>>
   me?: Maybe<User>
   reviewerFindManyProject: ProjectPaging
   reviewerFindManyReviewByProject?: Maybe<Array<Review>>
@@ -729,20 +759,24 @@ export type Query = {
   reviewerFindUserProjectReview?: Maybe<Review>
   uptime: Scalars['Float']['output']
   userFindManyComment?: Maybe<Array<Comment>>
+  userFindManyCommunity: CommunityPaging
   userFindManyIdentity?: Maybe<Array<Identity>>
   userFindManyRating: Array<Rating>
-  userFindManyTeam: TeamPaging
   userFindManyUser: UserPaging
-  userFindOneTeam?: Maybe<Team>
+  userFindOneCommunity?: Maybe<Community>
   userFindOneUser?: Maybe<User>
+  userGetCommunityChannels: Array<DiscordChannel>
   userGetDiscordServers: Array<DiscordServer>
   userGetProjectChannels: Array<DiscordChannel>
-  userGetTeamChannels: Array<DiscordChannel>
   userRequestIdentityChallenge?: Maybe<IdentityChallenge>
 }
 
 export type QueryAdminFindManyCommentArgs = {
   input: AdminFindManyCommentInput
+}
+
+export type QueryAdminFindManyCommunityArgs = {
+  input: AdminFindManyCommunityInput
 }
 
 export type QueryAdminFindManyIdentityArgs = {
@@ -761,12 +795,12 @@ export type QueryAdminFindManyReviewArgs = {
   input: AdminFindManyReviewInput
 }
 
-export type QueryAdminFindManyTeamArgs = {
-  input: AdminFindManyTeamInput
-}
-
 export type QueryAdminFindManyUserArgs = {
   input: AdminFindManyUserInput
+}
+
+export type QueryAdminFindOneCommunityArgs = {
+  communityId: Scalars['String']['input']
 }
 
 export type QueryAdminFindOneProjectArgs = {
@@ -777,12 +811,16 @@ export type QueryAdminFindOneReviewArgs = {
   reviewId: Scalars['String']['input']
 }
 
-export type QueryAdminFindOneTeamArgs = {
-  teamId: Scalars['String']['input']
-}
-
 export type QueryAdminFindOneUserArgs = {
   userId: Scalars['String']['input']
+}
+
+export type QueryAdminGetCommunityChannelsArgs = {
+  communityId: Scalars['String']['input']
+}
+
+export type QueryAdminGetCommunityMembersArgs = {
+  communityId: Scalars['String']['input']
 }
 
 export type QueryAdminGetDiscordChannelsArgs = {
@@ -797,40 +835,32 @@ export type QueryAdminGetProjectChannelsArgs = {
   projectId: Scalars['String']['input']
 }
 
-export type QueryAdminGetTeamChannelsArgs = {
-  teamId: Scalars['String']['input']
-}
-
-export type QueryAdminGetTeamMembersArgs = {
-  teamId: Scalars['String']['input']
-}
-
 export type QueryAnonRequestIdentityChallengeArgs = {
   input: RequestIdentityChallengeInput
+}
+
+export type QueryManagerFindManyCommunityArgs = {
+  input: ManagerFindManyCommunityInput
 }
 
 export type QueryManagerFindManyProjectArgs = {
   input: ManagerFindManyProjectInput
 }
 
-export type QueryManagerFindManyTeamArgs = {
-  input: ManagerFindManyTeamInput
+export type QueryManagerFindOneCommunityArgs = {
+  communityId: Scalars['String']['input']
 }
 
 export type QueryManagerFindOneProjectArgs = {
   projectId: Scalars['String']['input']
 }
 
-export type QueryManagerFindOneTeamArgs = {
-  teamId: Scalars['String']['input']
+export type QueryManagerGetCommunityMemberArgs = {
+  communityId: Scalars['String']['input']
 }
 
-export type QueryManagerGetTeamMemberArgs = {
-  teamId: Scalars['String']['input']
-}
-
-export type QueryManagerGetTeamMembersArgs = {
-  teamId: Scalars['String']['input']
+export type QueryManagerGetCommunityMembersArgs = {
+  communityId: Scalars['String']['input']
 }
 
 export type QueryReviewerFindManyProjectArgs = {
@@ -861,6 +891,10 @@ export type QueryUserFindManyCommentArgs = {
   input: UserFindManyCommentInput
 }
 
+export type QueryUserFindManyCommunityArgs = {
+  input: UserFindManyCommunityInput
+}
+
 export type QueryUserFindManyIdentityArgs = {
   input: UserFindManyIdentityInput
 }
@@ -869,28 +903,24 @@ export type QueryUserFindManyRatingArgs = {
   input: UserFindManyRatingInput
 }
 
-export type QueryUserFindManyTeamArgs = {
-  input: UserFindManyTeamInput
-}
-
 export type QueryUserFindManyUserArgs = {
   input: UserFindManyUserInput
 }
 
-export type QueryUserFindOneTeamArgs = {
-  teamId: Scalars['String']['input']
+export type QueryUserFindOneCommunityArgs = {
+  communityId: Scalars['String']['input']
 }
 
 export type QueryUserFindOneUserArgs = {
   username: Scalars['String']['input']
 }
 
-export type QueryUserGetProjectChannelsArgs = {
-  projectId: Scalars['String']['input']
+export type QueryUserGetCommunityChannelsArgs = {
+  communityId: Scalars['String']['input']
 }
 
-export type QueryUserGetTeamChannelsArgs = {
-  teamId: Scalars['String']['input']
+export type QueryUserGetProjectChannelsArgs = {
+  projectId: Scalars['String']['input']
 }
 
 export type QueryUserRequestIdentityChallengeArgs = {
@@ -937,11 +967,11 @@ export type ReviewPaging = {
 }
 
 export type ReviewerFindManyProjectInput = {
+  communityId?: InputMaybe<Scalars['String']['input']>
   limit?: InputMaybe<Scalars['Int']['input']>
   page?: InputMaybe<Scalars['Int']['input']>
   search?: InputMaybe<Scalars['String']['input']>
   status?: InputMaybe<ProjectStatus>
-  teamId?: InputMaybe<Scalars['String']['input']>
 }
 
 export type ReviewerFindManyReviewByProjectInput = {
@@ -952,36 +982,6 @@ export type ReviewerFindManyReviewByProjectInput = {
 export type ReviewerFindManyReviewByUsernameInput = {
   search?: InputMaybe<Scalars['String']['input']>
   username: Scalars['String']['input']
-}
-
-export type Team = {
-  __typename?: 'Team'
-  activeProjectsCount?: Maybe<Scalars['Int']['output']>
-  avatarUrl?: Maybe<Scalars['String']['output']>
-  createdAt?: Maybe<Scalars['DateTime']['output']>
-  homeServerId?: Maybe<Scalars['String']['output']>
-  id: Scalars['String']['output']
-  memberCount?: Maybe<Scalars['Int']['output']>
-  members?: Maybe<Array<TeamMember>>
-  name: Scalars['String']['output']
-  updatedAt?: Maybe<Scalars['DateTime']['output']>
-  viewUrl: Scalars['String']['output']
-}
-
-export type TeamMember = {
-  __typename?: 'TeamMember'
-  admin?: Maybe<Scalars['Boolean']['output']>
-  createdAt?: Maybe<Scalars['DateTime']['output']>
-  id: Scalars['String']['output']
-  updatedAt?: Maybe<Scalars['DateTime']['output']>
-  user?: Maybe<User>
-  userId: Scalars['String']['output']
-}
-
-export type TeamPaging = {
-  __typename?: 'TeamPaging'
-  data: Array<Team>
-  meta: PagingMeta
 }
 
 export type User = {
@@ -1018,17 +1018,17 @@ export type UserFindManyCommentInput = {
   search?: InputMaybe<Scalars['String']['input']>
 }
 
+export type UserFindManyCommunityInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>
+  page?: InputMaybe<Scalars['Int']['input']>
+  search?: InputMaybe<Scalars['String']['input']>
+}
+
 export type UserFindManyIdentityInput = {
   username: Scalars['String']['input']
 }
 
 export type UserFindManyRatingInput = {
-  search?: InputMaybe<Scalars['String']['input']>
-}
-
-export type UserFindManyTeamInput = {
-  limit?: InputMaybe<Scalars['Int']['input']>
-  page?: InputMaybe<Scalars['Int']['input']>
   search?: InputMaybe<Scalars['String']['input']>
 }
 
@@ -1440,6 +1440,641 @@ export type AdminDeleteCommentMutationVariables = Exact<{
 
 export type AdminDeleteCommentMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
 
+export type CommunityDetailsFragment = {
+  __typename?: 'Community'
+  activeProjectsCount?: number | null
+  avatarUrl?: string | null
+  createdAt?: Date | null
+  homeServerId?: string | null
+  id: string
+  memberCount?: number | null
+  name: string
+  updatedAt?: Date | null
+  viewUrl: string
+  members?: Array<{
+    __typename?: 'CommunityMember'
+    createdAt?: Date | null
+    id: string
+    userId: string
+    admin?: boolean | null
+    updatedAt?: Date | null
+    user?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      manager?: boolean | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+      walletAddress?: string | null
+    } | null
+  }> | null
+}
+
+export type CommunityMemberDetailsFragment = {
+  __typename?: 'CommunityMember'
+  createdAt?: Date | null
+  id: string
+  userId: string
+  admin?: boolean | null
+  updatedAt?: Date | null
+  user?: {
+    __typename?: 'User'
+    avatarUrl?: string | null
+    createdAt?: Date | null
+    developer?: boolean | null
+    id: string
+    name?: string | null
+    manager?: boolean | null
+    profileUrl: string
+    role?: UserRole | null
+    status?: UserStatus | null
+    updatedAt?: Date | null
+    username?: string | null
+    walletAddress?: string | null
+  } | null
+}
+
+export type UserFindManyCommunityQueryVariables = Exact<{
+  input: UserFindManyCommunityInput
+}>
+
+export type UserFindManyCommunityQuery = {
+  __typename?: 'Query'
+  paging: {
+    __typename?: 'CommunityPaging'
+    data: Array<{
+      __typename?: 'Community'
+      activeProjectsCount?: number | null
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      homeServerId?: string | null
+      id: string
+      memberCount?: number | null
+      name: string
+      updatedAt?: Date | null
+      viewUrl: string
+      members?: Array<{
+        __typename?: 'CommunityMember'
+        createdAt?: Date | null
+        id: string
+        userId: string
+        admin?: boolean | null
+        updatedAt?: Date | null
+        user?: {
+          __typename?: 'User'
+          avatarUrl?: string | null
+          createdAt?: Date | null
+          developer?: boolean | null
+          id: string
+          name?: string | null
+          manager?: boolean | null
+          profileUrl: string
+          role?: UserRole | null
+          status?: UserStatus | null
+          updatedAt?: Date | null
+          username?: string | null
+          walletAddress?: string | null
+        } | null
+      }> | null
+    }>
+    meta: {
+      __typename?: 'PagingMeta'
+      currentPage: number
+      isFirstPage: boolean
+      isLastPage: boolean
+      nextPage?: number | null
+      pageCount?: number | null
+      previousPage?: number | null
+      totalCount?: number | null
+    }
+  }
+}
+
+export type UserFindOneCommunityQueryVariables = Exact<{
+  communityId: Scalars['String']['input']
+}>
+
+export type UserFindOneCommunityQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'Community'
+    activeProjectsCount?: number | null
+    avatarUrl?: string | null
+    createdAt?: Date | null
+    homeServerId?: string | null
+    id: string
+    memberCount?: number | null
+    name: string
+    updatedAt?: Date | null
+    viewUrl: string
+    members?: Array<{
+      __typename?: 'CommunityMember'
+      createdAt?: Date | null
+      id: string
+      userId: string
+      admin?: boolean | null
+      updatedAt?: Date | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      } | null
+    }> | null
+  } | null
+}
+
+export type ManagerGetCommunityMembersQueryVariables = Exact<{
+  communityId: Scalars['String']['input']
+}>
+
+export type ManagerGetCommunityMembersQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'CommunityMember'
+    createdAt?: Date | null
+    id: string
+    userId: string
+    admin?: boolean | null
+    updatedAt?: Date | null
+    user?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      manager?: boolean | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+      walletAddress?: string | null
+    } | null
+  }> | null
+}
+
+export type ManagerGetCommunityMemberQueryVariables = Exact<{
+  communityId: Scalars['String']['input']
+}>
+
+export type ManagerGetCommunityMemberQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'CommunityMember'
+    createdAt?: Date | null
+    id: string
+    userId: string
+    admin?: boolean | null
+    updatedAt?: Date | null
+    user?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      manager?: boolean | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+      walletAddress?: string | null
+    } | null
+  } | null
+}
+
+export type ManagerFindManyCommunityQueryVariables = Exact<{
+  input: ManagerFindManyCommunityInput
+}>
+
+export type ManagerFindManyCommunityQuery = {
+  __typename?: 'Query'
+  paging: {
+    __typename?: 'CommunityPaging'
+    data: Array<{
+      __typename?: 'Community'
+      activeProjectsCount?: number | null
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      homeServerId?: string | null
+      id: string
+      memberCount?: number | null
+      name: string
+      updatedAt?: Date | null
+      viewUrl: string
+      members?: Array<{
+        __typename?: 'CommunityMember'
+        createdAt?: Date | null
+        id: string
+        userId: string
+        admin?: boolean | null
+        updatedAt?: Date | null
+        user?: {
+          __typename?: 'User'
+          avatarUrl?: string | null
+          createdAt?: Date | null
+          developer?: boolean | null
+          id: string
+          name?: string | null
+          manager?: boolean | null
+          profileUrl: string
+          role?: UserRole | null
+          status?: UserStatus | null
+          updatedAt?: Date | null
+          username?: string | null
+          walletAddress?: string | null
+        } | null
+      }> | null
+    }>
+    meta: {
+      __typename?: 'PagingMeta'
+      currentPage: number
+      isFirstPage: boolean
+      isLastPage: boolean
+      nextPage?: number | null
+      pageCount?: number | null
+      previousPage?: number | null
+      totalCount?: number | null
+    }
+  }
+}
+
+export type ManagerFindOneCommunityQueryVariables = Exact<{
+  communityId: Scalars['String']['input']
+}>
+
+export type ManagerFindOneCommunityQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'Community'
+    activeProjectsCount?: number | null
+    avatarUrl?: string | null
+    createdAt?: Date | null
+    homeServerId?: string | null
+    id: string
+    memberCount?: number | null
+    name: string
+    updatedAt?: Date | null
+    viewUrl: string
+    members?: Array<{
+      __typename?: 'CommunityMember'
+      createdAt?: Date | null
+      id: string
+      userId: string
+      admin?: boolean | null
+      updatedAt?: Date | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      } | null
+    }> | null
+  } | null
+}
+
+export type ManagerCreateCommunityMutationVariables = Exact<{
+  input: ManagerCreateCommunityInput
+}>
+
+export type ManagerCreateCommunityMutation = {
+  __typename?: 'Mutation'
+  created?: {
+    __typename?: 'Community'
+    activeProjectsCount?: number | null
+    avatarUrl?: string | null
+    createdAt?: Date | null
+    homeServerId?: string | null
+    id: string
+    memberCount?: number | null
+    name: string
+    updatedAt?: Date | null
+    viewUrl: string
+    members?: Array<{
+      __typename?: 'CommunityMember'
+      createdAt?: Date | null
+      id: string
+      userId: string
+      admin?: boolean | null
+      updatedAt?: Date | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      } | null
+    }> | null
+  } | null
+}
+
+export type ManagerUpdateCommunityMutationVariables = Exact<{
+  communityId: Scalars['String']['input']
+  input: ManagerUpdateCommunityInput
+}>
+
+export type ManagerUpdateCommunityMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'Community'
+    activeProjectsCount?: number | null
+    avatarUrl?: string | null
+    createdAt?: Date | null
+    homeServerId?: string | null
+    id: string
+    memberCount?: number | null
+    name: string
+    updatedAt?: Date | null
+    viewUrl: string
+    members?: Array<{
+      __typename?: 'CommunityMember'
+      createdAt?: Date | null
+      id: string
+      userId: string
+      admin?: boolean | null
+      updatedAt?: Date | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      } | null
+    }> | null
+  } | null
+}
+
+export type ManagerDeleteCommunityMutationVariables = Exact<{
+  communityId: Scalars['String']['input']
+}>
+
+export type ManagerDeleteCommunityMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
+
+export type AdminFindManyCommunityQueryVariables = Exact<{
+  input: AdminFindManyCommunityInput
+}>
+
+export type AdminFindManyCommunityQuery = {
+  __typename?: 'Query'
+  paging: {
+    __typename?: 'CommunityPaging'
+    data: Array<{
+      __typename?: 'Community'
+      activeProjectsCount?: number | null
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      homeServerId?: string | null
+      id: string
+      memberCount?: number | null
+      name: string
+      updatedAt?: Date | null
+      viewUrl: string
+      members?: Array<{
+        __typename?: 'CommunityMember'
+        createdAt?: Date | null
+        id: string
+        userId: string
+        admin?: boolean | null
+        updatedAt?: Date | null
+        user?: {
+          __typename?: 'User'
+          avatarUrl?: string | null
+          createdAt?: Date | null
+          developer?: boolean | null
+          id: string
+          name?: string | null
+          manager?: boolean | null
+          profileUrl: string
+          role?: UserRole | null
+          status?: UserStatus | null
+          updatedAt?: Date | null
+          username?: string | null
+          walletAddress?: string | null
+        } | null
+      }> | null
+    }>
+    meta: {
+      __typename?: 'PagingMeta'
+      currentPage: number
+      isFirstPage: boolean
+      isLastPage: boolean
+      nextPage?: number | null
+      pageCount?: number | null
+      previousPage?: number | null
+      totalCount?: number | null
+    }
+  }
+}
+
+export type AdminGetCommunityMembersQueryVariables = Exact<{
+  communityId: Scalars['String']['input']
+}>
+
+export type AdminGetCommunityMembersQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'CommunityMember'
+    createdAt?: Date | null
+    id: string
+    userId: string
+    admin?: boolean | null
+    updatedAt?: Date | null
+    user?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      manager?: boolean | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+      walletAddress?: string | null
+    } | null
+  }> | null
+}
+
+export type AdminFindOneCommunityQueryVariables = Exact<{
+  communityId: Scalars['String']['input']
+}>
+
+export type AdminFindOneCommunityQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'Community'
+    activeProjectsCount?: number | null
+    avatarUrl?: string | null
+    createdAt?: Date | null
+    homeServerId?: string | null
+    id: string
+    memberCount?: number | null
+    name: string
+    updatedAt?: Date | null
+    viewUrl: string
+    members?: Array<{
+      __typename?: 'CommunityMember'
+      createdAt?: Date | null
+      id: string
+      userId: string
+      admin?: boolean | null
+      updatedAt?: Date | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      } | null
+    }> | null
+  } | null
+}
+
+export type AdminUpdateCommunityMutationVariables = Exact<{
+  communityId: Scalars['String']['input']
+  input: AdminUpdateCommunityInput
+}>
+
+export type AdminUpdateCommunityMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'Community'
+    activeProjectsCount?: number | null
+    avatarUrl?: string | null
+    createdAt?: Date | null
+    homeServerId?: string | null
+    id: string
+    memberCount?: number | null
+    name: string
+    updatedAt?: Date | null
+    viewUrl: string
+    members?: Array<{
+      __typename?: 'CommunityMember'
+      createdAt?: Date | null
+      id: string
+      userId: string
+      admin?: boolean | null
+      updatedAt?: Date | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      } | null
+    }> | null
+  } | null
+}
+
+export type AdminDeleteCommunityMutationVariables = Exact<{
+  communityId: Scalars['String']['input']
+}>
+
+export type AdminDeleteCommunityMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
+
+export type AdminAddCommunityMemberMutationVariables = Exact<{
+  communityId: Scalars['String']['input']
+  userId: Scalars['String']['input']
+}>
+
+export type AdminAddCommunityMemberMutation = { __typename?: 'Mutation'; added?: boolean | null }
+
+export type AdminRemoveCommunityMemberMutationVariables = Exact<{
+  communityId: Scalars['String']['input']
+  userId: Scalars['String']['input']
+}>
+
+export type AdminRemoveCommunityMemberMutation = { __typename?: 'Mutation'; removed?: boolean | null }
+
+export type AdminToggleCommunityAdminMutationVariables = Exact<{
+  communityId: Scalars['String']['input']
+  userId: Scalars['String']['input']
+}>
+
+export type AdminToggleCommunityAdminMutation = { __typename?: 'Mutation'; toggled?: boolean | null }
+
+export type ManagerAddCommunityMemberMutationVariables = Exact<{
+  communityId: Scalars['String']['input']
+  userId: Scalars['String']['input']
+}>
+
+export type ManagerAddCommunityMemberMutation = { __typename?: 'Mutation'; added?: boolean | null }
+
+export type ManagerRemoveCommunityMemberMutationVariables = Exact<{
+  communityId: Scalars['String']['input']
+  userId: Scalars['String']['input']
+}>
+
+export type ManagerRemoveCommunityMemberMutation = { __typename?: 'Mutation'; removed?: boolean | null }
+
+export type ManagerToggleCommunityAdminMutationVariables = Exact<{
+  communityId: Scalars['String']['input']
+  userId: Scalars['String']['input']
+}>
+
+export type ManagerToggleCommunityAdminMutation = { __typename?: 'Mutation'; toggled?: boolean | null }
+
 export type AppConfigDetailsFragment = {
   __typename?: 'AppConfig'
   authDiscordEnabled: boolean
@@ -1494,7 +2129,7 @@ export type DiscordServerDetailsFragment = {
   createChannels?: boolean | null
   logChannelId?: string | null
   projectCategoryId?: string | null
-  teamCategoryId?: string | null
+  communityCategoryId?: string | null
 }
 
 export type DiscordRoleDetailsFragment = {
@@ -1542,7 +2177,7 @@ export type AdminGetDiscordServersQuery = {
     createChannels?: boolean | null
     logChannelId?: string | null
     projectCategoryId?: string | null
-    teamCategoryId?: string | null
+    communityCategoryId?: string | null
   }>
 }
 
@@ -1594,11 +2229,11 @@ export type AdminGetProjectChannelsQuery = {
   }>
 }
 
-export type AdminGetTeamChannelsQueryVariables = Exact<{
-  teamId: Scalars['String']['input']
+export type AdminGetCommunityChannelsQueryVariables = Exact<{
+  communityId: Scalars['String']['input']
 }>
 
-export type AdminGetTeamChannelsQuery = {
+export type AdminGetCommunityChannelsQuery = {
   __typename?: 'Query'
   items: Array<{
     __typename?: 'DiscordChannel'
@@ -1625,13 +2260,13 @@ export type AdminCreateProjectChannelMutationVariables = Exact<{
 
 export type AdminCreateProjectChannelMutation = { __typename?: 'Mutation'; created: boolean }
 
-export type AdminCreateTeamChannelMutationVariables = Exact<{
+export type AdminCreateCommunityChannelMutationVariables = Exact<{
   serverId: Scalars['String']['input']
   channelId: Scalars['String']['input']
-  teamId: Scalars['String']['input']
+  communityId: Scalars['String']['input']
 }>
 
-export type AdminCreateTeamChannelMutation = { __typename?: 'Mutation'; created: boolean }
+export type AdminCreateCommunityChannelMutation = { __typename?: 'Mutation'; created: boolean }
 
 export type AdminUpdateDiscordServerMutationVariables = Exact<{
   serverId: Scalars['String']['input']
@@ -1647,12 +2282,12 @@ export type AdminDeleteProjectChannelMutationVariables = Exact<{
 
 export type AdminDeleteProjectChannelMutation = { __typename?: 'Mutation'; deleted: boolean }
 
-export type AdminDeleteTeamChannelMutationVariables = Exact<{
+export type AdminDeleteCommunityChannelMutationVariables = Exact<{
   channelId: Scalars['String']['input']
-  teamId: Scalars['String']['input']
+  communityId: Scalars['String']['input']
 }>
 
-export type AdminDeleteTeamChannelMutation = { __typename?: 'Mutation'; deleted: boolean }
+export type AdminDeleteCommunityChannelMutation = { __typename?: 'Mutation'; deleted: boolean }
 
 export type AdminLeaveDiscordServerMutationVariables = Exact<{
   serverId: Scalars['String']['input']
@@ -1673,7 +2308,7 @@ export type UserGetDiscordServersQuery = {
     createChannels?: boolean | null
     logChannelId?: string | null
     projectCategoryId?: string | null
-    teamCategoryId?: string | null
+    communityCategoryId?: string | null
   }>
 }
 
@@ -1693,11 +2328,11 @@ export type UserGetProjectChannelsQuery = {
   }>
 }
 
-export type UserGetTeamChannelsQueryVariables = Exact<{
-  teamId: Scalars['String']['input']
+export type UserGetCommunityChannelsQueryVariables = Exact<{
+  communityId: Scalars['String']['input']
 }>
 
-export type UserGetTeamChannelsQuery = {
+export type UserGetCommunityChannelsQuery = {
   __typename?: 'Query'
   items: Array<{
     __typename?: 'DiscordChannel'
@@ -1992,7 +2627,7 @@ export type ProjectDetailsFragment = {
   slug: string
   status?: ProjectStatus | null
   tags?: Array<string> | null
-  teamId: string
+  communityId: string
   updatedAt?: Date | null
   viewUrl: string
   managers?: Array<{
@@ -2010,8 +2645,8 @@ export type ProjectDetailsFragment = {
     username?: string | null
     walletAddress?: string | null
   }> | null
-  team?: {
-    __typename?: 'Team'
+  community?: {
+    __typename?: 'Community'
     activeProjectsCount?: number | null
     avatarUrl?: string | null
     createdAt?: Date | null
@@ -2022,7 +2657,7 @@ export type ProjectDetailsFragment = {
     updatedAt?: Date | null
     viewUrl: string
     members?: Array<{
-      __typename?: 'TeamMember'
+      __typename?: 'CommunityMember'
       createdAt?: Date | null
       id: string
       userId: string
@@ -2075,7 +2710,7 @@ export type ReviewerFindManyProjectQuery = {
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
-      teamId: string
+      communityId: string
       updatedAt?: Date | null
       viewUrl: string
       managers?: Array<{
@@ -2093,8 +2728,8 @@ export type ReviewerFindManyProjectQuery = {
         username?: string | null
         walletAddress?: string | null
       }> | null
-      team?: {
-        __typename?: 'Team'
+      community?: {
+        __typename?: 'Community'
         activeProjectsCount?: number | null
         avatarUrl?: string | null
         createdAt?: Date | null
@@ -2105,7 +2740,7 @@ export type ReviewerFindManyProjectQuery = {
         updatedAt?: Date | null
         viewUrl: string
         members?: Array<{
-          __typename?: 'TeamMember'
+          __typename?: 'CommunityMember'
           createdAt?: Date | null
           id: string
           userId: string
@@ -2168,7 +2803,7 @@ export type ReviewerFindOneProjectQuery = {
     slug: string
     status?: ProjectStatus | null
     tags?: Array<string> | null
-    teamId: string
+    communityId: string
     updatedAt?: Date | null
     viewUrl: string
     managers?: Array<{
@@ -2186,8 +2821,8 @@ export type ReviewerFindOneProjectQuery = {
       username?: string | null
       walletAddress?: string | null
     }> | null
-    team?: {
-      __typename?: 'Team'
+    community?: {
+      __typename?: 'Community'
       activeProjectsCount?: number | null
       avatarUrl?: string | null
       createdAt?: Date | null
@@ -2198,7 +2833,7 @@ export type ReviewerFindOneProjectQuery = {
       updatedAt?: Date | null
       viewUrl: string
       members?: Array<{
-        __typename?: 'TeamMember'
+        __typename?: 'CommunityMember'
         createdAt?: Date | null
         id: string
         userId: string
@@ -2252,7 +2887,7 @@ export type AdminFindManyProjectQuery = {
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
-      teamId: string
+      communityId: string
       updatedAt?: Date | null
       viewUrl: string
       managers?: Array<{
@@ -2270,8 +2905,8 @@ export type AdminFindManyProjectQuery = {
         username?: string | null
         walletAddress?: string | null
       }> | null
-      team?: {
-        __typename?: 'Team'
+      community?: {
+        __typename?: 'Community'
         activeProjectsCount?: number | null
         avatarUrl?: string | null
         createdAt?: Date | null
@@ -2282,7 +2917,7 @@ export type AdminFindManyProjectQuery = {
         updatedAt?: Date | null
         viewUrl: string
         members?: Array<{
-          __typename?: 'TeamMember'
+          __typename?: 'CommunityMember'
           createdAt?: Date | null
           id: string
           userId: string
@@ -2345,7 +2980,7 @@ export type AdminFindOneProjectQuery = {
     slug: string
     status?: ProjectStatus | null
     tags?: Array<string> | null
-    teamId: string
+    communityId: string
     updatedAt?: Date | null
     viewUrl: string
     referral?: {
@@ -2393,8 +3028,8 @@ export type AdminFindOneProjectQuery = {
       username?: string | null
       walletAddress?: string | null
     }> | null
-    team?: {
-      __typename?: 'Team'
+    community?: {
+      __typename?: 'Community'
       activeProjectsCount?: number | null
       avatarUrl?: string | null
       createdAt?: Date | null
@@ -2405,7 +3040,7 @@ export type AdminFindOneProjectQuery = {
       updatedAt?: Date | null
       viewUrl: string
       members?: Array<{
-        __typename?: 'TeamMember'
+        __typename?: 'CommunityMember'
         createdAt?: Date | null
         id: string
         userId: string
@@ -2458,7 +3093,7 @@ export type AdminUpdateProjectMutation = {
     slug: string
     status?: ProjectStatus | null
     tags?: Array<string> | null
-    teamId: string
+    communityId: string
     updatedAt?: Date | null
     viewUrl: string
     managers?: Array<{
@@ -2476,8 +3111,8 @@ export type AdminUpdateProjectMutation = {
       username?: string | null
       walletAddress?: string | null
     }> | null
-    team?: {
-      __typename?: 'Team'
+    community?: {
+      __typename?: 'Community'
       activeProjectsCount?: number | null
       avatarUrl?: string | null
       createdAt?: Date | null
@@ -2488,7 +3123,7 @@ export type AdminUpdateProjectMutation = {
       updatedAt?: Date | null
       viewUrl: string
       members?: Array<{
-        __typename?: 'TeamMember'
+        __typename?: 'CommunityMember'
         createdAt?: Date | null
         id: string
         userId: string
@@ -2590,7 +3225,7 @@ export type ManagerFindManyProjectQuery = {
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
-      teamId: string
+      communityId: string
       updatedAt?: Date | null
       viewUrl: string
       managers?: Array<{
@@ -2608,8 +3243,8 @@ export type ManagerFindManyProjectQuery = {
         username?: string | null
         walletAddress?: string | null
       }> | null
-      team?: {
-        __typename?: 'Team'
+      community?: {
+        __typename?: 'Community'
         activeProjectsCount?: number | null
         avatarUrl?: string | null
         createdAt?: Date | null
@@ -2620,7 +3255,7 @@ export type ManagerFindManyProjectQuery = {
         updatedAt?: Date | null
         viewUrl: string
         members?: Array<{
-          __typename?: 'TeamMember'
+          __typename?: 'CommunityMember'
           createdAt?: Date | null
           id: string
           userId: string
@@ -2683,7 +3318,7 @@ export type ManagerFindOneProjectQuery = {
     slug: string
     status?: ProjectStatus | null
     tags?: Array<string> | null
-    teamId: string
+    communityId: string
     updatedAt?: Date | null
     viewUrl: string
     referral?: {
@@ -2731,8 +3366,8 @@ export type ManagerFindOneProjectQuery = {
       username?: string | null
       walletAddress?: string | null
     }> | null
-    team?: {
-      __typename?: 'Team'
+    community?: {
+      __typename?: 'Community'
       activeProjectsCount?: number | null
       avatarUrl?: string | null
       createdAt?: Date | null
@@ -2743,7 +3378,7 @@ export type ManagerFindOneProjectQuery = {
       updatedAt?: Date | null
       viewUrl: string
       members?: Array<{
-        __typename?: 'TeamMember'
+        __typename?: 'CommunityMember'
         createdAt?: Date | null
         id: string
         userId: string
@@ -2795,7 +3430,7 @@ export type ManagerCreateProjectMutation = {
     slug: string
     status?: ProjectStatus | null
     tags?: Array<string> | null
-    teamId: string
+    communityId: string
     updatedAt?: Date | null
     viewUrl: string
     managers?: Array<{
@@ -2813,8 +3448,8 @@ export type ManagerCreateProjectMutation = {
       username?: string | null
       walletAddress?: string | null
     }> | null
-    team?: {
-      __typename?: 'Team'
+    community?: {
+      __typename?: 'Community'
       activeProjectsCount?: number | null
       avatarUrl?: string | null
       createdAt?: Date | null
@@ -2825,7 +3460,7 @@ export type ManagerCreateProjectMutation = {
       updatedAt?: Date | null
       viewUrl: string
       members?: Array<{
-        __typename?: 'TeamMember'
+        __typename?: 'CommunityMember'
         createdAt?: Date | null
         id: string
         userId: string
@@ -2878,7 +3513,7 @@ export type ManagerUpdateProjectMutation = {
     slug: string
     status?: ProjectStatus | null
     tags?: Array<string> | null
-    teamId: string
+    communityId: string
     updatedAt?: Date | null
     viewUrl: string
     managers?: Array<{
@@ -2896,8 +3531,8 @@ export type ManagerUpdateProjectMutation = {
       username?: string | null
       walletAddress?: string | null
     }> | null
-    team?: {
-      __typename?: 'Team'
+    community?: {
+      __typename?: 'Community'
       activeProjectsCount?: number | null
       avatarUrl?: string | null
       createdAt?: Date | null
@@ -2908,7 +3543,7 @@ export type ManagerUpdateProjectMutation = {
       updatedAt?: Date | null
       viewUrl: string
       members?: Array<{
-        __typename?: 'TeamMember'
+        __typename?: 'CommunityMember'
         createdAt?: Date | null
         id: string
         userId: string
@@ -3120,7 +3755,7 @@ export type ReviewDetailsFragment = {
     slug: string
     status?: ProjectStatus | null
     tags?: Array<string> | null
-    teamId: string
+    communityId: string
     updatedAt?: Date | null
     viewUrl: string
     managers?: Array<{
@@ -3138,8 +3773,8 @@ export type ReviewDetailsFragment = {
       username?: string | null
       walletAddress?: string | null
     }> | null
-    team?: {
-      __typename?: 'Team'
+    community?: {
+      __typename?: 'Community'
       activeProjectsCount?: number | null
       avatarUrl?: string | null
       createdAt?: Date | null
@@ -3150,7 +3785,7 @@ export type ReviewDetailsFragment = {
       updatedAt?: Date | null
       viewUrl: string
       members?: Array<{
-        __typename?: 'TeamMember'
+        __typename?: 'CommunityMember'
         createdAt?: Date | null
         id: string
         userId: string
@@ -3226,7 +3861,7 @@ export type ReviewerFindManyReviewByProjectQuery = {
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
-      teamId: string
+      communityId: string
       updatedAt?: Date | null
       viewUrl: string
       managers?: Array<{
@@ -3244,8 +3879,8 @@ export type ReviewerFindManyReviewByProjectQuery = {
         username?: string | null
         walletAddress?: string | null
       }> | null
-      team?: {
-        __typename?: 'Team'
+      community?: {
+        __typename?: 'Community'
         activeProjectsCount?: number | null
         avatarUrl?: string | null
         createdAt?: Date | null
@@ -3256,7 +3891,7 @@ export type ReviewerFindManyReviewByProjectQuery = {
         updatedAt?: Date | null
         viewUrl: string
         members?: Array<{
-          __typename?: 'TeamMember'
+          __typename?: 'CommunityMember'
           createdAt?: Date | null
           id: string
           userId: string
@@ -3333,7 +3968,7 @@ export type ReviewerFindManyReviewByUsernameQuery = {
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
-      teamId: string
+      communityId: string
       updatedAt?: Date | null
       viewUrl: string
       managers?: Array<{
@@ -3351,8 +3986,8 @@ export type ReviewerFindManyReviewByUsernameQuery = {
         username?: string | null
         walletAddress?: string | null
       }> | null
-      team?: {
-        __typename?: 'Team'
+      community?: {
+        __typename?: 'Community'
         activeProjectsCount?: number | null
         avatarUrl?: string | null
         createdAt?: Date | null
@@ -3363,7 +3998,7 @@ export type ReviewerFindManyReviewByUsernameQuery = {
         updatedAt?: Date | null
         viewUrl: string
         members?: Array<{
-          __typename?: 'TeamMember'
+          __typename?: 'CommunityMember'
           createdAt?: Date | null
           id: string
           userId: string
@@ -3440,7 +4075,7 @@ export type ReviewerFindUserProjectReviewQuery = {
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
-      teamId: string
+      communityId: string
       updatedAt?: Date | null
       viewUrl: string
       managers?: Array<{
@@ -3458,8 +4093,8 @@ export type ReviewerFindUserProjectReviewQuery = {
         username?: string | null
         walletAddress?: string | null
       }> | null
-      team?: {
-        __typename?: 'Team'
+      community?: {
+        __typename?: 'Community'
         activeProjectsCount?: number | null
         avatarUrl?: string | null
         createdAt?: Date | null
@@ -3470,7 +4105,7 @@ export type ReviewerFindUserProjectReviewQuery = {
         updatedAt?: Date | null
         viewUrl: string
         members?: Array<{
-          __typename?: 'TeamMember'
+          __typename?: 'CommunityMember'
           createdAt?: Date | null
           id: string
           userId: string
@@ -3547,7 +4182,7 @@ export type ReviewerFindOneReviewQuery = {
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
-      teamId: string
+      communityId: string
       updatedAt?: Date | null
       viewUrl: string
       managers?: Array<{
@@ -3565,8 +4200,8 @@ export type ReviewerFindOneReviewQuery = {
         username?: string | null
         walletAddress?: string | null
       }> | null
-      team?: {
-        __typename?: 'Team'
+      community?: {
+        __typename?: 'Community'
         activeProjectsCount?: number | null
         avatarUrl?: string | null
         createdAt?: Date | null
@@ -3577,7 +4212,7 @@ export type ReviewerFindOneReviewQuery = {
         updatedAt?: Date | null
         viewUrl: string
         members?: Array<{
-          __typename?: 'TeamMember'
+          __typename?: 'CommunityMember'
           createdAt?: Date | null
           id: string
           userId: string
@@ -3654,7 +4289,7 @@ export type ReviewerCreateReviewMutation = {
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
-      teamId: string
+      communityId: string
       updatedAt?: Date | null
       viewUrl: string
       managers?: Array<{
@@ -3672,8 +4307,8 @@ export type ReviewerCreateReviewMutation = {
         username?: string | null
         walletAddress?: string | null
       }> | null
-      team?: {
-        __typename?: 'Team'
+      community?: {
+        __typename?: 'Community'
         activeProjectsCount?: number | null
         avatarUrl?: string | null
         createdAt?: Date | null
@@ -3684,7 +4319,7 @@ export type ReviewerCreateReviewMutation = {
         updatedAt?: Date | null
         viewUrl: string
         members?: Array<{
-          __typename?: 'TeamMember'
+          __typename?: 'CommunityMember'
           createdAt?: Date | null
           id: string
           userId: string
@@ -3769,7 +4404,7 @@ export type AdminFindManyReviewQuery = {
         slug: string
         status?: ProjectStatus | null
         tags?: Array<string> | null
-        teamId: string
+        communityId: string
         updatedAt?: Date | null
         viewUrl: string
         managers?: Array<{
@@ -3787,8 +4422,8 @@ export type AdminFindManyReviewQuery = {
           username?: string | null
           walletAddress?: string | null
         }> | null
-        team?: {
-          __typename?: 'Team'
+        community?: {
+          __typename?: 'Community'
           activeProjectsCount?: number | null
           avatarUrl?: string | null
           createdAt?: Date | null
@@ -3799,7 +4434,7 @@ export type AdminFindManyReviewQuery = {
           updatedAt?: Date | null
           viewUrl: string
           members?: Array<{
-            __typename?: 'TeamMember'
+            __typename?: 'CommunityMember'
             createdAt?: Date | null
             id: string
             userId: string
@@ -3887,7 +4522,7 @@ export type AdminFindOneReviewQuery = {
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
-      teamId: string
+      communityId: string
       updatedAt?: Date | null
       viewUrl: string
       managers?: Array<{
@@ -3905,8 +4540,8 @@ export type AdminFindOneReviewQuery = {
         username?: string | null
         walletAddress?: string | null
       }> | null
-      team?: {
-        __typename?: 'Team'
+      community?: {
+        __typename?: 'Community'
         activeProjectsCount?: number | null
         avatarUrl?: string | null
         createdAt?: Date | null
@@ -3917,7 +4552,7 @@ export type AdminFindOneReviewQuery = {
         updatedAt?: Date | null
         viewUrl: string
         members?: Array<{
-          __typename?: 'TeamMember'
+          __typename?: 'CommunityMember'
           createdAt?: Date | null
           id: string
           userId: string
@@ -3964,641 +4599,6 @@ export type AdminDeleteReviewMutationVariables = Exact<{
 }>
 
 export type AdminDeleteReviewMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
-
-export type TeamDetailsFragment = {
-  __typename?: 'Team'
-  activeProjectsCount?: number | null
-  avatarUrl?: string | null
-  createdAt?: Date | null
-  homeServerId?: string | null
-  id: string
-  memberCount?: number | null
-  name: string
-  updatedAt?: Date | null
-  viewUrl: string
-  members?: Array<{
-    __typename?: 'TeamMember'
-    createdAt?: Date | null
-    id: string
-    userId: string
-    admin?: boolean | null
-    updatedAt?: Date | null
-    user?: {
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
-      id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
-      updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
-    } | null
-  }> | null
-}
-
-export type TeamMemberDetailsFragment = {
-  __typename?: 'TeamMember'
-  createdAt?: Date | null
-  id: string
-  userId: string
-  admin?: boolean | null
-  updatedAt?: Date | null
-  user?: {
-    __typename?: 'User'
-    avatarUrl?: string | null
-    createdAt?: Date | null
-    developer?: boolean | null
-    id: string
-    name?: string | null
-    manager?: boolean | null
-    profileUrl: string
-    role?: UserRole | null
-    status?: UserStatus | null
-    updatedAt?: Date | null
-    username?: string | null
-    walletAddress?: string | null
-  } | null
-}
-
-export type UserFindManyTeamQueryVariables = Exact<{
-  input: UserFindManyTeamInput
-}>
-
-export type UserFindManyTeamQuery = {
-  __typename?: 'Query'
-  paging: {
-    __typename?: 'TeamPaging'
-    data: Array<{
-      __typename?: 'Team'
-      activeProjectsCount?: number | null
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      homeServerId?: string | null
-      id: string
-      memberCount?: number | null
-      name: string
-      updatedAt?: Date | null
-      viewUrl: string
-      members?: Array<{
-        __typename?: 'TeamMember'
-        createdAt?: Date | null
-        id: string
-        userId: string
-        admin?: boolean | null
-        updatedAt?: Date | null
-        user?: {
-          __typename?: 'User'
-          avatarUrl?: string | null
-          createdAt?: Date | null
-          developer?: boolean | null
-          id: string
-          name?: string | null
-          manager?: boolean | null
-          profileUrl: string
-          role?: UserRole | null
-          status?: UserStatus | null
-          updatedAt?: Date | null
-          username?: string | null
-          walletAddress?: string | null
-        } | null
-      }> | null
-    }>
-    meta: {
-      __typename?: 'PagingMeta'
-      currentPage: number
-      isFirstPage: boolean
-      isLastPage: boolean
-      nextPage?: number | null
-      pageCount?: number | null
-      previousPage?: number | null
-      totalCount?: number | null
-    }
-  }
-}
-
-export type UserFindOneTeamQueryVariables = Exact<{
-  teamId: Scalars['String']['input']
-}>
-
-export type UserFindOneTeamQuery = {
-  __typename?: 'Query'
-  item?: {
-    __typename?: 'Team'
-    activeProjectsCount?: number | null
-    avatarUrl?: string | null
-    createdAt?: Date | null
-    homeServerId?: string | null
-    id: string
-    memberCount?: number | null
-    name: string
-    updatedAt?: Date | null
-    viewUrl: string
-    members?: Array<{
-      __typename?: 'TeamMember'
-      createdAt?: Date | null
-      id: string
-      userId: string
-      admin?: boolean | null
-      updatedAt?: Date | null
-      user?: {
-        __typename?: 'User'
-        avatarUrl?: string | null
-        createdAt?: Date | null
-        developer?: boolean | null
-        id: string
-        name?: string | null
-        manager?: boolean | null
-        profileUrl: string
-        role?: UserRole | null
-        status?: UserStatus | null
-        updatedAt?: Date | null
-        username?: string | null
-        walletAddress?: string | null
-      } | null
-    }> | null
-  } | null
-}
-
-export type ManagerGetTeamMembersQueryVariables = Exact<{
-  teamId: Scalars['String']['input']
-}>
-
-export type ManagerGetTeamMembersQuery = {
-  __typename?: 'Query'
-  items?: Array<{
-    __typename?: 'TeamMember'
-    createdAt?: Date | null
-    id: string
-    userId: string
-    admin?: boolean | null
-    updatedAt?: Date | null
-    user?: {
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
-      id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
-      updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
-    } | null
-  }> | null
-}
-
-export type ManagerGetTeamMemberQueryVariables = Exact<{
-  teamId: Scalars['String']['input']
-}>
-
-export type ManagerGetTeamMemberQuery = {
-  __typename?: 'Query'
-  item?: {
-    __typename?: 'TeamMember'
-    createdAt?: Date | null
-    id: string
-    userId: string
-    admin?: boolean | null
-    updatedAt?: Date | null
-    user?: {
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
-      id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
-      updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
-    } | null
-  } | null
-}
-
-export type ManagerFindManyTeamQueryVariables = Exact<{
-  input: ManagerFindManyTeamInput
-}>
-
-export type ManagerFindManyTeamQuery = {
-  __typename?: 'Query'
-  paging: {
-    __typename?: 'TeamPaging'
-    data: Array<{
-      __typename?: 'Team'
-      activeProjectsCount?: number | null
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      homeServerId?: string | null
-      id: string
-      memberCount?: number | null
-      name: string
-      updatedAt?: Date | null
-      viewUrl: string
-      members?: Array<{
-        __typename?: 'TeamMember'
-        createdAt?: Date | null
-        id: string
-        userId: string
-        admin?: boolean | null
-        updatedAt?: Date | null
-        user?: {
-          __typename?: 'User'
-          avatarUrl?: string | null
-          createdAt?: Date | null
-          developer?: boolean | null
-          id: string
-          name?: string | null
-          manager?: boolean | null
-          profileUrl: string
-          role?: UserRole | null
-          status?: UserStatus | null
-          updatedAt?: Date | null
-          username?: string | null
-          walletAddress?: string | null
-        } | null
-      }> | null
-    }>
-    meta: {
-      __typename?: 'PagingMeta'
-      currentPage: number
-      isFirstPage: boolean
-      isLastPage: boolean
-      nextPage?: number | null
-      pageCount?: number | null
-      previousPage?: number | null
-      totalCount?: number | null
-    }
-  }
-}
-
-export type ManagerFindOneTeamQueryVariables = Exact<{
-  teamId: Scalars['String']['input']
-}>
-
-export type ManagerFindOneTeamQuery = {
-  __typename?: 'Query'
-  item?: {
-    __typename?: 'Team'
-    activeProjectsCount?: number | null
-    avatarUrl?: string | null
-    createdAt?: Date | null
-    homeServerId?: string | null
-    id: string
-    memberCount?: number | null
-    name: string
-    updatedAt?: Date | null
-    viewUrl: string
-    members?: Array<{
-      __typename?: 'TeamMember'
-      createdAt?: Date | null
-      id: string
-      userId: string
-      admin?: boolean | null
-      updatedAt?: Date | null
-      user?: {
-        __typename?: 'User'
-        avatarUrl?: string | null
-        createdAt?: Date | null
-        developer?: boolean | null
-        id: string
-        name?: string | null
-        manager?: boolean | null
-        profileUrl: string
-        role?: UserRole | null
-        status?: UserStatus | null
-        updatedAt?: Date | null
-        username?: string | null
-        walletAddress?: string | null
-      } | null
-    }> | null
-  } | null
-}
-
-export type ManagerCreateTeamMutationVariables = Exact<{
-  input: ManagerCreateTeamInput
-}>
-
-export type ManagerCreateTeamMutation = {
-  __typename?: 'Mutation'
-  created?: {
-    __typename?: 'Team'
-    activeProjectsCount?: number | null
-    avatarUrl?: string | null
-    createdAt?: Date | null
-    homeServerId?: string | null
-    id: string
-    memberCount?: number | null
-    name: string
-    updatedAt?: Date | null
-    viewUrl: string
-    members?: Array<{
-      __typename?: 'TeamMember'
-      createdAt?: Date | null
-      id: string
-      userId: string
-      admin?: boolean | null
-      updatedAt?: Date | null
-      user?: {
-        __typename?: 'User'
-        avatarUrl?: string | null
-        createdAt?: Date | null
-        developer?: boolean | null
-        id: string
-        name?: string | null
-        manager?: boolean | null
-        profileUrl: string
-        role?: UserRole | null
-        status?: UserStatus | null
-        updatedAt?: Date | null
-        username?: string | null
-        walletAddress?: string | null
-      } | null
-    }> | null
-  } | null
-}
-
-export type ManagerUpdateTeamMutationVariables = Exact<{
-  teamId: Scalars['String']['input']
-  input: ManagerUpdateTeamInput
-}>
-
-export type ManagerUpdateTeamMutation = {
-  __typename?: 'Mutation'
-  updated?: {
-    __typename?: 'Team'
-    activeProjectsCount?: number | null
-    avatarUrl?: string | null
-    createdAt?: Date | null
-    homeServerId?: string | null
-    id: string
-    memberCount?: number | null
-    name: string
-    updatedAt?: Date | null
-    viewUrl: string
-    members?: Array<{
-      __typename?: 'TeamMember'
-      createdAt?: Date | null
-      id: string
-      userId: string
-      admin?: boolean | null
-      updatedAt?: Date | null
-      user?: {
-        __typename?: 'User'
-        avatarUrl?: string | null
-        createdAt?: Date | null
-        developer?: boolean | null
-        id: string
-        name?: string | null
-        manager?: boolean | null
-        profileUrl: string
-        role?: UserRole | null
-        status?: UserStatus | null
-        updatedAt?: Date | null
-        username?: string | null
-        walletAddress?: string | null
-      } | null
-    }> | null
-  } | null
-}
-
-export type ManagerDeleteTeamMutationVariables = Exact<{
-  teamId: Scalars['String']['input']
-}>
-
-export type ManagerDeleteTeamMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
-
-export type AdminFindManyTeamQueryVariables = Exact<{
-  input: AdminFindManyTeamInput
-}>
-
-export type AdminFindManyTeamQuery = {
-  __typename?: 'Query'
-  paging: {
-    __typename?: 'TeamPaging'
-    data: Array<{
-      __typename?: 'Team'
-      activeProjectsCount?: number | null
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      homeServerId?: string | null
-      id: string
-      memberCount?: number | null
-      name: string
-      updatedAt?: Date | null
-      viewUrl: string
-      members?: Array<{
-        __typename?: 'TeamMember'
-        createdAt?: Date | null
-        id: string
-        userId: string
-        admin?: boolean | null
-        updatedAt?: Date | null
-        user?: {
-          __typename?: 'User'
-          avatarUrl?: string | null
-          createdAt?: Date | null
-          developer?: boolean | null
-          id: string
-          name?: string | null
-          manager?: boolean | null
-          profileUrl: string
-          role?: UserRole | null
-          status?: UserStatus | null
-          updatedAt?: Date | null
-          username?: string | null
-          walletAddress?: string | null
-        } | null
-      }> | null
-    }>
-    meta: {
-      __typename?: 'PagingMeta'
-      currentPage: number
-      isFirstPage: boolean
-      isLastPage: boolean
-      nextPage?: number | null
-      pageCount?: number | null
-      previousPage?: number | null
-      totalCount?: number | null
-    }
-  }
-}
-
-export type AdminGetTeamMembersQueryVariables = Exact<{
-  teamId: Scalars['String']['input']
-}>
-
-export type AdminGetTeamMembersQuery = {
-  __typename?: 'Query'
-  items?: Array<{
-    __typename?: 'TeamMember'
-    createdAt?: Date | null
-    id: string
-    userId: string
-    admin?: boolean | null
-    updatedAt?: Date | null
-    user?: {
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
-      id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
-      updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
-    } | null
-  }> | null
-}
-
-export type AdminFindOneTeamQueryVariables = Exact<{
-  teamId: Scalars['String']['input']
-}>
-
-export type AdminFindOneTeamQuery = {
-  __typename?: 'Query'
-  item?: {
-    __typename?: 'Team'
-    activeProjectsCount?: number | null
-    avatarUrl?: string | null
-    createdAt?: Date | null
-    homeServerId?: string | null
-    id: string
-    memberCount?: number | null
-    name: string
-    updatedAt?: Date | null
-    viewUrl: string
-    members?: Array<{
-      __typename?: 'TeamMember'
-      createdAt?: Date | null
-      id: string
-      userId: string
-      admin?: boolean | null
-      updatedAt?: Date | null
-      user?: {
-        __typename?: 'User'
-        avatarUrl?: string | null
-        createdAt?: Date | null
-        developer?: boolean | null
-        id: string
-        name?: string | null
-        manager?: boolean | null
-        profileUrl: string
-        role?: UserRole | null
-        status?: UserStatus | null
-        updatedAt?: Date | null
-        username?: string | null
-        walletAddress?: string | null
-      } | null
-    }> | null
-  } | null
-}
-
-export type AdminUpdateTeamMutationVariables = Exact<{
-  teamId: Scalars['String']['input']
-  input: AdminUpdateTeamInput
-}>
-
-export type AdminUpdateTeamMutation = {
-  __typename?: 'Mutation'
-  updated?: {
-    __typename?: 'Team'
-    activeProjectsCount?: number | null
-    avatarUrl?: string | null
-    createdAt?: Date | null
-    homeServerId?: string | null
-    id: string
-    memberCount?: number | null
-    name: string
-    updatedAt?: Date | null
-    viewUrl: string
-    members?: Array<{
-      __typename?: 'TeamMember'
-      createdAt?: Date | null
-      id: string
-      userId: string
-      admin?: boolean | null
-      updatedAt?: Date | null
-      user?: {
-        __typename?: 'User'
-        avatarUrl?: string | null
-        createdAt?: Date | null
-        developer?: boolean | null
-        id: string
-        name?: string | null
-        manager?: boolean | null
-        profileUrl: string
-        role?: UserRole | null
-        status?: UserStatus | null
-        updatedAt?: Date | null
-        username?: string | null
-        walletAddress?: string | null
-      } | null
-    }> | null
-  } | null
-}
-
-export type AdminDeleteTeamMutationVariables = Exact<{
-  teamId: Scalars['String']['input']
-}>
-
-export type AdminDeleteTeamMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
-
-export type AdminAddTeamMemberMutationVariables = Exact<{
-  teamId: Scalars['String']['input']
-  userId: Scalars['String']['input']
-}>
-
-export type AdminAddTeamMemberMutation = { __typename?: 'Mutation'; added?: boolean | null }
-
-export type AdminRemoveTeamMemberMutationVariables = Exact<{
-  teamId: Scalars['String']['input']
-  userId: Scalars['String']['input']
-}>
-
-export type AdminRemoveTeamMemberMutation = { __typename?: 'Mutation'; removed?: boolean | null }
-
-export type AdminToggleTeamAdminMutationVariables = Exact<{
-  teamId: Scalars['String']['input']
-  userId: Scalars['String']['input']
-}>
-
-export type AdminToggleTeamAdminMutation = { __typename?: 'Mutation'; toggled?: boolean | null }
-
-export type ManagerAddTeamMemberMutationVariables = Exact<{
-  teamId: Scalars['String']['input']
-  userId: Scalars['String']['input']
-}>
-
-export type ManagerAddTeamMemberMutation = { __typename?: 'Mutation'; added?: boolean | null }
-
-export type ManagerRemoveTeamMemberMutationVariables = Exact<{
-  teamId: Scalars['String']['input']
-  userId: Scalars['String']['input']
-}>
-
-export type ManagerRemoveTeamMemberMutation = { __typename?: 'Mutation'; removed?: boolean | null }
-
-export type ManagerToggleTeamAdminMutationVariables = Exact<{
-  teamId: Scalars['String']['input']
-  userId: Scalars['String']['input']
-}>
-
-export type ManagerToggleTeamAdminMutation = { __typename?: 'Mutation'; toggled?: boolean | null }
 
 export type UserDetailsFragment = {
   __typename?: 'User'
@@ -4895,7 +4895,7 @@ export const DiscordServerDetailsFragmentDoc = gql`
     createChannels
     logChannelId
     projectCategoryId
-    teamCategoryId
+    communityCategoryId
   }
 `
 export const DiscordRoleDetailsFragmentDoc = gql`
@@ -4955,8 +4955,8 @@ export const RatingDetailsFragmentDoc = gql`
     updatedAt
   }
 `
-export const TeamMemberDetailsFragmentDoc = gql`
-  fragment TeamMemberDetails on TeamMember {
+export const CommunityMemberDetailsFragmentDoc = gql`
+  fragment CommunityMemberDetails on CommunityMember {
     createdAt
     id
     userId
@@ -4968,8 +4968,8 @@ export const TeamMemberDetailsFragmentDoc = gql`
   }
   ${UserDetailsFragmentDoc}
 `
-export const TeamDetailsFragmentDoc = gql`
-  fragment TeamDetails on Team {
+export const CommunityDetailsFragmentDoc = gql`
+  fragment CommunityDetails on Community {
     activeProjectsCount
     avatarUrl
     createdAt
@@ -4980,10 +4980,10 @@ export const TeamDetailsFragmentDoc = gql`
     updatedAt
     viewUrl
     members {
-      ...TeamMemberDetails
+      ...CommunityMemberDetails
     }
   }
-  ${TeamMemberDetailsFragmentDoc}
+  ${CommunityMemberDetailsFragmentDoc}
 `
 export const ProjectDetailsFragmentDoc = gql`
   fragment ProjectDetails on Project {
@@ -5008,15 +5008,15 @@ export const ProjectDetailsFragmentDoc = gql`
     slug
     status
     tags
-    teamId
-    team {
-      ...TeamDetails
+    communityId
+    community {
+      ...CommunityDetails
     }
     updatedAt
     viewUrl
   }
   ${UserDetailsFragmentDoc}
-  ${TeamDetailsFragmentDoc}
+  ${CommunityDetailsFragmentDoc}
 `
 export const ReviewDetailsFragmentDoc = gql`
   fragment ReviewDetails on Review {
@@ -5126,6 +5126,160 @@ export const AdminDeleteCommentDocument = gql`
     deleted: adminDeleteComment(commentId: $commentId)
   }
 `
+export const UserFindManyCommunityDocument = gql`
+  query userFindManyCommunity($input: UserFindManyCommunityInput!) {
+    paging: userFindManyCommunity(input: $input) {
+      data {
+        ...CommunityDetails
+      }
+      meta {
+        ...PagingMetaDetails
+      }
+    }
+  }
+  ${CommunityDetailsFragmentDoc}
+  ${PagingMetaDetailsFragmentDoc}
+`
+export const UserFindOneCommunityDocument = gql`
+  query userFindOneCommunity($communityId: String!) {
+    item: userFindOneCommunity(communityId: $communityId) {
+      ...CommunityDetails
+    }
+  }
+  ${CommunityDetailsFragmentDoc}
+`
+export const ManagerGetCommunityMembersDocument = gql`
+  query managerGetCommunityMembers($communityId: String!) {
+    items: managerGetCommunityMembers(communityId: $communityId) {
+      ...CommunityMemberDetails
+    }
+  }
+  ${CommunityMemberDetailsFragmentDoc}
+`
+export const ManagerGetCommunityMemberDocument = gql`
+  query managerGetCommunityMember($communityId: String!) {
+    item: managerGetCommunityMember(communityId: $communityId) {
+      ...CommunityMemberDetails
+    }
+  }
+  ${CommunityMemberDetailsFragmentDoc}
+`
+export const ManagerFindManyCommunityDocument = gql`
+  query managerFindManyCommunity($input: ManagerFindManyCommunityInput!) {
+    paging: managerFindManyCommunity(input: $input) {
+      data {
+        ...CommunityDetails
+      }
+      meta {
+        ...PagingMetaDetails
+      }
+    }
+  }
+  ${CommunityDetailsFragmentDoc}
+  ${PagingMetaDetailsFragmentDoc}
+`
+export const ManagerFindOneCommunityDocument = gql`
+  query managerFindOneCommunity($communityId: String!) {
+    item: managerFindOneCommunity(communityId: $communityId) {
+      ...CommunityDetails
+    }
+  }
+  ${CommunityDetailsFragmentDoc}
+`
+export const ManagerCreateCommunityDocument = gql`
+  mutation managerCreateCommunity($input: ManagerCreateCommunityInput!) {
+    created: managerCreateCommunity(input: $input) {
+      ...CommunityDetails
+    }
+  }
+  ${CommunityDetailsFragmentDoc}
+`
+export const ManagerUpdateCommunityDocument = gql`
+  mutation managerUpdateCommunity($communityId: String!, $input: ManagerUpdateCommunityInput!) {
+    updated: managerUpdateCommunity(communityId: $communityId, input: $input) {
+      ...CommunityDetails
+    }
+  }
+  ${CommunityDetailsFragmentDoc}
+`
+export const ManagerDeleteCommunityDocument = gql`
+  mutation managerDeleteCommunity($communityId: String!) {
+    deleted: managerDeleteCommunity(communityId: $communityId)
+  }
+`
+export const AdminFindManyCommunityDocument = gql`
+  query adminFindManyCommunity($input: AdminFindManyCommunityInput!) {
+    paging: adminFindManyCommunity(input: $input) {
+      data {
+        ...CommunityDetails
+      }
+      meta {
+        ...PagingMetaDetails
+      }
+    }
+  }
+  ${CommunityDetailsFragmentDoc}
+  ${PagingMetaDetailsFragmentDoc}
+`
+export const AdminGetCommunityMembersDocument = gql`
+  query adminGetCommunityMembers($communityId: String!) {
+    items: adminGetCommunityMembers(communityId: $communityId) {
+      ...CommunityMemberDetails
+    }
+  }
+  ${CommunityMemberDetailsFragmentDoc}
+`
+export const AdminFindOneCommunityDocument = gql`
+  query adminFindOneCommunity($communityId: String!) {
+    item: adminFindOneCommunity(communityId: $communityId) {
+      ...CommunityDetails
+    }
+  }
+  ${CommunityDetailsFragmentDoc}
+`
+export const AdminUpdateCommunityDocument = gql`
+  mutation adminUpdateCommunity($communityId: String!, $input: AdminUpdateCommunityInput!) {
+    updated: adminUpdateCommunity(communityId: $communityId, input: $input) {
+      ...CommunityDetails
+    }
+  }
+  ${CommunityDetailsFragmentDoc}
+`
+export const AdminDeleteCommunityDocument = gql`
+  mutation adminDeleteCommunity($communityId: String!) {
+    deleted: adminDeleteCommunity(communityId: $communityId)
+  }
+`
+export const AdminAddCommunityMemberDocument = gql`
+  mutation adminAddCommunityMember($communityId: String!, $userId: String!) {
+    added: adminAddCommunityMember(communityId: $communityId, userId: $userId)
+  }
+`
+export const AdminRemoveCommunityMemberDocument = gql`
+  mutation adminRemoveCommunityMember($communityId: String!, $userId: String!) {
+    removed: adminRemoveCommunityMember(communityId: $communityId, userId: $userId)
+  }
+`
+export const AdminToggleCommunityAdminDocument = gql`
+  mutation adminToggleCommunityAdmin($communityId: String!, $userId: String!) {
+    toggled: adminToggleCommunityAdmin(communityId: $communityId, userId: $userId)
+  }
+`
+export const ManagerAddCommunityMemberDocument = gql`
+  mutation managerAddCommunityMember($communityId: String!, $userId: String!) {
+    added: managerAddCommunityMember(communityId: $communityId, userId: $userId)
+  }
+`
+export const ManagerRemoveCommunityMemberDocument = gql`
+  mutation managerRemoveCommunityMember($communityId: String!, $userId: String!) {
+    removed: managerRemoveCommunityMember(communityId: $communityId, userId: $userId)
+  }
+`
+export const ManagerToggleCommunityAdminDocument = gql`
+  mutation managerToggleCommunityAdmin($communityId: String!, $userId: String!) {
+    toggled: managerToggleCommunityAdmin(communityId: $communityId, userId: $userId)
+  }
+`
 export const UptimeDocument = gql`
   query uptime {
     uptime
@@ -5179,9 +5333,9 @@ export const AdminGetProjectChannelsDocument = gql`
   }
   ${DiscordChannelDetailsFragmentDoc}
 `
-export const AdminGetTeamChannelsDocument = gql`
-  query adminGetTeamChannels($teamId: String!) {
-    items: adminGetTeamChannels(teamId: $teamId) {
+export const AdminGetCommunityChannelsDocument = gql`
+  query adminGetCommunityChannels($communityId: String!) {
+    items: adminGetCommunityChannels(communityId: $communityId) {
       ...DiscordChannelDetails
     }
   }
@@ -5197,9 +5351,9 @@ export const AdminCreateProjectChannelDocument = gql`
     created: adminCreateProjectChannel(serverId: $serverId, channelId: $channelId, projectId: $projectId)
   }
 `
-export const AdminCreateTeamChannelDocument = gql`
-  mutation adminCreateTeamChannel($serverId: String!, $channelId: String!, $teamId: String!) {
-    created: adminCreateTeamChannel(serverId: $serverId, channelId: $channelId, teamId: $teamId)
+export const AdminCreateCommunityChannelDocument = gql`
+  mutation adminCreateCommunityChannel($serverId: String!, $channelId: String!, $communityId: String!) {
+    created: adminCreateCommunityChannel(serverId: $serverId, channelId: $channelId, communityId: $communityId)
   }
 `
 export const AdminUpdateDiscordServerDocument = gql`
@@ -5212,9 +5366,9 @@ export const AdminDeleteProjectChannelDocument = gql`
     deleted: adminDeleteProjectChannel(channelId: $channelId, projectId: $projectId)
   }
 `
-export const AdminDeleteTeamChannelDocument = gql`
-  mutation adminDeleteTeamChannel($channelId: String!, $teamId: String!) {
-    deleted: adminDeleteTeamChannel(channelId: $channelId, teamId: $teamId)
+export const AdminDeleteCommunityChannelDocument = gql`
+  mutation adminDeleteCommunityChannel($channelId: String!, $communityId: String!) {
+    deleted: adminDeleteCommunityChannel(channelId: $channelId, communityId: $communityId)
   }
 `
 export const AdminLeaveDiscordServerDocument = gql`
@@ -5238,9 +5392,9 @@ export const UserGetProjectChannelsDocument = gql`
   }
   ${DiscordChannelDetailsFragmentDoc}
 `
-export const UserGetTeamChannelsDocument = gql`
-  query userGetTeamChannels($teamId: String!) {
-    items: userGetTeamChannels(teamId: $teamId) {
+export const UserGetCommunityChannelsDocument = gql`
+  query userGetCommunityChannels($communityId: String!) {
+    items: userGetCommunityChannels(communityId: $communityId) {
       ...DiscordChannelDetails
     }
   }
@@ -5632,160 +5786,6 @@ export const AdminDeleteReviewDocument = gql`
     deleted: adminDeleteReview(reviewId: $reviewId)
   }
 `
-export const UserFindManyTeamDocument = gql`
-  query userFindManyTeam($input: UserFindManyTeamInput!) {
-    paging: userFindManyTeam(input: $input) {
-      data {
-        ...TeamDetails
-      }
-      meta {
-        ...PagingMetaDetails
-      }
-    }
-  }
-  ${TeamDetailsFragmentDoc}
-  ${PagingMetaDetailsFragmentDoc}
-`
-export const UserFindOneTeamDocument = gql`
-  query userFindOneTeam($teamId: String!) {
-    item: userFindOneTeam(teamId: $teamId) {
-      ...TeamDetails
-    }
-  }
-  ${TeamDetailsFragmentDoc}
-`
-export const ManagerGetTeamMembersDocument = gql`
-  query managerGetTeamMembers($teamId: String!) {
-    items: managerGetTeamMembers(teamId: $teamId) {
-      ...TeamMemberDetails
-    }
-  }
-  ${TeamMemberDetailsFragmentDoc}
-`
-export const ManagerGetTeamMemberDocument = gql`
-  query managerGetTeamMember($teamId: String!) {
-    item: managerGetTeamMember(teamId: $teamId) {
-      ...TeamMemberDetails
-    }
-  }
-  ${TeamMemberDetailsFragmentDoc}
-`
-export const ManagerFindManyTeamDocument = gql`
-  query managerFindManyTeam($input: ManagerFindManyTeamInput!) {
-    paging: managerFindManyTeam(input: $input) {
-      data {
-        ...TeamDetails
-      }
-      meta {
-        ...PagingMetaDetails
-      }
-    }
-  }
-  ${TeamDetailsFragmentDoc}
-  ${PagingMetaDetailsFragmentDoc}
-`
-export const ManagerFindOneTeamDocument = gql`
-  query managerFindOneTeam($teamId: String!) {
-    item: managerFindOneTeam(teamId: $teamId) {
-      ...TeamDetails
-    }
-  }
-  ${TeamDetailsFragmentDoc}
-`
-export const ManagerCreateTeamDocument = gql`
-  mutation managerCreateTeam($input: ManagerCreateTeamInput!) {
-    created: managerCreateTeam(input: $input) {
-      ...TeamDetails
-    }
-  }
-  ${TeamDetailsFragmentDoc}
-`
-export const ManagerUpdateTeamDocument = gql`
-  mutation managerUpdateTeam($teamId: String!, $input: ManagerUpdateTeamInput!) {
-    updated: managerUpdateTeam(teamId: $teamId, input: $input) {
-      ...TeamDetails
-    }
-  }
-  ${TeamDetailsFragmentDoc}
-`
-export const ManagerDeleteTeamDocument = gql`
-  mutation managerDeleteTeam($teamId: String!) {
-    deleted: managerDeleteTeam(teamId: $teamId)
-  }
-`
-export const AdminFindManyTeamDocument = gql`
-  query adminFindManyTeam($input: AdminFindManyTeamInput!) {
-    paging: adminFindManyTeam(input: $input) {
-      data {
-        ...TeamDetails
-      }
-      meta {
-        ...PagingMetaDetails
-      }
-    }
-  }
-  ${TeamDetailsFragmentDoc}
-  ${PagingMetaDetailsFragmentDoc}
-`
-export const AdminGetTeamMembersDocument = gql`
-  query adminGetTeamMembers($teamId: String!) {
-    items: adminGetTeamMembers(teamId: $teamId) {
-      ...TeamMemberDetails
-    }
-  }
-  ${TeamMemberDetailsFragmentDoc}
-`
-export const AdminFindOneTeamDocument = gql`
-  query adminFindOneTeam($teamId: String!) {
-    item: adminFindOneTeam(teamId: $teamId) {
-      ...TeamDetails
-    }
-  }
-  ${TeamDetailsFragmentDoc}
-`
-export const AdminUpdateTeamDocument = gql`
-  mutation adminUpdateTeam($teamId: String!, $input: AdminUpdateTeamInput!) {
-    updated: adminUpdateTeam(teamId: $teamId, input: $input) {
-      ...TeamDetails
-    }
-  }
-  ${TeamDetailsFragmentDoc}
-`
-export const AdminDeleteTeamDocument = gql`
-  mutation adminDeleteTeam($teamId: String!) {
-    deleted: adminDeleteTeam(teamId: $teamId)
-  }
-`
-export const AdminAddTeamMemberDocument = gql`
-  mutation adminAddTeamMember($teamId: String!, $userId: String!) {
-    added: adminAddTeamMember(teamId: $teamId, userId: $userId)
-  }
-`
-export const AdminRemoveTeamMemberDocument = gql`
-  mutation adminRemoveTeamMember($teamId: String!, $userId: String!) {
-    removed: adminRemoveTeamMember(teamId: $teamId, userId: $userId)
-  }
-`
-export const AdminToggleTeamAdminDocument = gql`
-  mutation adminToggleTeamAdmin($teamId: String!, $userId: String!) {
-    toggled: adminToggleTeamAdmin(teamId: $teamId, userId: $userId)
-  }
-`
-export const ManagerAddTeamMemberDocument = gql`
-  mutation managerAddTeamMember($teamId: String!, $userId: String!) {
-    added: managerAddTeamMember(teamId: $teamId, userId: $userId)
-  }
-`
-export const ManagerRemoveTeamMemberDocument = gql`
-  mutation managerRemoveTeamMember($teamId: String!, $userId: String!) {
-    removed: managerRemoveTeamMember(teamId: $teamId, userId: $userId)
-  }
-`
-export const ManagerToggleTeamAdminDocument = gql`
-  mutation managerToggleTeamAdmin($teamId: String!, $userId: String!) {
-    toggled: managerToggleTeamAdmin(teamId: $teamId, userId: $userId)
-  }
-`
 export const AdminCreateUserDocument = gql`
   mutation adminCreateUser($input: AdminCreateUserInput!) {
     created: adminCreateUser(input: $input) {
@@ -5883,6 +5883,26 @@ const UserDeleteCommentDocumentString = print(UserDeleteCommentDocument)
 const AdminFindManyCommentDocumentString = print(AdminFindManyCommentDocument)
 const AdminUpdateCommentDocumentString = print(AdminUpdateCommentDocument)
 const AdminDeleteCommentDocumentString = print(AdminDeleteCommentDocument)
+const UserFindManyCommunityDocumentString = print(UserFindManyCommunityDocument)
+const UserFindOneCommunityDocumentString = print(UserFindOneCommunityDocument)
+const ManagerGetCommunityMembersDocumentString = print(ManagerGetCommunityMembersDocument)
+const ManagerGetCommunityMemberDocumentString = print(ManagerGetCommunityMemberDocument)
+const ManagerFindManyCommunityDocumentString = print(ManagerFindManyCommunityDocument)
+const ManagerFindOneCommunityDocumentString = print(ManagerFindOneCommunityDocument)
+const ManagerCreateCommunityDocumentString = print(ManagerCreateCommunityDocument)
+const ManagerUpdateCommunityDocumentString = print(ManagerUpdateCommunityDocument)
+const ManagerDeleteCommunityDocumentString = print(ManagerDeleteCommunityDocument)
+const AdminFindManyCommunityDocumentString = print(AdminFindManyCommunityDocument)
+const AdminGetCommunityMembersDocumentString = print(AdminGetCommunityMembersDocument)
+const AdminFindOneCommunityDocumentString = print(AdminFindOneCommunityDocument)
+const AdminUpdateCommunityDocumentString = print(AdminUpdateCommunityDocument)
+const AdminDeleteCommunityDocumentString = print(AdminDeleteCommunityDocument)
+const AdminAddCommunityMemberDocumentString = print(AdminAddCommunityMemberDocument)
+const AdminRemoveCommunityMemberDocumentString = print(AdminRemoveCommunityMemberDocument)
+const AdminToggleCommunityAdminDocumentString = print(AdminToggleCommunityAdminDocument)
+const ManagerAddCommunityMemberDocumentString = print(ManagerAddCommunityMemberDocument)
+const ManagerRemoveCommunityMemberDocumentString = print(ManagerRemoveCommunityMemberDocument)
+const ManagerToggleCommunityAdminDocumentString = print(ManagerToggleCommunityAdminDocument)
 const UptimeDocumentString = print(UptimeDocument)
 const AppConfigDocumentString = print(AppConfigDocument)
 const AdminGetDiscordBotDocumentString = print(AdminGetDiscordBotDocument)
@@ -5890,17 +5910,17 @@ const AdminGetDiscordServersDocumentString = print(AdminGetDiscordServersDocumen
 const AdminGetDiscordRolesDocumentString = print(AdminGetDiscordRolesDocument)
 const AdminGetDiscordChannelsDocumentString = print(AdminGetDiscordChannelsDocument)
 const AdminGetProjectChannelsDocumentString = print(AdminGetProjectChannelsDocument)
-const AdminGetTeamChannelsDocumentString = print(AdminGetTeamChannelsDocument)
+const AdminGetCommunityChannelsDocumentString = print(AdminGetCommunityChannelsDocument)
 const AdminPingDiscordChannelDocumentString = print(AdminPingDiscordChannelDocument)
 const AdminCreateProjectChannelDocumentString = print(AdminCreateProjectChannelDocument)
-const AdminCreateTeamChannelDocumentString = print(AdminCreateTeamChannelDocument)
+const AdminCreateCommunityChannelDocumentString = print(AdminCreateCommunityChannelDocument)
 const AdminUpdateDiscordServerDocumentString = print(AdminUpdateDiscordServerDocument)
 const AdminDeleteProjectChannelDocumentString = print(AdminDeleteProjectChannelDocument)
-const AdminDeleteTeamChannelDocumentString = print(AdminDeleteTeamChannelDocument)
+const AdminDeleteCommunityChannelDocumentString = print(AdminDeleteCommunityChannelDocument)
 const AdminLeaveDiscordServerDocumentString = print(AdminLeaveDiscordServerDocument)
 const UserGetDiscordServersDocumentString = print(UserGetDiscordServersDocument)
 const UserGetProjectChannelsDocumentString = print(UserGetProjectChannelsDocument)
-const UserGetTeamChannelsDocumentString = print(UserGetTeamChannelsDocument)
+const UserGetCommunityChannelsDocumentString = print(UserGetCommunityChannelsDocument)
 const AdminFindManyIdentityDocumentString = print(AdminFindManyIdentityDocument)
 const AdminCreateIdentityDocumentString = print(AdminCreateIdentityDocument)
 const AdminDeleteIdentityDocumentString = print(AdminDeleteIdentityDocument)
@@ -5951,26 +5971,6 @@ const ReviewerDeleteReviewDocumentString = print(ReviewerDeleteReviewDocument)
 const AdminFindManyReviewDocumentString = print(AdminFindManyReviewDocument)
 const AdminFindOneReviewDocumentString = print(AdminFindOneReviewDocument)
 const AdminDeleteReviewDocumentString = print(AdminDeleteReviewDocument)
-const UserFindManyTeamDocumentString = print(UserFindManyTeamDocument)
-const UserFindOneTeamDocumentString = print(UserFindOneTeamDocument)
-const ManagerGetTeamMembersDocumentString = print(ManagerGetTeamMembersDocument)
-const ManagerGetTeamMemberDocumentString = print(ManagerGetTeamMemberDocument)
-const ManagerFindManyTeamDocumentString = print(ManagerFindManyTeamDocument)
-const ManagerFindOneTeamDocumentString = print(ManagerFindOneTeamDocument)
-const ManagerCreateTeamDocumentString = print(ManagerCreateTeamDocument)
-const ManagerUpdateTeamDocumentString = print(ManagerUpdateTeamDocument)
-const ManagerDeleteTeamDocumentString = print(ManagerDeleteTeamDocument)
-const AdminFindManyTeamDocumentString = print(AdminFindManyTeamDocument)
-const AdminGetTeamMembersDocumentString = print(AdminGetTeamMembersDocument)
-const AdminFindOneTeamDocumentString = print(AdminFindOneTeamDocument)
-const AdminUpdateTeamDocumentString = print(AdminUpdateTeamDocument)
-const AdminDeleteTeamDocumentString = print(AdminDeleteTeamDocument)
-const AdminAddTeamMemberDocumentString = print(AdminAddTeamMemberDocument)
-const AdminRemoveTeamMemberDocumentString = print(AdminRemoveTeamMemberDocument)
-const AdminToggleTeamAdminDocumentString = print(AdminToggleTeamAdminDocument)
-const ManagerAddTeamMemberDocumentString = print(ManagerAddTeamMemberDocument)
-const ManagerRemoveTeamMemberDocumentString = print(ManagerRemoveTeamMemberDocument)
-const ManagerToggleTeamAdminDocumentString = print(ManagerToggleTeamAdminDocument)
 const AdminCreateUserDocumentString = print(AdminCreateUserDocument)
 const AdminDeleteUserDocumentString = print(AdminDeleteUserDocument)
 const AdminFindManyUserDocumentString = print(AdminFindManyUserDocument)
@@ -6191,6 +6191,427 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
+    userFindManyCommunity(
+      variables: UserFindManyCommunityQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserFindManyCommunityQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserFindManyCommunityQuery>(UserFindManyCommunityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userFindManyCommunity',
+        'query',
+        variables,
+      )
+    },
+    userFindOneCommunity(
+      variables: UserFindOneCommunityQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserFindOneCommunityQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserFindOneCommunityQuery>(UserFindOneCommunityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userFindOneCommunity',
+        'query',
+        variables,
+      )
+    },
+    managerGetCommunityMembers(
+      variables: ManagerGetCommunityMembersQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: ManagerGetCommunityMembersQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<ManagerGetCommunityMembersQuery>(ManagerGetCommunityMembersDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'managerGetCommunityMembers',
+        'query',
+        variables,
+      )
+    },
+    managerGetCommunityMember(
+      variables: ManagerGetCommunityMemberQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: ManagerGetCommunityMemberQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<ManagerGetCommunityMemberQuery>(ManagerGetCommunityMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'managerGetCommunityMember',
+        'query',
+        variables,
+      )
+    },
+    managerFindManyCommunity(
+      variables: ManagerFindManyCommunityQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: ManagerFindManyCommunityQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<ManagerFindManyCommunityQuery>(ManagerFindManyCommunityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'managerFindManyCommunity',
+        'query',
+        variables,
+      )
+    },
+    managerFindOneCommunity(
+      variables: ManagerFindOneCommunityQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: ManagerFindOneCommunityQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<ManagerFindOneCommunityQuery>(ManagerFindOneCommunityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'managerFindOneCommunity',
+        'query',
+        variables,
+      )
+    },
+    managerCreateCommunity(
+      variables: ManagerCreateCommunityMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: ManagerCreateCommunityMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<ManagerCreateCommunityMutation>(ManagerCreateCommunityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'managerCreateCommunity',
+        'mutation',
+        variables,
+      )
+    },
+    managerUpdateCommunity(
+      variables: ManagerUpdateCommunityMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: ManagerUpdateCommunityMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<ManagerUpdateCommunityMutation>(ManagerUpdateCommunityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'managerUpdateCommunity',
+        'mutation',
+        variables,
+      )
+    },
+    managerDeleteCommunity(
+      variables: ManagerDeleteCommunityMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: ManagerDeleteCommunityMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<ManagerDeleteCommunityMutation>(ManagerDeleteCommunityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'managerDeleteCommunity',
+        'mutation',
+        variables,
+      )
+    },
+    adminFindManyCommunity(
+      variables: AdminFindManyCommunityQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminFindManyCommunityQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminFindManyCommunityQuery>(AdminFindManyCommunityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminFindManyCommunity',
+        'query',
+        variables,
+      )
+    },
+    adminGetCommunityMembers(
+      variables: AdminGetCommunityMembersQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminGetCommunityMembersQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminGetCommunityMembersQuery>(AdminGetCommunityMembersDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminGetCommunityMembers',
+        'query',
+        variables,
+      )
+    },
+    adminFindOneCommunity(
+      variables: AdminFindOneCommunityQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminFindOneCommunityQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminFindOneCommunityQuery>(AdminFindOneCommunityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminFindOneCommunity',
+        'query',
+        variables,
+      )
+    },
+    adminUpdateCommunity(
+      variables: AdminUpdateCommunityMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminUpdateCommunityMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminUpdateCommunityMutation>(AdminUpdateCommunityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminUpdateCommunity',
+        'mutation',
+        variables,
+      )
+    },
+    adminDeleteCommunity(
+      variables: AdminDeleteCommunityMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminDeleteCommunityMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminDeleteCommunityMutation>(AdminDeleteCommunityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminDeleteCommunity',
+        'mutation',
+        variables,
+      )
+    },
+    adminAddCommunityMember(
+      variables: AdminAddCommunityMemberMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminAddCommunityMemberMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminAddCommunityMemberMutation>(AdminAddCommunityMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminAddCommunityMember',
+        'mutation',
+        variables,
+      )
+    },
+    adminRemoveCommunityMember(
+      variables: AdminRemoveCommunityMemberMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminRemoveCommunityMemberMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminRemoveCommunityMemberMutation>(AdminRemoveCommunityMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminRemoveCommunityMember',
+        'mutation',
+        variables,
+      )
+    },
+    adminToggleCommunityAdmin(
+      variables: AdminToggleCommunityAdminMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminToggleCommunityAdminMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminToggleCommunityAdminMutation>(AdminToggleCommunityAdminDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminToggleCommunityAdmin',
+        'mutation',
+        variables,
+      )
+    },
+    managerAddCommunityMember(
+      variables: ManagerAddCommunityMemberMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: ManagerAddCommunityMemberMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<ManagerAddCommunityMemberMutation>(ManagerAddCommunityMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'managerAddCommunityMember',
+        'mutation',
+        variables,
+      )
+    },
+    managerRemoveCommunityMember(
+      variables: ManagerRemoveCommunityMemberMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: ManagerRemoveCommunityMemberMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<ManagerRemoveCommunityMemberMutation>(
+            ManagerRemoveCommunityMemberDocumentString,
+            variables,
+            { ...requestHeaders, ...wrappedRequestHeaders },
+          ),
+        'managerRemoveCommunityMember',
+        'mutation',
+        variables,
+      )
+    },
+    managerToggleCommunityAdmin(
+      variables: ManagerToggleCommunityAdminMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: ManagerToggleCommunityAdminMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<ManagerToggleCommunityAdminMutation>(ManagerToggleCommunityAdminDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'managerToggleCommunityAdmin',
+        'mutation',
+        variables,
+      )
+    },
     uptime(
       variables?: UptimeQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
@@ -6326,11 +6747,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
-    adminGetTeamChannels(
-      variables: AdminGetTeamChannelsQueryVariables,
+    adminGetCommunityChannels(
+      variables: AdminGetCommunityChannelsQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: AdminGetTeamChannelsQuery
+      data: AdminGetCommunityChannelsQuery
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -6338,11 +6759,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<AdminGetTeamChannelsQuery>(AdminGetTeamChannelsDocumentString, variables, {
+          client.rawRequest<AdminGetCommunityChannelsQuery>(AdminGetCommunityChannelsDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'adminGetTeamChannels',
+        'adminGetCommunityChannels',
         'query',
         variables,
       )
@@ -6389,11 +6810,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
-    adminCreateTeamChannel(
-      variables: AdminCreateTeamChannelMutationVariables,
+    adminCreateCommunityChannel(
+      variables: AdminCreateCommunityChannelMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: AdminCreateTeamChannelMutation
+      data: AdminCreateCommunityChannelMutation
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -6401,11 +6822,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<AdminCreateTeamChannelMutation>(AdminCreateTeamChannelDocumentString, variables, {
+          client.rawRequest<AdminCreateCommunityChannelMutation>(AdminCreateCommunityChannelDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'adminCreateTeamChannel',
+        'adminCreateCommunityChannel',
         'mutation',
         variables,
       )
@@ -6452,11 +6873,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
-    adminDeleteTeamChannel(
-      variables: AdminDeleteTeamChannelMutationVariables,
+    adminDeleteCommunityChannel(
+      variables: AdminDeleteCommunityChannelMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: AdminDeleteTeamChannelMutation
+      data: AdminDeleteCommunityChannelMutation
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -6464,11 +6885,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<AdminDeleteTeamChannelMutation>(AdminDeleteTeamChannelDocumentString, variables, {
+          client.rawRequest<AdminDeleteCommunityChannelMutation>(AdminDeleteCommunityChannelDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'adminDeleteTeamChannel',
+        'adminDeleteCommunityChannel',
         'mutation',
         variables,
       )
@@ -6536,11 +6957,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
-    userGetTeamChannels(
-      variables: UserGetTeamChannelsQueryVariables,
+    userGetCommunityChannels(
+      variables: UserGetCommunityChannelsQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: UserGetTeamChannelsQuery
+      data: UserGetCommunityChannelsQuery
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -6548,11 +6969,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<UserGetTeamChannelsQuery>(UserGetTeamChannelsDocumentString, variables, {
+          client.rawRequest<UserGetCommunityChannelsQuery>(UserGetCommunityChannelsDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'userGetTeamChannels',
+        'userGetCommunityChannels',
         'query',
         variables,
       )
@@ -7611,426 +8032,6 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
-    userFindManyTeam(
-      variables: UserFindManyTeamQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: UserFindManyTeamQuery
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<UserFindManyTeamQuery>(UserFindManyTeamDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'userFindManyTeam',
-        'query',
-        variables,
-      )
-    },
-    userFindOneTeam(
-      variables: UserFindOneTeamQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: UserFindOneTeamQuery
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<UserFindOneTeamQuery>(UserFindOneTeamDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'userFindOneTeam',
-        'query',
-        variables,
-      )
-    },
-    managerGetTeamMembers(
-      variables: ManagerGetTeamMembersQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: ManagerGetTeamMembersQuery
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<ManagerGetTeamMembersQuery>(ManagerGetTeamMembersDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'managerGetTeamMembers',
-        'query',
-        variables,
-      )
-    },
-    managerGetTeamMember(
-      variables: ManagerGetTeamMemberQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: ManagerGetTeamMemberQuery
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<ManagerGetTeamMemberQuery>(ManagerGetTeamMemberDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'managerGetTeamMember',
-        'query',
-        variables,
-      )
-    },
-    managerFindManyTeam(
-      variables: ManagerFindManyTeamQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: ManagerFindManyTeamQuery
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<ManagerFindManyTeamQuery>(ManagerFindManyTeamDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'managerFindManyTeam',
-        'query',
-        variables,
-      )
-    },
-    managerFindOneTeam(
-      variables: ManagerFindOneTeamQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: ManagerFindOneTeamQuery
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<ManagerFindOneTeamQuery>(ManagerFindOneTeamDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'managerFindOneTeam',
-        'query',
-        variables,
-      )
-    },
-    managerCreateTeam(
-      variables: ManagerCreateTeamMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: ManagerCreateTeamMutation
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<ManagerCreateTeamMutation>(ManagerCreateTeamDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'managerCreateTeam',
-        'mutation',
-        variables,
-      )
-    },
-    managerUpdateTeam(
-      variables: ManagerUpdateTeamMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: ManagerUpdateTeamMutation
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<ManagerUpdateTeamMutation>(ManagerUpdateTeamDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'managerUpdateTeam',
-        'mutation',
-        variables,
-      )
-    },
-    managerDeleteTeam(
-      variables: ManagerDeleteTeamMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: ManagerDeleteTeamMutation
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<ManagerDeleteTeamMutation>(ManagerDeleteTeamDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'managerDeleteTeam',
-        'mutation',
-        variables,
-      )
-    },
-    adminFindManyTeam(
-      variables: AdminFindManyTeamQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: AdminFindManyTeamQuery
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<AdminFindManyTeamQuery>(AdminFindManyTeamDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'adminFindManyTeam',
-        'query',
-        variables,
-      )
-    },
-    adminGetTeamMembers(
-      variables: AdminGetTeamMembersQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: AdminGetTeamMembersQuery
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<AdminGetTeamMembersQuery>(AdminGetTeamMembersDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'adminGetTeamMembers',
-        'query',
-        variables,
-      )
-    },
-    adminFindOneTeam(
-      variables: AdminFindOneTeamQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: AdminFindOneTeamQuery
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<AdminFindOneTeamQuery>(AdminFindOneTeamDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'adminFindOneTeam',
-        'query',
-        variables,
-      )
-    },
-    adminUpdateTeam(
-      variables: AdminUpdateTeamMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: AdminUpdateTeamMutation
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<AdminUpdateTeamMutation>(AdminUpdateTeamDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'adminUpdateTeam',
-        'mutation',
-        variables,
-      )
-    },
-    adminDeleteTeam(
-      variables: AdminDeleteTeamMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: AdminDeleteTeamMutation
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<AdminDeleteTeamMutation>(AdminDeleteTeamDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'adminDeleteTeam',
-        'mutation',
-        variables,
-      )
-    },
-    adminAddTeamMember(
-      variables: AdminAddTeamMemberMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: AdminAddTeamMemberMutation
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<AdminAddTeamMemberMutation>(AdminAddTeamMemberDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'adminAddTeamMember',
-        'mutation',
-        variables,
-      )
-    },
-    adminRemoveTeamMember(
-      variables: AdminRemoveTeamMemberMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: AdminRemoveTeamMemberMutation
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<AdminRemoveTeamMemberMutation>(AdminRemoveTeamMemberDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'adminRemoveTeamMember',
-        'mutation',
-        variables,
-      )
-    },
-    adminToggleTeamAdmin(
-      variables: AdminToggleTeamAdminMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: AdminToggleTeamAdminMutation
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<AdminToggleTeamAdminMutation>(AdminToggleTeamAdminDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'adminToggleTeamAdmin',
-        'mutation',
-        variables,
-      )
-    },
-    managerAddTeamMember(
-      variables: ManagerAddTeamMemberMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: ManagerAddTeamMemberMutation
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<ManagerAddTeamMemberMutation>(ManagerAddTeamMemberDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'managerAddTeamMember',
-        'mutation',
-        variables,
-      )
-    },
-    managerRemoveTeamMember(
-      variables: ManagerRemoveTeamMemberMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: ManagerRemoveTeamMemberMutation
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<ManagerRemoveTeamMemberMutation>(ManagerRemoveTeamMemberDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'managerRemoveTeamMember',
-        'mutation',
-        variables,
-      )
-    },
-    managerToggleTeamAdmin(
-      variables: ManagerToggleTeamAdminMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: ManagerToggleTeamAdminMutation
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<ManagerToggleTeamAdminMutation>(ManagerToggleTeamAdminDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'managerToggleTeamAdmin',
-        'mutation',
-        variables,
-      )
-    },
     adminCreateUser(
       variables: AdminCreateUserMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
@@ -8245,6 +8246,14 @@ export function AdminFindManyCommentInputSchema(): z.ZodObject<Properties<AdminF
   })
 }
 
+export function AdminFindManyCommunityInputSchema(): z.ZodObject<Properties<AdminFindManyCommunityInput>> {
+  return z.object({
+    limit: z.number().nullish(),
+    page: z.number().nullish(),
+    search: z.string().nullish(),
+  })
+}
+
 export function AdminFindManyIdentityInputSchema(): z.ZodObject<Properties<AdminFindManyIdentityInput>> {
   return z.object({
     ownerId: z.string().nullish(),
@@ -8254,10 +8263,10 @@ export function AdminFindManyIdentityInputSchema(): z.ZodObject<Properties<Admin
 
 export function AdminFindManyProjectInputSchema(): z.ZodObject<Properties<AdminFindManyProjectInput>> {
   return z.object({
+    communityId: z.string().nullish(),
     limit: z.number().nullish(),
     page: z.number().nullish(),
     search: z.string().nullish(),
-    teamId: z.string().nullish(),
   })
 }
 
@@ -8273,14 +8282,6 @@ export function AdminFindManyReviewInputSchema(): z.ZodObject<Properties<AdminFi
     limit: z.number().nullish(),
     page: z.number().nullish(),
     projectId: z.string(),
-    search: z.string().nullish(),
-  })
-}
-
-export function AdminFindManyTeamInputSchema(): z.ZodObject<Properties<AdminFindManyTeamInput>> {
-  return z.object({
-    limit: z.number().nullish(),
-    page: z.number().nullish(),
     search: z.string().nullish(),
   })
 }
@@ -8301,12 +8302,20 @@ export function AdminUpdateCommentInputSchema(): z.ZodObject<Properties<AdminUpd
   })
 }
 
+export function AdminUpdateCommunityInputSchema(): z.ZodObject<Properties<AdminUpdateCommunityInput>> {
+  return z.object({
+    avatarUrl: z.string().nullish(),
+    homeServerId: z.string().nullish(),
+    name: z.string().nullish(),
+  })
+}
+
 export function AdminUpdateDiscordServerInputSchema(): z.ZodObject<Properties<AdminUpdateDiscordServerInput>> {
   return z.object({
+    communityCategoryId: z.string().nullish(),
     createChannels: z.boolean().nullish(),
     logChannelId: z.string().nullish(),
     projectCategoryId: z.string().nullish(),
-    teamCategoryId: z.string().nullish(),
   })
 }
 
@@ -8316,6 +8325,7 @@ export function AdminUpdateProjectInputSchema(): z.ZodObject<Properties<AdminUpd
     amountReferralUsd: z.number().nullish(),
     amountTotalUsd: z.number().nullish(),
     avatarUrl: z.string().nullish(),
+    communityId: z.string().nullish(),
     duration: z.number().nullish(),
     instructions: z.string().nullish(),
     linkDiscord: z.string().nullish(),
@@ -8327,7 +8337,6 @@ export function AdminUpdateProjectInputSchema(): z.ZodObject<Properties<AdminUpd
     startDate: definedNonNullAnySchema.nullish(),
     status: ProjectStatusSchema.nullish(),
     tags: z.array(z.string()).nullish(),
-    teamId: z.string().nullish(),
   })
 }
 
@@ -8335,14 +8344,6 @@ export function AdminUpdateRatingInputSchema(): z.ZodObject<Properties<AdminUpda
   return z.object({
     content: z.string().nullish(),
     rating: z.number(),
-  })
-}
-
-export function AdminUpdateTeamInputSchema(): z.ZodObject<Properties<AdminUpdateTeamInput>> {
-  return z.object({
-    avatarUrl: z.string().nullish(),
-    homeServerId: z.string().nullish(),
-    name: z.string().nullish(),
   })
 }
 
@@ -8371,35 +8372,43 @@ export function LoginInputSchema(): z.ZodObject<Properties<LoginInput>> {
   })
 }
 
-export function ManagerCreateProjectInputSchema(): z.ZodObject<Properties<ManagerCreateProjectInput>> {
+export function ManagerCreateCommunityInputSchema(): z.ZodObject<Properties<ManagerCreateCommunityInput>> {
   return z.object({
-    duration: z.number().nullish(),
     name: z.string(),
-    startDate: definedNonNullAnySchema.nullish(),
-    teamId: z.string(),
   })
 }
 
-export function ManagerCreateTeamInputSchema(): z.ZodObject<Properties<ManagerCreateTeamInput>> {
+export function ManagerCreateProjectInputSchema(): z.ZodObject<Properties<ManagerCreateProjectInput>> {
   return z.object({
+    communityId: z.string(),
+    duration: z.number().nullish(),
     name: z.string(),
+    startDate: definedNonNullAnySchema.nullish(),
+  })
+}
+
+export function ManagerFindManyCommunityInputSchema(): z.ZodObject<Properties<ManagerFindManyCommunityInput>> {
+  return z.object({
+    limit: z.number().nullish(),
+    page: z.number().nullish(),
+    search: z.string().nullish(),
   })
 }
 
 export function ManagerFindManyProjectInputSchema(): z.ZodObject<Properties<ManagerFindManyProjectInput>> {
   return z.object({
+    communityId: z.string().nullish(),
     limit: z.number().nullish(),
     page: z.number().nullish(),
     search: z.string().nullish(),
-    teamId: z.string().nullish(),
   })
 }
 
-export function ManagerFindManyTeamInputSchema(): z.ZodObject<Properties<ManagerFindManyTeamInput>> {
+export function ManagerUpdateCommunityInputSchema(): z.ZodObject<Properties<ManagerUpdateCommunityInput>> {
   return z.object({
-    limit: z.number().nullish(),
-    page: z.number().nullish(),
-    search: z.string().nullish(),
+    avatarUrl: z.string().nullish(),
+    homeServerId: z.string().nullish(),
+    name: z.string().nullish(),
   })
 }
 
@@ -8424,14 +8433,6 @@ export function ManagerUpdateProjectInputSchema(): z.ZodObject<Properties<Manage
   })
 }
 
-export function ManagerUpdateTeamInputSchema(): z.ZodObject<Properties<ManagerUpdateTeamInput>> {
-  return z.object({
-    avatarUrl: z.string().nullish(),
-    homeServerId: z.string().nullish(),
-    name: z.string().nullish(),
-  })
-}
-
 export function RegisterInputSchema(): z.ZodObject<Properties<RegisterInput>> {
   return z.object({
     password: z.string(),
@@ -8448,11 +8449,11 @@ export function RequestIdentityChallengeInputSchema(): z.ZodObject<Properties<Re
 
 export function ReviewerFindManyProjectInputSchema(): z.ZodObject<Properties<ReviewerFindManyProjectInput>> {
   return z.object({
+    communityId: z.string().nullish(),
     limit: z.number().nullish(),
     page: z.number().nullish(),
     search: z.string().nullish(),
     status: ProjectStatusSchema.nullish(),
-    teamId: z.string().nullish(),
   })
 }
 
@@ -8497,6 +8498,14 @@ export function UserFindManyCommentInputSchema(): z.ZodObject<Properties<UserFin
   })
 }
 
+export function UserFindManyCommunityInputSchema(): z.ZodObject<Properties<UserFindManyCommunityInput>> {
+  return z.object({
+    limit: z.number().nullish(),
+    page: z.number().nullish(),
+    search: z.string().nullish(),
+  })
+}
+
 export function UserFindManyIdentityInputSchema(): z.ZodObject<Properties<UserFindManyIdentityInput>> {
   return z.object({
     username: z.string(),
@@ -8505,14 +8514,6 @@ export function UserFindManyIdentityInputSchema(): z.ZodObject<Properties<UserFi
 
 export function UserFindManyRatingInputSchema(): z.ZodObject<Properties<UserFindManyRatingInput>> {
   return z.object({
-    search: z.string().nullish(),
-  })
-}
-
-export function UserFindManyTeamInputSchema(): z.ZodObject<Properties<UserFindManyTeamInput>> {
-  return z.object({
-    limit: z.number().nullish(),
-    page: z.number().nullish(),
     search: z.string().nullish(),
   })
 }

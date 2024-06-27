@@ -1,5 +1,5 @@
 import { ApiCoreService, createIdentityProviderCache } from '@deanslist-platform/api-core-data-access'
-import { ApiTeamService, createTeamEmbed } from '@deanslist-platform/api-team-data-access'
+import { ApiCommunityService, createCommunityEmbed } from '@deanslist-platform/api-community-data-access'
 import { Injectable } from '@nestjs/common'
 import { IdentityProvider } from '@prisma/client'
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js'
@@ -19,7 +19,7 @@ export class ApiDiscordBotCommandService {
     provider: IdentityProvider.Discord,
   })
 
-  constructor(private readonly core: ApiCoreService, private readonly team: ApiTeamService) {}
+  constructor(private readonly core: ApiCoreService, private readonly community: ApiCommunityService) {}
 
   commands(): {
     data: SlashCommandBuilder
@@ -44,28 +44,28 @@ export class ApiDiscordBotCommandService {
 
           const found = await this.core.data.discordChannel.findUnique({
             where: { id: channel },
-            include: { projects: true, teams: { include: { members: true, projects: true } } },
+            include: { projects: true, communities: { include: { members: true, projects: true } } },
           })
           if (!found) {
             await interaction.reply({ ephemeral: true, content: `Channel <#${channel}> is not configured` })
             return
           }
 
-          const hasTeam = found.teams.length > 0
+          const hasCommunity = found.communities.length > 0
           const hasProject = found.projects.length > 0
 
-          if (!hasTeam && !hasProject) {
+          if (!hasCommunity && !hasProject) {
             await interaction.reply({
               ephemeral: true,
-              content: `Channel <#${channel}> is not connected to a team or project`,
+              content: `Channel <#${channel}> is not connected to a community or project`,
             })
             return
           }
-          if (hasTeam && found.teams.length) {
+          if (hasCommunity && found.communities.length) {
             await interaction.reply({
               ephemeral: true,
-              content: `Channel <#${channel}> is connected to team <#${found.teams[0].name}>`,
-              embeds: [createTeamEmbed(this.baseUrl, found.teams[0])],
+              content: `Channel <#${channel}> is connected to community <#${found.communities[0].name}>`,
+              embeds: [createCommunityEmbed(this.baseUrl, found.communities[0])],
             })
             return
           }
@@ -93,14 +93,17 @@ export class ApiDiscordBotCommandService {
         },
       },
       {
-        data: new SlashCommandBuilder().setName('teams').setDescription('Get a list of teams'),
+        data: new SlashCommandBuilder().setName('communities').setDescription('Get a list of communities'),
         execute: async (interaction) => {
           const identity = await this.ensureUserIdentity(interaction)
           if (!identity) {
             return
           }
-          const teams = await this.team.data.getTeamsForUser(identity.owner.id)
-          await interaction.reply({ ephemeral: true, embeds: teams.map((team) => createTeamEmbed(this.baseUrl, team)) })
+          const communities = await this.community.data.getCommunitiesForUser(identity.owner.id)
+          await interaction.reply({
+            ephemeral: true,
+            embeds: communities.map((community) => createCommunityEmbed(this.baseUrl, community)),
+          })
         },
       },
     ]

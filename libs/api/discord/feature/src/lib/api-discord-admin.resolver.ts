@@ -33,8 +33,8 @@ export class ApiDiscordAdminResolver {
   }
 
   @Query(() => [DiscordChannel])
-  adminGetTeamChannels(@Args('teamId') teamId: string) {
-    return this.service.channel.getTeamChannels(teamId)
+  adminGetCommunityChannels(@Args('communityId') communityId: string) {
+    return this.service.channel.getCommunityChannels(communityId)
   }
 
   @Query(() => [DiscordRole])
@@ -76,16 +76,16 @@ export class ApiDiscordAdminResolver {
   }
 
   @Mutation(() => Boolean)
-  adminCreateTeamChannel(
-    @Args('teamId') teamId: string,
+  adminCreateCommunityChannel(
+    @Args('communityId') communityId: string,
     @Args('serverId') serverId: string,
     @Args('channelId') channelId: string,
   ) {
-    return this.service.channel.createTeamChannel({ teamId, channelId, serverId })
+    return this.service.channel.createCommunityChannel({ communityId, channelId, serverId })
   }
 
   @Mutation(() => Boolean)
-  adminDeleteTeamChannel(@Args('teamId') teamId: string, @Args('channelId') channelId: string) {
-    return this.service.channel.deleteTeamChannel({ teamId, channelId })
+  adminDeleteCommunityChannel(@Args('communityId') communityId: string, @Args('channelId') channelId: string) {
+    return this.service.channel.deleteCommunityChannel({ communityId, channelId })
   }
 }

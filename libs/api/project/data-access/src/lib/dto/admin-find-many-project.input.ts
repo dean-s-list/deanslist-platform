@@ -4,7 +4,7 @@ import { Field, InputType } from '@nestjs/graphql'
 @InputType()
 export class AdminFindManyProjectInput extends PagingInput() {
   @Field({ nullable: true })
-  teamId?: string
+  communityId?: string
   @Field({ nullable: true })
   search?: string
 }

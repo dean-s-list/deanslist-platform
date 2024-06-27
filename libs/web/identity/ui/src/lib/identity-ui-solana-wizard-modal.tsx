@@ -14,7 +14,7 @@ export function IdentityUiSolanaWizardModal({
   const [opened, { open, close }] = useDisclosure(false)
   return (
     <>
-      <Modal opened={opened} onClose={close} size="xl" zIndex={1} title="Verify your wallet" centered>
+      <Modal opened={opened} onClose={close} size="xl" zIndex={1000} title="Verify your wallet" centered>
         <IdentityUiSolanaWizard
           p="lg"
           sign={(useLedger) =>

@@ -3,14 +3,14 @@ import { useSdk } from '@deanslist-platform/web-core-data-access'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
-export function useReviewerFindManyProject(props: Partial<ReviewerFindManyProjectInput> & { teamId?: string }) {
+export function useReviewerFindManyProject(props: Partial<ReviewerFindManyProjectInput> & { communityId?: string }) {
   const sdk = useSdk()
   const [limit, setLimit] = useState(props?.limit ?? 10)
   const [page, setPage] = useState(props?.page ?? 1)
   const [status, setStatus] = useState<ProjectStatus>(props?.status ?? ProjectStatus.Active)
   const [search, setSearch] = useState<string>(props?.search ?? '')
 
-  const input: ReviewerFindManyProjectInput = { page, limit, search, status, teamId: props.teamId }
+  const input: ReviewerFindManyProjectInput = { page, limit, search, status, communityId: props.communityId }
   const query = useQuery({
     queryKey: ['reviewer', 'find-many-project', input],
     queryFn: () => sdk.reviewerFindManyProject({ input }).then((res) => res.data),

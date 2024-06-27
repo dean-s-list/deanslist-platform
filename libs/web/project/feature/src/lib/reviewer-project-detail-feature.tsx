@@ -11,7 +11,7 @@ import {
   ProjectUiTags,
 } from '@deanslist-platform/web-project-ui'
 import { ReviewerProjectReviewFeature } from '@deanslist-platform/web-review-feature'
-import { TeamUiLink } from '@deanslist-platform/web-team-ui'
+import { CommunityUiLink } from '@deanslist-platform/web-community-ui'
 import { Button, Collapse, Group, Paper } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { UiContainer, UiError, UiGroup, UiLoader, UiStack } from '@pubkey-ui/core'
@@ -81,8 +81,8 @@ export function ReviewerProjectDetailFeature() {
                   <ProjectUiManagers project={item} />
                 </Group>
                 <Group>
-                  Team
-                  {item.team ? <TeamUiLink team={item.team} to={item.team.viewUrl} /> : null}
+                  Community
+                  {item.community ? <CommunityUiLink community={item.community} to={item.community.viewUrl} /> : null}
                 </Group>
                 {item.tags?.length ? <ProjectUiTags tags={item.tags} /> : null}
                 {item.instructions?.length ? <ProjectUiInstructions item={item} /> : null}

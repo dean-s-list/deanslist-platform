@@ -5,7 +5,7 @@ import { ProjectStatus } from '../entity/project-status.enum'
 @InputType()
 export class ReviewerFindManyProjectInput extends PagingInput() {
   @Field({ nullable: true })
-  teamId?: string
+  communityId?: string
   @Field({ nullable: true })
   search?: string
   @Field(() => ProjectStatus, { nullable: true })

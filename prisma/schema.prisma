@@ -25,6 +25,31 @@ model Comment {
   ratings        Rating[]
 }
 
+model Community {
+  id           String            @id @default(cuid())
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  name         String
+  avatarUrl    String?
+  homeServerId String?
+  channels     DiscordChannel[]
+  members      CommunityMember[]
+  projects     Project[]
+}
+
+model CommunityMember {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  admin       Boolean   @default(false)
+  community   Community @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  communityId String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+
+  @@unique([communityId, userId])
+}
+
 model DiscordBot {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
@@ -32,13 +57,13 @@ model DiscordBot {
 }
 
 model DiscordChannel {
-  id        String        @id @default(cuid())
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
-  server    DiscordServer @relation(fields: [serverId], references: [id], onDelete: Cascade)
-  serverId  String
-  projects  Project[]
-  teams     Team[]
+  id          String        @id @default(cuid())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  server      DiscordServer @relation(fields: [serverId], references: [id], onDelete: Cascade)
+  serverId    String
+  projects    Project[]
+  communities Community[]
 }
 
 model DiscordRole {
@@ -56,10 +81,10 @@ model DiscordServer {
   roles     DiscordRole[]
   channels  DiscordChannel[]
 
-  createChannels    Boolean @default(false)
-  logChannelId      String?
-  projectCategoryId String?
-  teamCategoryId    String?
+  createChannels      Boolean @default(false)
+  logChannelId        String?
+  projectCategoryId   String?
+  communityCategoryId String?
 }
 
 model Identity {
@@ -99,8 +124,8 @@ model Project {
   id                String           @id @default(cuid())
   createdAt         DateTime         @default(now())
   updatedAt         DateTime         @updatedAt
-  team              Team             @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  teamId            String
+  community         Community        @relation(fields: [communityId], references: [id], onDelete: Cascade)
+  communityId       String
   slug              String
   name              String
   instructions      String?
@@ -125,8 +150,8 @@ model Project {
   referral          User?            @relation(name: "ProjectReferral", fields: [referralId], references: [id])
   referralId        String?
 
-  @@unique([teamId, name])
-  @@unique([teamId, slug])
+  @@unique([communityId, name])
+  @@unique([communityId, slug])
 }
 
 model Review {
@@ -156,49 +181,24 @@ model Rating {
   @@unique([commentId, authorId])
 }
 
-model Team {
-  id           String           @id @default(cuid())
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @updatedAt
-  name         String
-  avatarUrl    String?
-  homeServerId String?
-  channels     DiscordChannel[]
-  members      TeamMember[]
-  projects     Project[]
-}
-
-model TeamMember {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  admin     Boolean  @default(false)
-  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  teamId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String
-
-  @@unique([teamId, userId])
-}
-
 model User {
-  id              String       @id @default(cuid())
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
+  id              String            @id @default(cuid())
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
   avatarUrl       String?
-  developer       Boolean      @default(false)
+  developer       Boolean           @default(false)
   name            String?
   password        String?
   walletAddress   String?
-  role            UserRole     @default(User)
-  status          UserStatus   @default(Created)
-  username        String       @unique
+  role            UserRole          @default(User)
+  status          UserStatus        @default(Created)
+  username        String            @unique
   identities      Identity[]
-  teams           TeamMember[]
+  communities     CommunityMember[]
   reviews         Review[]
-  projectManagers Project[]    @relation(name: "ProjectManagers")
-  projectMembers  Project[]    @relation(name: "ProjectMembers")
-  projectReferral Project[]    @relation(name: "ProjectReferral")
+  projectManagers Project[]         @relation(name: "ProjectManagers")
+  projectMembers  Project[]         @relation(name: "ProjectMembers")
+  projectReferral Project[]         @relation(name: "ProjectReferral")
   comments        Comment[]
   ratings         Rating[]
 }

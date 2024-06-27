@@ -4,21 +4,21 @@ import { getAliceCookie, sdk, uniqueId } from '../support'
 describe('api-review-feature', () => {
   describe('api-review-user-resolver', () => {
     let reviewId: string
-    let teamId: string
+    let communityId: string
     let projectId: string
     let alice: string
 
     beforeAll(async () => {
       alice = await getAliceCookie()
-      teamId = await sdk
-        .userCreateTeam({ input: { name: uniqueId('team') } }, { cookie: alice })
+      communityId = await sdk
+        .userCreateCommunity({ input: { name: uniqueId('community') } }, { cookie: alice })
         .then((res) => res.data.created.id)
     })
 
     describe('authorized', () => {
       beforeEach(async () => {
         projectId = await sdk
-          .userCreateProject({ input: { teamId, name: uniqueId('project') } }, { cookie: alice })
+          .userCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
           .then((res) => res.data.created.id)
       })
 

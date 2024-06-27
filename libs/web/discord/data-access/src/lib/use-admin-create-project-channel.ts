@@ -28,20 +28,20 @@ export function useAdminCreateProjectChannel({ projectId }: { projectId: string 
   }
 }
 
-export function useAdminCreateTeamChannel({ teamId }: { teamId: string }) {
+export function useAdminCreateCommunityChannel({ communityId }: { communityId: string }) {
   const sdk = useSdk()
 
   const mutation = useMutation({
-    mutationKey: ['adminCreateTeamChannel', { teamId }],
+    mutationKey: ['adminCreateCommunityChannel', { communityId }],
     mutationFn: ({ channelId, serverId }: { channelId: string; serverId: string }) =>
       sdk
-        .adminCreateTeamChannel({ teamId, channelId, serverId })
+        .adminCreateCommunityChannel({ communityId, channelId, serverId })
         .then((res) => res.data)
         .then((res) => {
           if (res.created) {
-            toastSuccess('Team channel created')
+            toastSuccess('Community channel created')
           } else {
-            toastError('Team channel not created')
+            toastError('Community channel not created')
           }
         })
         .catch((err) => {

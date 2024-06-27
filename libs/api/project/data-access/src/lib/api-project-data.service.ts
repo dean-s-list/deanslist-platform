@@ -1,5 +1,5 @@
 import { ApiCoreService, slugifyId } from '@deanslist-platform/api-core-data-access'
-import { ApiTeamService } from '@deanslist-platform/api-team-data-access'
+import { ApiCommunityService } from '@deanslist-platform/api-community-data-access'
 import { Injectable } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
 import { ApiProjectEventService } from './api-project-event.service'
@@ -11,29 +11,29 @@ export class ApiProjectDataService {
   constructor(
     private readonly core: ApiCoreService,
     private readonly event: ApiProjectEventService,
-    private readonly team: ApiTeamService,
+    private readonly community: ApiCommunityService,
   ) {}
 
   async ensureProjectAdmin({ projectId, userId }: { projectId: string; userId: string }) {
     const found = await this.findOneProject(projectId)
-    await this.ensureTeamAdmin({ teamId: found.teamId, userId })
+    await this.ensureCommunityAdmin({ communityId: found.communityId, userId })
     return found
   }
 
-  async ensureTeamAdmin({ teamId, userId }: { teamId: string; userId: string }) {
-    return this.team.data.ensureTeamAdmin({ teamId, userId })
+  async ensureCommunityAdmin({ communityId, userId }: { communityId: string; userId: string }) {
+    return this.community.data.ensureCommunityAdmin({ communityId, userId })
   }
 
   async createProject(
     userId: string,
-    { teamId, ...input }: Omit<Prisma.ProjectCreateWithoutTeamInput, 'slug'> & { teamId: string },
+    { communityId, ...input }: Omit<Prisma.ProjectCreateWithoutCommunityInput, 'slug'> & { communityId: string },
   ): Promise<ProjectCreatedEvent['project']> {
     const name = input.name.trim()
     const slug = slugifyId(name, true)
 
     const [foundName, foundSlug] = await Promise.all([
-      this.core.data.project.findUnique({ where: { teamId_name: { teamId, name } } }),
-      this.core.data.project.findUnique({ where: { teamId_slug: { teamId, slug } } }),
+      this.core.data.project.findUnique({ where: { communityId_name: { communityId, name } } }),
+      this.core.data.project.findUnique({ where: { communityId_slug: { communityId, slug } } }),
     ])
 
     if (foundName) {
@@ -42,20 +42,20 @@ export class ApiProjectDataService {
     if (foundSlug) {
       throw new Error('Project with this slug already exists')
     }
-    const team = await this.core.data.team.findUnique({ where: { id: teamId } })
+    const community = await this.core.data.community.findUnique({ where: { id: communityId } })
 
-    if (!team) {
-      throw new Error('Team ${teamId} not found')
+    if (!community) {
+      throw new Error('Community ${communityId} not found')
     }
 
     const data: Prisma.ProjectCreateInput = {
       ...input,
       slug,
-      team: { connect: { id: teamId } },
-      avatarUrl: team.avatarUrl ?? undefined,
+      community: { connect: { id: communityId } },
+      avatarUrl: community.avatarUrl ?? undefined,
     }
 
-    const project = await this.core.data.project.create({ data, include: { team: true } })
+    const project = await this.core.data.project.create({ data, include: { community: true } })
 
     this.event.emitProjectCreated({ project, userId })
 
@@ -69,7 +69,7 @@ export class ApiProjectDataService {
       where: { id: found.id },
       include: {
         channels: true,
-        team: true,
+        community: true,
       },
     })
 
@@ -96,7 +96,7 @@ export class ApiProjectDataService {
   ) {
     const found = await this.core.data.project.findUnique({
       where: { id: projectId, ...where },
-      include: { team: true, ...include },
+      include: { community: true, ...include },
     })
     if (!found) {
       throw new Error('Project not found')

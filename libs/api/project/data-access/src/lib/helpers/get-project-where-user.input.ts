@@ -3,7 +3,7 @@ import { ReviewerFindManyProjectInput } from '../dto/reviewer-find-many-project-
 
 export function getProjectWhereUserInput(input: ReviewerFindManyProjectInput): Prisma.ProjectWhereInput {
   const where: Prisma.ProjectWhereInput = {
-    teamId: input.teamId ?? undefined,
+    communityId: input.communityId ?? undefined,
     status: input.status ?? ProjectStatus.Active,
   }
 

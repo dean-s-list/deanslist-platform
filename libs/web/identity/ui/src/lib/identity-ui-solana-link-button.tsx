@@ -1,8 +1,8 @@
-import { Button, ButtonProps } from '@mantine/core'
-import { modals } from '@mantine/modals'
 import { Identity, IdentityProvider, solanaGradient } from '@deanslist-platform/sdk'
 import { IdentityProviderSolanaLink } from '@deanslist-platform/web-identity-data-access'
 import { SolanaClusterProvider } from '@deanslist-platform/web-solana-data-access'
+import { Button, ButtonProps } from '@mantine/core'
+import { modals } from '@mantine/modals'
 import { IdentityUiIcon } from './identity-ui-icon'
 import { IdentityUiSolanaLinkWizard } from './identity-ui-solana-link-wizard'
 
@@ -27,7 +27,8 @@ export function IdentityUiSolanaLinkButton({
         modals.open({
           size: 'xl',
           title: 'Link Solana Wallet',
-          zIndex: 1,
+          zIndex: 100,
+          centered: true,
           children: (
             <SolanaClusterProvider autoConnect={false}>
               <IdentityProviderSolanaLink refresh={refresh}>

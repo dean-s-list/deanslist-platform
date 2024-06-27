@@ -18,16 +18,22 @@ input AdminFindManyCommentInput {
   search: String
 }
 
+input AdminFindManyCommunityInput {
+  limit: Int = 10
+  page: Int = 1
+  search: String
+}
+
 input AdminFindManyIdentityInput {
   ownerId: String
   provider: IdentityProvider
 }
 
 input AdminFindManyProjectInput {
+  communityId: String
   limit: Int = 10
   page: Int = 1
   search: String
-  teamId: String
 }
 
 input AdminFindManyRatingInput {
@@ -39,12 +45,6 @@ input AdminFindManyReviewInput {
   limit: Int = 10
   page: Int = 1
   projectId: String!
-  search: String
-}
-
-input AdminFindManyTeamInput {
-  limit: Int = 10
-  page: Int = 1
   search: String
 }
 
@@ -60,11 +60,17 @@ input AdminUpdateCommentInput {
   content: String
 }
 
+input AdminUpdateCommunityInput {
+  avatarUrl: String
+  homeServerId: String
+  name: String
+}
+
 input AdminUpdateDiscordServerInput {
+  communityCategoryId: String
   createChannels: Boolean
   logChannelId: String
   projectCategoryId: String
-  teamCategoryId: String
 }
 
 input AdminUpdateProjectInput {
@@ -72,6 +78,7 @@ input AdminUpdateProjectInput {
   amountReferralUsd: Int
   amountTotalUsd: Int
   avatarUrl: String
+  communityId: String
   duration: Int
   instructions: String
   linkDiscord: String
@@ -83,18 +90,11 @@ input AdminUpdateProjectInput {
   startDate: DateTime
   status: ProjectStatus
   tags: [String!]
-  teamId: String
 }
 
 input AdminUpdateRatingInput {
   content: String
   rating: Float!
-}
-
-input AdminUpdateTeamInput {
-  avatarUrl: String
-  homeServerId: String
-  name: String
 }
 
 input AdminUpdateUserInput {
@@ -134,6 +134,33 @@ enum CommentCategory {
   Other
 }
 
+type Community {
+  activeProjectsCount: Int
+  avatarUrl: String
+  createdAt: DateTime
+  homeServerId: String
+  id: String!
+  memberCount: Int
+  members: [CommunityMember!]
+  name: String!
+  updatedAt: DateTime
+  viewUrl: String!
+}
+
+type CommunityMember {
+  admin: Boolean
+  createdAt: DateTime
+  id: String!
+  updatedAt: DateTime
+  user: User
+  userId: String!
+}
+
+type CommunityPaging {
+  data: [Community!]!
+  meta: PagingMeta!
+}
+
 """
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
@@ -165,13 +192,13 @@ type DiscordRole {
 
 type DiscordServer {
   avatarUrl: String
+  communityCategoryId: String
   createChannels: Boolean
   id: String!
   logChannelId: String
   name: String!
   permissions: [String!]
   projectCategoryId: String
-  teamCategoryId: String
 }
 
 type Identity {
@@ -223,28 +250,34 @@ input LoginInput {
   username: String!
 }
 
+input ManagerCreateCommunityInput {
+  name: String!
+}
+
 input ManagerCreateProjectInput {
+  communityId: String!
   duration: Int
   name: String!
   startDate: DateTime
-  teamId: String!
 }
 
-input ManagerCreateTeamInput {
-  name: String!
+input ManagerFindManyCommunityInput {
+  limit: Int = 10
+  page: Int = 1
+  search: String
 }
 
 input ManagerFindManyProjectInput {
+  communityId: String
   limit: Int = 10
   page: Int = 1
   search: String
-  teamId: String
 }
 
-input ManagerFindManyTeamInput {
-  limit: Int = 10
-  page: Int = 1
-  search: String
+input ManagerUpdateCommunityInput {
+  avatarUrl: String
+  homeServerId: String
+  name: String
 }
 
 input ManagerUpdateProjectInput {
@@ -266,61 +299,55 @@ input ManagerUpdateProjectInput {
   tags: [String!]
 }
 
-input ManagerUpdateTeamInput {
-  avatarUrl: String
-  homeServerId: String
-  name: String
-}
-
 type Mutation {
+  adminAddCommunityMember(communityId: String!, userId: String!): Boolean
   adminAddProjectManager(managerUserId: String!, projectId: String!): Boolean
   adminAddProjectMember(memberUserId: String!, projectId: String!): Boolean
   adminAddProjectReferral(projectId: String!, referralUserId: String!): Boolean
-  adminAddTeamMember(teamId: String!, userId: String!): Boolean
+  adminCreateCommunityChannel(channelId: String!, communityId: String!, serverId: String!): Boolean!
   adminCreateIdentity(input: AdminCreateIdentityInput!): Identity
   adminCreateProjectChannel(channelId: String!, projectId: String!, serverId: String!): Boolean!
-  adminCreateTeamChannel(channelId: String!, serverId: String!, teamId: String!): Boolean!
   adminCreateUser(input: AdminCreateUserInput!): User
   adminDeleteComment(commentId: String!): Boolean
+  adminDeleteCommunity(communityId: String!): Boolean
+  adminDeleteCommunityChannel(channelId: String!, communityId: String!): Boolean!
   adminDeleteIdentity(identityId: String!): Boolean
   adminDeleteProject(projectId: String!): Boolean
   adminDeleteProjectChannel(channelId: String!, projectId: String!): Boolean!
   adminDeleteRating(ratingId: String!): Boolean
   adminDeleteReview(reviewId: String!): Boolean
-  adminDeleteTeam(teamId: String!): Boolean
-  adminDeleteTeamChannel(channelId: String!, teamId: String!): Boolean!
   adminDeleteUser(userId: String!): Boolean
   adminLeaveDiscordServer(serverId: String!): Boolean!
   adminPingDiscordChannel(channelId: String!, serverId: String!): Boolean!
+  adminRemoveCommunityMember(communityId: String!, userId: String!): Boolean
   adminRemoveProjectManager(managerUserId: String!, projectId: String!): Boolean
   adminRemoveProjectMember(memberUserId: String!, projectId: String!): Boolean
   adminRemoveProjectReferral(projectId: String!, referralUserId: String!): Boolean
-  adminRemoveTeamMember(teamId: String!, userId: String!): Boolean
-  adminToggleTeamAdmin(teamId: String!, userId: String!): Boolean
+  adminToggleCommunityAdmin(communityId: String!, userId: String!): Boolean
   adminUpdateComment(commentId: String!, input: AdminUpdateCommentInput!): Comment
+  adminUpdateCommunity(communityId: String!, input: AdminUpdateCommunityInput!): Community
   adminUpdateDiscordServer(input: AdminUpdateDiscordServerInput!, serverId: String!): Boolean!
   adminUpdateProject(input: AdminUpdateProjectInput!, projectId: String!): Project
   adminUpdateRating(input: AdminUpdateRatingInput!, ratingId: String!): Rating
-  adminUpdateTeam(input: AdminUpdateTeamInput!, teamId: String!): Team
   adminUpdateUser(input: AdminUpdateUserInput!, userId: String!): User
   anonVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
   login(input: LoginInput!): User
   logout: Boolean
+  managerAddCommunityMember(communityId: String!, userId: String!): Boolean
   managerAddProjectManager(managerUserId: String!, projectId: String!): Boolean
   managerAddProjectMember(memberUserId: String!, projectId: String!): Boolean
   managerAddProjectReferral(projectId: String!, referralUserId: String!): Boolean
-  managerAddTeamMember(teamId: String!, userId: String!): Boolean
+  managerCreateCommunity(input: ManagerCreateCommunityInput!): Community
   managerCreateProject(input: ManagerCreateProjectInput!): Project
-  managerCreateTeam(input: ManagerCreateTeamInput!): Team
+  managerDeleteCommunity(communityId: String!): Boolean
   managerDeleteProject(projectId: String!): Boolean
-  managerDeleteTeam(teamId: String!): Boolean
+  managerRemoveCommunityMember(communityId: String!, userId: String!): Boolean
   managerRemoveProjectManager(managerUserId: String!, projectId: String!): Boolean
   managerRemoveProjectMember(memberUserId: String!, projectId: String!): Boolean
   managerRemoveProjectReferral(projectId: String!, referralUserId: String!): Boolean
-  managerRemoveTeamMember(teamId: String!, userId: String!): Boolean
-  managerToggleTeamAdmin(teamId: String!, userId: String!): Boolean
+  managerToggleCommunityAdmin(communityId: String!, userId: String!): Boolean
+  managerUpdateCommunity(communityId: String!, input: ManagerUpdateCommunityInput!): Community
   managerUpdateProject(input: ManagerUpdateProjectInput!, projectId: String!): Project
-  managerUpdateTeam(input: ManagerUpdateTeamInput!, teamId: String!): Team
   register(input: RegisterInput!): User
   reviewerCreateReview(projectId: String!): Review
   reviewerDeleteReview(reviewId: String!): Boolean
@@ -352,6 +379,8 @@ type Project {
   amountReferralUsd: Int
   amountTotalUsd: Int
   avatarUrl: String
+  community: Community
+  communityId: String!
   createdAt: DateTime
   duration: Int
   endDate: DateTime
@@ -372,8 +401,6 @@ type Project {
   startDate: DateTime
   status: ProjectStatus
   tags: [String!]
-  team: Team
-  teamId: String!
   updatedAt: DateTime
   viewUrl: String!
 }
@@ -391,31 +418,31 @@ enum ProjectStatus {
 
 type Query {
   adminFindManyComment(input: AdminFindManyCommentInput!): [Comment!]
+  adminFindManyCommunity(input: AdminFindManyCommunityInput!): CommunityPaging!
   adminFindManyIdentity(input: AdminFindManyIdentityInput!): [Identity!]
   adminFindManyProject(input: AdminFindManyProjectInput!): ProjectPaging!
   adminFindManyRating(input: AdminFindManyRatingInput!): [Rating!]!
   adminFindManyReview(input: AdminFindManyReviewInput!): ReviewPaging!
-  adminFindManyTeam(input: AdminFindManyTeamInput!): TeamPaging!
   adminFindManyUser(input: AdminFindManyUserInput!): UserPaging!
+  adminFindOneCommunity(communityId: String!): Community
   adminFindOneProject(projectId: String!): Project
   adminFindOneReview(reviewId: String!): Review
-  adminFindOneTeam(teamId: String!): Team
   adminFindOneUser(userId: String!): User
+  adminGetCommunityChannels(communityId: String!): [DiscordChannel!]!
+  adminGetCommunityMembers(communityId: String!): [CommunityMember!]
   adminGetDiscordBot: DiscordBot!
   adminGetDiscordChannels(serverId: String!): [DiscordChannel!]!
   adminGetDiscordRoles(serverId: String!): [DiscordRole!]!
   adminGetDiscordServers: [DiscordServer!]!
   adminGetProjectChannels(projectId: String!): [DiscordChannel!]!
-  adminGetTeamChannels(teamId: String!): [DiscordChannel!]!
-  adminGetTeamMembers(teamId: String!): [TeamMember!]
   anonRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
   appConfig: AppConfig!
+  managerFindManyCommunity(input: ManagerFindManyCommunityInput!): CommunityPaging!
   managerFindManyProject(input: ManagerFindManyProjectInput!): ProjectPaging!
-  managerFindManyTeam(input: ManagerFindManyTeamInput!): TeamPaging!
+  managerFindOneCommunity(communityId: String!): Community
   managerFindOneProject(projectId: String!): Project
-  managerFindOneTeam(teamId: String!): Team
-  managerGetTeamMember(teamId: String!): TeamMember
-  managerGetTeamMembers(teamId: String!): [TeamMember!]
+  managerGetCommunityMember(communityId: String!): CommunityMember
+  managerGetCommunityMembers(communityId: String!): [CommunityMember!]
   me: User
   reviewerFindManyProject(input: ReviewerFindManyProjectInput!): ProjectPaging!
   reviewerFindManyReviewByProject(input: ReviewerFindManyReviewByProjectInput!): [Review!]
@@ -425,15 +452,15 @@ type Query {
   reviewerFindUserProjectReview(projectId: String!): Review
   uptime: Float!
   userFindManyComment(input: UserFindManyCommentInput!): [Comment!]
+  userFindManyCommunity(input: UserFindManyCommunityInput!): CommunityPaging!
   userFindManyIdentity(input: UserFindManyIdentityInput!): [Identity!]
   userFindManyRating(input: UserFindManyRatingInput!): [Rating!]!
-  userFindManyTeam(input: UserFindManyTeamInput!): TeamPaging!
   userFindManyUser(input: UserFindManyUserInput!): UserPaging!
-  userFindOneTeam(teamId: String!): Team
+  userFindOneCommunity(communityId: String!): Community
   userFindOneUser(username: String!): User
+  userGetCommunityChannels(communityId: String!): [DiscordChannel!]!
   userGetDiscordServers: [DiscordServer!]!
   userGetProjectChannels(projectId: String!): [DiscordChannel!]!
-  userGetTeamChannels(teamId: String!): [DiscordChannel!]!
   userRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
 }
 
@@ -474,11 +501,11 @@ type ReviewPaging {
 }
 
 input ReviewerFindManyProjectInput {
+  communityId: String
   limit: Int = 10
   page: Int = 1
   search: String
   status: ProjectStatus
-  teamId: String
 }
 
 input ReviewerFindManyReviewByProjectInput {
@@ -489,33 +516,6 @@ input ReviewerFindManyReviewByProjectInput {
 input ReviewerFindManyReviewByUsernameInput {
   search: String
   username: String!
-}
-
-type Team {
-  activeProjectsCount: Int
-  avatarUrl: String
-  createdAt: DateTime
-  homeServerId: String
-  id: String!
-  memberCount: Int
-  members: [TeamMember!]
-  name: String!
-  updatedAt: DateTime
-  viewUrl: String!
-}
-
-type TeamMember {
-  admin: Boolean
-  createdAt: DateTime
-  id: String!
-  updatedAt: DateTime
-  user: User
-  userId: String!
-}
-
-type TeamPaging {
-  data: [Team!]!
-  meta: PagingMeta!
 }
 
 type User {
@@ -551,17 +551,17 @@ input UserFindManyCommentInput {
   search: String
 }
 
+input UserFindManyCommunityInput {
+  limit: Int = 10
+  page: Int = 1
+  search: String
+}
+
 input UserFindManyIdentityInput {
   username: String!
 }
 
 input UserFindManyRatingInput {
-  search: String
-}
-
-input UserFindManyTeamInput {
-  limit: Int = 10
-  page: Int = 1
   search: String
 }
 

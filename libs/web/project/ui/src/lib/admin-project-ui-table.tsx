@@ -1,5 +1,5 @@
 import { Project } from '@deanslist-platform/sdk'
-import { TeamUiItem } from '@deanslist-platform/web-team-ui'
+import { CommunityUiItem } from '@deanslist-platform/web-community-ui'
 import { ActionIcon, Group, ScrollArea } from '@mantine/core'
 import { IconEye, IconPencil, IconTrash } from '@tabler/icons-react'
 import { DataTable, DataTableProps } from 'mantine-datatable'
@@ -37,8 +37,8 @@ export function AdminProjectUiTable({
             render: (item) => <ProjectUiItem project={item} to={item.id} />,
           },
           {
-            accessor: 'team',
-            render: (item) => (item?.team ? <TeamUiItem team={item.team} to={item.id} /> : null),
+            accessor: 'community',
+            render: (item) => (item?.community ? <CommunityUiItem community={item.community} to={item.id} /> : null),
           },
           {
             accessor: 'actions',

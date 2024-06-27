@@ -6,7 +6,7 @@ export function getProjectWhereManagerInput(
   input: ManagerFindManyProjectInput,
 ): Prisma.ProjectWhereInput {
   const where: Prisma.ProjectWhereInput = {
-    teamId: input.teamId ?? undefined,
+    communityId: input.communityId ?? undefined,
     managers: { some: { id: userId } },
   }
 

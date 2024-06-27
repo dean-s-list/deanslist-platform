@@ -11,7 +11,7 @@ export class ApiUserResolver {
 
   @ResolveField(() => Boolean, { nullable: true })
   manager(@Parent() user: User) {
-    return !!user.teams?.length || !!user.projectManagers?.length
+    return !!user.communities?.length || !!user.projectManagers?.length
   }
 
   @ResolveField(() => String)

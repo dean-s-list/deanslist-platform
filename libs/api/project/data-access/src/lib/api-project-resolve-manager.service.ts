@@ -11,7 +11,7 @@ export class ApiProjectResolveManagerService {
   constructor(private readonly data: ApiProjectDataService) {}
 
   async createProject(userId: string, input: ManagerCreateProjectInput) {
-    await this.data.ensureTeamAdmin({ teamId: input.teamId, userId })
+    await this.data.ensureCommunityAdmin({ communityId: input.communityId, userId })
 
     return this.data.createProject(userId, input)
   }

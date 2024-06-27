@@ -6,7 +6,7 @@ import { ApiProjectFeatureModule } from '@deanslist-platform/api-project-feature
 import { ApiCommentFeatureModule } from '@deanslist-platform/api-comment-feature'
 import { ApiRatingFeatureModule } from '@deanslist-platform/api-rating-feature'
 import { ApiReviewFeatureModule } from '@deanslist-platform/api-review-feature'
-import { ApiTeamFeatureModule } from '@deanslist-platform/api-team-feature'
+import { ApiCommunityFeatureModule } from '@deanslist-platform/api-community-feature'
 import { ApiUserFeatureModule } from '@deanslist-platform/api-user-feature'
 import { Module } from '@nestjs/common'
 import { ApiCoreController } from './api-core.controller'
@@ -22,7 +22,7 @@ const imports = [
   ApiCommentFeatureModule,
   ApiRatingFeatureModule,
   ApiReviewFeatureModule,
-  ApiTeamFeatureModule,
+  ApiCommunityFeatureModule,
   ApiUserFeatureModule,
 ]
 

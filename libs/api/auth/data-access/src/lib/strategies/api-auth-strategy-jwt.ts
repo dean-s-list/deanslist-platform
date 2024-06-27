@@ -28,7 +28,7 @@ export class ApiAuthStrategyJwt extends PassportStrategy(Strategy) {
       include: {
         identities: { where: { verified: true } },
         projectManagers: { select: { id: true } },
-        teams: { select: { id: true } },
+        communities: { select: { id: true } },
       },
     })
 

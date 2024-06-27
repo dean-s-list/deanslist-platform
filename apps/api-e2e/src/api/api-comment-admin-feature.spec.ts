@@ -3,7 +3,7 @@ import { getAliceCookie, getBobCookie, sdk, uniqueId } from '../support'
 
 describe('api-comment-feature', () => {
   describe('api-comment-admin-resolver', () => {
-    let teamId: string
+    let communityId: string
     let projectId: string
     let reviewId: string
     let commentId: string
@@ -11,11 +11,11 @@ describe('api-comment-feature', () => {
 
     beforeAll(async () => {
       alice = await getAliceCookie()
-      teamId = await sdk
-        .userCreateTeam({ input: { name: uniqueId('team') } }, { cookie: alice })
+      communityId = await sdk
+        .userCreateCommunity({ input: { name: uniqueId('community') } }, { cookie: alice })
         .then((res) => res.data.created.id)
       projectId = await sdk
-        .userCreateProject({ input: { teamId, name: uniqueId('project') } }, { cookie: alice })
+        .userCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
         .then((res) => res.data.created.id)
       reviewId = await sdk.userCreateReview({ projectId }, { cookie: alice }).then((res) => res.data.created.id)
       commentId = await sdk

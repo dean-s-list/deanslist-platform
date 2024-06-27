@@ -17,10 +17,10 @@ export class ApiDiscordChannelService {
       .then((ids) => this.bot.getChannelsByIds(ids))
   }
 
-  async getTeamChannels(teamId: string) {
+  async getCommunityChannels(communityId: string) {
     return this.core.data.discordChannel
       .findMany({
-        where: { teams: { some: { id: teamId } } },
+        where: { communities: { some: { id: communityId } } },
         select: { id: true },
       })
       .then((res) => res.map((tem) => tem.id))
@@ -57,7 +57,15 @@ export class ApiDiscordChannelService {
     })
     return !!created
   }
-  async createTeamChannel({ serverId, channelId, teamId }: { teamId: string; serverId: string; channelId: string }) {
+  async createCommunityChannel({
+    serverId,
+    channelId,
+    communityId,
+  }: {
+    communityId: string
+    serverId: string
+    channelId: string
+  }) {
     const channel = await this.bot.getChannel(channelId)
     if (!channel) {
       throw new Error(`Channel ${channelId} not found`)
@@ -71,10 +79,10 @@ export class ApiDiscordChannelService {
       create: {
         id: channelId,
         server: { connect: { id: serverId } },
-        teams: { connect: { id: teamId } },
+        communities: { connect: { id: communityId } },
       },
       update: {
-        teams: { connect: { id: teamId } },
+        communities: { connect: { id: communityId } },
       },
     })
     return !!created
@@ -88,10 +96,10 @@ export class ApiDiscordChannelService {
     return !!deleted
   }
 
-  async deleteTeamChannel({ teamId, channelId }: { teamId: string; channelId: string }) {
+  async deleteCommunityChannel({ communityId, channelId }: { communityId: string; channelId: string }) {
     const deleted = await this.core.data.discordChannel.update({
       where: { id: channelId },
-      data: { teams: { disconnect: { id: teamId } } },
+      data: { communities: { disconnect: { id: communityId } } },
     })
     return !!deleted
   }
@@ -100,12 +108,12 @@ export class ApiDiscordChannelService {
     const existing = await this.core.data.discordChannel.findMany({
       where: {
         id: channelId,
-        OR: [{ projects: { some: {} }, teams: { some: {} } }],
+        OR: [{ projects: { some: {} }, communities: { some: {} } }],
       },
-      select: { projects: true, teams: true },
+      select: { projects: true, communities: true },
     })
     if (existing) {
-      throw new Error(`Channel is already in use by a project or team`)
+      throw new Error(`Channel is already in use by a project or community`)
     }
   }
 }

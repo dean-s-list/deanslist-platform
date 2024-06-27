@@ -1,8 +1,8 @@
-import { Button, Tooltip } from '@mantine/core'
-import { modals } from '@mantine/modals'
 import { ellipsify, Identity, IdentityProvider } from '@deanslist-platform/sdk'
 import { IdentityProviderSolanaLink } from '@deanslist-platform/web-identity-data-access'
 import { SolanaClusterProvider } from '@deanslist-platform/web-solana-data-access'
+import { Button, Tooltip } from '@mantine/core'
+import { modals } from '@mantine/modals'
 import { IconAlertCircle } from '@tabler/icons-react'
 import { IdentityUiSolanaVerifyWizard } from './identity-ui-solana-verify-wizard'
 
@@ -17,7 +17,7 @@ export function IdentityUiSolanaVerifyButton({ identity, refresh }: { identity: 
         onClick={() => {
           modals.open({
             title: 'Verify Identity',
-            zIndex: 1,
+            zIndex: 1000,
             size: 'xl',
             children: (
               <SolanaClusterProvider autoConnect={true}>

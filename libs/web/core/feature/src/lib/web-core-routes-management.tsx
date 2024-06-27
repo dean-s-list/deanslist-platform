@@ -1,7 +1,7 @@
 import { useAuth } from '@deanslist-platform/web-auth-data-access'
 import { CoreUiBackLink, CoreUiButton } from '@deanslist-platform/web-core-ui'
-import { ManagerProjectTeamFeature } from '@deanslist-platform/web-project-feature'
-import { ManagerTeamFeature } from '@deanslist-platform/web-team-feature'
+import { ManagerProjectCommunityFeature } from '@deanslist-platform/web-project-feature'
+import { ManagerCommunityFeature } from '@deanslist-platform/web-community-feature'
 import { Box } from '@mantine/core'
 import { modals } from '@mantine/modals'
 import { UiContainer, UiGroup, UiPage, UiStack } from '@pubkey-ui/core'
@@ -18,7 +18,7 @@ export default function () {
   return useRoutes([
     { path: '', element: <Navigate to="projects" replace /> },
     { path: '/projects/*', element: <ManagementProjectsFeature /> },
-    { path: '/teams/*', element: <ManagerTeamFeature /> },
+    { path: '/communities/*', element: <ManagerCommunityFeature /> },
   ])
 }
 
@@ -36,8 +36,8 @@ export function ManagementProjectsFeature() {
       title="Projects"
       rightAction={
         <UiGroup>
-          <CoreUiButton iconLeft={IconUsersGroup} to="/management/teams">
-            Manage Teams
+          <CoreUiButton iconLeft={IconUsersGroup} to="/management/communities">
+            Manage Communities
           </CoreUiButton>
           <CoreUiButton
             iconLeft={IconPlus}
@@ -55,7 +55,7 @@ export function ManagementProjectsFeature() {
       }
     >
       <Box>
-        <ManagerProjectTeamFeature />
+        <ManagerProjectCommunityFeature />
       </Box>
     </UiPage>
   ) : (
@@ -66,7 +66,7 @@ export function ManagementProjectsFeature() {
             <CoreUiBackLink label="Back to overview" />
           </UiGroup>
           <Box>
-            <ManagerProjectTeamFeature />
+            <ManagerProjectCommunityFeature />
           </Box>
         </UiStack>
       </UiContainer>

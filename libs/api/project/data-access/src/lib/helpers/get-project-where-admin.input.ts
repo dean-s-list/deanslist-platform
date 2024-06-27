@@ -3,7 +3,7 @@ import { AdminFindManyProjectInput } from '../dto/admin-find-many-project.input'
 
 export function getProjectWhereAdminInput(input: AdminFindManyProjectInput): Prisma.ProjectWhereInput {
   const where: Prisma.ProjectWhereInput = {
-    teamId: input.teamId ?? undefined,
+    communityId: input.communityId ?? undefined,
   }
 
   if (input.search) {

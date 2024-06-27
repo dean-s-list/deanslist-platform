@@ -17,5 +17,5 @@ export class DiscordServer {
   @Field({ nullable: true })
   projectCategoryId?: string | null
   @Field({ nullable: true })
-  teamCategoryId?: string | null
+  communityCategoryId?: string | null
 }

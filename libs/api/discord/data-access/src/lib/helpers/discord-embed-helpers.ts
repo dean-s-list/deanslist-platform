@@ -69,7 +69,7 @@ export function createProjectEmbed(baseUrl: string, item: Project): APIEmbed {
   return {
     title: 'Project Information',
     author: { name: item.name, icon_url: item.avatarUrl ?? undefined },
-    url: `${baseUrl}/teams/${item.id}`,
+    url: `${baseUrl}/communities/${item.id}`,
     fields: createProjectFields(item),
   }
 }

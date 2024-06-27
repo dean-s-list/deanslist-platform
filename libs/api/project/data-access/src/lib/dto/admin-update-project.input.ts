@@ -4,7 +4,7 @@ import { ProjectStatus } from '../entity/project-status.enum'
 @InputType()
 export class AdminUpdateProjectInput {
   @Field({ nullable: true })
-  teamId?: string
+  communityId?: string
   @Field({ nullable: true })
   name?: string
   @Field({ nullable: true })

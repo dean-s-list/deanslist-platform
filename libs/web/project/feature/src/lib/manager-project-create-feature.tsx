@@ -5,9 +5,9 @@ import { ManagerProjectUiCreateForm } from '@deanslist-platform/web-project-ui'
 import { toastError, UiCard, UiPage } from '@pubkey-ui/core'
 import { useNavigate } from 'react-router-dom'
 
-export function ManagerProjectCreateFeature({ teamId }: { teamId: string }) {
+export function ManagerProjectCreateFeature({ communityId }: { communityId: string }) {
   const navigate = useNavigate()
-  const { createProject } = useManagerFindManyProject({ teamId })
+  const { createProject } = useManagerFindManyProject({ communityId })
 
   async function submit(input: ManagerCreateProjectInput) {
     return createProject(input)

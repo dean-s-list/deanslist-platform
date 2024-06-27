@@ -5,9 +5,9 @@ import { Button, Group } from '@mantine/core'
 import { UiDebugModal, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
 import { Link } from 'react-router-dom'
 
-export function ManagerProjectListFeature({ teamId }: { teamId?: string }) {
+export function ManagerProjectListFeature({ communityId }: { communityId?: string }) {
   const { items, pagination, query, setSearch } = useManagerFindManyProject({
-    teamId,
+    communityId,
     limit: 12,
   })
 

@@ -28,20 +28,20 @@ export function useAdminDeleteProjectChannel({ channelId, projectId }: { channel
   }
 }
 
-export function useAdminDeleteTeamChannel({ channelId, teamId }: { channelId: string; teamId: string }) {
+export function useAdminDeleteCommunityChannel({ channelId, communityId }: { channelId: string; communityId: string }) {
   const sdk = useSdk()
 
   const mutation = useMutation({
-    mutationKey: ['adminDeleteTeamChannel', { teamId }],
+    mutationKey: ['adminDeleteCommunityChannel', { communityId }],
     mutationFn: () =>
       sdk
-        .adminDeleteTeamChannel({ teamId, channelId })
+        .adminDeleteCommunityChannel({ communityId, channelId })
         .then((res) => res.data)
         .then((res) => {
           if (res.deleted) {
-            toastSuccess('Team channel deleted')
+            toastSuccess('Community channel deleted')
           } else {
-            toastError('Team channel not deleted')
+            toastError('Community channel not deleted')
           }
         })
         .catch((err) => {
