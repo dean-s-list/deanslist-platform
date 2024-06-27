@@ -1,5 +1,5 @@
 import { Field, HideField, ObjectType } from '@nestjs/graphql'
-import { CommunityMember } from './community-member.entity'
+import { CommunityManager } from './community-manager.entity'
 
 @ObjectType()
 export class Community {
@@ -15,8 +15,8 @@ export class Community {
   avatarUrl?: string | null
   @Field({ nullable: true })
   homeServerId?: string | null
-  @Field(() => [CommunityMember], { nullable: true })
-  members?: CommunityMember[]
+  @Field(() => [CommunityManager], { nullable: true })
+  managers?: CommunityManager[]
   @HideField()
   projects?: unknown[]
 }

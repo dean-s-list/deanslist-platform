@@ -9,7 +9,7 @@ export const provisionDataCommunities: Prisma.CommunityCreateInput[] = [
     avatarUrl: 'https://avatars.githubusercontent.com/u/125477168?v=4',
     name: 'PubKey',
     homeServerId: '1083213946078625853',
-    members: { create: { userId: 'beeman.dev', admin: true } },
+    managers: { create: { userId: 'beeman.dev', admin: true } },
     projects: {
       create: [
         {
@@ -54,7 +54,7 @@ export const provisionDataCommunities: Prisma.CommunityCreateInput[] = [
     name: `Dean's List`,
     homeServerId: '1187522687531233381',
     avatarUrl: avatarDeansList,
-    members: {
+    managers: {
       create: [
         { userId: 'beeman.dev', admin: true },
         { userId: 'parzicano', admin: true },
@@ -91,6 +91,6 @@ export const provisionDataCommunities: Prisma.CommunityCreateInput[] = [
     id: 'gibwork',
     name: `Gib Work`,
     avatarUrl: 'https://pbs.twimg.com/profile_images/1701414895613255680/xqejQpDn_400x400.jpg',
-    members: { create: { userId: 'beeman.dev', admin: true } },
+    managers: { create: { userId: 'beeman.dev', admin: true } },
   },
 ]

@@ -1,7 +1,7 @@
 import type { Community } from '@deanslist-platform/sdk'
 import { CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
 import { Divider, Group, Paper, Text } from '@mantine/core'
-import { UiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core'
+import { UiGroup, UiStack } from '@pubkey-ui/core'
 import { IconCube, IconUsers } from '@tabler/icons-react'
 import { ComponentType } from 'react'
 import { CommunityUiItem } from './community-ui-item'
@@ -17,7 +17,7 @@ export function CommunityUiGridItem({ community, to }: { community: Community; t
         <Divider />
         <UiGroup>
           <Item icon={IconCube} text={`${community.activeProjectsCount ?? 0} active projects`} />
-          <Item icon={IconUsers} text={`${community.memberCount ?? 0} members`} />
+          <Item icon={IconUsers} text={`${community.managerCount ?? 0} managers`} />
         </UiGroup>
       </UiStack>
     </Paper>

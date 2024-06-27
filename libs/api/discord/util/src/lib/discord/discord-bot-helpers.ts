@@ -1,5 +1,5 @@
 export interface FormatBotMessageOptions {
-  communityMember: { username: string; discordId?: string }
+  communityManager: { username: string; discordId?: string }
   prefix: string
   dryRun: boolean
   mentionRoles: boolean
@@ -9,7 +9,7 @@ export interface FormatBotMessageOptions {
 }
 
 export function formatBotMessage({
-  communityMember: { username, discordId },
+  communityManager: { username, discordId },
   prefix,
   dryRun,
   mentionRoles,

@@ -19,8 +19,8 @@ export class ApiCommunityResolver {
   }
 
   @ResolveField(() => Int, { nullable: true })
-  memberCount(@Parent() community: Community) {
-    return community.members?.length ?? 0
+  managerCount(@Parent() community: Community) {
+    return community.managers?.length ?? 0
   }
 
   @ResolveField(() => String)

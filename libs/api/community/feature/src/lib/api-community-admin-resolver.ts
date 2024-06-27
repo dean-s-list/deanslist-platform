@@ -4,7 +4,7 @@ import {
   AdminUpdateCommunityInput,
   ApiCommunityService,
   Community,
-  CommunityMember,
+  CommunityManager,
   CommunityPaging,
 } from '@deanslist-platform/api-community-data-access'
 import { UseGuards } from '@nestjs/common'
@@ -16,12 +16,12 @@ export class ApiCommunityAdminResolver {
   constructor(private readonly service: ApiCommunityService) {}
 
   @Mutation(() => Boolean, { nullable: true })
-  adminAddCommunityMember(
+  adminAddCommunityManager(
     @CtxUserId() userId: string,
     @Args('communityId') communityId: string,
-    @Args('userId') memberId: string,
+    @Args('userId') managerId: string,
   ) {
-    return this.service.data.addCommunityMember(userId, communityId, memberId)
+    return this.service.data.addCommunityManager(userId, communityId, managerId)
   }
 
   @Mutation(() => Boolean, { nullable: true })
@@ -29,9 +29,9 @@ export class ApiCommunityAdminResolver {
     return this.service.data.deleteCommunity(userId, communityId)
   }
 
-  @Query(() => [CommunityMember], { nullable: true })
-  adminGetCommunityMembers(@Args('communityId') communityId: string) {
-    return this.service.data.getCommunityMembers(communityId)
+  @Query(() => [CommunityManager], { nullable: true })
+  adminGetCommunityManagers(@Args('communityId') communityId: string) {
+    return this.service.data.getCommunityManagers(communityId)
   }
 
   @Query(() => CommunityPaging)
@@ -45,21 +45,21 @@ export class ApiCommunityAdminResolver {
   }
 
   @Mutation(() => Boolean, { nullable: true })
-  adminRemoveCommunityMember(
+  adminRemoveCommunityManager(
     @CtxUserId() userId: string,
     @Args('communityId') communityId: string,
-    @Args('userId') memberId: string,
+    @Args('userId') managerId: string,
   ) {
-    return this.service.data.removeCommunityMember(userId, communityId, memberId)
+    return this.service.data.removeCommunityManager(userId, communityId, managerId)
   }
 
   @Mutation(() => Boolean, { nullable: true })
   adminToggleCommunityAdmin(
     @CtxUserId() userId: string,
     @Args('communityId') communityId: string,
-    @Args('userId') memberId: string,
+    @Args('userId') managerId: string,
   ) {
-    return this.service.data.toggleCommunityAdmin(userId, communityId, memberId)
+    return this.service.data.toggleCommunityAdmin(userId, communityId, managerId)
   }
   @Mutation(() => Community, { nullable: true })
   adminUpdateCommunity(@Args('communityId') communityId: string, @Args('input') input: AdminUpdateCommunityInput) {

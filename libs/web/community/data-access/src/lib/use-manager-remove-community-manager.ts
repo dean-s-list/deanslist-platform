@@ -2,20 +2,20 @@ import { useSdk } from '@deanslist-platform/web-core-data-access'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useMutation } from '@tanstack/react-query'
 
-export function useManagerRemoveCommunityMember({ communityId }: { communityId: string }) {
+export function useManagerRemoveCommunityManager({ communityId }: { communityId: string }) {
   const sdk = useSdk()
 
   const mutation = useMutation({
-    mutationKey: ['manager', 'managerRemoveCommunityMember', { communityId }],
+    mutationKey: ['manager', 'managerRemoveCommunityManager', { communityId }],
     mutationFn: (userId: string) =>
       sdk
-        .managerRemoveCommunityMember({ communityId, userId })
+        .managerRemoveCommunityManager({ communityId, userId })
         .then((res) => res.data)
         .then((res) => {
           if (res.removed) {
-            toastSuccess('Member removed from community')
+            toastSuccess('Manager removed from community')
           } else {
-            toastError('Member not removed from community')
+            toastError('Manager not removed from community')
           }
         })
         .catch((err) => {

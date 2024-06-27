@@ -2,7 +2,7 @@ import { useAdminFindOneCommunity } from '@deanslist-platform/web-community-data
 import { AdminCommunityUiUpdateForm } from '@deanslist-platform/web-community-ui'
 import { UiCard, UiError, UiLoader, UiTabRoutes } from '@pubkey-ui/core'
 import { AdminCommunityDetailChannelsTab } from './admin-community-detail-channels-tab'
-import { AdminCommunityDetailMembersTab } from './admin-community-detail-members-tab'
+import { AdminCommunityDetailManagersTab } from './admin-community-detail-managers-tab'
 
 export function AdminCommunityDetailSettingsTab({ communityId }: { communityId: string }) {
   const { item, query, updateCommunity } = useAdminFindOneCommunity({ communityId })
@@ -18,11 +18,11 @@ export function AdminCommunityDetailSettingsTab({ communityId }: { communityId: 
     <UiTabRoutes
       tabs={[
         {
-          path: 'members',
-          label: 'Members',
+          path: 'managers',
+          label: 'Managers',
           element: (
             <UiCard>
-              <AdminCommunityDetailMembersTab communityId={item.id} />
+              <AdminCommunityDetailManagersTab communityId={item.id} />
             </UiCard>
           ),
         },

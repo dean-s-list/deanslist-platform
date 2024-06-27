@@ -2,7 +2,7 @@ import { User } from '@deanslist-platform/api-user-data-access'
 import { Field, ObjectType } from '@nestjs/graphql'
 
 @ObjectType()
-export class CommunityMember {
+export class CommunityManager {
   @Field()
   id!: string
   @Field({ nullable: true })

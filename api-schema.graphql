@@ -141,14 +141,14 @@ type Community {
   homeServerId: String
   id: String!
   manageUrl: String!
-  memberCount: Int
-  members: [CommunityMember!]
+  managerCount: Int
+  managers: [CommunityManager!]
   name: String!
   updatedAt: DateTime
   viewUrl: String!
 }
 
-type CommunityMember {
+type CommunityManager {
   admin: Boolean
   createdAt: DateTime
   id: String!
@@ -301,7 +301,7 @@ input ManagerUpdateProjectInput {
 }
 
 type Mutation {
-  adminAddCommunityMember(communityId: String!, userId: String!): Boolean
+  adminAddCommunityManager(communityId: String!, userId: String!): Boolean
   adminAddProjectManager(managerUserId: String!, projectId: String!): Boolean
   adminAddProjectMember(memberUserId: String!, projectId: String!): Boolean
   adminAddProjectReferral(projectId: String!, referralUserId: String!): Boolean
@@ -320,7 +320,7 @@ type Mutation {
   adminDeleteUser(userId: String!): Boolean
   adminLeaveDiscordServer(serverId: String!): Boolean!
   adminPingDiscordChannel(channelId: String!, serverId: String!): Boolean!
-  adminRemoveCommunityMember(communityId: String!, userId: String!): Boolean
+  adminRemoveCommunityManager(communityId: String!, userId: String!): Boolean
   adminRemoveProjectManager(managerUserId: String!, projectId: String!): Boolean
   adminRemoveProjectMember(memberUserId: String!, projectId: String!): Boolean
   adminRemoveProjectReferral(projectId: String!, referralUserId: String!): Boolean
@@ -334,7 +334,7 @@ type Mutation {
   anonVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
   login(input: LoginInput!): User
   logout: Boolean
-  managerAddCommunityMember(communityId: String!, userId: String!): Boolean
+  managerAddCommunityManager(communityId: String!, userId: String!): Boolean
   managerAddProjectManager(managerUserId: String!, projectId: String!): Boolean
   managerAddProjectMember(memberUserId: String!, projectId: String!): Boolean
   managerAddProjectReferral(projectId: String!, referralUserId: String!): Boolean
@@ -342,7 +342,7 @@ type Mutation {
   managerCreateProject(input: ManagerCreateProjectInput!): Project
   managerDeleteCommunity(communityId: String!): Boolean
   managerDeleteProject(projectId: String!): Boolean
-  managerRemoveCommunityMember(communityId: String!, userId: String!): Boolean
+  managerRemoveCommunityManager(communityId: String!, userId: String!): Boolean
   managerRemoveProjectManager(managerUserId: String!, projectId: String!): Boolean
   managerRemoveProjectMember(memberUserId: String!, projectId: String!): Boolean
   managerRemoveProjectReferral(projectId: String!, referralUserId: String!): Boolean
@@ -430,7 +430,7 @@ type Query {
   adminFindOneReview(reviewId: String!): Review
   adminFindOneUser(userId: String!): User
   adminGetCommunityChannels(communityId: String!): [DiscordChannel!]!
-  adminGetCommunityMembers(communityId: String!): [CommunityMember!]
+  adminGetCommunityManagers(communityId: String!): [CommunityManager!]
   adminGetDiscordBot: DiscordBot!
   adminGetDiscordChannels(serverId: String!): [DiscordChannel!]!
   adminGetDiscordRoles(serverId: String!): [DiscordRole!]!
@@ -442,8 +442,8 @@ type Query {
   managerFindManyProject(input: ManagerFindManyProjectInput!): ProjectPaging!
   managerFindOneCommunity(communityId: String!): Community
   managerFindOneProject(projectId: String!): Project
-  managerGetCommunityMember(communityId: String!): CommunityMember
-  managerGetCommunityMembers(communityId: String!): [CommunityMember!]
+  managerGetCommunityManager(communityId: String!): CommunityManager
+  managerGetCommunityManagers(communityId: String!): [CommunityManager!]
   me: User
   reviewerFindManyProject(input: ReviewerFindManyProjectInput!): ProjectPaging!
   reviewerFindManyReviewByProject(input: ReviewerFindManyReviewByProjectInput!): [Review!]

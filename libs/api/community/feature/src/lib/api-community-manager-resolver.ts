@@ -1,12 +1,12 @@
 import { ApiAuthGraphQLUserGuard, CtxUserId } from '@deanslist-platform/api-auth-data-access'
 import {
   ApiCommunityService,
+  Community,
+  CommunityManager,
+  CommunityPaging,
   ManagerCreateCommunityInput,
   ManagerFindManyCommunityInput,
   ManagerUpdateCommunityInput,
-  Community,
-  CommunityMember,
-  CommunityPaging,
 } from '@deanslist-platform/api-community-data-access'
 import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
@@ -17,12 +17,12 @@ export class ApiCommunityManagerResolver {
   constructor(private readonly service: ApiCommunityService) {}
 
   @Mutation(() => Boolean, { nullable: true })
-  managerAddCommunityMember(
+  managerAddCommunityManager(
     @CtxUserId() userId: string,
     @Args('communityId') communityId: string,
-    @Args('userId') memberId: string,
+    @Args('userId') managerId: string,
   ) {
-    return this.service.manager.addCommunityMember(userId, communityId, memberId)
+    return this.service.manager.addCommunityManager(userId, communityId, managerId)
   }
 
   @Mutation(() => Community, { nullable: true })
@@ -35,14 +35,14 @@ export class ApiCommunityManagerResolver {
     return this.service.manager.deleteCommunity(userId, communityId)
   }
 
-  @Query(() => [CommunityMember], { nullable: true })
-  managerGetCommunityMembers(@Args('communityId') communityId: string) {
-    return this.service.manager.getCommunityMembers(communityId)
+  @Query(() => [CommunityManager], { nullable: true })
+  managerGetCommunityManagers(@Args('communityId') communityId: string) {
+    return this.service.manager.getCommunityManagers(communityId)
   }
 
-  @Query(() => CommunityMember, { nullable: true })
-  managerGetCommunityMember(@CtxUserId() userId: string, @Args('communityId') communityId: string) {
-    return this.service.manager.getCommunityMember(userId, communityId)
+  @Query(() => CommunityManager, { nullable: true })
+  managerGetCommunityManager(@CtxUserId() userId: string, @Args('communityId') communityId: string) {
+    return this.service.manager.getCommunityManager(userId, communityId)
   }
 
   @Query(() => CommunityPaging)
@@ -56,20 +56,20 @@ export class ApiCommunityManagerResolver {
   }
 
   @Mutation(() => Boolean, { nullable: true })
-  managerRemoveCommunityMember(
+  managerRemoveCommunityManager(
     @CtxUserId() userId: string,
     @Args('communityId') communityId: string,
-    @Args('userId') memberId: string,
+    @Args('userId') managerId: string,
   ) {
-    return this.service.manager.removeCommunityMember(userId, communityId, memberId)
+    return this.service.manager.removeCommunityManager(userId, communityId, managerId)
   }
   @Mutation(() => Boolean, { nullable: true })
   managerToggleCommunityAdmin(
     @CtxUserId() userId: string,
     @Args('communityId') communityId: string,
-    @Args('userId') memberId: string,
+    @Args('userId') managerId: string,
   ) {
-    return this.service.manager.toggleCommunityAdmin(userId, communityId, memberId)
+    return this.service.manager.toggleCommunityAdmin(userId, communityId, managerId)
   }
 
   @Mutation(() => Community, { nullable: true })

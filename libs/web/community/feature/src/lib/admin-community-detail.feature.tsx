@@ -1,12 +1,12 @@
 import { useAdminFindOneCommunity } from '@deanslist-platform/web-community-data-access'
 import { AdminCommunityUiUpdateForm, CommunityUiItem } from '@deanslist-platform/web-community-ui'
-import { CoreUiBack, CoreUiDebugModal, CoreUiPage } from '@deanslist-platform/web-core-ui'
-import { ActionIcon, Group, Tooltip } from '@mantine/core'
+import { CoreUiBack, CoreUiButton, CoreUiDebugModal, CoreUiPage } from '@deanslist-platform/web-core-ui'
+import { Group } from '@mantine/core'
 import { UiCard, UiError, UiLoader, UiTabRoutes } from '@pubkey-ui/core'
 import { IconChairDirector } from '@tabler/icons-react'
-import { Link, useLocation, useParams } from 'react-router-dom'
+import { useLocation, useParams } from 'react-router-dom'
 import { AdminCommunityDetailChannelsTab } from './admin-community-detail-channels-tab'
-import { AdminCommunityDetailMembersTab } from './admin-community-detail-members-tab'
+import { AdminCommunityDetailManagersTab } from './admin-community-detail-managers-tab'
 
 export function AdminCommunityDetailFeature() {
   const { pathname } = useLocation()
@@ -20,21 +20,18 @@ export function AdminCommunityDetailFeature() {
     return <UiError message="Community not found." />
   }
 
-  const baseUrl = `/admin/communities/${communityId}`
   return (
     <CoreUiPage
       withContainer={false}
-      title={<CommunityUiItem avatarProps={{ size: 'sm' }} community={item} to={baseUrl} />}
+      title={<CommunityUiItem avatarProps={{ size: 'sm' }} community={item} />}
       leftAction={<CoreUiBack />}
       rightAction={
         <Group>
           <CoreUiDebugModal data={item} />
           {item.manageUrl ? (
-            <Tooltip label="Manage community">
-              <ActionIcon component={Link} to={item.manageUrl} variant="light">
-                <IconChairDirector size={16} />
-              </ActionIcon>
-            </Tooltip>
+            <CoreUiButton to={item.manageUrl} variant="light" size="xs" iconLeft={IconChairDirector}>
+              Manage community
+            </CoreUiButton>
           ) : null}
         </Group>
       }
@@ -42,9 +39,9 @@ export function AdminCommunityDetailFeature() {
       <UiTabRoutes
         tabs={[
           {
-            path: 'members',
-            label: 'Members',
-            element: <AdminCommunityDetailMembersTab communityId={item.id} />,
+            path: 'managers',
+            label: 'Managers',
+            element: <AdminCommunityDetailManagersTab communityId={item.id} />,
           },
           {
             path: 'channels',

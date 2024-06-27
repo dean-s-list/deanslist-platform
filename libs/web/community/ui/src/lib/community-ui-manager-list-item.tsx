@@ -1,4 +1,4 @@
-import type { CommunityMember } from '@deanslist-platform/sdk'
+import type { CommunityManager } from '@deanslist-platform/sdk'
 import { useAuth } from '@deanslist-platform/web-auth-data-access'
 import { UserUiItem } from '@deanslist-platform/web-user-ui'
 import { ActionIcon, Group, Switch } from '@mantine/core'
@@ -6,12 +6,12 @@ import { modals } from '@mantine/modals'
 import { UiCard, UiGroup, UiStack } from '@pubkey-ui/core'
 import { IconTrash } from '@tabler/icons-react'
 
-export function CommunityUiMemberListItem({
+export function CommunityUiManagerListItem({
   item,
   toggle,
   remove,
 }: {
-  item: CommunityMember
+  item: CommunityManager
   toggle: () => Promise<void>
   remove: () => Promise<void>
 }) {
@@ -25,7 +25,7 @@ export function CommunityUiMemberListItem({
           <Group>
             <Switch
               disabled={user?.id === item.userId}
-              label={item.admin ? 'Admin' : 'Member'}
+              label={item.admin ? 'Admin' : 'Manager'}
               checked={item.admin ?? false}
               onChange={toggle}
             />
@@ -36,7 +36,7 @@ export function CommunityUiMemberListItem({
               variant="light"
               onClick={() => {
                 modals.openConfirmModal({
-                  title: 'Remove Community Member',
+                  title: 'Remove Community Manager',
                   children: `Are you sure you want to remove ${
                     item.user?.name ?? item.user?.username
                   } from the community?`,

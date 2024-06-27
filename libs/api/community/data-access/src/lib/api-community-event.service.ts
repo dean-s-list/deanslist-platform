@@ -3,19 +3,19 @@ import { ApiCoreService } from '@deanslist-platform/api-core-data-access'
 import { Injectable } from '@nestjs/common'
 import { CommunityCreatedEvent } from './event/community-created-event'
 import { CommunityDeletedEvent } from './event/community-deleted-event'
-import { CommunityMemberAddedEvent } from './event/community-member-added-event'
-import { CommunityMemberRemovedEvent } from './event/community-member-removed-event'
+import { CommunityManagerAddedEvent } from './event/community-manager-added-event'
+import { CommunityManagerRemovedEvent } from './event/community-manager-removed-event'
 
 @Injectable()
 export class ApiCommunityEventService {
   constructor(private readonly core: ApiCoreService) {}
 
-  emitCommunityMemberAdded(event: CommunityMemberAddedEvent) {
-    return this.core.event.emit(CommunityMemberAddedEvent.event, event)
+  emitCommunityManagerAdded(event: CommunityManagerAddedEvent) {
+    return this.core.event.emit(CommunityManagerAddedEvent.event, event)
   }
 
-  emitCommunityMemberRemoved(event: CommunityMemberRemovedEvent) {
-    return this.core.event.emit(CommunityMemberRemovedEvent.event, event)
+  emitCommunityManagerRemoved(event: CommunityManagerRemovedEvent) {
+    return this.core.event.emit(CommunityManagerRemovedEvent.event, event)
   }
 
   emitCommunityCreated(event: CommunityCreatedEvent) {

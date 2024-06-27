@@ -4,7 +4,7 @@ import { Button } from '@mantine/core'
 import { UiGroup, UiStack } from '@pubkey-ui/core'
 import { useState } from 'react'
 
-export function CommunityUiAddMemberForm({ addMember }: { addMember: (userId: string) => Promise<void> }) {
+export function CommunityUiAddManagerForm({ add }: { add: (userId: string) => Promise<void> }) {
   const [userResult, setUserResult] = useState<User | undefined>(undefined)
   return (
     <UiStack>
@@ -12,7 +12,7 @@ export function CommunityUiAddMemberForm({ addMember }: { addMember: (userId: st
       {userResult ? (
         <UiGroup>
           <UserUiItem user={userResult} />
-          <Button onClick={() => addMember(userResult.id)}>Add</Button>
+          <Button onClick={() => add(userResult.id)}>Add</Button>
         </UiGroup>
       ) : null}
     </UiStack>

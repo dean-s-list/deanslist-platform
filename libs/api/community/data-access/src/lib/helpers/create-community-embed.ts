@@ -3,7 +3,7 @@ import { APIEmbed } from 'discord.js'
 
 export function createCommunityEmbed(
   baseUrl: string,
-  community: Community & { members: unknown[]; projects: unknown[] },
+  community: Community & { managers: unknown[]; projects: unknown[] },
 ): APIEmbed {
   return {
     title: community.name,
@@ -13,7 +13,7 @@ export function createCommunityEmbed(
       { name: 'ID', value: community.id, inline: true },
       { name: 'Created', value: community.createdAt.toISOString(), inline: true },
       { name: 'Updated', value: community.updatedAt.toISOString(), inline: true },
-      { name: 'Members', value: community.members.length.toString() ?? '0', inline: true },
+      { name: 'Managers', value: community.managers.length.toString() ?? '0', inline: true },
       { name: 'Projects', value: community.projects.length.toString() ?? '0', inline: true },
     ],
   }

@@ -13,9 +13,9 @@ export function useManagerToggleCommunityAdmin({ communityId }: { communityId: s
         .then((res) => res.data)
         .then((res) => {
           if (res.toggled) {
-            toastSuccess('Member admin toggled successfully')
+            toastSuccess('Manager admin toggled successfully')
           } else {
-            toastError('Member admin not toggled')
+            toastError('Manager admin not toggled')
           }
         })
         .catch((err) => {

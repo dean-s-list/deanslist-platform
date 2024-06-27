@@ -1,20 +1,23 @@
 import { useAuth } from '@deanslist-platform/web-auth-data-access'
-import { useManagerFindOneCommunity, useManagerGetCommunityMember } from '@deanslist-platform/web-community-data-access'
+import {
+  useManagerFindOneCommunity,
+  useManagerGetCommunityManager,
+} from '@deanslist-platform/web-community-data-access'
 import { CommunityUiItem } from '@deanslist-platform/web-community-ui'
 import { CoreUiBackLink, CoreUiButton, CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
 import { ManagerProjectCommunityFeature } from '@deanslist-platform/web-project-feature'
-import { ActionIcon, Group, Tooltip } from '@mantine/core'
+import { Group } from '@mantine/core'
 import { UiError, UiGroup, UiLoader, UiPage } from '@pubkey-ui/core'
 import { IconSettings, IconShield, IconUsers } from '@tabler/icons-react'
 import { useMemo } from 'react'
-import { Link, Navigate, RouteObject, useLocation, useParams, useRoutes } from 'react-router-dom'
-import { ManagerCommunityDetailMembersTab } from './manager-community-detail-members-tab'
+import { Navigate, RouteObject, useLocation, useParams, useRoutes } from 'react-router-dom'
+import { ManagerCommunityDetailManagersTab } from './manager-community-detail-managers-tab'
 import { ManagerCommunitySettingsGeneralTab } from './manager-community-settings-general.tab'
 
 export function ManagerCommunityDetailFeature() {
   const { communityId } = useParams<{ communityId: string }>() as { communityId: string }
   const { item, query } = useManagerFindOneCommunity({ communityId })
-  const { isCommunityAdmin } = useManagerGetCommunityMember({ communityId })
+  const { isCommunityAdmin } = useManagerGetCommunityManager({ communityId })
   const { isAdmin } = useAuth()
   const { pathname } = useLocation()
 
@@ -26,8 +29,8 @@ export function ManagerCommunityDetailFeature() {
     if (isCommunityAdmin) {
       res.push(
         {
-          path: 'members',
-          element: <ManagerCommunityDetailMembersTab communityId={communityId} />,
+          path: 'managers',
+          element: <ManagerCommunityDetailManagersTab communityId={communityId} />,
         },
         {
           path: 'settings',
@@ -54,29 +57,27 @@ export function ManagerCommunityDetailFeature() {
         {isCommunityAdmin ? (
           <Group>
             <CoreUiDebugModal data={item} />
-            {isAdmin ? (
-              <Tooltip label="Community admin">
-                <ActionIcon component={Link} to={`/admin/communities/${communityId}`} variant="light">
-                  <IconShield size={16} />
-                </ActionIcon>
-              </Tooltip>
-            ) : null}
             <CoreUiButton
-              to={`${item.manageUrl}/members`}
-              variant={pathname.startsWith(`${item.manageUrl}/members`) ? 'primary' : 'light'}
-              size="sm"
+              to={`${item.manageUrl}/managers`}
+              variant={pathname.startsWith(`${item.manageUrl}/managers`) ? 'primary' : 'light'}
+              size="xs"
               iconLeft={IconUsers}
             >
-              Members
+              Managers
             </CoreUiButton>
             <CoreUiButton
               to={`${item.manageUrl}/settings`}
               variant={pathname.startsWith(`${item.manageUrl}/settings`) ? 'primary' : 'light'}
-              size="sm"
+              size="xs"
               iconLeft={IconSettings}
             >
               Settings
             </CoreUiButton>
+            {isAdmin ? (
+              <CoreUiButton to={`/admin/communities/${communityId}`} variant="light" size="xs" iconLeft={IconShield}>
+                Admin
+              </CoreUiButton>
+            ) : null}
           </Group>
         ) : null}
       </UiGroup>

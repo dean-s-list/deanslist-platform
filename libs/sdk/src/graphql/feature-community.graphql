@@ -4,17 +4,17 @@ fragment CommunityDetails on Community {
   createdAt
   homeServerId
   id
-  memberCount
+  managerCount
+  managers {
+    ...CommunityManagerDetails
+  }
+  manageUrl
   name
   updatedAt
   viewUrl
-  manageUrl
-  members {
-    ...CommunityMemberDetails
-  }
 }
 
-fragment CommunityMemberDetails on CommunityMember {
+fragment CommunityManagerDetails on CommunityManager {
   createdAt
   id
   userId
@@ -42,15 +42,15 @@ query userFindOneCommunity($communityId: String!) {
   }
 }
 
-query managerGetCommunityMembers($communityId: String!) {
-  items: managerGetCommunityMembers(communityId: $communityId) {
-    ...CommunityMemberDetails
+query managerGetCommunityManagers($communityId: String!) {
+  items: managerGetCommunityManagers(communityId: $communityId) {
+    ...CommunityManagerDetails
   }
 }
 
-query managerGetCommunityMember($communityId: String!) {
-  item: managerGetCommunityMember(communityId: $communityId) {
-    ...CommunityMemberDetails
+query managerGetCommunityManager($communityId: String!) {
+  item: managerGetCommunityManager(communityId: $communityId) {
+    ...CommunityManagerDetails
   }
 }
 
@@ -98,9 +98,9 @@ query adminFindManyCommunity($input: AdminFindManyCommunityInput!) {
   }
 }
 
-query adminGetCommunityMembers($communityId: String!) {
-  items: adminGetCommunityMembers(communityId: $communityId) {
-    ...CommunityMemberDetails
+query adminGetCommunityManagers($communityId: String!) {
+  items: adminGetCommunityManagers(communityId: $communityId) {
+    ...CommunityManagerDetails
   }
 }
 
@@ -120,22 +120,22 @@ mutation adminDeleteCommunity($communityId: String!) {
   deleted: adminDeleteCommunity(communityId: $communityId)
 }
 
-mutation adminAddCommunityMember($communityId: String!, $userId: String!) {
-  added: adminAddCommunityMember(communityId: $communityId, userId: $userId)
+mutation adminAddCommunityManager($communityId: String!, $userId: String!) {
+  added: adminAddCommunityManager(communityId: $communityId, userId: $userId)
 }
-mutation adminRemoveCommunityMember($communityId: String!, $userId: String!) {
-  removed: adminRemoveCommunityMember(communityId: $communityId, userId: $userId)
+mutation adminRemoveCommunityManager($communityId: String!, $userId: String!) {
+  removed: adminRemoveCommunityManager(communityId: $communityId, userId: $userId)
 }
 
 mutation adminToggleCommunityAdmin($communityId: String!, $userId: String!) {
   toggled: adminToggleCommunityAdmin(communityId: $communityId, userId: $userId)
 }
 
-mutation managerAddCommunityMember($communityId: String!, $userId: String!) {
-  added: managerAddCommunityMember(communityId: $communityId, userId: $userId)
+mutation managerAddCommunityManager($communityId: String!, $userId: String!) {
+  added: managerAddCommunityManager(communityId: $communityId, userId: $userId)
 }
-mutation managerRemoveCommunityMember($communityId: String!, $userId: String!) {
-  removed: managerRemoveCommunityMember(communityId: $communityId, userId: $userId)
+mutation managerRemoveCommunityManager($communityId: String!, $userId: String!) {
+  removed: managerRemoveCommunityManager(communityId: $communityId, userId: $userId)
 }
 
 mutation managerToggleCommunityAdmin($communityId: String!, $userId: String!) {

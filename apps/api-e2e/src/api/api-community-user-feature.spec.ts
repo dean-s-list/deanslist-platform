@@ -151,7 +151,7 @@ describe('api-community-feature', () => {
       it('should not add a community member', async () => {
         expect.assertions(1)
         try {
-          await sdk.managerAddCommunityMember({ communityId: aliceCommunityId, userId: 'bob' }, { cookie: bob })
+          await sdk.managerAddCommunityManager({ communityId: aliceCommunityId, userId: 'bob' }, { cookie: bob })
         } catch (e) {
           expect(e.message).toBe('You are not a community admin')
         }
@@ -160,7 +160,7 @@ describe('api-community-feature', () => {
       it('should not remove a community member', async () => {
         expect.assertions(1)
         try {
-          await sdk.managerRemoveCommunityMember({ communityId: aliceCommunityId, userId: 'bob' }, { cookie: bob })
+          await sdk.managerRemoveCommunityManager({ communityId: aliceCommunityId, userId: 'bob' }, { cookie: bob })
         } catch (e) {
           expect(e.message).toBe('You are not a community admin')
         }

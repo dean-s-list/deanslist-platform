@@ -26,18 +26,18 @@ model Comment {
 }
 
 model Community {
-  id           String            @id @default(cuid())
-  createdAt    DateTime          @default(now())
-  updatedAt    DateTime          @updatedAt
+  id           String             @id @default(cuid())
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
   name         String
   avatarUrl    String?
   homeServerId String?
   channels     DiscordChannel[]
-  members      CommunityMember[]
+  managers     CommunityManager[]
   projects     Project[]
 }
 
-model CommunityMember {
+model CommunityManager {
   id          String    @id @default(cuid())
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -182,23 +182,23 @@ model Rating {
 }
 
 model User {
-  id              String            @id @default(cuid())
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime          @updatedAt
+  id              String             @id @default(cuid())
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
   avatarUrl       String?
-  developer       Boolean           @default(false)
+  developer       Boolean            @default(false)
   name            String?
   password        String?
   walletAddress   String?
-  role            UserRole          @default(User)
-  status          UserStatus        @default(Created)
-  username        String            @unique
+  role            UserRole           @default(User)
+  status          UserStatus         @default(Created)
+  username        String             @unique
   identities      Identity[]
-  communities     CommunityMember[]
+  communities     CommunityManager[]
   reviews         Review[]
-  projectManagers Project[]         @relation(name: "ProjectManagers")
-  projectMembers  Project[]         @relation(name: "ProjectMembers")
-  projectReferral Project[]         @relation(name: "ProjectReferral")
+  projectManagers Project[]          @relation(name: "ProjectManagers")
+  projectMembers  Project[]          @relation(name: "ProjectMembers")
+  projectReferral Project[]          @relation(name: "ProjectReferral")
   comments        Comment[]
   ratings         Rating[]
 }

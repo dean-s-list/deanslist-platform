@@ -2,20 +2,20 @@ import { useSdk } from '@deanslist-platform/web-core-data-access'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useMutation } from '@tanstack/react-query'
 
-export function useManagerAddCommunityMember({ communityId }: { communityId: string }) {
+export function useManagerAddCommunityManager({ communityId }: { communityId: string }) {
   const sdk = useSdk()
 
   const mutation = useMutation({
-    mutationKey: ['manager', 'managerAddCommunityMember', { communityId }],
+    mutationKey: ['manager', 'managerAddCommunityManager', { communityId }],
     mutationFn: (userId: string) =>
       sdk
-        .managerAddCommunityMember({ communityId, userId })
+        .managerAddCommunityManager({ communityId, userId })
         .then((res) => res.data)
         .then((res) => {
           if (res.added) {
-            toastSuccess('Member added to community')
+            toastSuccess('Manager added to community')
           } else {
-            toastError('Member not added to community')
+            toastError('Manager not added to community')
           }
         })
         .catch((err) => {

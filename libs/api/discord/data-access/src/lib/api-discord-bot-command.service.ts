@@ -1,5 +1,5 @@
-import { ApiCoreService, createIdentityProviderCache } from '@deanslist-platform/api-core-data-access'
 import { ApiCommunityService, createCommunityEmbed } from '@deanslist-platform/api-community-data-access'
+import { ApiCoreService, createIdentityProviderCache } from '@deanslist-platform/api-core-data-access'
 import { Injectable } from '@nestjs/common'
 import { IdentityProvider } from '@prisma/client'
 import { ChatInputCommandInteraction, SlashCommandBuilder } from 'discord.js'
@@ -44,7 +44,7 @@ export class ApiDiscordBotCommandService {
 
           const found = await this.core.data.discordChannel.findUnique({
             where: { id: channel },
-            include: { projects: true, communities: { include: { members: true, projects: true } } },
+            include: { projects: true, communities: { include: { managers: true, projects: true } } },
           })
           if (!found) {
             await interaction.reply({ ephemeral: true, content: `Channel <#${channel}> is not configured` })

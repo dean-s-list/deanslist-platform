@@ -33,7 +33,7 @@ export class ApiCommunityDataService {
     const data: Prisma.CommunityCreateInput = {
       ...input,
       id,
-      members: { create: { userId, admin: true } },
+      managers: { create: { userId, admin: true } },
     }
 
     const community = await this.core.data.community.create({ data })
@@ -58,22 +58,22 @@ export class ApiCommunityDataService {
   }
 
   async ensureCommunityAdmin({ communityId, userId }: { communityId: string; userId: string }) {
-    const member = await this.getCommunityMember({ communityId, userId })
-    if (!member || !member.admin) {
+    const manager = await this.getCommunityManager({ communityId, userId })
+    if (!manager || !manager.admin) {
       throw new Error('You are not a community admin')
     }
-    return member
+    return manager
   }
 
-  async getCommunityMember({ communityId, userId }: { communityId: string; userId: string }) {
-    return this.core.data.communityMember.findUnique({
+  async getCommunityManager({ communityId, userId }: { communityId: string; userId: string }) {
+    return this.core.data.communityManager.findUnique({
       where: { communityId_userId: { communityId, userId } },
       include: { user: true },
     })
   }
 
-  async getCommunityMembers(communityId: string) {
-    return this.core.data.communityMember.findMany({
+  async getCommunityManagers(communityId: string) {
+    return this.core.data.communityManager.findMany({
       where: { communityId },
       include: { user: true },
       orderBy: [{ user: { username: 'asc' } }],
@@ -82,10 +82,10 @@ export class ApiCommunityDataService {
 
   async getCommunitiesForUser(userId: string) {
     return this.core.data.community.findMany({
-      where: { members: { some: { userId } } },
+      where: { managers: { some: { userId } } },
       orderBy: { name: 'asc' },
       include: {
-        members: { distinct: ['userId'] },
+        managers: { distinct: ['userId'] },
         projects: { include: { _count: true } },
       },
     })
@@ -105,7 +105,7 @@ export class ApiCommunityDataService {
   async findOneCommunity(communityId: string) {
     const found = await this.core.data.community.findUnique({
       where: { id: communityId },
-      include: { members: true },
+      include: { managers: true },
     })
     if (!found) {
       throw new Error('Community not found')
@@ -117,44 +117,44 @@ export class ApiCommunityDataService {
     return this.core.data.community.update({ where: { id: communityId }, data: input })
   }
 
-  async removeCommunityMember(userId: string, communityId: string, memberId: string) {
-    const member = await this.getCommunityMember({ communityId, userId: memberId })
-    if (!member) {
-      throw new Error('Member not found')
+  async removeCommunityManager(userId: string, communityId: string, managerId: string) {
+    const manager = await this.getCommunityManager({ communityId, userId: managerId })
+    if (!manager) {
+      throw new Error('Manager not found')
     }
-    if (member.admin) {
+    if (manager.admin) {
       throw new Error('Cannot remove community admin')
     }
-    const removed = await this.core.data.communityMember.delete({
-      where: { communityId_userId: { communityId, userId: memberId } },
+    const removed = await this.core.data.communityManager.delete({
+      where: { communityId_userId: { communityId, userId: managerId } },
     })
-    this.event.emitCommunityMemberRemoved({ userId, memberId, communityId })
+    this.event.emitCommunityManagerRemoved({ userId, managerId, communityId })
     return !!removed
   }
 
-  async addCommunityMember(userId: string, communityId: string, memberId: string) {
-    const found = await this.getCommunityMember({ communityId, userId: memberId })
+  async addCommunityManager(userId: string, communityId: string, managerId: string) {
+    const found = await this.getCommunityManager({ communityId, userId: managerId })
     if (found) {
-      throw new Error('Member already added')
+      throw new Error('Manager already added')
     }
-    const added = await this.core.data.communityMember.create({
-      data: { communityId, userId: memberId },
+    const added = await this.core.data.communityManager.create({
+      data: { communityId, userId: managerId },
     })
-    this.event.emitCommunityMemberAdded({ userId, memberId, communityId })
+    this.event.emitCommunityManagerAdded({ userId, managerId, communityId })
     return !!added
   }
 
-  async toggleCommunityAdmin(userId: string, communityId: string, memberId: string) {
-    const member = await this.getCommunityMember({ communityId, userId: memberId })
-    if (!member) {
-      throw new Error('Member not found')
+  async toggleCommunityAdmin(userId: string, communityId: string, managerId: string) {
+    const manager = await this.getCommunityManager({ communityId, userId: managerId })
+    if (!manager) {
+      throw new Error('Manager not found')
     }
-    const updated = await this.core.data.communityMember.update({
-      where: { communityId_userId: { communityId, userId: memberId } },
-      data: { admin: !member.admin },
+    const updated = await this.core.data.communityManager.update({
+      where: { communityId_userId: { communityId, userId: managerId } },
+      data: { admin: !manager.admin },
     })
     // TODO: emit event
-    // this.event.emitCommunityMemberToggledAdmin({ userId, memberId, communityId })
+    // this.event.emitCommunityManagerToggledAdmin({ userId, managerId, communityId })
     return !!updated
   }
 }
