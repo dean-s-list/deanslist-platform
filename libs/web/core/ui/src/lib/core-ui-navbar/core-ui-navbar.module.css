@@ -15,18 +15,16 @@
 .link {
   display: block;
   line-height: 1;
-  padding: rem(8px) rem(12px);
-  border-radius: var(--mantine-radius-sm);
+  padding: rem(12px) rem(12px);
+  border-radius: var(--mantine-radius-md);
   text-decoration: none;
   color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
-  font-size: var(--mantine-font-size-sm);
-  font-weight: 500;
 
   @mixin hover {
-    background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-7));
+    background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-9));
   }
 }
 .linkActive {
-  background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-8));
+  background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-9));
   color: light-dark(var(--mantine-color-brand-6), var(--mantine-color-brand-4));
 }

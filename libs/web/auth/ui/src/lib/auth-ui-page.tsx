@@ -12,7 +12,7 @@ export function AuthUiPage({ authEnabled, children }: { authEnabled: boolean; ch
         <Box miw={400} p="lg">
           <UiStack gap={48}>
             <Group justify="center">
-              <CoreUiLogoType height={48} />
+              <CoreUiLogoType height={64} />
             </Group>
             {children}
           </UiStack>

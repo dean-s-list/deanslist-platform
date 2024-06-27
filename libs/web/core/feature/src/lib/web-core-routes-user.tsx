@@ -1,3 +1,4 @@
+import { CoreUiNotFound } from '@deanslist-platform/web-core-ui'
 import { DashboardFeature } from '@deanslist-platform/web-dashboard-feature'
 import { UserLeaderboardFeature } from '@deanslist-platform/web-leaderboard-feature'
 import { UserProjectFeature } from '@deanslist-platform/web-project-feature'
@@ -30,7 +31,8 @@ const routes: RouteObject[] = [
   { path: '/teams/*', element: <UserTeamFeature /> },
   { path: '/leaderboard/*', element: <UserLeaderboardFeature /> },
   { path: '/u/*', element: <UserFeature /> },
-  { path: 'ratings/*', element: <UserRatingFeature /> },
+  { path: '/teams/*', element: <UserRatingFeature /> },
+  { path: '*', element: <CoreUiNotFound to="/dashboard" /> },
 ]
 
 export default function WebCoreRoutesUser() {

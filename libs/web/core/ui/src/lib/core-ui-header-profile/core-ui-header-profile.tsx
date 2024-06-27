@@ -1,7 +1,7 @@
 import { User, UserRole } from '@deanslist-platform/sdk'
 import { Button, Menu } from '@mantine/core'
 import { UiAvatar } from '@pubkey-ui/core'
-import { IconBug, IconLogout, IconSettings, IconShield, IconUser } from '@tabler/icons-react'
+import { IconBug, IconChevronDown, IconLogout, IconSettings, IconShield, IconUser } from '@tabler/icons-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -22,14 +22,25 @@ export function CoreUiHeaderProfile({ user, logout }: { user?: User | null; logo
       arrowOffset={18}
     >
       <Menu.Target>
-        <Button p={0} variant={open ? 'light' : 'default'} radius="xl">
-          <UiAvatar
-            url={user?.avatarUrl}
-            name={user?.username}
-            alt={user?.username ?? 'User Avatar'}
-            radius={100}
-            size={34}
-          />
+        <Button
+          variant={open ? 'light' : 'default'}
+          style={{ border: '1px solid white' }}
+          color="brand"
+          radius="xl"
+          leftSection={
+            <UiAvatar
+              url={user?.avatarUrl}
+              name={user?.username}
+              alt={user?.username ?? 'User Avatar'}
+              radius={100}
+              size={24}
+            />
+          }
+          rightSection={
+            <IconChevronDown size={20} stroke={2.5} style={{ transform: open ? 'rotate(180deg)' : undefined }} />
+          }
+        >
+          Profile
         </Button>
       </Menu.Target>
       <Menu.Dropdown>

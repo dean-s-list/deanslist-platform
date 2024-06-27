@@ -4,7 +4,7 @@ import { ReactNode, Suspense } from 'react'
 export function CoreUiLayout({
   children,
   header,
-  headerHeight = rem(56),
+  headerHeight = rem(72),
   navbar,
   navbarConfig = {},
   ...props
@@ -17,6 +17,8 @@ export function CoreUiLayout({
 }) {
   return (
     <AppShell
+      withBorder={false}
+      layout="alt"
       header={{ height: headerHeight }}
       navbar={navbar ? { width: 300, breakpoint: 'md', ...navbarConfig } : undefined}
       padding="md"
