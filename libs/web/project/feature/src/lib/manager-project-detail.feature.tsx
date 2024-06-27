@@ -5,7 +5,7 @@ import { Box, Group, Paper } from '@mantine/core'
 import { UiAlert, UiError, UiGroup, UiLoader, UiStack, UiTabRoute, UiTabRoutes } from '@pubkey-ui/core'
 import { useParams } from 'react-router-dom'
 import { ManagerProjectDetailChannelsTab } from './manager-project-detail-channels-tab'
-import { ManagerProjectDetailMembersTab } from './manager-project-detail-members-tab'
+import { ManagerProjectDetailTeamTab } from './manager-project-detail-team-tab'
 import { ManagerProjectSettingsTab } from './manager-project-settings-tab'
 
 export function ManagerProjectDetailFeature() {
@@ -18,7 +18,7 @@ export function ManagerProjectDetailFeature() {
       label: 'Settings',
       element: <ManagerProjectSettingsTab projectId={projectId} />,
     },
-    { path: 'members', label: 'Members', element: <ManagerProjectDetailMembersTab projectId={projectId} /> },
+    { path: 'team', label: 'Team', element: <ManagerProjectDetailTeamTab projectId={projectId} /> },
     { path: 'rating', label: 'Rating', element: <UiAlert message="Coming soon." /> },
     { path: 'payout', label: 'Payout', element: <UiAlert message="Coming soon." /> },
     { path: 'channels', label: '', element: <ManagerProjectDetailChannelsTab projectId={projectId} /> },

@@ -62,7 +62,7 @@ query adminFindOneProject($projectId: String!) {
     referral {
       ...UserDetails
     }
-    members {
+    reviewers {
       ...UserDetails
     }
   }
@@ -86,12 +86,12 @@ mutation adminRemoveProjectManager($projectId: String!, $managerUserId: String!)
   removed: adminRemoveProjectManager(projectId: $projectId, managerUserId: $managerUserId)
 }
 
-mutation adminAddProjectMember($projectId: String!, $memberUserId: String!) {
-  added: adminAddProjectMember(projectId: $projectId, memberUserId: $memberUserId)
+mutation adminAddProjectReviewer($projectId: String!, $reviewerUserId: String!) {
+  added: adminAddProjectReviewer(projectId: $projectId, reviewerUserId: $reviewerUserId)
 }
 
-mutation adminRemoveProjectMember($projectId: String!, $memberUserId: String!) {
-  removed: adminRemoveProjectMember(projectId: $projectId, memberUserId: $memberUserId)
+mutation adminRemoveProjectReviewer($projectId: String!, $reviewerUserId: String!) {
+  removed: adminRemoveProjectReviewer(projectId: $projectId, reviewerUserId: $reviewerUserId)
 }
 
 mutation adminAddProjectReferral($projectId: String!, $referralUserId: String!) {
@@ -119,7 +119,7 @@ query managerFindOneProject($projectId: String!) {
     referral {
       ...UserDetails
     }
-    members {
+    reviewers {
       ...UserDetails
     }
   }
@@ -149,12 +149,12 @@ mutation managerRemoveProjectManager($projectId: String!, $managerUserId: String
   removed: managerRemoveProjectManager(projectId: $projectId, managerUserId: $managerUserId)
 }
 
-mutation managerAddProjectMember($projectId: String!, $memberUserId: String!) {
-  added: managerAddProjectMember(projectId: $projectId, memberUserId: $memberUserId)
+mutation managerAddProjectReviewer($projectId: String!, $reviewerUserId: String!) {
+  added: managerAddProjectReviewer(projectId: $projectId, reviewerUserId: $reviewerUserId)
 }
 
-mutation managerRemoveProjectMember($projectId: String!, $memberUserId: String!) {
-  removed: managerRemoveProjectMember(projectId: $projectId, memberUserId: $memberUserId)
+mutation managerRemoveProjectReviewer($projectId: String!, $reviewerUserId: String!) {
+  removed: managerRemoveProjectReviewer(projectId: $projectId, reviewerUserId: $reviewerUserId)
 }
 
 mutation managerAddProjectReferral($projectId: String!, $referralUserId: String!) {

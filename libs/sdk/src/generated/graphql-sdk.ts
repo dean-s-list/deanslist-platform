@@ -327,8 +327,8 @@ export type Mutation = {
   __typename?: 'Mutation'
   adminAddCommunityManager?: Maybe<Scalars['Boolean']['output']>
   adminAddProjectManager?: Maybe<Scalars['Boolean']['output']>
-  adminAddProjectMember?: Maybe<Scalars['Boolean']['output']>
   adminAddProjectReferral?: Maybe<Scalars['Boolean']['output']>
+  adminAddProjectReviewer?: Maybe<Scalars['Boolean']['output']>
   adminCreateCommunityChannel: Scalars['Boolean']['output']
   adminCreateIdentity?: Maybe<Identity>
   adminCreateProjectChannel: Scalars['Boolean']['output']
@@ -346,8 +346,8 @@ export type Mutation = {
   adminPingDiscordChannel: Scalars['Boolean']['output']
   adminRemoveCommunityManager?: Maybe<Scalars['Boolean']['output']>
   adminRemoveProjectManager?: Maybe<Scalars['Boolean']['output']>
-  adminRemoveProjectMember?: Maybe<Scalars['Boolean']['output']>
   adminRemoveProjectReferral?: Maybe<Scalars['Boolean']['output']>
+  adminRemoveProjectReviewer?: Maybe<Scalars['Boolean']['output']>
   adminToggleCommunityAdmin?: Maybe<Scalars['Boolean']['output']>
   adminUpdateComment?: Maybe<Comment>
   adminUpdateCommunity?: Maybe<Community>
@@ -360,16 +360,16 @@ export type Mutation = {
   logout?: Maybe<Scalars['Boolean']['output']>
   managerAddCommunityManager?: Maybe<Scalars['Boolean']['output']>
   managerAddProjectManager?: Maybe<Scalars['Boolean']['output']>
-  managerAddProjectMember?: Maybe<Scalars['Boolean']['output']>
   managerAddProjectReferral?: Maybe<Scalars['Boolean']['output']>
+  managerAddProjectReviewer?: Maybe<Scalars['Boolean']['output']>
   managerCreateCommunity?: Maybe<Community>
   managerCreateProject?: Maybe<Project>
   managerDeleteCommunity?: Maybe<Scalars['Boolean']['output']>
   managerDeleteProject?: Maybe<Scalars['Boolean']['output']>
   managerRemoveCommunityManager?: Maybe<Scalars['Boolean']['output']>
   managerRemoveProjectManager?: Maybe<Scalars['Boolean']['output']>
-  managerRemoveProjectMember?: Maybe<Scalars['Boolean']['output']>
   managerRemoveProjectReferral?: Maybe<Scalars['Boolean']['output']>
+  managerRemoveProjectReviewer?: Maybe<Scalars['Boolean']['output']>
   managerToggleCommunityAdmin?: Maybe<Scalars['Boolean']['output']>
   managerUpdateCommunity?: Maybe<Community>
   managerUpdateProject?: Maybe<Project>
@@ -399,14 +399,14 @@ export type MutationAdminAddProjectManagerArgs = {
   projectId: Scalars['String']['input']
 }
 
-export type MutationAdminAddProjectMemberArgs = {
-  memberUserId: Scalars['String']['input']
-  projectId: Scalars['String']['input']
-}
-
 export type MutationAdminAddProjectReferralArgs = {
   projectId: Scalars['String']['input']
   referralUserId: Scalars['String']['input']
+}
+
+export type MutationAdminAddProjectReviewerArgs = {
+  projectId: Scalars['String']['input']
+  reviewerUserId: Scalars['String']['input']
 }
 
 export type MutationAdminCreateCommunityChannelArgs = {
@@ -486,14 +486,14 @@ export type MutationAdminRemoveProjectManagerArgs = {
   projectId: Scalars['String']['input']
 }
 
-export type MutationAdminRemoveProjectMemberArgs = {
-  memberUserId: Scalars['String']['input']
-  projectId: Scalars['String']['input']
-}
-
 export type MutationAdminRemoveProjectReferralArgs = {
   projectId: Scalars['String']['input']
   referralUserId: Scalars['String']['input']
+}
+
+export type MutationAdminRemoveProjectReviewerArgs = {
+  projectId: Scalars['String']['input']
+  reviewerUserId: Scalars['String']['input']
 }
 
 export type MutationAdminToggleCommunityAdminArgs = {
@@ -549,14 +549,14 @@ export type MutationManagerAddProjectManagerArgs = {
   projectId: Scalars['String']['input']
 }
 
-export type MutationManagerAddProjectMemberArgs = {
-  memberUserId: Scalars['String']['input']
-  projectId: Scalars['String']['input']
-}
-
 export type MutationManagerAddProjectReferralArgs = {
   projectId: Scalars['String']['input']
   referralUserId: Scalars['String']['input']
+}
+
+export type MutationManagerAddProjectReviewerArgs = {
+  projectId: Scalars['String']['input']
+  reviewerUserId: Scalars['String']['input']
 }
 
 export type MutationManagerCreateCommunityArgs = {
@@ -585,14 +585,14 @@ export type MutationManagerRemoveProjectManagerArgs = {
   projectId: Scalars['String']['input']
 }
 
-export type MutationManagerRemoveProjectMemberArgs = {
-  memberUserId: Scalars['String']['input']
-  projectId: Scalars['String']['input']
-}
-
 export type MutationManagerRemoveProjectReferralArgs = {
   projectId: Scalars['String']['input']
   referralUserId: Scalars['String']['input']
+}
+
+export type MutationManagerRemoveProjectReviewerArgs = {
+  projectId: Scalars['String']['input']
+  reviewerUserId: Scalars['String']['input']
 }
 
 export type MutationManagerToggleCommunityAdminArgs = {
@@ -699,10 +699,10 @@ export type Project = {
   linkWebsite?: Maybe<Scalars['String']['output']>
   manageUrl: Scalars['String']['output']
   managers?: Maybe<Array<User>>
-  members?: Maybe<Array<User>>
   name: Scalars['String']['output']
   referral?: Maybe<User>
   reviewCount?: Maybe<Scalars['Int']['output']>
+  reviewers?: Maybe<Array<User>>
   slug: Scalars['String']['output']
   startDate?: Maybe<Scalars['DateTime']['output']>
   status?: Maybe<ProjectStatus>
@@ -3013,7 +3013,7 @@ export type AdminFindOneProjectQuery = {
       username?: string | null
       walletAddress?: string | null
     } | null
-    members?: Array<{
+    reviewers?: Array<{
       __typename?: 'User'
       avatarUrl?: string | null
       createdAt?: Date | null
@@ -3186,19 +3186,19 @@ export type AdminRemoveProjectManagerMutationVariables = Exact<{
 
 export type AdminRemoveProjectManagerMutation = { __typename?: 'Mutation'; removed?: boolean | null }
 
-export type AdminAddProjectMemberMutationVariables = Exact<{
+export type AdminAddProjectReviewerMutationVariables = Exact<{
   projectId: Scalars['String']['input']
-  memberUserId: Scalars['String']['input']
+  reviewerUserId: Scalars['String']['input']
 }>
 
-export type AdminAddProjectMemberMutation = { __typename?: 'Mutation'; added?: boolean | null }
+export type AdminAddProjectReviewerMutation = { __typename?: 'Mutation'; added?: boolean | null }
 
-export type AdminRemoveProjectMemberMutationVariables = Exact<{
+export type AdminRemoveProjectReviewerMutationVariables = Exact<{
   projectId: Scalars['String']['input']
-  memberUserId: Scalars['String']['input']
+  reviewerUserId: Scalars['String']['input']
 }>
 
-export type AdminRemoveProjectMemberMutation = { __typename?: 'Mutation'; removed?: boolean | null }
+export type AdminRemoveProjectReviewerMutation = { __typename?: 'Mutation'; removed?: boolean | null }
 
 export type AdminAddProjectReferralMutationVariables = Exact<{
   projectId: Scalars['String']['input']
@@ -3354,7 +3354,7 @@ export type ManagerFindOneProjectQuery = {
       username?: string | null
       walletAddress?: string | null
     } | null
-    members?: Array<{
+    reviewers?: Array<{
       __typename?: 'User'
       avatarUrl?: string | null
       createdAt?: Date | null
@@ -3610,19 +3610,19 @@ export type ManagerRemoveProjectManagerMutationVariables = Exact<{
 
 export type ManagerRemoveProjectManagerMutation = { __typename?: 'Mutation'; removed?: boolean | null }
 
-export type ManagerAddProjectMemberMutationVariables = Exact<{
+export type ManagerAddProjectReviewerMutationVariables = Exact<{
   projectId: Scalars['String']['input']
-  memberUserId: Scalars['String']['input']
+  reviewerUserId: Scalars['String']['input']
 }>
 
-export type ManagerAddProjectMemberMutation = { __typename?: 'Mutation'; added?: boolean | null }
+export type ManagerAddProjectReviewerMutation = { __typename?: 'Mutation'; added?: boolean | null }
 
-export type ManagerRemoveProjectMemberMutationVariables = Exact<{
+export type ManagerRemoveProjectReviewerMutationVariables = Exact<{
   projectId: Scalars['String']['input']
-  memberUserId: Scalars['String']['input']
+  reviewerUserId: Scalars['String']['input']
 }>
 
-export type ManagerRemoveProjectMemberMutation = { __typename?: 'Mutation'; removed?: boolean | null }
+export type ManagerRemoveProjectReviewerMutation = { __typename?: 'Mutation'; removed?: boolean | null }
 
 export type ManagerAddProjectReferralMutationVariables = Exact<{
   projectId: Scalars['String']['input']
@@ -5563,7 +5563,7 @@ export const AdminFindOneProjectDocument = gql`
       referral {
         ...UserDetails
       }
-      members {
+      reviewers {
         ...UserDetails
       }
     }
@@ -5594,14 +5594,14 @@ export const AdminRemoveProjectManagerDocument = gql`
     removed: adminRemoveProjectManager(projectId: $projectId, managerUserId: $managerUserId)
   }
 `
-export const AdminAddProjectMemberDocument = gql`
-  mutation adminAddProjectMember($projectId: String!, $memberUserId: String!) {
-    added: adminAddProjectMember(projectId: $projectId, memberUserId: $memberUserId)
+export const AdminAddProjectReviewerDocument = gql`
+  mutation adminAddProjectReviewer($projectId: String!, $reviewerUserId: String!) {
+    added: adminAddProjectReviewer(projectId: $projectId, reviewerUserId: $reviewerUserId)
   }
 `
-export const AdminRemoveProjectMemberDocument = gql`
-  mutation adminRemoveProjectMember($projectId: String!, $memberUserId: String!) {
-    removed: adminRemoveProjectMember(projectId: $projectId, memberUserId: $memberUserId)
+export const AdminRemoveProjectReviewerDocument = gql`
+  mutation adminRemoveProjectReviewer($projectId: String!, $reviewerUserId: String!) {
+    removed: adminRemoveProjectReviewer(projectId: $projectId, reviewerUserId: $reviewerUserId)
   }
 `
 export const AdminAddProjectReferralDocument = gql`
@@ -5635,7 +5635,7 @@ export const ManagerFindOneProjectDocument = gql`
       referral {
         ...UserDetails
       }
-      members {
+      reviewers {
         ...UserDetails
       }
     }
@@ -5674,14 +5674,14 @@ export const ManagerRemoveProjectManagerDocument = gql`
     removed: managerRemoveProjectManager(projectId: $projectId, managerUserId: $managerUserId)
   }
 `
-export const ManagerAddProjectMemberDocument = gql`
-  mutation managerAddProjectMember($projectId: String!, $memberUserId: String!) {
-    added: managerAddProjectMember(projectId: $projectId, memberUserId: $memberUserId)
+export const ManagerAddProjectReviewerDocument = gql`
+  mutation managerAddProjectReviewer($projectId: String!, $reviewerUserId: String!) {
+    added: managerAddProjectReviewer(projectId: $projectId, reviewerUserId: $reviewerUserId)
   }
 `
-export const ManagerRemoveProjectMemberDocument = gql`
-  mutation managerRemoveProjectMember($projectId: String!, $memberUserId: String!) {
-    removed: managerRemoveProjectMember(projectId: $projectId, memberUserId: $memberUserId)
+export const ManagerRemoveProjectReviewerDocument = gql`
+  mutation managerRemoveProjectReviewer($projectId: String!, $reviewerUserId: String!) {
+    removed: managerRemoveProjectReviewer(projectId: $projectId, reviewerUserId: $reviewerUserId)
   }
 `
 export const ManagerAddProjectReferralDocument = gql`
@@ -5970,8 +5970,8 @@ const AdminUpdateProjectDocumentString = print(AdminUpdateProjectDocument)
 const AdminDeleteProjectDocumentString = print(AdminDeleteProjectDocument)
 const AdminAddProjectManagerDocumentString = print(AdminAddProjectManagerDocument)
 const AdminRemoveProjectManagerDocumentString = print(AdminRemoveProjectManagerDocument)
-const AdminAddProjectMemberDocumentString = print(AdminAddProjectMemberDocument)
-const AdminRemoveProjectMemberDocumentString = print(AdminRemoveProjectMemberDocument)
+const AdminAddProjectReviewerDocumentString = print(AdminAddProjectReviewerDocument)
+const AdminRemoveProjectReviewerDocumentString = print(AdminRemoveProjectReviewerDocument)
 const AdminAddProjectReferralDocumentString = print(AdminAddProjectReferralDocument)
 const AdminRemoveProjectReferralDocumentString = print(AdminRemoveProjectReferralDocument)
 const ManagerFindManyProjectDocumentString = print(ManagerFindManyProjectDocument)
@@ -5981,8 +5981,8 @@ const ManagerUpdateProjectDocumentString = print(ManagerUpdateProjectDocument)
 const ManagerDeleteProjectDocumentString = print(ManagerDeleteProjectDocument)
 const ManagerAddProjectManagerDocumentString = print(ManagerAddProjectManagerDocument)
 const ManagerRemoveProjectManagerDocumentString = print(ManagerRemoveProjectManagerDocument)
-const ManagerAddProjectMemberDocumentString = print(ManagerAddProjectMemberDocument)
-const ManagerRemoveProjectMemberDocumentString = print(ManagerRemoveProjectMemberDocument)
+const ManagerAddProjectReviewerDocumentString = print(ManagerAddProjectReviewerDocument)
+const ManagerRemoveProjectReviewerDocumentString = print(ManagerRemoveProjectReviewerDocument)
 const ManagerAddProjectReferralDocumentString = print(ManagerAddProjectReferralDocument)
 const ManagerRemoveProjectReferralDocumentString = print(ManagerRemoveProjectReferralDocument)
 const UserFindManyRatingDocumentString = print(UserFindManyRatingDocument)
@@ -7407,11 +7407,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
-    adminAddProjectMember(
-      variables: AdminAddProjectMemberMutationVariables,
+    adminAddProjectReviewer(
+      variables: AdminAddProjectReviewerMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: AdminAddProjectMemberMutation
+      data: AdminAddProjectReviewerMutation
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -7419,20 +7419,20 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<AdminAddProjectMemberMutation>(AdminAddProjectMemberDocumentString, variables, {
+          client.rawRequest<AdminAddProjectReviewerMutation>(AdminAddProjectReviewerDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'adminAddProjectMember',
+        'adminAddProjectReviewer',
         'mutation',
         variables,
       )
     },
-    adminRemoveProjectMember(
-      variables: AdminRemoveProjectMemberMutationVariables,
+    adminRemoveProjectReviewer(
+      variables: AdminRemoveProjectReviewerMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: AdminRemoveProjectMemberMutation
+      data: AdminRemoveProjectReviewerMutation
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -7440,11 +7440,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<AdminRemoveProjectMemberMutation>(AdminRemoveProjectMemberDocumentString, variables, {
+          client.rawRequest<AdminRemoveProjectReviewerMutation>(AdminRemoveProjectReviewerDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'adminRemoveProjectMember',
+        'adminRemoveProjectReviewer',
         'mutation',
         variables,
       )
@@ -7638,11 +7638,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
-    managerAddProjectMember(
-      variables: ManagerAddProjectMemberMutationVariables,
+    managerAddProjectReviewer(
+      variables: ManagerAddProjectReviewerMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: ManagerAddProjectMemberMutation
+      data: ManagerAddProjectReviewerMutation
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -7650,20 +7650,20 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<ManagerAddProjectMemberMutation>(ManagerAddProjectMemberDocumentString, variables, {
+          client.rawRequest<ManagerAddProjectReviewerMutation>(ManagerAddProjectReviewerDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'managerAddProjectMember',
+        'managerAddProjectReviewer',
         'mutation',
         variables,
       )
     },
-    managerRemoveProjectMember(
-      variables: ManagerRemoveProjectMemberMutationVariables,
+    managerRemoveProjectReviewer(
+      variables: ManagerRemoveProjectReviewerMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: ManagerRemoveProjectMemberMutation
+      data: ManagerRemoveProjectReviewerMutation
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -7671,11 +7671,12 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<ManagerRemoveProjectMemberMutation>(ManagerRemoveProjectMemberDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'managerRemoveProjectMember',
+          client.rawRequest<ManagerRemoveProjectReviewerMutation>(
+            ManagerRemoveProjectReviewerDocumentString,
+            variables,
+            { ...requestHeaders, ...wrappedRequestHeaders },
+          ),
+        'managerRemoveProjectReviewer',
         'mutation',
         variables,
       )

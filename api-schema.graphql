@@ -303,8 +303,8 @@ input ManagerUpdateProjectInput {
 type Mutation {
   adminAddCommunityManager(communityId: String!, userId: String!): Boolean
   adminAddProjectManager(managerUserId: String!, projectId: String!): Boolean
-  adminAddProjectMember(memberUserId: String!, projectId: String!): Boolean
   adminAddProjectReferral(projectId: String!, referralUserId: String!): Boolean
+  adminAddProjectReviewer(projectId: String!, reviewerUserId: String!): Boolean
   adminCreateCommunityChannel(channelId: String!, communityId: String!, serverId: String!): Boolean!
   adminCreateIdentity(input: AdminCreateIdentityInput!): Identity
   adminCreateProjectChannel(channelId: String!, projectId: String!, serverId: String!): Boolean!
@@ -322,8 +322,8 @@ type Mutation {
   adminPingDiscordChannel(channelId: String!, serverId: String!): Boolean!
   adminRemoveCommunityManager(communityId: String!, userId: String!): Boolean
   adminRemoveProjectManager(managerUserId: String!, projectId: String!): Boolean
-  adminRemoveProjectMember(memberUserId: String!, projectId: String!): Boolean
   adminRemoveProjectReferral(projectId: String!, referralUserId: String!): Boolean
+  adminRemoveProjectReviewer(projectId: String!, reviewerUserId: String!): Boolean
   adminToggleCommunityAdmin(communityId: String!, userId: String!): Boolean
   adminUpdateComment(commentId: String!, input: AdminUpdateCommentInput!): Comment
   adminUpdateCommunity(communityId: String!, input: AdminUpdateCommunityInput!): Community
@@ -336,16 +336,16 @@ type Mutation {
   logout: Boolean
   managerAddCommunityManager(communityId: String!, userId: String!): Boolean
   managerAddProjectManager(managerUserId: String!, projectId: String!): Boolean
-  managerAddProjectMember(memberUserId: String!, projectId: String!): Boolean
   managerAddProjectReferral(projectId: String!, referralUserId: String!): Boolean
+  managerAddProjectReviewer(projectId: String!, reviewerUserId: String!): Boolean
   managerCreateCommunity(input: ManagerCreateCommunityInput!): Community
   managerCreateProject(input: ManagerCreateProjectInput!): Project
   managerDeleteCommunity(communityId: String!): Boolean
   managerDeleteProject(projectId: String!): Boolean
   managerRemoveCommunityManager(communityId: String!, userId: String!): Boolean
   managerRemoveProjectManager(managerUserId: String!, projectId: String!): Boolean
-  managerRemoveProjectMember(memberUserId: String!, projectId: String!): Boolean
   managerRemoveProjectReferral(projectId: String!, referralUserId: String!): Boolean
+  managerRemoveProjectReviewer(projectId: String!, reviewerUserId: String!): Boolean
   managerToggleCommunityAdmin(communityId: String!, userId: String!): Boolean
   managerUpdateCommunity(communityId: String!, input: ManagerUpdateCommunityInput!): Community
   managerUpdateProject(input: ManagerUpdateProjectInput!, projectId: String!): Project
@@ -394,10 +394,10 @@ type Project {
   linkWebsite: String
   manageUrl: String!
   managers: [User!]
-  members: [User!]
   name: String!
   referral: User
   reviewCount: Int
+  reviewers: [User!]
   slug: String!
   startDate: DateTime
   status: ProjectStatus

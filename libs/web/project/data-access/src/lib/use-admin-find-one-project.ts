@@ -49,34 +49,34 @@ export function useAdminFindOneProject({ projectId }: { projectId: string }) {
           toastError(err.message)
           return null
         }),
-    addProjectMember: (memberUserId: string) =>
+    addProjectReviewer: (reviewerUserId: string) =>
       sdk
-        .adminAddProjectMember({ projectId, memberUserId })
+        .adminAddProjectReviewer({ projectId, reviewerUserId })
         .then((res) => res.data)
         .then(async (res) => {
           if (res) {
-            toastSuccess('Project member added')
+            toastSuccess('Project reviewer added')
             await query.refetch()
             return res.added
           }
-          toastError('Project member not added')
+          toastError('Project reviewer not added')
           return null
         })
         .catch((err) => {
           toastError(err.message)
           return null
         }),
-    removeProjectMember: (memberUserId: string) =>
+    removeProjectReviewer: (reviewerUserId: string) =>
       sdk
-        .adminRemoveProjectMember({ projectId, memberUserId })
+        .adminRemoveProjectReviewer({ projectId, reviewerUserId })
         .then((res) => res.data)
         .then(async (res) => {
           if (res) {
-            toastSuccess('Project member removed')
+            toastSuccess('Project reviewer removed')
             await query.refetch()
             return res.removed
           }
-          toastError('Project member not removed')
+          toastError('Project reviewer not removed')
           return null
         })
         .catch((err) => {

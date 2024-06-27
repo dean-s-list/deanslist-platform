@@ -25,12 +25,12 @@ export class ApiProjectManagementResolver {
   }
 
   @Mutation(() => Boolean, { nullable: true })
-  managerAddProjectMember(
+  managerAddProjectReviewer(
     @CtxUserId() userId: string,
     @Args('projectId') projectId: string,
-    @Args('memberUserId') memberUserId: string,
+    @Args('reviewerUserId') reviewerUserId: string,
   ) {
-    return this.service.manager.addProjectMember(userId, projectId, memberUserId)
+    return this.service.manager.addProjectReviewer(userId, projectId, reviewerUserId)
   }
 
   @Mutation(() => Boolean, { nullable: true })
@@ -72,12 +72,12 @@ export class ApiProjectManagementResolver {
   }
 
   @Mutation(() => Boolean, { nullable: true })
-  managerRemoveProjectMember(
+  managerRemoveProjectReviewer(
     @CtxUserId() userId: string,
     @Args('projectId') projectId: string,
-    @Args('memberUserId') memberUserId: string,
+    @Args('reviewerUserId') reviewerUserId: string,
   ) {
-    return this.service.manager.removeProjectMember(userId, projectId, memberUserId)
+    return this.service.manager.removeProjectReviewer(userId, projectId, reviewerUserId)
   }
 
   @Mutation(() => Boolean, { nullable: true })

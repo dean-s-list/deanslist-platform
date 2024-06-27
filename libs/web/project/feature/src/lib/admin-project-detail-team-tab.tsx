@@ -1,18 +1,18 @@
-import { useManagerFindOneProject } from '@deanslist-platform/web-project-data-access'
+import { useAdminFindOneProject } from '@deanslist-platform/web-project-data-access'
 import { ProjectUiMemberManager } from '@deanslist-platform/web-project-ui'
 import { UiCard, UiError, UiLoader, UiStack } from '@pubkey-ui/core'
 
-export function ManagerProjectDetailMembersTab({ projectId }: { projectId: string }) {
+export function AdminProjectDetailTeamTab({ projectId }: { projectId: string }) {
   const {
     item,
     query,
     addProjectManager,
-    addProjectMember,
+    addProjectReviewer,
     addProjectReferral,
     removeProjectManager,
-    removeProjectMember,
+    removeProjectReviewer,
     removeProjectReferral,
-  } = useManagerFindOneProject({ projectId })
+  } = useAdminFindOneProject({ projectId })
 
   if (query.isLoading) {
     return <UiLoader />
@@ -30,11 +30,11 @@ export function ManagerProjectDetailMembersTab({ projectId }: { projectId: strin
           removeUser={removeProjectManager}
         />
       </UiCard>
-      <UiCard title="Members">
+      <UiCard title="Reviewers">
         <ProjectUiMemberManager
-          users={item.members ?? []}
-          addUser={addProjectMember}
-          removeUser={removeProjectMember}
+          users={item.reviewers ?? []}
+          addUser={addProjectReviewer}
+          removeUser={removeProjectReviewer}
         />
       </UiCard>
       <UiCard title="Referral">

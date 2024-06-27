@@ -146,7 +146,7 @@ model Project {
   channels          DiscordChannel[]
   reviews           Review[]
   managers          User[]           @relation(name: "ProjectManagers")
-  members           User[]           @relation(name: "ProjectMembers")
+  reviewers         User[]           @relation(name: "ProjectReviews")
   referral          User?            @relation(name: "ProjectReferral", fields: [referralId], references: [id])
   referralId        String?
 
@@ -197,7 +197,7 @@ model User {
   communities     CommunityManager[]
   reviews         Review[]
   projectManagers Project[]          @relation(name: "ProjectManagers")
-  projectMembers  Project[]          @relation(name: "ProjectMembers")
+  projectReviewes Project[]          @relation(name: "ProjectReviews")
   projectReferral Project[]          @relation(name: "ProjectReferral")
   comments        Comment[]
   ratings         Rating[]

@@ -34,7 +34,7 @@ export class ApiProjectResolveManagerService {
   async findOneProject(userId: string, projectId: string) {
     return this.data.findOneProject(
       projectId,
-      { managers: true, members: true, referral: true },
+      { managers: true, reviewers: true, referral: true },
       { managers: { some: { id: userId } } },
     )
   }
@@ -57,16 +57,16 @@ export class ApiProjectResolveManagerService {
     return this.data.removeProjectManager(userId, projectId, managerUserId)
   }
 
-  async addProjectMember(userId: string, projectId: string, memberUserId: string) {
+  async addProjectReviewer(userId: string, projectId: string, reviewerUserId: string) {
     await this.data.ensureProjectAdmin({ projectId, userId })
 
-    return this.data.addProjectMember(userId, projectId, memberUserId)
+    return this.data.addProjectReviewer(userId, projectId, reviewerUserId)
   }
 
-  async removeProjectMember(userId: string, projectId: string, memberUserId: string) {
+  async removeProjectReviewer(userId: string, projectId: string, reviewerUserId: string) {
     await this.data.ensureProjectAdmin({ projectId, userId })
 
-    return this.data.removeProjectMember(userId, projectId, memberUserId)
+    return this.data.removeProjectReviewer(userId, projectId, reviewerUserId)
   }
 
   async addProjectReferral(userId: string, projectId: string, referralUserId: string) {

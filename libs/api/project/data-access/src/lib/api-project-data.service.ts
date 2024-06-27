@@ -97,7 +97,7 @@ export class ApiProjectDataService {
   ) {
     const found = await this.core.data.project.findUnique({
       where: { id: projectId, ...where },
-      include: { community: true, ...include },
+      include: { community: true, managers: true, ...include },
     })
     if (!found) {
       throw new Error('Project not found')
@@ -121,6 +121,11 @@ export class ApiProjectDataService {
   }
 
   async removeProjectManager(userId: string, projectId: string, managerUserId: string) {
+    const project = await this.findOneProject(projectId)
+    const managerCount = project.managers?.length ?? 0
+    if (managerCount === 1) {
+      throw new Error('Cannot remove last project manager')
+    }
     const removed = await this.core.data.project.update({
       where: { id: projectId },
       data: { managers: { disconnect: { id: managerUserId } } },
@@ -129,19 +134,19 @@ export class ApiProjectDataService {
     return !!removed
   }
 
-  async addProjectMember(userId: string, projectId: string, memberUserId: string) {
+  async addProjectReviewer(userId: string, projectId: string, reviewerUserId: string) {
     const added = await this.core.data.project.update({
       where: { id: projectId },
-      data: { members: { connect: { id: memberUserId } } },
+      data: { reviewers: { connect: { id: reviewerUserId } } },
     })
     // TODO: Emit events, announce in Discord.
     return !!added
   }
 
-  async removeProjectMember(userId: string, projectId: string, memberUserId: string) {
+  async removeProjectReviewer(userId: string, projectId: string, reviewerUserId: string) {
     const removed = await this.core.data.project.update({
       where: { id: projectId },
-      data: { members: { disconnect: { id: memberUserId } } },
+      data: { reviewers: { disconnect: { id: reviewerUserId } } },
     })
     // TODO: Emit events, announce in Discord.
     return !!removed

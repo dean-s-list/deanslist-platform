@@ -9,7 +9,7 @@ import { ProjectUiTags } from './project-ui-tags'
 
 export function ProjectUiGridItem({ project, to }: { project: Project; to?: string }) {
   return (
-    <Paper withBorder p="md">
+    <Paper withBorder p="md" radius="lg">
       <UiStack>
         <UiGroup>
           <ProjectUiItem project={project} to={to} />

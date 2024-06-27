@@ -1,8 +1,4 @@
-import {
-  Review,
-  ReviewerFindManyReviewByProjectInput,
-  ReviewerFindManyReviewByUsernameInput,
-} from '@deanslist-platform/sdk'
+import { Review, ReviewerFindManyReviewByProjectInput } from '@deanslist-platform/sdk'
 import { useSdk } from '@deanslist-platform/web-core-data-access'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
@@ -47,24 +43,5 @@ export function useReviewerFindManyReviewByProject(
         toastSuccess('Review deleted')
         return query.refetch()
       }),
-  }
-}
-export function useReviewerFindManyReviewByUsername(
-  props: Partial<ReviewerFindManyReviewByUsernameInput> & { username: string },
-) {
-  const sdk = useSdk()
-  const [search, setSearch] = useState<string>(props?.search ?? '')
-
-  const input: ReviewerFindManyReviewByUsernameInput = { search, username: props.username }
-  const query = useQuery({
-    queryKey: ['reviewer', 'find-many-review-by-username', input],
-    queryFn: () => sdk.reviewerFindManyReviewByUsername({ input }).then((res) => res.data),
-  })
-  const items: Review[] = query.data?.items ?? []
-
-  return {
-    items,
-    query,
-    setSearch,
   }
 }

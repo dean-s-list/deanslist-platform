@@ -16,7 +16,7 @@ export class Project {
   @Field(() => [User], { nullable: true })
   managers?: User[]
   @Field(() => [User], { nullable: true })
-  members?: User[]
+  reviewers?: User[]
   @Field(() => User, { nullable: true })
   referral?: User
   @Field()
