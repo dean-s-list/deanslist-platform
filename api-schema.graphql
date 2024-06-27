@@ -181,6 +181,7 @@ type Identity {
   id: String!
   name: String
   owner: User
+  primary: Boolean
   profile: JSON
   provider: IdentityProvider!
   providerId: String!
@@ -329,6 +330,7 @@ type Mutation {
   userDeleteIdentity(identityId: String!): Boolean
   userDeleteRating(ratingId: String!): Boolean
   userLinkIdentity(input: LinkIdentityInput!): Identity
+  userSetPrimaryIdentity(identityId: String!): Identity
   userUpdateComment(commentId: String!, input: UserUpdateCommentInput!): Comment
   userUpdateRating(input: UserUpdateRatingInput!, ratingId: String!): Rating
   userUpdateUser(input: UserUpdateUserInput!): User
@@ -529,6 +531,7 @@ type User {
   status: UserStatus
   updatedAt: DateTime
   username: String
+  walletAddress: String
 }
 
 input UserCreateCommentInput {

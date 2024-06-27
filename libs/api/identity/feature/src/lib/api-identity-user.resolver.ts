@@ -36,6 +36,11 @@ export class ApiIdentityUserResolver {
     return this.service.user.linkIdentity(userId, input)
   }
 
+  @Mutation(() => Identity, { nullable: true })
+  userSetPrimaryIdentity(@CtxUserId() userId: string, @Args('identityId') identityId: string) {
+    return this.service.user.setPrimaryIdentity(userId, identityId)
+  }
+
   @Mutation(() => IdentityChallenge, { nullable: true })
   userVerifyIdentityChallenge(
     @Context() ctx: BaseContext,

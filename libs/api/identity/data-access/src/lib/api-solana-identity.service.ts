@@ -1,8 +1,8 @@
+import { ApiCoreService, BaseContext, getRequestDetails } from '@deanslist-platform/api-core-data-access'
 import { Injectable, Logger } from '@nestjs/common'
 import { IdentityProvider } from '@prisma/client'
-import { ApiCoreService, BaseContext, getRequestDetails } from '@deanslist-platform/api-core-data-access'
-import { PublicKey } from '@solana/web3.js'
 import { verifySignature } from '@pubkeyapp/solana-verify-wallet'
+import { PublicKey } from '@solana/web3.js'
 
 @Injectable()
 export class ApiSolanaIdentityService {
@@ -63,7 +63,15 @@ export class ApiSolanaIdentityService {
         challenge,
       },
       include: {
-        identity: true,
+        identity: {
+          include: {
+            owner: {
+              include: {
+                identities: true,
+              },
+            },
+          },
+        },
       },
     })
     if (!found) {

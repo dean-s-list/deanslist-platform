@@ -72,6 +72,7 @@ model Identity {
   accessToken  String?
   refreshToken String?
   profile      Json?
+  primary      Boolean             @default(false)
   verified     Boolean             @default(false)
   owner        User                @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId      String
@@ -188,6 +189,7 @@ model User {
   developer       Boolean      @default(false)
   name            String?
   password        String?
+  walletAddress   String?
   role            UserRole     @default(User)
   status          UserStatus   @default(Created)
   username        String       @unique

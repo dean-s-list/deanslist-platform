@@ -1,5 +1,5 @@
-import { ReviewerFindManyReviewByUsernameInput } from '@deanslist-platform/api-review-data-access'
 import { Prisma } from '@prisma/client'
+import { ReviewerFindManyReviewByUsernameInput } from '../dto/reviewer-find-many-review-by-username-input'
 
 export function getReviewerReviewByUsernameWhereInput(
   input: ReviewerFindManyReviewByUsernameInput,

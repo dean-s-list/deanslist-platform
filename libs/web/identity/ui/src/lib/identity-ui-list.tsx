@@ -1,20 +1,23 @@
-import { ActionIcon, Badge, Code, Group, Menu, Text } from '@mantine/core'
 import { ellipsify, Identity } from '@deanslist-platform/sdk'
+import { ActionIcon, Badge, Code, Group, Menu, Text } from '@mantine/core'
 import { UiCard, UiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core'
 import { IconDotsVertical, IconTrash } from '@tabler/icons-react'
 import { IdentityUiAvatar } from './identity-ui-avatar'
 import { IdentityUiLink } from './identity-ui-link'
+import { IdentityUiSetPrimary } from './identity-ui-set-primary'
 import { IdentityUiSolanaVerifyButton } from './identity-ui-solana-verify-button'
 import { IdentityUiVerified } from './identity-ui-verified'
 
 export function IdentityUiList({
   deleteIdentity,
-  refresh,
   items,
+  refresh,
+  setPrimary,
 }: {
-  refresh?: () => void
   deleteIdentity?: (id: string) => void
   items: Identity[]
+  refresh?: () => void
+  setPrimary?: (id: string) => void
 }) {
   return (
     <UiStack>
@@ -40,6 +43,7 @@ export function IdentityUiList({
                     Not verified
                   </Badge>
                 )}
+                {setPrimary ? <IdentityUiSetPrimary item={item} setPrimary={setPrimary} /> : null}
               </UiGroup>
             </Group>
             <Group gap="xs">

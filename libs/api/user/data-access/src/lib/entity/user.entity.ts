@@ -22,6 +22,8 @@ export class User {
   name?: string | null
   @Field({ nullable: true })
   username!: string
+  @Field({ nullable: true })
+  walletAddress?: string | null
   @HideField()
   identities?: unknown[] | null
   @HideField()

@@ -1,5 +1,5 @@
-import { Group, Text } from '@mantine/core'
 import { Identity, IdentityProvider } from '@deanslist-platform/sdk'
+import { Group, Text } from '@mantine/core'
 import { UiStack } from '@pubkey-ui/core'
 import { IdentityUiIcon } from './identity-ui-icon'
 
@@ -8,12 +8,14 @@ import { IdentityUiList } from './identity-ui-list'
 
 export function IdentityUiGroupList({
   deleteIdentity,
-  refresh,
   grouped,
+  refresh,
+  setPrimary,
 }: {
   deleteIdentity?: (id: string) => void
-  refresh?: () => void
   grouped: { provider: IdentityProvider; items: Identity[] }[]
+  refresh?: () => void
+  setPrimary?: (id: string) => void
 }) {
   return (
     <UiStack gap="lg">
@@ -33,7 +35,12 @@ export function IdentityUiGroupList({
             />
           </Group>
           {group.items?.length ? (
-            <IdentityUiList items={group.items} refresh={refresh} deleteIdentity={deleteIdentity} />
+            <IdentityUiList
+              items={group.items}
+              refresh={refresh}
+              deleteIdentity={deleteIdentity}
+              setPrimary={setPrimary}
+            />
           ) : null}
         </UiStack>
       ))}

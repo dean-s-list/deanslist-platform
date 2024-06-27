@@ -25,6 +25,9 @@ export class ApiUserIdentityService {
     if (found.provider === IdentityProvider.Discord) {
       throw new Error(`Cannot delete Discord identity`)
     }
+    if (found.primary) {
+      throw new Error(`Cannot delete primary identity`)
+    }
     if (found.owner.identities.length === 1 && !found.owner.password) {
       throw new Error(`Cannot delete last identity`)
     }
@@ -114,6 +117,14 @@ export class ApiUserIdentityService {
       this.logger.log(`Identity ${found.identity.id} verified`)
     }
 
+    const hasPrimary = found.identity?.owner?.identities
+      ?.filter((identity) => identity.provider === provider)
+      .some((identity) => identity.primary)
+
+    if (!hasPrimary) {
+      await this.setPrimary(found.identity)
+    }
+
     // Update the identity
     const updated = await this.core.data.identityChallenge.update({
       where: {
@@ -150,5 +161,47 @@ export class ApiUserIdentityService {
       },
     })
     return created
+  }
+
+  async setPrimaryIdentity(userId: string, identityId: string) {
+    const found = await this.core.data.identity.findFirst({
+      where: {
+        id: identityId,
+        ownerId: userId,
+        provider: IdentityProvider.Solana,
+      },
+    })
+    if (!found) {
+      throw new Error(`Identity ${identityId} not found`)
+    }
+    if (found.provider !== IdentityProvider.Solana) {
+      throw new Error(`Identity ${identityId} is not a Solana identity`)
+    }
+    if (found.primary) {
+      throw new Error(`Identity ${identityId} already set as primary`)
+    }
+    await this.core.data.identity.updateMany({
+      where: { ownerId: userId, provider: IdentityProvider.Solana },
+      data: { primary: false },
+    })
+    return this.setPrimary(found)
+  }
+
+  async setPrimary({
+    ownerId,
+    provider,
+    providerId,
+  }: {
+    ownerId: string
+    provider: IdentityProvider
+    providerId: string
+  }) {
+    const updated = await this.core.data.identity.update({
+      where: { provider_providerId: { provider, providerId } },
+      data: { primary: true },
+    })
+    this.logger.log(`Identity ${providerId} set as primary for ${ownerId}`)
+    await this.core.data.user.update({ where: { id: ownerId }, data: { walletAddress: providerId } })
+    return updated
   }
 }

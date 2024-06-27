@@ -3,6 +3,7 @@ fragment IdentityDetails on Identity {
   expired
   id
   name
+  primary
   profile
   provider
   providerId
@@ -83,5 +84,10 @@ query anonRequestIdentityChallenge($input: RequestIdentityChallengeInput!) {
 mutation anonVerifyIdentityChallenge($input: VerifyIdentityChallengeInput!) {
   verified: anonVerifyIdentityChallenge(input: $input) {
     ...IdentityChallengeDetails
+  }
+}
+mutation userSetPrimaryIdentity($identityId: String!) {
+  set: userSetPrimaryIdentity(identityId: $identityId) {
+    ...IdentityDetails
   }
 }

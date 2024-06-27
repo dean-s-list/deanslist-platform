@@ -56,5 +56,20 @@ export function useUserFindManyIdentity({ username }: { username: string }) {
         })
         .finally(() => query.refetch())
     },
+    setPrimaryIdentity(identityId: string) {
+      sdk
+        .userSetPrimaryIdentity({ identityId })
+        .then(async (res) => {
+          if (res.data.set?.primary) {
+            toastSuccess('Identity set as primary')
+          } else {
+            toastError(`Error setting identity as primary`)
+          }
+          await query.refetch()
+        })
+        .catch((res) => {
+          toastError({ title: 'Error setting identity as primary', message: `${res}` })
+        })
+    },
   }
 }

@@ -205,6 +205,7 @@ export type Identity = {
   id: Scalars['String']['output']
   name?: Maybe<Scalars['String']['output']>
   owner?: Maybe<User>
+  primary?: Maybe<Scalars['Boolean']['output']>
   profile?: Maybe<Scalars['JSON']['output']>
   provider: IdentityProvider
   providerId: Scalars['String']['output']
@@ -350,6 +351,7 @@ export type Mutation = {
   userDeleteIdentity?: Maybe<Scalars['Boolean']['output']>
   userDeleteRating?: Maybe<Scalars['Boolean']['output']>
   userLinkIdentity?: Maybe<Identity>
+  userSetPrimaryIdentity?: Maybe<Identity>
   userUpdateComment?: Maybe<Comment>
   userUpdateRating?: Maybe<Rating>
   userUpdateUser?: Maybe<User>
@@ -611,6 +613,10 @@ export type MutationUserDeleteRatingArgs = {
 
 export type MutationUserLinkIdentityArgs = {
   input: LinkIdentityInput
+}
+
+export type MutationUserSetPrimaryIdentityArgs = {
+  identityId: Scalars['String']['input']
 }
 
 export type MutationUserUpdateCommentArgs = {
@@ -992,6 +998,7 @@ export type User = {
   status?: Maybe<UserStatus>
   updatedAt?: Maybe<Scalars['DateTime']['output']>
   username?: Maybe<Scalars['String']['output']>
+  walletAddress?: Maybe<Scalars['String']['output']>
 }
 
 export type UserCreateCommentInput = {
@@ -1088,6 +1095,7 @@ export type LoginMutation = {
     status?: UserStatus | null
     updatedAt?: Date | null
     username?: string | null
+    walletAddress?: string | null
   } | null
 }
 
@@ -1114,6 +1122,7 @@ export type RegisterMutation = {
     status?: UserStatus | null
     updatedAt?: Date | null
     username?: string | null
+    walletAddress?: string | null
   } | null
 }
 
@@ -1134,12 +1143,14 @@ export type MeQuery = {
     status?: UserStatus | null
     updatedAt?: Date | null
     username?: string | null
+    walletAddress?: string | null
     identities?: Array<{
       __typename?: 'Identity'
       createdAt: Date
       expired?: boolean | null
       id: string
       name?: string | null
+      primary?: boolean | null
       profile?: any | null
       provider: IdentityProvider
       providerId: string
@@ -1175,6 +1186,7 @@ export type CommentDetailsFragment = {
     status?: UserStatus | null
     updatedAt?: Date | null
     username?: string | null
+    walletAddress?: string | null
   } | null
 }
 
@@ -1221,6 +1233,7 @@ export type UserFindManyCommentQuery = {
         status?: UserStatus | null
         updatedAt?: Date | null
         username?: string | null
+        walletAddress?: string | null
       } | null
     }> | null
     author?: {
@@ -1236,6 +1249,7 @@ export type UserFindManyCommentQuery = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     } | null
   }> | null
 }
@@ -1271,6 +1285,7 @@ export type UserCreateCommentMutation = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     } | null
   } | null
 }
@@ -1307,6 +1322,7 @@ export type UserUpdateCommentMutation = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     } | null
   } | null
 }
@@ -1360,6 +1376,7 @@ export type AdminFindManyCommentQuery = {
         status?: UserStatus | null
         updatedAt?: Date | null
         username?: string | null
+        walletAddress?: string | null
       } | null
     }> | null
     author?: {
@@ -1375,6 +1392,7 @@ export type AdminFindManyCommentQuery = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     } | null
   }> | null
 }
@@ -1411,6 +1429,7 @@ export type AdminUpdateCommentMutation = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     } | null
   } | null
 }
@@ -1696,6 +1715,7 @@ export type IdentityDetailsFragment = {
   expired?: boolean | null
   id: string
   name?: string | null
+  primary?: boolean | null
   profile?: any | null
   provider: IdentityProvider
   providerId: string
@@ -1730,6 +1750,7 @@ export type AdminFindManyIdentityQuery = {
     expired?: boolean | null
     id: string
     name?: string | null
+    primary?: boolean | null
     profile?: any | null
     provider: IdentityProvider
     providerId: string
@@ -1762,6 +1783,7 @@ export type AdminFindManyIdentityQuery = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     } | null
   }> | null
 }
@@ -1778,6 +1800,7 @@ export type AdminCreateIdentityMutation = {
     expired?: boolean | null
     id: string
     name?: string | null
+    primary?: boolean | null
     profile?: any | null
     provider: IdentityProvider
     providerId: string
@@ -1805,6 +1828,7 @@ export type UserFindManyIdentityQuery = {
     expired?: boolean | null
     id: string
     name?: string | null
+    primary?: boolean | null
     profile?: any | null
     provider: IdentityProvider
     providerId: string
@@ -1874,6 +1898,7 @@ export type UserLinkIdentityMutation = {
     expired?: boolean | null
     id: string
     name?: string | null
+    primary?: boolean | null
     profile?: any | null
     provider: IdentityProvider
     providerId: string
@@ -1925,6 +1950,28 @@ export type AnonVerifyIdentityChallengeMutation = {
   } | null
 }
 
+export type UserSetPrimaryIdentityMutationVariables = Exact<{
+  identityId: Scalars['String']['input']
+}>
+
+export type UserSetPrimaryIdentityMutation = {
+  __typename?: 'Mutation'
+  set?: {
+    __typename?: 'Identity'
+    createdAt: Date
+    expired?: boolean | null
+    id: string
+    name?: string | null
+    primary?: boolean | null
+    profile?: any | null
+    provider: IdentityProvider
+    providerId: string
+    updatedAt: Date
+    url?: string | null
+    verified?: boolean | null
+  } | null
+}
+
 export type ProjectDetailsFragment = {
   __typename?: 'Project'
   amountManagerUsd?: number | null
@@ -1961,6 +2008,7 @@ export type ProjectDetailsFragment = {
     status?: UserStatus | null
     updatedAt?: Date | null
     username?: string | null
+    walletAddress?: string | null
   }> | null
   team?: {
     __typename?: 'Team'
@@ -1993,6 +2041,7 @@ export type ProjectDetailsFragment = {
         status?: UserStatus | null
         updatedAt?: Date | null
         username?: string | null
+        walletAddress?: string | null
       } | null
     }> | null
   } | null
@@ -2042,6 +2091,7 @@ export type ReviewerFindManyProjectQuery = {
         status?: UserStatus | null
         updatedAt?: Date | null
         username?: string | null
+        walletAddress?: string | null
       }> | null
       team?: {
         __typename?: 'Team'
@@ -2074,6 +2124,7 @@ export type ReviewerFindManyProjectQuery = {
             status?: UserStatus | null
             updatedAt?: Date | null
             username?: string | null
+            walletAddress?: string | null
           } | null
         }> | null
       } | null
@@ -2133,6 +2184,7 @@ export type ReviewerFindOneProjectQuery = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     }> | null
     team?: {
       __typename?: 'Team'
@@ -2165,6 +2217,7 @@ export type ReviewerFindOneProjectQuery = {
           status?: UserStatus | null
           updatedAt?: Date | null
           username?: string | null
+          walletAddress?: string | null
         } | null
       }> | null
     } | null
@@ -2215,6 +2268,7 @@ export type AdminFindManyProjectQuery = {
         status?: UserStatus | null
         updatedAt?: Date | null
         username?: string | null
+        walletAddress?: string | null
       }> | null
       team?: {
         __typename?: 'Team'
@@ -2247,6 +2301,7 @@ export type AdminFindManyProjectQuery = {
             status?: UserStatus | null
             updatedAt?: Date | null
             username?: string | null
+            walletAddress?: string | null
           } | null
         }> | null
       } | null
@@ -2306,6 +2361,7 @@ export type AdminFindOneProjectQuery = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     } | null
     members?: Array<{
       __typename?: 'User'
@@ -2320,6 +2376,7 @@ export type AdminFindOneProjectQuery = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     }> | null
     managers?: Array<{
       __typename?: 'User'
@@ -2334,6 +2391,7 @@ export type AdminFindOneProjectQuery = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     }> | null
     team?: {
       __typename?: 'Team'
@@ -2366,6 +2424,7 @@ export type AdminFindOneProjectQuery = {
           status?: UserStatus | null
           updatedAt?: Date | null
           username?: string | null
+          walletAddress?: string | null
         } | null
       }> | null
     } | null
@@ -2415,6 +2474,7 @@ export type AdminUpdateProjectMutation = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     }> | null
     team?: {
       __typename?: 'Team'
@@ -2447,6 +2507,7 @@ export type AdminUpdateProjectMutation = {
           status?: UserStatus | null
           updatedAt?: Date | null
           username?: string | null
+          walletAddress?: string | null
         } | null
       }> | null
     } | null
@@ -2545,6 +2606,7 @@ export type ManagerFindManyProjectQuery = {
         status?: UserStatus | null
         updatedAt?: Date | null
         username?: string | null
+        walletAddress?: string | null
       }> | null
       team?: {
         __typename?: 'Team'
@@ -2577,6 +2639,7 @@ export type ManagerFindManyProjectQuery = {
             status?: UserStatus | null
             updatedAt?: Date | null
             username?: string | null
+            walletAddress?: string | null
           } | null
         }> | null
       } | null
@@ -2636,6 +2699,7 @@ export type ManagerFindOneProjectQuery = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     } | null
     members?: Array<{
       __typename?: 'User'
@@ -2650,6 +2714,7 @@ export type ManagerFindOneProjectQuery = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     }> | null
     managers?: Array<{
       __typename?: 'User'
@@ -2664,6 +2729,7 @@ export type ManagerFindOneProjectQuery = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     }> | null
     team?: {
       __typename?: 'Team'
@@ -2696,6 +2762,7 @@ export type ManagerFindOneProjectQuery = {
           status?: UserStatus | null
           updatedAt?: Date | null
           username?: string | null
+          walletAddress?: string | null
         } | null
       }> | null
     } | null
@@ -2744,6 +2811,7 @@ export type ManagerCreateProjectMutation = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     }> | null
     team?: {
       __typename?: 'Team'
@@ -2776,6 +2844,7 @@ export type ManagerCreateProjectMutation = {
           status?: UserStatus | null
           updatedAt?: Date | null
           username?: string | null
+          walletAddress?: string | null
         } | null
       }> | null
     } | null
@@ -2825,6 +2894,7 @@ export type ManagerUpdateProjectMutation = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     }> | null
     team?: {
       __typename?: 'Team'
@@ -2857,6 +2927,7 @@ export type ManagerUpdateProjectMutation = {
           status?: UserStatus | null
           updatedAt?: Date | null
           username?: string | null
+          walletAddress?: string | null
         } | null
       }> | null
     } | null
@@ -3065,6 +3136,7 @@ export type ReviewDetailsFragment = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     }> | null
     team?: {
       __typename?: 'Team'
@@ -3097,6 +3169,7 @@ export type ReviewDetailsFragment = {
           status?: UserStatus | null
           updatedAt?: Date | null
           username?: string | null
+          walletAddress?: string | null
         } | null
       }> | null
     } | null
@@ -3114,6 +3187,7 @@ export type ReviewDetailsFragment = {
     status?: UserStatus | null
     updatedAt?: Date | null
     username?: string | null
+    walletAddress?: string | null
   } | null
 }
 
@@ -3168,6 +3242,7 @@ export type ReviewerFindManyReviewByProjectQuery = {
         status?: UserStatus | null
         updatedAt?: Date | null
         username?: string | null
+        walletAddress?: string | null
       }> | null
       team?: {
         __typename?: 'Team'
@@ -3200,6 +3275,7 @@ export type ReviewerFindManyReviewByProjectQuery = {
             status?: UserStatus | null
             updatedAt?: Date | null
             username?: string | null
+            walletAddress?: string | null
           } | null
         }> | null
       } | null
@@ -3217,6 +3293,7 @@ export type ReviewerFindManyReviewByProjectQuery = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     } | null
   }> | null
 }
@@ -3272,6 +3349,7 @@ export type ReviewerFindManyReviewByUsernameQuery = {
         status?: UserStatus | null
         updatedAt?: Date | null
         username?: string | null
+        walletAddress?: string | null
       }> | null
       team?: {
         __typename?: 'Team'
@@ -3304,6 +3382,7 @@ export type ReviewerFindManyReviewByUsernameQuery = {
             status?: UserStatus | null
             updatedAt?: Date | null
             username?: string | null
+            walletAddress?: string | null
           } | null
         }> | null
       } | null
@@ -3321,6 +3400,7 @@ export type ReviewerFindManyReviewByUsernameQuery = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     } | null
   }> | null
 }
@@ -3376,6 +3456,7 @@ export type ReviewerFindUserProjectReviewQuery = {
         status?: UserStatus | null
         updatedAt?: Date | null
         username?: string | null
+        walletAddress?: string | null
       }> | null
       team?: {
         __typename?: 'Team'
@@ -3408,6 +3489,7 @@ export type ReviewerFindUserProjectReviewQuery = {
             status?: UserStatus | null
             updatedAt?: Date | null
             username?: string | null
+            walletAddress?: string | null
           } | null
         }> | null
       } | null
@@ -3425,6 +3507,7 @@ export type ReviewerFindUserProjectReviewQuery = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     } | null
   } | null
 }
@@ -3480,6 +3563,7 @@ export type ReviewerFindOneReviewQuery = {
         status?: UserStatus | null
         updatedAt?: Date | null
         username?: string | null
+        walletAddress?: string | null
       }> | null
       team?: {
         __typename?: 'Team'
@@ -3512,6 +3596,7 @@ export type ReviewerFindOneReviewQuery = {
             status?: UserStatus | null
             updatedAt?: Date | null
             username?: string | null
+            walletAddress?: string | null
           } | null
         }> | null
       } | null
@@ -3529,6 +3614,7 @@ export type ReviewerFindOneReviewQuery = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     } | null
   } | null
 }
@@ -3584,6 +3670,7 @@ export type ReviewerCreateReviewMutation = {
         status?: UserStatus | null
         updatedAt?: Date | null
         username?: string | null
+        walletAddress?: string | null
       }> | null
       team?: {
         __typename?: 'Team'
@@ -3616,6 +3703,7 @@ export type ReviewerCreateReviewMutation = {
             status?: UserStatus | null
             updatedAt?: Date | null
             username?: string | null
+            walletAddress?: string | null
           } | null
         }> | null
       } | null
@@ -3633,6 +3721,7 @@ export type ReviewerCreateReviewMutation = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     } | null
   } | null
 }
@@ -3696,6 +3785,7 @@ export type AdminFindManyReviewQuery = {
           status?: UserStatus | null
           updatedAt?: Date | null
           username?: string | null
+          walletAddress?: string | null
         }> | null
         team?: {
           __typename?: 'Team'
@@ -3728,6 +3818,7 @@ export type AdminFindManyReviewQuery = {
               status?: UserStatus | null
               updatedAt?: Date | null
               username?: string | null
+              walletAddress?: string | null
             } | null
           }> | null
         } | null
@@ -3745,6 +3836,7 @@ export type AdminFindManyReviewQuery = {
         status?: UserStatus | null
         updatedAt?: Date | null
         username?: string | null
+        walletAddress?: string | null
       } | null
     }>
     meta: {
@@ -3811,6 +3903,7 @@ export type AdminFindOneReviewQuery = {
         status?: UserStatus | null
         updatedAt?: Date | null
         username?: string | null
+        walletAddress?: string | null
       }> | null
       team?: {
         __typename?: 'Team'
@@ -3843,6 +3936,7 @@ export type AdminFindOneReviewQuery = {
             status?: UserStatus | null
             updatedAt?: Date | null
             username?: string | null
+            walletAddress?: string | null
           } | null
         }> | null
       } | null
@@ -3860,6 +3954,7 @@ export type AdminFindOneReviewQuery = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     } | null
   } | null
 }
@@ -3901,6 +3996,7 @@ export type TeamDetailsFragment = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     } | null
   }> | null
 }
@@ -3925,6 +4021,7 @@ export type TeamMemberDetailsFragment = {
     status?: UserStatus | null
     updatedAt?: Date | null
     username?: string | null
+    walletAddress?: string | null
   } | null
 }
 
@@ -3967,6 +4064,7 @@ export type UserFindManyTeamQuery = {
           status?: UserStatus | null
           updatedAt?: Date | null
           username?: string | null
+          walletAddress?: string | null
         } | null
       }> | null
     }>
@@ -4020,6 +4118,7 @@ export type UserFindOneTeamQuery = {
         status?: UserStatus | null
         updatedAt?: Date | null
         username?: string | null
+        walletAddress?: string | null
       } | null
     }> | null
   } | null
@@ -4051,6 +4150,7 @@ export type ManagerGetTeamMembersQuery = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     } | null
   }> | null
 }
@@ -4081,6 +4181,7 @@ export type ManagerGetTeamMemberQuery = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     } | null
   } | null
 }
@@ -4124,6 +4225,7 @@ export type ManagerFindManyTeamQuery = {
           status?: UserStatus | null
           updatedAt?: Date | null
           username?: string | null
+          walletAddress?: string | null
         } | null
       }> | null
     }>
@@ -4177,6 +4279,7 @@ export type ManagerFindOneTeamQuery = {
         status?: UserStatus | null
         updatedAt?: Date | null
         username?: string | null
+        walletAddress?: string | null
       } | null
     }> | null
   } | null
@@ -4219,6 +4322,7 @@ export type ManagerCreateTeamMutation = {
         status?: UserStatus | null
         updatedAt?: Date | null
         username?: string | null
+        walletAddress?: string | null
       } | null
     }> | null
   } | null
@@ -4262,6 +4366,7 @@ export type ManagerUpdateTeamMutation = {
         status?: UserStatus | null
         updatedAt?: Date | null
         username?: string | null
+        walletAddress?: string | null
       } | null
     }> | null
   } | null
@@ -4312,6 +4417,7 @@ export type AdminFindManyTeamQuery = {
           status?: UserStatus | null
           updatedAt?: Date | null
           username?: string | null
+          walletAddress?: string | null
         } | null
       }> | null
     }>
@@ -4354,6 +4460,7 @@ export type AdminGetTeamMembersQuery = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     } | null
   }> | null
 }
@@ -4395,6 +4502,7 @@ export type AdminFindOneTeamQuery = {
         status?: UserStatus | null
         updatedAt?: Date | null
         username?: string | null
+        walletAddress?: string | null
       } | null
     }> | null
   } | null
@@ -4438,6 +4546,7 @@ export type AdminUpdateTeamMutation = {
         status?: UserStatus | null
         updatedAt?: Date | null
         username?: string | null
+        walletAddress?: string | null
       } | null
     }> | null
   } | null
@@ -4504,6 +4613,7 @@ export type UserDetailsFragment = {
   status?: UserStatus | null
   updatedAt?: Date | null
   username?: string | null
+  walletAddress?: string | null
 }
 
 export type AdminCreateUserMutationVariables = Exact<{
@@ -4525,6 +4635,7 @@ export type AdminCreateUserMutation = {
     status?: UserStatus | null
     updatedAt?: Date | null
     username?: string | null
+    walletAddress?: string | null
   } | null
 }
 
@@ -4555,12 +4666,14 @@ export type AdminFindManyUserQuery = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
       identities?: Array<{
         __typename?: 'Identity'
         createdAt: Date
         expired?: boolean | null
         id: string
         name?: string | null
+        primary?: boolean | null
         profile?: any | null
         provider: IdentityProvider
         providerId: string
@@ -4601,6 +4714,7 @@ export type AdminFindOneUserQuery = {
     status?: UserStatus | null
     updatedAt?: Date | null
     username?: string | null
+    walletAddress?: string | null
   } | null
 }
 
@@ -4624,6 +4738,7 @@ export type AdminUpdateUserMutation = {
     status?: UserStatus | null
     updatedAt?: Date | null
     username?: string | null
+    walletAddress?: string | null
   } | null
 }
 
@@ -4648,6 +4763,7 @@ export type UserFindManyUserQuery = {
       status?: UserStatus | null
       updatedAt?: Date | null
       username?: string | null
+      walletAddress?: string | null
     }>
     meta: {
       __typename?: 'PagingMeta'
@@ -4681,6 +4797,7 @@ export type UserFindOneUserQuery = {
     status?: UserStatus | null
     updatedAt?: Date | null
     username?: string | null
+    walletAddress?: string | null
   } | null
 }
 
@@ -4703,6 +4820,7 @@ export type UserUpdateUserMutation = {
     status?: UserStatus | null
     updatedAt?: Date | null
     username?: string | null
+    walletAddress?: string | null
   } | null
 }
 
@@ -4719,6 +4837,7 @@ export const UserDetailsFragmentDoc = gql`
     status
     updatedAt
     username
+    walletAddress
   }
 `
 export const CommentDetailsFragmentDoc = gql`
@@ -4803,6 +4922,7 @@ export const IdentityDetailsFragmentDoc = gql`
     expired
     id
     name
+    primary
     profile
     provider
     providerId
@@ -5207,6 +5327,14 @@ export const AnonVerifyIdentityChallengeDocument = gql`
     }
   }
   ${IdentityChallengeDetailsFragmentDoc}
+`
+export const UserSetPrimaryIdentityDocument = gql`
+  mutation userSetPrimaryIdentity($identityId: String!) {
+    set: userSetPrimaryIdentity(identityId: $identityId) {
+      ...IdentityDetails
+    }
+  }
+  ${IdentityDetailsFragmentDoc}
 `
 export const ReviewerFindManyProjectDocument = gql`
   query reviewerFindManyProject($input: ReviewerFindManyProjectInput!) {
@@ -5783,6 +5911,7 @@ const UserVerifyIdentityChallengeDocumentString = print(UserVerifyIdentityChalle
 const UserLinkIdentityDocumentString = print(UserLinkIdentityDocument)
 const AnonRequestIdentityChallengeDocumentString = print(AnonRequestIdentityChallengeDocument)
 const AnonVerifyIdentityChallengeDocumentString = print(AnonVerifyIdentityChallengeDocument)
+const UserSetPrimaryIdentityDocumentString = print(UserSetPrimaryIdentityDocument)
 const ReviewerFindManyProjectDocumentString = print(ReviewerFindManyProjectDocument)
 const ReviewerFindOneProjectDocumentString = print(ReviewerFindOneProjectDocument)
 const AdminFindManyProjectDocumentString = print(AdminFindManyProjectDocument)
@@ -6634,6 +6763,27 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
             ...wrappedRequestHeaders,
           }),
         'anonVerifyIdentityChallenge',
+        'mutation',
+        variables,
+      )
+    },
+    userSetPrimaryIdentity(
+      variables: UserSetPrimaryIdentityMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserSetPrimaryIdentityMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserSetPrimaryIdentityMutation>(UserSetPrimaryIdentityDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userSetPrimaryIdentity',
         'mutation',
         variables,
       )
