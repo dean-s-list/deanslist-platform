@@ -1,6 +1,6 @@
 import { Team } from '@deanslist-platform/api-team-data-access'
 import { User } from '@deanslist-platform/api-user-data-access'
-import { Field, Int, ObjectType } from '@nestjs/graphql'
+import { Field, HideField, Int, ObjectType } from '@nestjs/graphql'
 import { ProjectStatus } from './project-status.enum'
 
 @ObjectType()
@@ -37,8 +37,6 @@ export class Project {
   linkTwitter?: string | null
   @Field({ nullable: true })
   linkWebsite?: string | null
-  @Field(() => [String], { nullable: true })
-  links?: string[]
   @Field(() => Int, { nullable: true })
   amountManagerUsd?: number | null
   @Field(() => Int, { nullable: true })
@@ -55,4 +53,6 @@ export class Project {
   startDate?: Date | null
   @Field({ nullable: true })
   avatarUrl?: string | null
+  @HideField()
+  reviews?: { comments?: unknown[] }[] | null
 }

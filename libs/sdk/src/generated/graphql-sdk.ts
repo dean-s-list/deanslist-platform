@@ -101,7 +101,6 @@ export type AdminUpdateProjectInput = {
   linkTelegram?: InputMaybe<Scalars['String']['input']>
   linkTwitter?: InputMaybe<Scalars['String']['input']>
   linkWebsite?: InputMaybe<Scalars['String']['input']>
-  links?: InputMaybe<Array<Scalars['String']['input']>>
   name?: InputMaybe<Scalars['String']['input']>
   startDate?: InputMaybe<Scalars['DateTime']['input']>
   status?: InputMaybe<ProjectStatus>
@@ -279,7 +278,6 @@ export type ManagerUpdateProjectInput = {
   linkTelegram?: InputMaybe<Scalars['String']['input']>
   linkTwitter?: InputMaybe<Scalars['String']['input']>
   linkWebsite?: InputMaybe<Scalars['String']['input']>
-  links?: InputMaybe<Array<Scalars['String']['input']>>
   name?: InputMaybe<Scalars['String']['input']>
   referralId?: InputMaybe<Scalars['String']['input']>
   startDate?: InputMaybe<Scalars['DateTime']['input']>
@@ -344,13 +342,13 @@ export type Mutation = {
   managerUpdateProject?: Maybe<Project>
   managerUpdateTeam?: Maybe<Team>
   register?: Maybe<User>
+  reviewerCreateReview?: Maybe<Review>
+  reviewerDeleteReview?: Maybe<Scalars['Boolean']['output']>
   userCreateComment?: Maybe<Comment>
   userCreateRating?: Maybe<Rating>
-  userCreateReview?: Maybe<Review>
   userDeleteComment?: Maybe<Scalars['Boolean']['output']>
   userDeleteIdentity?: Maybe<Scalars['Boolean']['output']>
   userDeleteRating?: Maybe<Scalars['Boolean']['output']>
-  userDeleteReview?: Maybe<Scalars['Boolean']['output']>
   userLinkIdentity?: Maybe<Identity>
   userUpdateComment?: Maybe<Comment>
   userUpdateRating?: Maybe<Rating>
@@ -583,16 +581,20 @@ export type MutationRegisterArgs = {
   input: RegisterInput
 }
 
+export type MutationReviewerCreateReviewArgs = {
+  projectId: Scalars['String']['input']
+}
+
+export type MutationReviewerDeleteReviewArgs = {
+  reviewId: Scalars['String']['input']
+}
+
 export type MutationUserCreateCommentArgs = {
   input: UserCreateCommentInput
 }
 
 export type MutationUserCreateRatingArgs = {
   input: UserCreateRatingInput
-}
-
-export type MutationUserCreateReviewArgs = {
-  projectId: Scalars['String']['input']
 }
 
 export type MutationUserDeleteCommentArgs = {
@@ -605,10 +607,6 @@ export type MutationUserDeleteIdentityArgs = {
 
 export type MutationUserDeleteRatingArgs = {
   ratingId: Scalars['String']['input']
-}
-
-export type MutationUserDeleteReviewArgs = {
-  reviewId: Scalars['String']['input']
 }
 
 export type MutationUserLinkIdentityArgs = {
@@ -660,11 +658,12 @@ export type Project = {
   linkTelegram?: Maybe<Scalars['String']['output']>
   linkTwitter?: Maybe<Scalars['String']['output']>
   linkWebsite?: Maybe<Scalars['String']['output']>
-  links?: Maybe<Array<Scalars['String']['output']>>
+  manageUrl: Scalars['String']['output']
   managers?: Maybe<Array<User>>
   members?: Maybe<Array<User>>
   name: Scalars['String']['output']
   referral?: Maybe<User>
+  reviewCount?: Maybe<Scalars['Int']['output']>
   slug: Scalars['String']['output']
   startDate?: Maybe<Scalars['DateTime']['output']>
   status?: Maybe<ProjectStatus>
@@ -716,19 +715,20 @@ export type Query = {
   managerGetTeamMember?: Maybe<TeamMember>
   managerGetTeamMembers?: Maybe<Array<TeamMember>>
   me?: Maybe<User>
+  reviewerFindManyProject: ProjectPaging
+  reviewerFindManyReviewByProject?: Maybe<Array<Review>>
+  reviewerFindManyReviewByUsername?: Maybe<Array<Review>>
+  reviewerFindOneProject?: Maybe<Project>
+  reviewerFindOneReview?: Maybe<Review>
+  reviewerFindUserProjectReview?: Maybe<Review>
   uptime: Scalars['Float']['output']
   userFindManyComment?: Maybe<Array<Comment>>
   userFindManyIdentity?: Maybe<Array<Identity>>
-  userFindManyProject: ProjectPaging
   userFindManyRating: Array<Rating>
-  userFindManyReview?: Maybe<Array<Review>>
   userFindManyTeam: TeamPaging
   userFindManyUser: UserPaging
-  userFindOneProject?: Maybe<Project>
-  userFindOneReview?: Maybe<Review>
   userFindOneTeam?: Maybe<Team>
   userFindOneUser?: Maybe<User>
-  userFindUserProjectReview?: Maybe<Review>
   userGetDiscordServers: Array<DiscordServer>
   userGetProjectChannels: Array<DiscordChannel>
   userGetTeamChannels: Array<DiscordChannel>
@@ -827,6 +827,30 @@ export type QueryManagerGetTeamMembersArgs = {
   teamId: Scalars['String']['input']
 }
 
+export type QueryReviewerFindManyProjectArgs = {
+  input: ReviewerFindManyProjectInput
+}
+
+export type QueryReviewerFindManyReviewByProjectArgs = {
+  input: ReviewerFindManyReviewByProjectInput
+}
+
+export type QueryReviewerFindManyReviewByUsernameArgs = {
+  input: ReviewerFindManyReviewByUsernameInput
+}
+
+export type QueryReviewerFindOneProjectArgs = {
+  projectId: Scalars['String']['input']
+}
+
+export type QueryReviewerFindOneReviewArgs = {
+  reviewId: Scalars['String']['input']
+}
+
+export type QueryReviewerFindUserProjectReviewArgs = {
+  projectId: Scalars['String']['input']
+}
+
 export type QueryUserFindManyCommentArgs = {
   input: UserFindManyCommentInput
 }
@@ -835,16 +859,8 @@ export type QueryUserFindManyIdentityArgs = {
   input: UserFindManyIdentityInput
 }
 
-export type QueryUserFindManyProjectArgs = {
-  input: UserFindManyProjectInput
-}
-
 export type QueryUserFindManyRatingArgs = {
   input: UserFindManyRatingInput
-}
-
-export type QueryUserFindManyReviewArgs = {
-  input: UserFindManyReviewInput
 }
 
 export type QueryUserFindManyTeamArgs = {
@@ -855,24 +871,12 @@ export type QueryUserFindManyUserArgs = {
   input: UserFindManyUserInput
 }
 
-export type QueryUserFindOneProjectArgs = {
-  projectId: Scalars['String']['input']
-}
-
-export type QueryUserFindOneReviewArgs = {
-  reviewId: Scalars['String']['input']
-}
-
 export type QueryUserFindOneTeamArgs = {
   teamId: Scalars['String']['input']
 }
 
 export type QueryUserFindOneUserArgs = {
   username: Scalars['String']['input']
-}
-
-export type QueryUserFindUserProjectReviewArgs = {
-  projectId: Scalars['String']['input']
 }
 
 export type QueryUserGetProjectChannelsArgs = {
@@ -924,6 +928,24 @@ export type ReviewPaging = {
   __typename?: 'ReviewPaging'
   data: Array<Review>
   meta: PagingMeta
+}
+
+export type ReviewerFindManyProjectInput = {
+  limit?: InputMaybe<Scalars['Int']['input']>
+  page?: InputMaybe<Scalars['Int']['input']>
+  search?: InputMaybe<Scalars['String']['input']>
+  status?: InputMaybe<ProjectStatus>
+  teamId?: InputMaybe<Scalars['String']['input']>
+}
+
+export type ReviewerFindManyReviewByProjectInput = {
+  projectId: Scalars['String']['input']
+  search?: InputMaybe<Scalars['String']['input']>
+}
+
+export type ReviewerFindManyReviewByUsernameInput = {
+  search?: InputMaybe<Scalars['String']['input']>
+  username: Scalars['String']['input']
 }
 
 export type Team = {
@@ -993,20 +1015,7 @@ export type UserFindManyIdentityInput = {
   username: Scalars['String']['input']
 }
 
-export type UserFindManyProjectInput = {
-  limit?: InputMaybe<Scalars['Int']['input']>
-  page?: InputMaybe<Scalars['Int']['input']>
-  search?: InputMaybe<Scalars['String']['input']>
-  status?: InputMaybe<ProjectStatus>
-  teamId?: InputMaybe<Scalars['String']['input']>
-}
-
 export type UserFindManyRatingInput = {
-  search?: InputMaybe<Scalars['String']['input']>
-}
-
-export type UserFindManyReviewInput = {
-  projectId: Scalars['String']['input']
   search?: InputMaybe<Scalars['String']['input']>
 }
 
@@ -1930,8 +1939,9 @@ export type ProjectDetailsFragment = {
   linkTelegram?: string | null
   linkTwitter?: string | null
   linkWebsite?: string | null
-  links?: Array<string> | null
+  manageUrl: string
   name: string
+  reviewCount?: number | null
   slug: string
   status?: ProjectStatus | null
   tags?: Array<string> | null
@@ -1988,11 +1998,11 @@ export type ProjectDetailsFragment = {
   } | null
 }
 
-export type UserFindManyProjectQueryVariables = Exact<{
-  input: UserFindManyProjectInput
+export type ReviewerFindManyProjectQueryVariables = Exact<{
+  input: ReviewerFindManyProjectInput
 }>
 
-export type UserFindManyProjectQuery = {
+export type ReviewerFindManyProjectQuery = {
   __typename?: 'Query'
   paging: {
     __typename?: 'ProjectPaging'
@@ -2010,8 +2020,9 @@ export type UserFindManyProjectQuery = {
       linkTelegram?: string | null
       linkTwitter?: string | null
       linkWebsite?: string | null
-      links?: Array<string> | null
+      manageUrl: string
       name: string
+      reviewCount?: number | null
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
@@ -2080,11 +2091,11 @@ export type UserFindManyProjectQuery = {
   }
 }
 
-export type UserFindOneProjectQueryVariables = Exact<{
+export type ReviewerFindOneProjectQueryVariables = Exact<{
   projectId: Scalars['String']['input']
 }>
 
-export type UserFindOneProjectQuery = {
+export type ReviewerFindOneProjectQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'Project'
@@ -2100,8 +2111,9 @@ export type UserFindOneProjectQuery = {
     linkTelegram?: string | null
     linkTwitter?: string | null
     linkWebsite?: string | null
-    links?: Array<string> | null
+    manageUrl: string
     name: string
+    reviewCount?: number | null
     slug: string
     status?: ProjectStatus | null
     tags?: Array<string> | null
@@ -2181,8 +2193,9 @@ export type AdminFindManyProjectQuery = {
       linkTelegram?: string | null
       linkTwitter?: string | null
       linkWebsite?: string | null
-      links?: Array<string> | null
+      manageUrl: string
       name: string
+      reviewCount?: number | null
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
@@ -2271,8 +2284,9 @@ export type AdminFindOneProjectQuery = {
     linkTelegram?: string | null
     linkTwitter?: string | null
     linkWebsite?: string | null
-    links?: Array<string> | null
+    manageUrl: string
     name: string
+    reviewCount?: number | null
     slug: string
     status?: ProjectStatus | null
     tags?: Array<string> | null
@@ -2379,8 +2393,9 @@ export type AdminUpdateProjectMutation = {
     linkTelegram?: string | null
     linkTwitter?: string | null
     linkWebsite?: string | null
-    links?: Array<string> | null
+    manageUrl: string
     name: string
+    reviewCount?: number | null
     slug: string
     status?: ProjectStatus | null
     tags?: Array<string> | null
@@ -2508,8 +2523,9 @@ export type ManagerFindManyProjectQuery = {
       linkTelegram?: string | null
       linkTwitter?: string | null
       linkWebsite?: string | null
-      links?: Array<string> | null
+      manageUrl: string
       name: string
+      reviewCount?: number | null
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
@@ -2598,8 +2614,9 @@ export type ManagerFindOneProjectQuery = {
     linkTelegram?: string | null
     linkTwitter?: string | null
     linkWebsite?: string | null
-    links?: Array<string> | null
+    manageUrl: string
     name: string
+    reviewCount?: number | null
     slug: string
     status?: ProjectStatus | null
     tags?: Array<string> | null
@@ -2705,8 +2722,9 @@ export type ManagerCreateProjectMutation = {
     linkTelegram?: string | null
     linkTwitter?: string | null
     linkWebsite?: string | null
-    links?: Array<string> | null
+    manageUrl: string
     name: string
+    reviewCount?: number | null
     slug: string
     status?: ProjectStatus | null
     tags?: Array<string> | null
@@ -2785,8 +2803,9 @@ export type ManagerUpdateProjectMutation = {
     linkTelegram?: string | null
     linkTwitter?: string | null
     linkWebsite?: string | null
-    links?: Array<string> | null
+    manageUrl: string
     name: string
+    reviewCount?: number | null
     slug: string
     status?: ProjectStatus | null
     tags?: Array<string> | null
@@ -3024,8 +3043,9 @@ export type ReviewDetailsFragment = {
     linkTelegram?: string | null
     linkTwitter?: string | null
     linkWebsite?: string | null
-    links?: Array<string> | null
+    manageUrl: string
     name: string
+    reviewCount?: number | null
     slug: string
     status?: ProjectStatus | null
     tags?: Array<string> | null
@@ -3097,11 +3117,11 @@ export type ReviewDetailsFragment = {
   } | null
 }
 
-export type UserFindManyReviewQueryVariables = Exact<{
-  input: UserFindManyReviewInput
+export type ReviewerFindManyReviewByProjectQueryVariables = Exact<{
+  input: ReviewerFindManyReviewByProjectInput
 }>
 
-export type UserFindManyReviewQuery = {
+export type ReviewerFindManyReviewByProjectQuery = {
   __typename?: 'Query'
   items?: Array<{
     __typename?: 'Review'
@@ -3126,8 +3146,9 @@ export type UserFindManyReviewQuery = {
       linkTelegram?: string | null
       linkTwitter?: string | null
       linkWebsite?: string | null
-      links?: Array<string> | null
+      manageUrl: string
       name: string
+      reviewCount?: number | null
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
@@ -3200,11 +3221,115 @@ export type UserFindManyReviewQuery = {
   }> | null
 }
 
-export type UserFindUserProjectReviewQueryVariables = Exact<{
+export type ReviewerFindManyReviewByUsernameQueryVariables = Exact<{
+  input: ReviewerFindManyReviewByUsernameInput
+}>
+
+export type ReviewerFindManyReviewByUsernameQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'Review'
+    createdAt?: Date | null
+    id: string
+    projectId: string
+    reviewerId: string
+    updatedAt?: Date | null
+    name: string
+    viewUrl: string
+    project?: {
+      __typename?: 'Project'
+      amountManagerUsd?: number | null
+      amountReferralUsd?: number | null
+      amountTotalUsd?: number | null
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      id: string
+      instructions?: string | null
+      linkDiscord?: string | null
+      linkGithub?: string | null
+      linkTelegram?: string | null
+      linkTwitter?: string | null
+      linkWebsite?: string | null
+      manageUrl: string
+      name: string
+      reviewCount?: number | null
+      slug: string
+      status?: ProjectStatus | null
+      tags?: Array<string> | null
+      teamId: string
+      updatedAt?: Date | null
+      viewUrl: string
+      managers?: Array<{
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+      }> | null
+      team?: {
+        __typename?: 'Team'
+        activeProjectsCount?: number | null
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        homeServerId?: string | null
+        id: string
+        memberCount?: number | null
+        name: string
+        updatedAt?: Date | null
+        viewUrl: string
+        members?: Array<{
+          __typename?: 'TeamMember'
+          createdAt?: Date | null
+          id: string
+          userId: string
+          admin?: boolean | null
+          updatedAt?: Date | null
+          user?: {
+            __typename?: 'User'
+            avatarUrl?: string | null
+            createdAt?: Date | null
+            developer?: boolean | null
+            id: string
+            name?: string | null
+            manager?: boolean | null
+            profileUrl: string
+            role?: UserRole | null
+            status?: UserStatus | null
+            updatedAt?: Date | null
+            username?: string | null
+          } | null
+        }> | null
+      } | null
+    } | null
+    reviewer?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      manager?: boolean | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+    } | null
+  }> | null
+}
+
+export type ReviewerFindUserProjectReviewQueryVariables = Exact<{
   projectId: Scalars['String']['input']
 }>
 
-export type UserFindUserProjectReviewQuery = {
+export type ReviewerFindUserProjectReviewQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'Review'
@@ -3229,8 +3354,9 @@ export type UserFindUserProjectReviewQuery = {
       linkTelegram?: string | null
       linkTwitter?: string | null
       linkWebsite?: string | null
-      links?: Array<string> | null
+      manageUrl: string
       name: string
+      reviewCount?: number | null
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
@@ -3303,11 +3429,11 @@ export type UserFindUserProjectReviewQuery = {
   } | null
 }
 
-export type UserFindOneReviewQueryVariables = Exact<{
+export type ReviewerFindOneReviewQueryVariables = Exact<{
   reviewId: Scalars['String']['input']
 }>
 
-export type UserFindOneReviewQuery = {
+export type ReviewerFindOneReviewQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'Review'
@@ -3332,8 +3458,9 @@ export type UserFindOneReviewQuery = {
       linkTelegram?: string | null
       linkTwitter?: string | null
       linkWebsite?: string | null
-      links?: Array<string> | null
+      manageUrl: string
       name: string
+      reviewCount?: number | null
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
@@ -3406,11 +3533,11 @@ export type UserFindOneReviewQuery = {
   } | null
 }
 
-export type UserCreateReviewMutationVariables = Exact<{
+export type ReviewerCreateReviewMutationVariables = Exact<{
   projectId: Scalars['String']['input']
 }>
 
-export type UserCreateReviewMutation = {
+export type ReviewerCreateReviewMutation = {
   __typename?: 'Mutation'
   created?: {
     __typename?: 'Review'
@@ -3435,8 +3562,9 @@ export type UserCreateReviewMutation = {
       linkTelegram?: string | null
       linkTwitter?: string | null
       linkWebsite?: string | null
-      links?: Array<string> | null
+      manageUrl: string
       name: string
+      reviewCount?: number | null
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
@@ -3509,11 +3637,11 @@ export type UserCreateReviewMutation = {
   } | null
 }
 
-export type UserDeleteReviewMutationVariables = Exact<{
+export type ReviewerDeleteReviewMutationVariables = Exact<{
   reviewId: Scalars['String']['input']
 }>
 
-export type UserDeleteReviewMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
+export type ReviewerDeleteReviewMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
 
 export type AdminFindManyReviewQueryVariables = Exact<{
   input: AdminFindManyReviewInput
@@ -3546,8 +3674,9 @@ export type AdminFindManyReviewQuery = {
         linkTelegram?: string | null
         linkTwitter?: string | null
         linkWebsite?: string | null
-        links?: Array<string> | null
+        manageUrl: string
         name: string
+        reviewCount?: number | null
         slug: string
         status?: ProjectStatus | null
         tags?: Array<string> | null
@@ -3660,8 +3789,9 @@ export type AdminFindOneReviewQuery = {
       linkTelegram?: string | null
       linkTwitter?: string | null
       linkWebsite?: string | null
-      links?: Array<string> | null
+      manageUrl: string
       name: string
+      reviewCount?: number | null
       slug: string
       status?: ProjectStatus | null
       tags?: Array<string> | null
@@ -4749,11 +4879,12 @@ export const ProjectDetailsFragmentDoc = gql`
     linkTelegram
     linkTwitter
     linkWebsite
-    links
     managers {
       ...UserDetails
     }
+    manageUrl
     name
+    reviewCount
     slug
     status
     tags
@@ -5077,9 +5208,9 @@ export const AnonVerifyIdentityChallengeDocument = gql`
   }
   ${IdentityChallengeDetailsFragmentDoc}
 `
-export const UserFindManyProjectDocument = gql`
-  query userFindManyProject($input: UserFindManyProjectInput!) {
-    paging: userFindManyProject(input: $input) {
+export const ReviewerFindManyProjectDocument = gql`
+  query reviewerFindManyProject($input: ReviewerFindManyProjectInput!) {
+    paging: reviewerFindManyProject(input: $input) {
       data {
         ...ProjectDetails
       }
@@ -5091,9 +5222,9 @@ export const UserFindManyProjectDocument = gql`
   ${ProjectDetailsFragmentDoc}
   ${PagingMetaDetailsFragmentDoc}
 `
-export const UserFindOneProjectDocument = gql`
-  query userFindOneProject($projectId: String!) {
-    item: userFindOneProject(projectId: $projectId) {
+export const ReviewerFindOneProjectDocument = gql`
+  query reviewerFindOneProject($projectId: String!) {
+    item: reviewerFindOneProject(projectId: $projectId) {
       ...ProjectDetails
     }
   }
@@ -5301,41 +5432,49 @@ export const AdminDeleteRatingDocument = gql`
     deleted: adminDeleteRating(ratingId: $ratingId)
   }
 `
-export const UserFindManyReviewDocument = gql`
-  query userFindManyReview($input: UserFindManyReviewInput!) {
-    items: userFindManyReview(input: $input) {
+export const ReviewerFindManyReviewByProjectDocument = gql`
+  query reviewerFindManyReviewByProject($input: ReviewerFindManyReviewByProjectInput!) {
+    items: reviewerFindManyReviewByProject(input: $input) {
       ...ReviewDetails
     }
   }
   ${ReviewDetailsFragmentDoc}
 `
-export const UserFindUserProjectReviewDocument = gql`
-  query userFindUserProjectReview($projectId: String!) {
-    item: userFindUserProjectReview(projectId: $projectId) {
+export const ReviewerFindManyReviewByUsernameDocument = gql`
+  query reviewerFindManyReviewByUsername($input: ReviewerFindManyReviewByUsernameInput!) {
+    items: reviewerFindManyReviewByUsername(input: $input) {
       ...ReviewDetails
     }
   }
   ${ReviewDetailsFragmentDoc}
 `
-export const UserFindOneReviewDocument = gql`
-  query userFindOneReview($reviewId: String!) {
-    item: userFindOneReview(reviewId: $reviewId) {
+export const ReviewerFindUserProjectReviewDocument = gql`
+  query reviewerFindUserProjectReview($projectId: String!) {
+    item: reviewerFindUserProjectReview(projectId: $projectId) {
       ...ReviewDetails
     }
   }
   ${ReviewDetailsFragmentDoc}
 `
-export const UserCreateReviewDocument = gql`
-  mutation userCreateReview($projectId: String!) {
-    created: userCreateReview(projectId: $projectId) {
+export const ReviewerFindOneReviewDocument = gql`
+  query reviewerFindOneReview($reviewId: String!) {
+    item: reviewerFindOneReview(reviewId: $reviewId) {
       ...ReviewDetails
     }
   }
   ${ReviewDetailsFragmentDoc}
 `
-export const UserDeleteReviewDocument = gql`
-  mutation userDeleteReview($reviewId: String!) {
-    deleted: userDeleteReview(reviewId: $reviewId)
+export const ReviewerCreateReviewDocument = gql`
+  mutation reviewerCreateReview($projectId: String!) {
+    created: reviewerCreateReview(projectId: $projectId) {
+      ...ReviewDetails
+    }
+  }
+  ${ReviewDetailsFragmentDoc}
+`
+export const ReviewerDeleteReviewDocument = gql`
+  mutation reviewerDeleteReview($reviewId: String!) {
+    deleted: reviewerDeleteReview(reviewId: $reviewId)
   }
 `
 export const AdminFindManyReviewDocument = gql`
@@ -5644,8 +5783,8 @@ const UserVerifyIdentityChallengeDocumentString = print(UserVerifyIdentityChalle
 const UserLinkIdentityDocumentString = print(UserLinkIdentityDocument)
 const AnonRequestIdentityChallengeDocumentString = print(AnonRequestIdentityChallengeDocument)
 const AnonVerifyIdentityChallengeDocumentString = print(AnonVerifyIdentityChallengeDocument)
-const UserFindManyProjectDocumentString = print(UserFindManyProjectDocument)
-const UserFindOneProjectDocumentString = print(UserFindOneProjectDocument)
+const ReviewerFindManyProjectDocumentString = print(ReviewerFindManyProjectDocument)
+const ReviewerFindOneProjectDocumentString = print(ReviewerFindOneProjectDocument)
 const AdminFindManyProjectDocumentString = print(AdminFindManyProjectDocument)
 const AdminFindOneProjectDocumentString = print(AdminFindOneProjectDocument)
 const AdminUpdateProjectDocumentString = print(AdminUpdateProjectDocument)
@@ -5674,11 +5813,12 @@ const UserDeleteRatingDocumentString = print(UserDeleteRatingDocument)
 const AdminFindManyRatingDocumentString = print(AdminFindManyRatingDocument)
 const AdminUpdateRatingDocumentString = print(AdminUpdateRatingDocument)
 const AdminDeleteRatingDocumentString = print(AdminDeleteRatingDocument)
-const UserFindManyReviewDocumentString = print(UserFindManyReviewDocument)
-const UserFindUserProjectReviewDocumentString = print(UserFindUserProjectReviewDocument)
-const UserFindOneReviewDocumentString = print(UserFindOneReviewDocument)
-const UserCreateReviewDocumentString = print(UserCreateReviewDocument)
-const UserDeleteReviewDocumentString = print(UserDeleteReviewDocument)
+const ReviewerFindManyReviewByProjectDocumentString = print(ReviewerFindManyReviewByProjectDocument)
+const ReviewerFindManyReviewByUsernameDocumentString = print(ReviewerFindManyReviewByUsernameDocument)
+const ReviewerFindUserProjectReviewDocumentString = print(ReviewerFindUserProjectReviewDocument)
+const ReviewerFindOneReviewDocumentString = print(ReviewerFindOneReviewDocument)
+const ReviewerCreateReviewDocumentString = print(ReviewerCreateReviewDocument)
+const ReviewerDeleteReviewDocumentString = print(ReviewerDeleteReviewDocument)
 const AdminFindManyReviewDocumentString = print(AdminFindManyReviewDocument)
 const AdminFindOneReviewDocumentString = print(AdminFindOneReviewDocument)
 const AdminDeleteReviewDocumentString = print(AdminDeleteReviewDocument)
@@ -6498,11 +6638,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
-    userFindManyProject(
-      variables: UserFindManyProjectQueryVariables,
+    reviewerFindManyProject(
+      variables: ReviewerFindManyProjectQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: UserFindManyProjectQuery
+      data: ReviewerFindManyProjectQuery
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -6510,20 +6650,20 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<UserFindManyProjectQuery>(UserFindManyProjectDocumentString, variables, {
+          client.rawRequest<ReviewerFindManyProjectQuery>(ReviewerFindManyProjectDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'userFindManyProject',
+        'reviewerFindManyProject',
         'query',
         variables,
       )
     },
-    userFindOneProject(
-      variables: UserFindOneProjectQueryVariables,
+    reviewerFindOneProject(
+      variables: ReviewerFindOneProjectQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: UserFindOneProjectQuery
+      data: ReviewerFindOneProjectQuery
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -6531,11 +6671,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<UserFindOneProjectQuery>(UserFindOneProjectDocumentString, variables, {
+          client.rawRequest<ReviewerFindOneProjectQuery>(ReviewerFindOneProjectDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'userFindOneProject',
+        'reviewerFindOneProject',
         'query',
         variables,
       )
@@ -7129,11 +7269,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
-    userFindManyReview(
-      variables: UserFindManyReviewQueryVariables,
+    reviewerFindManyReviewByProject(
+      variables: ReviewerFindManyReviewByProjectQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: UserFindManyReviewQuery
+      data: ReviewerFindManyReviewByProjectQuery
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -7141,20 +7281,21 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<UserFindManyReviewQuery>(UserFindManyReviewDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'userFindManyReview',
+          client.rawRequest<ReviewerFindManyReviewByProjectQuery>(
+            ReviewerFindManyReviewByProjectDocumentString,
+            variables,
+            { ...requestHeaders, ...wrappedRequestHeaders },
+          ),
+        'reviewerFindManyReviewByProject',
         'query',
         variables,
       )
     },
-    userFindUserProjectReview(
-      variables: UserFindUserProjectReviewQueryVariables,
+    reviewerFindManyReviewByUsername(
+      variables: ReviewerFindManyReviewByUsernameQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: UserFindUserProjectReviewQuery
+      data: ReviewerFindManyReviewByUsernameQuery
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -7162,20 +7303,21 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<UserFindUserProjectReviewQuery>(UserFindUserProjectReviewDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'userFindUserProjectReview',
+          client.rawRequest<ReviewerFindManyReviewByUsernameQuery>(
+            ReviewerFindManyReviewByUsernameDocumentString,
+            variables,
+            { ...requestHeaders, ...wrappedRequestHeaders },
+          ),
+        'reviewerFindManyReviewByUsername',
         'query',
         variables,
       )
     },
-    userFindOneReview(
-      variables: UserFindOneReviewQueryVariables,
+    reviewerFindUserProjectReview(
+      variables: ReviewerFindUserProjectReviewQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: UserFindOneReviewQuery
+      data: ReviewerFindUserProjectReviewQuery
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -7183,20 +7325,21 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<UserFindOneReviewQuery>(UserFindOneReviewDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'userFindOneReview',
+          client.rawRequest<ReviewerFindUserProjectReviewQuery>(
+            ReviewerFindUserProjectReviewDocumentString,
+            variables,
+            { ...requestHeaders, ...wrappedRequestHeaders },
+          ),
+        'reviewerFindUserProjectReview',
         'query',
         variables,
       )
     },
-    userCreateReview(
-      variables: UserCreateReviewMutationVariables,
+    reviewerFindOneReview(
+      variables: ReviewerFindOneReviewQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: UserCreateReviewMutation
+      data: ReviewerFindOneReviewQuery
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -7204,20 +7347,41 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<UserCreateReviewMutation>(UserCreateReviewDocumentString, variables, {
+          client.rawRequest<ReviewerFindOneReviewQuery>(ReviewerFindOneReviewDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'userCreateReview',
+        'reviewerFindOneReview',
+        'query',
+        variables,
+      )
+    },
+    reviewerCreateReview(
+      variables: ReviewerCreateReviewMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: ReviewerCreateReviewMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<ReviewerCreateReviewMutation>(ReviewerCreateReviewDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'reviewerCreateReview',
         'mutation',
         variables,
       )
     },
-    userDeleteReview(
-      variables: UserDeleteReviewMutationVariables,
+    reviewerDeleteReview(
+      variables: ReviewerDeleteReviewMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: UserDeleteReviewMutation
+      data: ReviewerDeleteReviewMutation
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -7225,11 +7389,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<UserDeleteReviewMutation>(UserDeleteReviewDocumentString, variables, {
+          client.rawRequest<ReviewerDeleteReviewMutation>(ReviewerDeleteReviewDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'userDeleteReview',
+        'reviewerDeleteReview',
         'mutation',
         variables,
       )
@@ -8009,7 +8173,6 @@ export function AdminUpdateProjectInputSchema(): z.ZodObject<Properties<AdminUpd
     linkTelegram: z.string().nullish(),
     linkTwitter: z.string().nullish(),
     linkWebsite: z.string().nullish(),
-    links: z.array(z.string()).nullish(),
     name: z.string().nullish(),
     startDate: definedNonNullAnySchema.nullish(),
     status: ProjectStatusSchema.nullish(),
@@ -8103,7 +8266,6 @@ export function ManagerUpdateProjectInputSchema(): z.ZodObject<Properties<Manage
     linkTelegram: z.string().nullish(),
     linkTwitter: z.string().nullish(),
     linkWebsite: z.string().nullish(),
-    links: z.array(z.string()).nullish(),
     name: z.string().nullish(),
     referralId: z.string().nullish(),
     startDate: definedNonNullAnySchema.nullish(),
@@ -8131,6 +8293,34 @@ export function RequestIdentityChallengeInputSchema(): z.ZodObject<Properties<Re
   return z.object({
     provider: IdentityProviderSchema,
     providerId: z.string(),
+  })
+}
+
+export function ReviewerFindManyProjectInputSchema(): z.ZodObject<Properties<ReviewerFindManyProjectInput>> {
+  return z.object({
+    limit: z.number().nullish(),
+    page: z.number().nullish(),
+    search: z.string().nullish(),
+    status: ProjectStatusSchema.nullish(),
+    teamId: z.string().nullish(),
+  })
+}
+
+export function ReviewerFindManyReviewByProjectInputSchema(): z.ZodObject<
+  Properties<ReviewerFindManyReviewByProjectInput>
+> {
+  return z.object({
+    projectId: z.string(),
+    search: z.string().nullish(),
+  })
+}
+
+export function ReviewerFindManyReviewByUsernameInputSchema(): z.ZodObject<
+  Properties<ReviewerFindManyReviewByUsernameInput>
+> {
+  return z.object({
+    search: z.string().nullish(),
+    username: z.string(),
   })
 }
 
@@ -8163,25 +8353,8 @@ export function UserFindManyIdentityInputSchema(): z.ZodObject<Properties<UserFi
   })
 }
 
-export function UserFindManyProjectInputSchema(): z.ZodObject<Properties<UserFindManyProjectInput>> {
-  return z.object({
-    limit: z.number().nullish(),
-    page: z.number().nullish(),
-    search: z.string().nullish(),
-    status: ProjectStatusSchema.nullish(),
-    teamId: z.string().nullish(),
-  })
-}
-
 export function UserFindManyRatingInputSchema(): z.ZodObject<Properties<UserFindManyRatingInput>> {
   return z.object({
-    search: z.string().nullish(),
-  })
-}
-
-export function UserFindManyReviewInputSchema(): z.ZodObject<Properties<UserFindManyReviewInput>> {
-  return z.object({
-    projectId: z.string(),
     search: z.string().nullish(),
   })
 }

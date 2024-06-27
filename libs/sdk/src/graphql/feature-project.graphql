@@ -11,11 +11,12 @@ fragment ProjectDetails on Project {
   linkTelegram
   linkTwitter
   linkWebsite
-  links
   managers {
     ...UserDetails
   }
+  manageUrl
   name
+  reviewCount
   slug
   status
   tags
@@ -27,8 +28,8 @@ fragment ProjectDetails on Project {
   viewUrl
 }
 
-query userFindManyProject($input: UserFindManyProjectInput!) {
-  paging: userFindManyProject(input: $input) {
+query reviewerFindManyProject($input: ReviewerFindManyProjectInput!) {
+  paging: reviewerFindManyProject(input: $input) {
     data {
       ...ProjectDetails
     }
@@ -38,8 +39,8 @@ query userFindManyProject($input: UserFindManyProjectInput!) {
   }
 }
 
-query userFindOneProject($projectId: String!) {
-  item: userFindOneProject(projectId: $projectId) {
+query reviewerFindOneProject($projectId: String!) {
+  item: reviewerFindOneProject(projectId: $projectId) {
     ...ProjectDetails
   }
 }

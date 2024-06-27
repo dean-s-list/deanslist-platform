@@ -1,7 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql'
 
 @InputType()
-export class UserCreateReviewInput {
+export class ReviewerCreateReviewInput {
   @Field()
   projectId!: string
 }

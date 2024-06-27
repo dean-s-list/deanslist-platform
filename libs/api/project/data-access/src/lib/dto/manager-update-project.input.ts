@@ -33,8 +33,6 @@ export class ManagerUpdateProjectInput {
   linkTwitter?: string
   @Field({ nullable: true })
   linkWebsite?: string
-  @Field(() => [String], { nullable: true })
-  links?: string[]
   @Field({ nullable: true })
   referralId?: string
 }

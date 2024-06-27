@@ -1,11 +1,13 @@
 import { ApiCoreService } from '@deanslist-platform/api-core-data-access'
 import { Injectable } from '@nestjs/common'
-import { UserFindManyReviewInput } from './dto/user-find-many-review.input'
+import { ReviewerFindManyReviewByProjectInput } from './dto/reviewer-find-many-review-by-project-input'
+import { ReviewerFindManyReviewByUsernameInput } from './dto/reviewer-find-many-review-by-username-input'
 import { Review } from './entity/review.entity'
-import { getUserReviewWhereInput } from './helpers/get-user-review-where.input'
+import { getReviewerReviewByProjectWhereInput } from './helpers/get-reviewer-review-by-project-where-input'
+import { getReviewerReviewByUsernameWhereInput } from './helpers/get-reviewer-review-by-username-where-input'
 
 @Injectable()
-export class ApiReviewResolveUserService {
+export class ApiReviewResolveReviewerService {
   constructor(private readonly core: ApiCoreService) {}
 
   async createReview(userId: string, projectId: string) {
@@ -24,10 +26,18 @@ export class ApiReviewResolveUserService {
     return !!deleted
   }
 
-  async findManyReview(input: UserFindManyReviewInput): Promise<Review[]> {
+  async findManyReviewByProject(input: ReviewerFindManyReviewByProjectInput): Promise<Review[]> {
     return this.core.data.review.findMany({
       orderBy: { createdAt: 'desc' },
-      where: getUserReviewWhereInput(input),
+      where: getReviewerReviewByProjectWhereInput(input),
+      include: { project: true, reviewer: true },
+    })
+  }
+
+  async findManyReviewByUsername(input: ReviewerFindManyReviewByUsernameInput): Promise<Review[]> {
+    return this.core.data.review.findMany({
+      orderBy: { createdAt: 'desc' },
+      where: getReviewerReviewByUsernameWhereInput(input),
       include: { project: true, reviewer: true },
     })
   }

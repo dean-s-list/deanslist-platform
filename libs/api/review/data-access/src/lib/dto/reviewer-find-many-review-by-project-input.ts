@@ -1,7 +1,7 @@
 import { Field, InputType } from '@nestjs/graphql'
 
 @InputType()
-export class UserFindManyReviewInput {
+export class ReviewerFindManyReviewByProjectInput {
   @Field()
   projectId!: string
   @Field({ nullable: true })

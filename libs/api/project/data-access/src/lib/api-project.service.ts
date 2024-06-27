@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { ApiProjectDataService } from './api-project-data.service'
 import { ApiProjectResolveAdminService } from './api-project-resolve-admin.service'
 import { ApiProjectResolveManagerService } from './api-project-resolve-manager.service'
-import { ApiProjectResolveUserService } from './api-project-resolve-user.service'
+import { ApiProjectResolveReviewerService } from './api-project-resolve-reviewer.service'
 
 @Injectable()
 export class ApiProjectService {
@@ -10,6 +10,6 @@ export class ApiProjectService {
     readonly admin: ApiProjectResolveAdminService,
     readonly data: ApiProjectDataService,
     readonly manager: ApiProjectResolveManagerService,
-    readonly user: ApiProjectResolveUserService,
+    readonly reviewer: ApiProjectResolveReviewerService,
   ) {}
 }

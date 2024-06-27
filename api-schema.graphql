@@ -79,7 +79,6 @@ input AdminUpdateProjectInput {
   linkTelegram: String
   linkTwitter: String
   linkWebsite: String
-  links: [String!]
   name: String
   startDate: DateTime
   status: ProjectStatus
@@ -259,7 +258,6 @@ input ManagerUpdateProjectInput {
   linkTelegram: String
   linkTwitter: String
   linkWebsite: String
-  links: [String!]
   name: String
   referralId: String
   startDate: DateTime
@@ -323,13 +321,13 @@ type Mutation {
   managerUpdateProject(input: ManagerUpdateProjectInput!, projectId: String!): Project
   managerUpdateTeam(input: ManagerUpdateTeamInput!, teamId: String!): Team
   register(input: RegisterInput!): User
+  reviewerCreateReview(projectId: String!): Review
+  reviewerDeleteReview(reviewId: String!): Boolean
   userCreateComment(input: UserCreateCommentInput!): Comment
   userCreateRating(input: UserCreateRatingInput!): Rating
-  userCreateReview(projectId: String!): Review
   userDeleteComment(commentId: String!): Boolean
   userDeleteIdentity(identityId: String!): Boolean
   userDeleteRating(ratingId: String!): Boolean
-  userDeleteReview(reviewId: String!): Boolean
   userLinkIdentity(input: LinkIdentityInput!): Identity
   userUpdateComment(commentId: String!, input: UserUpdateCommentInput!): Comment
   userUpdateRating(input: UserUpdateRatingInput!, ratingId: String!): Rating
@@ -362,11 +360,12 @@ type Project {
   linkTelegram: String
   linkTwitter: String
   linkWebsite: String
-  links: [String!]
+  manageUrl: String!
   managers: [User!]
   members: [User!]
   name: String!
   referral: User
+  reviewCount: Int
   slug: String!
   startDate: DateTime
   status: ProjectStatus
@@ -416,19 +415,20 @@ type Query {
   managerGetTeamMember(teamId: String!): TeamMember
   managerGetTeamMembers(teamId: String!): [TeamMember!]
   me: User
+  reviewerFindManyProject(input: ReviewerFindManyProjectInput!): ProjectPaging!
+  reviewerFindManyReviewByProject(input: ReviewerFindManyReviewByProjectInput!): [Review!]
+  reviewerFindManyReviewByUsername(input: ReviewerFindManyReviewByUsernameInput!): [Review!]
+  reviewerFindOneProject(projectId: String!): Project
+  reviewerFindOneReview(reviewId: String!): Review
+  reviewerFindUserProjectReview(projectId: String!): Review
   uptime: Float!
   userFindManyComment(input: UserFindManyCommentInput!): [Comment!]
   userFindManyIdentity(input: UserFindManyIdentityInput!): [Identity!]
-  userFindManyProject(input: UserFindManyProjectInput!): ProjectPaging!
   userFindManyRating(input: UserFindManyRatingInput!): [Rating!]!
-  userFindManyReview(input: UserFindManyReviewInput!): [Review!]
   userFindManyTeam(input: UserFindManyTeamInput!): TeamPaging!
   userFindManyUser(input: UserFindManyUserInput!): UserPaging!
-  userFindOneProject(projectId: String!): Project
-  userFindOneReview(reviewId: String!): Review
   userFindOneTeam(teamId: String!): Team
   userFindOneUser(username: String!): User
-  userFindUserProjectReview(projectId: String!): Review
   userGetDiscordServers: [DiscordServer!]!
   userGetProjectChannels(projectId: String!): [DiscordChannel!]!
   userGetTeamChannels(teamId: String!): [DiscordChannel!]!
@@ -469,6 +469,24 @@ type Review {
 type ReviewPaging {
   data: [Review!]!
   meta: PagingMeta!
+}
+
+input ReviewerFindManyProjectInput {
+  limit: Int = 10
+  page: Int = 1
+  search: String
+  status: ProjectStatus
+  teamId: String
+}
+
+input ReviewerFindManyReviewByProjectInput {
+  projectId: String!
+  search: String
+}
+
+input ReviewerFindManyReviewByUsernameInput {
+  search: String
+  username: String!
 }
 
 type Team {
@@ -534,20 +552,7 @@ input UserFindManyIdentityInput {
   username: String!
 }
 
-input UserFindManyProjectInput {
-  limit: Int = 10
-  page: Int = 1
-  search: String
-  status: ProjectStatus
-  teamId: String
-}
-
 input UserFindManyRatingInput {
-  search: String
-}
-
-input UserFindManyReviewInput {
-  projectId: String!
   search: String
 }
 

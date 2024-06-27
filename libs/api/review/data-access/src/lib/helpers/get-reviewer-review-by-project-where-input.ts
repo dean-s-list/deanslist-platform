@@ -1,8 +1,12 @@
 import { Prisma } from '@prisma/client'
-import { UserFindManyReviewInput } from '../dto/user-find-many-review.input'
+import { ReviewerFindManyReviewByProjectInput } from '../dto/reviewer-find-many-review-by-project-input'
 
-export function getUserReviewWhereInput(input: UserFindManyReviewInput): Prisma.ReviewWhereInput {
-  const where: Prisma.ReviewWhereInput = {}
+export function getReviewerReviewByProjectWhereInput(
+  input: ReviewerFindManyReviewByProjectInput,
+): Prisma.ReviewWhereInput {
+  const where: Prisma.ReviewWhereInput = {
+    projectId: input.projectId,
+  }
 
   if (input.search) {
     where.OR = [

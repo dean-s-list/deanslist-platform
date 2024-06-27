@@ -3,7 +3,7 @@ import { Field, InputType } from '@nestjs/graphql'
 import { ProjectStatus } from '../entity/project-status.enum'
 
 @InputType()
-export class UserFindManyProjectInput extends PagingInput() {
+export class ReviewerFindManyProjectInput extends PagingInput() {
   @Field({ nullable: true })
   teamId?: string
   @Field({ nullable: true })

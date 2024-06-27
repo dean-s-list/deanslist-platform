@@ -35,6 +35,4 @@ export class AdminUpdateProjectInput {
   linkTwitter?: string
   @Field({ nullable: true })
   linkWebsite?: string
-  @Field(() => [String], { nullable: true })
-  links?: string[]
 }

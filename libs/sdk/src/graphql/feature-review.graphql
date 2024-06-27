@@ -14,32 +14,38 @@ fragment ReviewDetails on Review {
   viewUrl
 }
 
-query userFindManyReview($input: UserFindManyReviewInput!) {
-  items: userFindManyReview(input: $input) {
+query reviewerFindManyReviewByProject($input: ReviewerFindManyReviewByProjectInput!) {
+  items: reviewerFindManyReviewByProject(input: $input) {
     ...ReviewDetails
   }
 }
 
-query userFindUserProjectReview($projectId: String!) {
-  item: userFindUserProjectReview(projectId: $projectId) {
+query reviewerFindManyReviewByUsername($input: ReviewerFindManyReviewByUsernameInput!) {
+  items: reviewerFindManyReviewByUsername(input: $input) {
     ...ReviewDetails
   }
 }
 
-query userFindOneReview($reviewId: String!) {
-  item: userFindOneReview(reviewId: $reviewId) {
+query reviewerFindUserProjectReview($projectId: String!) {
+  item: reviewerFindUserProjectReview(projectId: $projectId) {
     ...ReviewDetails
   }
 }
 
-mutation userCreateReview($projectId: String!) {
-  created: userCreateReview(projectId: $projectId) {
+query reviewerFindOneReview($reviewId: String!) {
+  item: reviewerFindOneReview(reviewId: $reviewId) {
     ...ReviewDetails
   }
 }
 
-mutation userDeleteReview($reviewId: String!) {
-  deleted: userDeleteReview(reviewId: $reviewId)
+mutation reviewerCreateReview($projectId: String!) {
+  created: reviewerCreateReview(projectId: $projectId) {
+    ...ReviewDetails
+  }
+}
+
+mutation reviewerDeleteReview($reviewId: String!) {
+  deleted: reviewerDeleteReview(reviewId: $reviewId)
 }
 
 query adminFindManyReview($input: AdminFindManyReviewInput!) {

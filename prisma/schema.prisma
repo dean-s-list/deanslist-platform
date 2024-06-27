@@ -108,7 +108,6 @@ model Project {
   linkTelegram      String?
   linkTwitter       String?
   linkWebsite       String?
-  links             String[]
   duration          Int              @default(2)
   amountManagerUsd  Int?
   amountReferralUsd Int?

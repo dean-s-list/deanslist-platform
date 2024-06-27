@@ -1,14 +1,13 @@
 import { UserCommentFeature } from '@deanslist-platform/web-comment-feature'
-import { CoreUiBack } from '@deanslist-platform/web-core-ui'
-import { useUserFindOneReview } from '@deanslist-platform/web-review-data-access'
-import { ReviewUiItem } from '@deanslist-platform/web-review-ui'
+import { CoreUiBackLink } from '@deanslist-platform/web-core-ui'
+import { useReviewerFindOneReview } from '@deanslist-platform/web-review-data-access'
 import { Group } from '@mantine/core'
 import { UiDebugModal, UiError, UiGroup, UiLoader, UiStack } from '@pubkey-ui/core'
 import { useParams } from 'react-router-dom'
 
-export function UserReviewDetailFeature() {
+export function ReviewerReviewDetailFeature() {
   const { reviewId } = useParams<{ reviewId: string }>() as { reviewId: string }
-  const { item, query } = useUserFindOneReview({ reviewId })
+  const { item, query } = useReviewerFindOneReview({ reviewId })
 
   if (query.isLoading) {
     return <UiLoader />
@@ -24,8 +23,7 @@ export function UserReviewDetailFeature() {
     <UiStack>
       <UiGroup>
         <Group>
-          <CoreUiBack />
-          <ReviewUiItem review={item} />
+          <CoreUiBackLink label="Back to all reviews" />
         </Group>
         <Group>
           <UiDebugModal data={item} />

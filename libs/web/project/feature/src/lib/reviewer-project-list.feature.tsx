@@ -1,13 +1,13 @@
 import { getEnumOptions, ProjectStatus } from '@deanslist-platform/sdk'
 import { CoreUiSearchField } from '@deanslist-platform/web-core-ui'
-import { useUserFindManyProject } from '@deanslist-platform/web-project-data-access'
+import { useReviewerFindManyProject } from '@deanslist-platform/web-project-data-access'
 import { ProjectUiGrid } from '@deanslist-platform/web-project-ui'
 import { Group, Select } from '@mantine/core'
 import { UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
 import { IconSearch } from '@tabler/icons-react'
 
-export default function UserProjectListFeature() {
-  const { items, pagination, query, setSearch, status, setStatus } = useUserFindManyProject({
+export default function ReviewerProjectListFeature() {
+  const { items, pagination, query, setSearch, status, setStatus } = useReviewerFindManyProject({
     limit: 24,
   })
 

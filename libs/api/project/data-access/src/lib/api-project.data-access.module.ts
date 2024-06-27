@@ -5,7 +5,7 @@ import { ApiProjectDataService } from './api-project-data.service'
 import { ApiProjectEventService } from './api-project-event.service'
 import { ApiProjectResolveAdminService } from './api-project-resolve-admin.service'
 import { ApiProjectResolveManagerService } from './api-project-resolve-manager.service'
-import { ApiProjectResolveUserService } from './api-project-resolve-user.service'
+import { ApiProjectResolveReviewerService } from './api-project-resolve-reviewer.service'
 import { ApiProjectService } from './api-project.service'
 
 @Module({
@@ -15,7 +15,7 @@ import { ApiProjectService } from './api-project.service'
     ApiProjectEventService,
     ApiProjectResolveAdminService,
     ApiProjectResolveManagerService,
-    ApiProjectResolveUserService,
+    ApiProjectResolveReviewerService,
     ApiProjectService,
   ],
   exports: [ApiProjectService],

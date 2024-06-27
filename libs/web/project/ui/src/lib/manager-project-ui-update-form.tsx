@@ -36,7 +36,6 @@ export function ManagerProjectUiUpdateForm({
       instructions: project.instructions ?? '',
       linkDiscord: project.linkDiscord ?? '',
       linkGithub: project.linkGithub ?? '',
-      links: project.links ?? [],
       linkTelegram: project.linkTelegram ?? '',
       linkTwitter: project.linkTwitter ?? '',
       linkWebsite: project.linkWebsite ?? '',

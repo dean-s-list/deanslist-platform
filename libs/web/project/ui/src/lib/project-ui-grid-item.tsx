@@ -1,5 +1,5 @@
 import type { Project } from '@deanslist-platform/sdk'
-import { Paper } from '@mantine/core'
+import { Paper, Text } from '@mantine/core'
 import { UiDebugModal, UiGroup, UiStack } from '@pubkey-ui/core'
 import { ProjectUiAmount } from './project-ui-amount'
 import { ProjectUiItem } from './project-ui-item'
@@ -17,7 +17,7 @@ export function ProjectUiGridItem({ project, to }: { project: Project; to?: stri
         <ProjectUiTags tags={project.tags} />
         <ProjectUiAmount amount={project.amountTotalUsd} label="total" />
         <UiGroup>
-          <div></div>
+          <Text>{project.reviewCount ?? 0} participants</Text>
           <ProjectUiStatusBadge status={project?.status} />
         </UiGroup>
       </UiStack>
