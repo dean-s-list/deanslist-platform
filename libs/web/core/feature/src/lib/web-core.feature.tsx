@@ -1,6 +1,7 @@
 import { AuthProvider } from '@deanslist-platform/web-auth-data-access'
 import { SdkProvider } from '@deanslist-platform/web-core-data-access'
 import { CoreUiThemeProvider } from '@deanslist-platform/web-core-ui'
+import { SolanaClusterProvider } from '@deanslist-platform/web-solana-data-access'
 import { toastError } from '@pubkey-ui/core'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
@@ -32,7 +33,9 @@ export function WebCoreFeature() {
         <SdkProvider>
           <AuthProvider>
             <CoreUiThemeProvider>
-              <ShellRoutes />
+              <SolanaClusterProvider autoConnect={true}>
+                <ShellRoutes />
+              </SolanaClusterProvider>
             </CoreUiThemeProvider>
           </AuthProvider>
         </SdkProvider>

@@ -6,8 +6,10 @@ import {
   CoreUiNavbar,
   CoreUiNavbarLink,
 } from '@deanslist-platform/web-core-ui'
+import { Group } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { UiLoader } from '@pubkey-ui/core'
+import { WalletMultiIcon } from '@pubkeyapp/wallet-adapter-mantine-ui'
 import { IconChairDirector, IconChecks, IconCube, IconListNumbers, IconSettings, IconShield } from '@tabler/icons-react'
 import { ReactNode, Suspense, useMemo } from 'react'
 
@@ -36,7 +38,12 @@ export function WebCoreLayout({ children }: { children: ReactNode }) {
           toggle={toggle}
           showBurger
           showDrawer={false}
-          profile={<CoreUiHeaderProfile user={user} logout={logout} />}
+          profile={
+            <Group>
+              <WalletMultiIcon radius="md" variant="subtle" />
+              <CoreUiHeaderProfile user={user} logout={logout} />
+            </Group>
+          }
         />
       }
       navbar={<CoreUiNavbar opened={opened} toggle={toggle} links={links} />}

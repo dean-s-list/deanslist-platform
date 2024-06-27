@@ -18,6 +18,9 @@ export function getReviewerReviewByUsernameWhereInput(
           managers: { some: { username: { contains: input.search, mode: 'insensitive' } } },
         },
       },
+      {
+        comments: { some: { content: { contains: input.search, mode: 'insensitive' } } },
+      },
     ]
   }
 
