@@ -1,9 +1,11 @@
 import { BN } from '@coral-xyz/anchor'
+import {
+  getLockTokensVotingPowerPerWallet,
+  getTokenOwnerRecords,
+  useRealmQuery,
+  useVsrClient,
+} from '@deanslist-platform/realms-sdk-react'
 import { useUserFindManyUser } from '@deanslist-platform/web-user-data-access'
-import { useRealmQuery } from '@realms/hooks/queries/realm'
-import { getTokenOwnerRecords } from '@realms/models/proposal'
-import { useVsrClient } from '@realms/VoterWeightPlugins/useVsrClient'
-import { getLockTokensVotingPowerPerWallet } from '@realms/VoteStakeRegistry/tools/deposits'
 import { ProgramAccount, TokenOwnerRecord } from '@solana/spl-governance'
 import { Wallet } from '@solana/wallet-adapter-react'
 import { Connection, PublicKey } from '@solana/web3.js'

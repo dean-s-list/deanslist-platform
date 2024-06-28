@@ -36,6 +36,7 @@
       "@deanslist-platform/api-team-feature": ["libs/api/team/feature/src/index.ts"],
       "@deanslist-platform/api-user-data-access": ["libs/api/user/data-access/src/index.ts"],
       "@deanslist-platform/api-user-feature": ["libs/api/user/feature/src/index.ts"],
+      "@deanslist-platform/realms-sdk-react": ["packages/realms-sdk-react/src/index.ts"],
       "@deanslist-platform/sdk": ["libs/sdk/src/index.ts"],
       "@deanslist-platform/tools": ["libs/tools/src/index.ts"],
       "@deanslist-platform/web-auth-data-access": ["libs/web/auth/data-access/src/index.ts"],
@@ -76,8 +77,7 @@
       "@deanslist-platform/web-team-ui": ["libs/web/team/ui/src/index.ts"],
       "@deanslist-platform/web-user-data-access": ["libs/web/user/data-access/src/index.ts"],
       "@deanslist-platform/web-user-feature": ["libs/web/user/feature/src/index.ts"],
-      "@deanslist-platform/web-user-ui": ["libs/web/user/ui/src/index.ts"],
-      "@realms/*": ["libs/web/realms/src/*"]
+      "@deanslist-platform/web-user-ui": ["libs/web/user/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -1,8 +1,10 @@
 import { BN } from '@coral-xyz/anchor'
-import { fetchRealmConfigQuery } from '@realms/hooks/queries/realmConfig'
-import { chunks } from '@realms/utils/helpers'
-import { VsrClient } from '@realms/VoteStakeRegistry/sdk/client'
-import { getLockTokensVotingPowerPerWallet } from '@realms/VoteStakeRegistry/tools/deposits'
+import {
+  chunks,
+  fetchRealmConfigQuery,
+  getLockTokensVotingPowerPerWallet,
+  VsrClient,
+} from '@deanslist-platform/realms-sdk-react'
 import {
   booleanFilter,
   getGovernanceAccounts,

@@ -1,10 +1,10 @@
+import { MAINNET_RPC } from '@deanslist-platform/realms-sdk-react'
 import { CoreUiCountdown } from '@deanslist-platform/web-core-ui'
 import { useLeaderboardPerks, useLeaderboardRecords } from '@deanslist-platform/web-leaderboard-data-access'
 import { LeaderboardUiLeader, LeaderboardUiPerks, LeaderboardUiTable } from '@deanslist-platform/web-leaderboard-ui'
 import { SolanaClusterProvider, WalletConnectionLoader } from '@deanslist-platform/web-solana-data-access'
 import { Card, Center, Divider, Grid, Stack, Table, TableTbody, Title } from '@mantine/core'
 import { UiPage } from '@pubkey-ui/core'
-import { MAINNET_RPC } from '@realms/constants/endpoints'
 import { Wallet } from '@solana/wallet-adapter-react'
 import { Connection } from '@solana/web3.js'
 
