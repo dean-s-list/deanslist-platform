@@ -1,8 +1,7 @@
-import { Connection } from '@solana/web3.js'
-
-const connection = new Connection('https://mango.rpcpool.com', 'recent')
-export default connection
+import { useConnection } from '@solana/wallet-adapter-react'
 
 export function useRealmsConnection() {
+  const { connection } = useConnection()
+
   return { connection }
 }

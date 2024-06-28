@@ -15,7 +15,7 @@
     "dev:sdk": "pnpm build:sdk --watch",
     "dev:services": "docker compose up",
     "dev:services:stop": "docker compose down",
-    "dev:web": "nx serve web --port 3000",
+    "dev:web": "nx serve web",
     "docker:build:api": "docker build . -t ghcr.io/dean-s-list/deanslist-platform",
     "docker:push:api": "docker push ghcr.io/dean-s-list/deanslist-platform",
     "docker:run:api": "docker run -it -p 8000:3000 ghcr.io/dean-s-list/deanslist-platform",

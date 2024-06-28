@@ -1,5 +1,8 @@
-import { BlockhashWithExpiryBlockHeight, Connection, PublicKey } from '@solana/web3.js'
+import { BN } from '@coral-xyz/anchor'
+import { fetchRealmConfigQuery } from '@realms/hooks/queries/realmConfig'
+import { chunks } from '@realms/utils/helpers'
 import { VsrClient } from '@realms/VoteStakeRegistry/sdk/client'
+import { getLockTokensVotingPowerPerWallet } from '@realms/VoteStakeRegistry/tools/deposits'
 import {
   booleanFilter,
   getGovernanceAccounts,
@@ -7,10 +10,7 @@ import {
   pubkeyFilter,
   TokenOwnerRecord,
 } from '@solana/spl-governance'
-import { getLockTokensVotingPowerPerWallet } from '@realms/VoteStakeRegistry/tools/deposits'
-import { BN } from '@coral-xyz/anchor'
-import { fetchRealmConfigQuery } from '@realms/hooks/queries/realmConfig'
-import { chunks } from '@realms/utils/helpers'
+import { BlockhashWithExpiryBlockHeight, Connection, PublicKey } from '@solana/web3.js'
 
 async function getGovAccounts(realm: any, walletPk: PublicKey, connection: Connection) {
   const realmFilter = pubkeyFilter(1, realm.pubkey)

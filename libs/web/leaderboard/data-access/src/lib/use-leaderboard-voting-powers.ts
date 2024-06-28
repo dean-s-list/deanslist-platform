@@ -1,17 +1,15 @@
-import { useEffect, useState } from 'react'
+import { BN } from '@coral-xyz/anchor'
+import { useUserFindManyUser } from '@deanslist-platform/web-user-data-access'
+import { useRealmQuery } from '@realms/hooks/queries/realm'
+import { getTokenOwnerRecords } from '@realms/models/proposal'
+import { useVsrClient } from '@realms/VoterWeightPlugins/useVsrClient'
+import { getLockTokensVotingPowerPerWallet } from '@realms/VoteStakeRegistry/tools/deposits'
+import { ProgramAccount, TokenOwnerRecord } from '@solana/spl-governance'
+import { Wallet } from '@solana/wallet-adapter-react'
+import { Connection, PublicKey } from '@solana/web3.js'
 import { pipe } from 'fp-ts/function'
 import { fromTaskOption, matchW } from 'fp-ts/TaskEither'
-import { ProgramAccount, TokenOwnerRecord } from '@solana/spl-governance'
-
-import { BN } from '@coral-xyz/anchor'
-import { useWallet } from '@solana/wallet-adapter-react'
-import { PublicKey } from '@solana/web3.js'
-import { useUserFindManyUser } from '@deanslist-platform/web-user-data-access'
-import { getTokenOwnerRecords } from '@realms/models/proposal'
-import { useRealmsConnection } from '@realms/connection'
-import { useVsrClient } from '@realms/VoterWeightPlugins/useVsrClient'
-import { useRealmQuery } from '@realms/hooks/queries/realm'
-import { getLockTokensVotingPowerPerWallet } from '@realms/VoteStakeRegistry/tools/deposits'
+import { useEffect, useMemo, useState } from 'react'
 import { getDelegatedVotingPower } from './use-leaderboard-delegated-votes'
 
 const governingTokenMint = new PublicKey('Ds52CDgqdWbTWsua1hgT3AuSSy4FNx2Ezge1br3jQ14a')
@@ -28,19 +26,20 @@ export interface LeaderboardLeader {
   rank: number
 }
 
-export function useLeaderboardRecords() {
-  const { wallet } = useWallet()
+export function useLeaderboardRecords({ wallet, connection }: { wallet: Wallet; connection: Connection }) {
   const { vsrClient } = useVsrClient()
-  const { connection } = useRealmsConnection()
   const realm = useRealmQuery().data?.result
 
   const { items: users } = useUserFindManyUser({ limit: 100000 })
-  const [tokenOwnerRecords, setTokenOwnerRecords] = useState<ProgramAccount<TokenOwnerRecord>[] | null>(null)
+  const [tokenOwnerRecords, setTokenOwnerRecords] = useState<ProgramAccount<TokenOwnerRecord>[]>([])
   const [votePowerRecords, setVotePowerRecords] = useState<Record<string, BN> | null>(null)
   const [delegatedPowers, setDelegatedPowers] = useState<Record<string, BN> | null>(null)
   const [error, setError] = useState<string>('')
   const [loadingMessage, setLoadingMessage] = useState<string>('Fetching all token holders...')
-  const walletsPks = tokenOwnerRecords?.map((t) => t.account.governingTokenOwner) || []
+  const tokenOwnerRecordsPks = useMemo(
+    () => (tokenOwnerRecords.length ? tokenOwnerRecords.map((t) => t.account.governingTokenOwner) : []),
+    [tokenOwnerRecords],
+  )
 
   useEffect(() => {
     if (connection) {
@@ -68,13 +67,13 @@ export function useLeaderboardRecords() {
   }, [connection])
 
   useEffect(() => {
-    if (realm && connection && vsrClient && tokenOwnerRecords && tokenOwnerRecords.length) {
+    if (realm && connection && vsrClient && tokenOwnerRecordsPks.length) {
       setLoadingMessage("Fetching token holders' voting power...")
-      getLockTokensVotingPowerPerWallet(walletsPks, realm, vsrClient, connection)
+      getLockTokensVotingPowerPerWallet(tokenOwnerRecordsPks, realm, vsrClient, connection)
         .then(setVotePowerRecords)
         .catch(() => setError('Could not fetch voting powers.'))
     }
-  }, [tokenOwnerRecords?.length, tokenOwnerRecords, vsrClient, connection, realm])
+  }, [tokenOwnerRecordsPks, vsrClient, connection, realm])
 
   const leaders = tokenOwnerRecords
     ?.map((t) => {
@@ -100,9 +99,10 @@ export function useLeaderboardRecords() {
     .filter((l) => !l.votingPower.isZero())
     .sort((a, b) => b.votingPower.toNumber() - a.votingPower.toNumber())
     .map((l, i) => ({ ...l, rank: i + 1 }))
+    .slice(0, 50)
 
   useEffect(() => {
-    if (realm && connection && vsrClient && leaders && leaders.length) {
+    if (realm && connection && vsrClient && leaders?.length) {
       setLoadingMessage("Fetching token holders' delegated voting power...")
       const wals = leaders.map((l) => new PublicKey(l.wallet))
       // const wals = [new PublicKey('Fywb7YDCXxtD7pNKThJ36CAtVe23dEeEPf7HqKzJs1VG')]
@@ -110,7 +110,7 @@ export function useLeaderboardRecords() {
         .then(setDelegatedPowers)
         .catch(() => setError('Could not fetch delegated voting powers.'))
     }
-  }, [leaders?.length, realm, connection, vsrClient, connection])
+  }, [leaders, realm, vsrClient, connection])
 
   return {
     error,

@@ -1,21 +1,33 @@
-import { Card, Center, Divider, Grid, Stack, Table, TableTbody, Title } from '@mantine/core'
-import { UiPage } from '@pubkey-ui/core'
-import { SolanaClusterProvider } from '@deanslist-platform/web-solana-data-access'
-import React from 'react'
+import { CoreUiCountdown } from '@deanslist-platform/web-core-ui'
 import { useLeaderboardPerks, useLeaderboardRecords } from '@deanslist-platform/web-leaderboard-data-access'
 import { LeaderboardUiLeader, LeaderboardUiPerks, LeaderboardUiTable } from '@deanslist-platform/web-leaderboard-ui'
-import { CoreUiCountdown } from '@deanslist-platform/web-core-ui'
+import { SolanaClusterProvider, WalletConnectionLoader } from '@deanslist-platform/web-solana-data-access'
+import { Card, Center, Divider, Grid, Stack, Table, TableTbody, Title } from '@mantine/core'
+import { UiPage } from '@pubkey-ui/core'
+import { MAINNET_RPC } from '@realms/constants/endpoints'
+import { Wallet } from '@solana/wallet-adapter-react'
+import { Connection } from '@solana/web3.js'
 
 export function UserLeaderboardFeature() {
   return (
-    <SolanaClusterProvider autoConnect={true}>
-      <_UserLeaderboardFeature />
+    <SolanaClusterProvider autoConnect={true} endpoint={MAINNET_RPC}>
+      <WalletConnectionLoader
+        render={({ wallet, connection }) => <LeaderboardLoader wallet={wallet} connection={connection} />}
+      />
     </SolanaClusterProvider>
   )
 }
 
-function _UserLeaderboardFeature() {
-  const { leaders, loading, loadingMessage } = useLeaderboardRecords()
+function LeaderboardLoader({ wallet, connection }: { wallet: Wallet; connection: Connection }) {
+  // Here we can load fixed data for the leaderboard
+  // For instance, we can fetch all the users from the database, create a map of wallet, and all the voting powers
+  // We can also fetch the realm data, and the vsr client
+  // All of this is passed into the LeaderboardFeature component, which can then use it to fetch the rest of the data
+  return <LeaderboardFeature wallet={wallet} connection={connection} />
+}
+
+function LeaderboardFeature({ wallet, connection }: { wallet: Wallet; connection: Connection }) {
+  const { leaders, loading, loadingMessage } = useLeaderboardRecords({ wallet, connection })
   const { perks, deadline } = useLeaderboardPerks()
 
   const me = !loading && leaders?.find((l) => l.isYou)
