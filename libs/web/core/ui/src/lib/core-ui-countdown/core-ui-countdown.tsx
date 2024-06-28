@@ -22,11 +22,11 @@ function calculateTimeLeft(date: Date): number[] {
   return [days, hours, minutes, seconds]
 }
 
-function CountdownCard({ value, label }: { value: number; label: string }) {
+function CountdownCard({ value, label, ...textProps }: { value: number; label: string; textProps?: TextProps }) {
   return (
     <Stack gap={2} align="center" bg="black" p="sm" style={{ borderRadius: '10px' }}>
-      <Text>{value}</Text>
-      <Text>{label}</Text>
+      <Text {...textProps}>{value}</Text>
+      <Text {...textProps}>{label}</Text>
     </Stack>
   )
 }
@@ -49,13 +49,11 @@ export function CoreUiCountdown({ date, textProps }: { date: Date; textProps?: T
   const [days, hours, minutes, seconds] = time
 
   return (
-    <Text {...textProps}>
-      <Group>
-        <CountdownCard value={days} label="days" />
-        <CountdownCard value={hours} label="hours" />
-        <CountdownCard value={minutes} label="minutes" />
-        <CountdownCard value={seconds} label="seconds" />
-      </Group>
-    </Text>
+    <Group>
+      <CountdownCard value={days} label="days" {...textProps} />
+      <CountdownCard value={hours} label="hours" {...textProps} />
+      <CountdownCard value={minutes} label="minutes" {...textProps} />
+      <CountdownCard value={seconds} label="seconds" {...textProps} />
+    </Group>
   )
 }

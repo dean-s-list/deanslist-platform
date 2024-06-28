@@ -1,27 +1,16 @@
 import { BN, EventParser, Idl, Program } from '@coral-xyz/anchor'
 import { ProgramAccount, Realm } from '@solana/spl-governance'
-import { ComputeBudgetProgram, Connection, PublicKey, Transaction } from '@solana/web3.js'
+import { BlockhashWithExpiryBlockHeight, Connection, PublicKey, Transaction } from '@solana/web3.js'
 import { SIMULATION_WALLET } from '@realms/tools/constants'
 import { DAYS_PER_MONTH, SECS_PER_DAY } from '@realms/utils/dateTools'
 import { chunks } from '@realms/utils/helpers'
-import {
-  Deposit,
-  DepositWithMintAccount,
-  getRegistrarPDA,
-  getVoterPDA,
-  LockupType,
-  Registrar,
-  Voter,
-} from '@realms/VoteStakeRegistry/sdk/accounts'
+import { getRegistrarPDA, getVoterPDA, Registrar, Voter } from '@realms/VoteStakeRegistry/sdk/accounts'
 import { tryGetRegistrar } from '@realms/VoteStakeRegistry/sdk/api'
 import { VsrClient } from '@realms/VoteStakeRegistry/sdk/client'
-import { MONTHLY } from './types'
 
 const VOTER_INFO_EVENT_NAME = 'VoterInfo'
-const DEPOSIT_EVENT_NAME = 'DepositEntryInfo'
 // The wallet can be any existing account for the simulation
 // Note: when running a local validator ensure the account is copied from devnet: --clone ENmcpFCpxN1CqyUjuog9yyUVfdXBKF3LVCwLr7grJZpk -ud
-const simulationWallet = new PublicKey(SIMULATION_WALLET)
 
 const logsToEvents = <T extends Idl>(
   program: Program<T>,
@@ -35,6 +24,7 @@ const logsToEvents = <T extends Idl>(
   const errors = parser.parseLogs(logs)
   return [...errors].map((event) => ({ event, walletPk }))
 }
+
 const getVotingPowersForWallets = async ({
   client,
   registrarPk,
@@ -186,106 +176,25 @@ export const calcMultiplier = ({
   return depositScaledFactor !== 0 ? calc : 0
 }
 
-export const getPeriod = (lockUpPeriodInDays: number, lockupKind: LockupType) => {
-  //in case we do monthly close up we pass months not days.
-  const period = lockupKind !== MONTHLY ? lockUpPeriodInDays : lockUpPeriodInDays / DAYS_PER_MONTH
-  //   const maxMonthsNumber = 72
-  //   const daysLimit = 2190
-  //additional prevention of lockup being to high in case of monthly lockup 72 months as 6 years
-  //in case of other types 2190 days as 6 years
-  //   if (lockupKind === MONTHLY && period > maxMonthsNumber) {
-  //     throw 'lockup period is to hight'
-  //   }
-  //   if (lockupKind !== MONTHLY && period > daysLimit) {
-  //     throw 'lockup period is to hight'
-  //   }
-  return period
-}
-
-export const calcMintMultiplier = (
-  lockupSecs: number,
-  registrar: Registrar | null,
-  realm: ProgramAccount<Realm> | undefined,
-  isVested?: boolean,
-) => {
-  const mintCfgs = registrar?.votingMints
-  const mintCfg = mintCfgs?.find((x) => x.mint.toBase58() === realm?.account.communityMint.toBase58())
-  if (mintCfg) {
-    const { lockupSaturationSecs, baselineVoteWeightScaledFactor, maxExtraLockupVoteWeightScaledFactor } = mintCfg
-    const depositScaledFactorNum = baselineVoteWeightScaledFactor.toNumber()
-    const maxExtraLockupVoteWeightScaledFactorNum = maxExtraLockupVoteWeightScaledFactor.toNumber()
-    const lockupSaturationSecsNum = lockupSaturationSecs.toNumber()
-    //(deposit_scaled_factor + max_extra_lockup_vote_weight_scaled_factor * min(lockup_secs, lockup_saturation_secs) / lockup_saturation_secs) / deposit_scaled_factor
-    const calced = calcMultiplier({
-      depositScaledFactor: depositScaledFactorNum,
-      maxExtraLockupVoteWeightScaledFactor: maxExtraLockupVoteWeightScaledFactorNum,
-      lockupSaturationSecs: lockupSaturationSecsNum,
-      lockupSecs,
-      isVested,
-    })
-
-    return parseFloat(calced.toFixed(2))
-  }
-  return 0
-}
-
-const getDepositsAdditionalInfoEvents = async (
-  client: VsrClient,
-  usedDeposits: DepositWithMintAccount[],
-  connection: Connection,
-  registrar: PublicKey,
-  voter: PublicKey,
-) => {
-  //because we switch wallet in here we can't use rpc from npm module
-  //anchor dont allow to switch wallets inside existing client
-  //parse events response as anchor do
-  const latestBlockhash = await connection.getLatestBlockhash()
-  const events: any[] = []
-  const parser = new EventParser(client.program.programId, client.program.coder)
-  const maxRange = 8
-  const maxIndex = Math.max(...usedDeposits.map((x) => x.index)) + 1
-  const numberOfSimulations = Math.ceil(maxIndex / maxRange)
-  for (let i = 0; i < numberOfSimulations; i++) {
-    const take = maxRange
-    const transaction = new Transaction({ feePayer: simulationWallet })
-    transaction.lastValidBlockHeight = latestBlockhash.lastValidBlockHeight
-    transaction.recentBlockhash = latestBlockhash.blockhash
-    const logVoterInfoIx = await client.program.methods
-      .logVoterInfo(maxRange * i, take)
-      .accounts({ registrar, voter })
-      .instruction()
-    transaction.add(ComputeBudgetProgram.setComputeUnitLimit({ units: 1_000_000 }))
-    transaction.add(logVoterInfoIx)
-    // TODO cache using fetchVotingPowerSimulation
-
-    const batchOfDeposits = await connection.simulateTransaction(transaction)
-    const logEvents = parser.parseLogs(batchOfDeposits.value.logs!)
-    events.push(...[...logEvents])
-  }
-  return events
-}
-
 export const getLockTokensVotingPowerPerWallet = async (
   walletsPks: PublicKey[],
   realm: ProgramAccount<Realm>,
   client: VsrClient,
   connection: Connection,
+  latestBlockhash?: BlockhashWithExpiryBlockHeight,
 ) => {
   const { registrar } = getRegistrarPDA(realm.pubkey, realm.account.communityMint, client.program.programId)
   const existingRegistrar = await tryGetRegistrar(registrar, client)
-  console.log('existingRegistrar', existingRegistrar)
 
-  const latestBlockhash = await connection.getLatestBlockhash()
-  console.log('latestBlockhash', latestBlockhash)
+  const _latestBlockhash = latestBlockhash || (await connection.getLatestBlockhash())
   const votingPowers = await getVotingPowersForWallets({
     client: client,
     registrarPk: registrar,
     existingRegistrar: existingRegistrar!,
     walletPks: walletsPks,
     connection: connection,
-    latestBlockhash,
+    latestBlockhash: _latestBlockhash,
   })
-  console.log('votingPowers', votingPowers)
 
   if (votingPowers) {
     const votingPowerObj: Record<string, BN> = {}
@@ -296,19 +205,4 @@ export const getLockTokensVotingPowerPerWallet = async (
     return votingPowerObj
   }
   return {}
-}
-
-export const getDepositType = (deposit: Deposit): LockupType => {
-  if (typeof deposit.lockup.kind.monthly !== 'undefined') {
-    return 'monthly'
-  } else if (typeof deposit.lockup.kind.cliff !== 'undefined') {
-    return 'cliff'
-  } else if (typeof deposit.lockup.kind.constant !== 'undefined') {
-    return 'constant'
-  } else if (typeof deposit.lockup.kind.daily !== 'undefined') {
-    return 'daily'
-  } else if (typeof deposit.lockup.kind.none !== 'undefined') {
-    return 'none'
-  }
-  return 'none'
 }

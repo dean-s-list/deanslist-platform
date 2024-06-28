@@ -61,8 +61,6 @@ export interface DepositWithMintAccount extends Deposit {
   votingPowerBaseline: BN
 }
 
-export const emptyPk = '11111111111111111111111111111111'
-
 export const getRegistrarPDA = (realmPk: PublicKey, mint: PublicKey, clientProgramId: PublicKey) => {
   const [registrar, registrarBump] = PublicKey.findProgramAddressSync(
     [realmPk.toBuffer(), Buffer.from('registrar'), mint.toBuffer()],
@@ -83,17 +81,5 @@ export const getVoterPDA = (registrar: PublicKey, walletPk: PublicKey, clientPro
   return {
     voter,
     voterBump,
-  }
-}
-
-export const getVoterWeightPDA = (registrar: PublicKey, walletPk: PublicKey, clientProgramId: PublicKey) => {
-  const [voterWeightPk, voterWeightBump] = PublicKey.findProgramAddressSync(
-    [registrar.toBuffer(), Buffer.from('voter-weight-record'), walletPk.toBuffer()],
-    clientProgramId,
-  )
-
-  return {
-    voterWeightPk,
-    voterWeightBump,
   }
 }

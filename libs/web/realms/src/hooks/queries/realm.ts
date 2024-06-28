@@ -1,4 +1,3 @@
-import useSelectedRealmPubkey from '@realms/hooks/selectedRealm/useSelectedRealmPubkey'
 import { getRealm } from '@solana/spl-governance'
 import { Connection, PublicKey } from '@solana/web3.js'
 import { useQuery } from '@tanstack/react-query'
@@ -29,7 +28,21 @@ export const useRealmByPubkeyQuery = (realmPk: undefined | PublicKey) => {
 }
 
 export const useRealmQuery = () => {
-  const pubkey = useSelectedRealmPubkey()
+  const deansRealm = {
+    symbol: "Dean's List Network State",
+    displayName: "Dean's List Network State",
+    programId: 'GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw',
+    realmId: 'F9V4Lwo49aUe8fFujMbU6uhdFyDRqKY54WpzdpncUSk9',
+    bannerImage: '/realms/Deans_List_Network_State/banner-deanslist.png',
+    website: 'https://www.deanslist.services/',
+    twitter: '@deanslistDAO',
+    discord: 'https://discord.gg/deanslist',
+    ogImage: '/realms/Deans_List_Network_State/avatar-deanslist.png',
+    github: 'https://github.com/Deans-List/',
+    shortDescription:
+      'A Service DAO turned Network State, consisting of Web3 power users providing feedback sessions. Join us in changing the future of work!',
+  }
+  const pubkey = new PublicKey(deansRealm.realmId)
   return useRealmByPubkeyQuery(pubkey)
 }
 

@@ -1,16 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
-import { Registrar, Voter } from './accounts'
+import { Registrar } from './accounts'
 import { VsrClient } from './client'
-
-export const tryGetVoter = async (voterPk: PublicKey, client: Pick<VsrClient, 'program'>) => {
-  try {
-    const voter = await client?.program.account.voter.fetch(voterPk)
-    // The cast to any works around an anchor issue with interpreting enums
-    return voter as unknown as Voter
-  } catch (e) {
-    return null
-  }
-}
 
 export const tryGetRegistrar = async (registrarPk: PublicKey, client: Pick<VsrClient, 'program'>) => {
   try {
@@ -19,13 +9,4 @@ export const tryGetRegistrar = async (registrarPk: PublicKey, client: Pick<VsrCl
   } catch (e) {
     return null
   }
-}
-
-export const getMintCfgIdx = async (registrarPk: PublicKey, mintPK: PublicKey, client: VsrClient) => {
-  const existingRegistrar = await tryGetRegistrar(registrarPk, client)
-  const mintCfgIdx = existingRegistrar?.votingMints.findIndex((x) => x.mint.toBase58() === mintPK.toBase58())
-  if (mintCfgIdx === null || mintCfgIdx === -1) {
-    throw 'mint not configured to use'
-  }
-  return mintCfgIdx
 }

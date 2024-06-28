@@ -1,19 +1,8 @@
-import {
-  booleanFilter,
-  getGovernanceAccounts,
-  getTokenOwnerRecord,
-  pubkeyFilter,
-  TokenOwnerRecord,
-} from '@solana/spl-governance'
-import { Connection, PublicKey } from '@solana/web3.js'
+import { booleanFilter, getGovernanceAccounts, pubkeyFilter, TokenOwnerRecord } from '@solana/spl-governance'
+import { PublicKey } from '@solana/web3.js'
 import { useQuery } from '@tanstack/react-query'
-import asFindable from '@realms/utils/queries/asFindable'
-import { useAddressQuery_CommunityTokenOwner, useAddressQuery_CouncilTokenOwner } from './addresses/tokenOwnerRecord'
 import { useRealmQuery } from './realm'
-import useLegacyConnectionContext from '@realms/hooks/useLegacyConnectionContext'
-import useWalletOnePointOh from '@realms/hooks/useWalletOnePointOh'
-import queryClient from './queryClient'
-import mainnetBetaRealms from '@realms/public/realms/mainnet-beta'
+import useLegacyConnectionContext from '../useLegacyConnectionContext'
 
 export const tokenOwnerRecordQueryKeys = {
   all: (endpoint: string) => [endpoint, 'TokenOwnerRecord'],
@@ -38,66 +27,11 @@ export const tokenOwnerRecordQueryKeys = {
   ],
 }
 
-/** does NOT filter by realm */
-const fetchTokenOwnerRecordsByRealmByOwner = async (connection: Connection, program: PublicKey, ownerPk: PublicKey) =>
-  queryClient.fetchQuery({
-    queryKey: tokenOwnerRecordQueryKeys.byProgramXOwner(connection.rpcEndpoint, program, ownerPk),
-    queryFn: async () => {
-      const filter = pubkeyFilter(1 + 32 + 32, ownerPk)
-      if (!filter) throw new Error() // unclear why this would ever happen, probably it just cannot
-
-      return getGovernanceAccounts(connection, program, TokenOwnerRecord, [filter])
-    },
-  })
-
-/**
- * CURRENTLY USED ONLY BY DISABLED COMPONENTS
- */
-export const fetchTokenOwnerRecordsByOwnerAnyRealm = async (connection: Connection, ownerPk: PublicKey) => {
-  const programs = [...new Set(mainnetBetaRealms.map((x) => x.programId))].map((x) => new PublicKey(x))
-  return (await Promise.all(programs.map((pk) => fetchTokenOwnerRecordsByRealmByOwner(connection, pk, ownerPk)))).flat()
-}
-
-export const useTokenOwnerRecordsForRealmQuery = () => {
-  const connection = useLegacyConnectionContext()
-  const realm = useRealmQuery().data?.result
-
-  const enabled = realm !== undefined
-  const query = useQuery({
-    queryKey: enabled
-      ? Object.freeze(tokenOwnerRecordQueryKeys.byRealm(connection.current.rpcEndpoint, realm.pubkey))
-      : [],
-    queryFn: async () => {
-      if (!enabled) throw new Error()
-
-      const filter = pubkeyFilter(1, realm.pubkey)
-      if (!filter) throw new Error() // unclear why this would ever happen, probably it just cannot
-
-      const results = await getGovernanceAccounts(connection.current, realm.owner, TokenOwnerRecord, [filter])
-
-      // This may or may not be resource intensive for big DAOs, and is not too useful
-      /*
-      results.forEach((x) => {
-        queryClient.setQueryData(
-          tokenOwnerRecordQueryKeys.byPubkey(connection.cluster, x.pubkey),
-          { found: true, result: x }
-        )
-      }) */
-
-      return results
-    },
-    enabled,
-  })
-
-  return query
-}
 // 1 + 32 + 32 + 32 + 8 + 4 + 4 + 1 + 1 + 6
 // TODO filter in the gPA (would need rpc to also index)
-export const useTokenOwnerRecordsDelegatedToUser = () => {
+export const useTokenOwnerRecordsDelegatedToUser = (walletPk: PublicKey | undefined) => {
   const connection = useLegacyConnectionContext()
   const realm = useRealmQuery().data?.result
-  const wallet = useWalletOnePointOh()
-  const walletPk = wallet?.publicKey ?? undefined
   const enabled = realm !== undefined && walletPk !== undefined
   const query = useQuery({
     queryKey: enabled
@@ -134,36 +68,4 @@ export const useTokenOwnerRecordsDelegatedToUser = () => {
   })
 
   return query
-}
-
-const queryFn = (connection: Connection, pubkey: PublicKey) => asFindable(getTokenOwnerRecord)(connection, pubkey)
-
-export const useTokenOwnerRecordByPubkeyQuery = (pubkey: PublicKey | undefined) => {
-  const connection = useLegacyConnectionContext()
-  const enabled = pubkey !== undefined
-  const query = useQuery({
-    queryKey: enabled ? Object.freeze(tokenOwnerRecordQueryKeys.byPubkey(connection.current.rpcEndpoint, pubkey)) : [],
-    queryFn: async () => {
-      if (!enabled) throw new Error()
-      return queryFn(connection.current, pubkey)
-    },
-    enabled,
-  })
-  return query
-}
-
-export const fetchTokenOwnerRecordByPubkey = (connection: Connection, pubkey: PublicKey) =>
-  queryClient.fetchQuery({
-    queryKey: tokenOwnerRecordQueryKeys.byPubkey(connection.rpcEndpoint, pubkey),
-    queryFn: () => queryFn(connection, pubkey),
-  })
-
-export const useUserCommunityTokenOwnerRecord = () => {
-  const { data: tokenOwnerRecordPubkey } = useAddressQuery_CommunityTokenOwner()
-  return useTokenOwnerRecordByPubkeyQuery(tokenOwnerRecordPubkey)
-}
-
-export const useUserCouncilTokenOwnerRecord = () => {
-  const { data: tokenOwnerRecordPubkey } = useAddressQuery_CouncilTokenOwner()
-  return useTokenOwnerRecordByPubkeyQuery(tokenOwnerRecordPubkey)
 }

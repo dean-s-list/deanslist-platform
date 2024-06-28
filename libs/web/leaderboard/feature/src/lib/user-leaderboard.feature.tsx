@@ -1,4 +1,4 @@
-import { Card, Center, Divider, Grid, Stack, Table, Title } from '@mantine/core'
+import { Card, Center, Divider, Grid, Stack, Table, TableTbody, Title } from '@mantine/core'
 import { UiPage } from '@pubkey-ui/core'
 import { SolanaClusterProvider } from '@deanslist-platform/web-solana-data-access'
 import React from 'react'
@@ -15,10 +15,10 @@ export function UserLeaderboardFeature() {
 }
 
 function _UserLeaderboardFeature() {
-  const { leaders, loading } = useLeaderboardRecords()
+  const { leaders, loading, loadingMessage } = useLeaderboardRecords()
   const { perks, deadline } = useLeaderboardPerks()
 
-  const me = leaders?.find((l) => l.isYou)
+  const me = !loading && leaders?.find((l) => l.isYou)
 
   return (
     <UiPage title="">
@@ -26,7 +26,7 @@ function _UserLeaderboardFeature() {
       <Grid>
         <Grid.Col span={7}>
           <Card radius="lg">
-            <LeaderboardUiTable leaders={leaders} loading={loading} perks={perks} />
+            <LeaderboardUiTable leaders={leaders} loading={loading} perks={perks} loadingMessage={loadingMessage} />
           </Card>
         </Grid.Col>
         <Grid.Col span={5}>
@@ -47,7 +47,9 @@ function _UserLeaderboardFeature() {
               {me && <Divider />}
               {me && (
                 <Table>
-                  <LeaderboardUiLeader leader={me} perks={perks} />
+                  <TableTbody>
+                    <LeaderboardUiLeader leader={me} perks={perks} />
+                  </TableTbody>
                 </Table>
               )}
               <Divider />

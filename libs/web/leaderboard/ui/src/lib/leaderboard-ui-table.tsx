@@ -1,4 +1,4 @@
-import { Table, Text } from '@mantine/core'
+import { Center, Stack, Table, Text } from '@mantine/core'
 import { UiInfo, UiLoader } from '@pubkey-ui/core'
 import React from 'react'
 import { LeaderboardLeader, LeaderboardPerk } from '@deanslist-platform/web-leaderboard-data-access'
@@ -16,15 +16,24 @@ function TableTh({ text, ta }: { text: string; ta?: string }) {
 
 export function LeaderboardUiTable({
   loading,
+  loadingMessage,
   leaders,
   perks,
 }: {
   loading: boolean
+  loadingMessage: string
   leaders: LeaderboardLeader[] | undefined
   perks: LeaderboardPerk[]
 }) {
   if (loading) {
-    return <UiLoader />
+    return (
+      <Stack p={20}>
+        <UiLoader />
+        <Center>
+          <Text>{loadingMessage}</Text>
+        </Center>
+      </Stack>
+    )
   }
 
   if (!leaders?.length) {
@@ -43,7 +52,7 @@ export function LeaderboardUiTable({
       </Table.Thead>
       <Table.Tbody>
         {leaders.map((item) => (
-          <LeaderboardUiLeader leader={item} perks={perks} />
+          <LeaderboardUiLeader key={item.rank} leader={item} perks={perks} />
         ))}
       </Table.Tbody>
     </Table>

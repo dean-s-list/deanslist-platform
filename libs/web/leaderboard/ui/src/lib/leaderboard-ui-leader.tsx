@@ -21,8 +21,10 @@ export function LeaderboardUiLeader({ leader, perks }: { leader: LeaderboardLead
       </Table.Td>
       <Table.Td>
         <Group>
-          {leaderPerks.map((p) => (
-            <Text size="xl">{p.icon}</Text>
+          {leaderPerks.map((p, i) => (
+            <Text key={i} size="xl">
+              {p.icon}
+            </Text>
           ))}
         </Group>
       </Table.Td>

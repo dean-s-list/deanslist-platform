@@ -1,9 +1,10 @@
 import type { EndpointTypes } from '@realms/models/types'
-import { Connection } from '@solana/web3.js'
-import type { EndpointInfo } from '@realms/@types/types'
 import { DEVNET_RPC, MAINNET_RPC } from '@realms/constants/endpoints'
 
-export const BACKUP_CONNECTIONS = [new Connection(`https://api.mngo.cloud/lite-rpc/v1-mangoui-812743`, 'recent')]
+export interface EndpointInfo {
+  name: EndpointTypes
+  url: string
+}
 
 const ENDPOINTS: EndpointInfo[] = [
   {
@@ -19,23 +20,6 @@ const ENDPOINTS: EndpointInfo[] = [
     url: 'http://127.0.0.1:8899',
   },
 ]
-
-console.log('deployed ENDPOINTS:', ENDPOINTS)
-
-export interface ConnectionContext {
-  cluster: EndpointTypes
-  current: Connection
-  endpoint: string
-}
-
-export function getConnectionContext(cluster: string): ConnectionContext {
-  const ENDPOINT = ENDPOINTS.find((e) => e.name === cluster) || ENDPOINTS[0]
-  return {
-    cluster: ENDPOINT!.name as EndpointTypes,
-    current: new Connection(ENDPOINT!.url, 'recent'),
-    endpoint: ENDPOINT!.url,
-  }
-}
 
 /**
  * Given ConnectionContext, find the network.
