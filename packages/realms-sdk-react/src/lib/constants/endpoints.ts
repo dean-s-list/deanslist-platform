@@ -1,4 +1,2 @@
-export const MAINNET_RPC = process.env.NEXT_PUBLIC_MAINNET_RPC || process.env.MAINNET_RPC || 'https://mango.rpcpool.com'
-
-export const DEVNET_RPC =
-  process.env.NEXT_PUBLIC_DEVNET_RPC || process.env.DEVNET_RPC || 'https://mango.devnet.rpcpool.com'
+export const MAINNET_RPC = 'https://mainnet.helius-rpc.com/?api-key=ae350168-50e2-4d7f-a8ae-d68a174a3020'
+export const DEVNET_RPC = 'https://mango.devnet.rpcpool.com'
