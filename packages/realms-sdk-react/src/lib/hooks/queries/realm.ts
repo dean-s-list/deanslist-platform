@@ -2,7 +2,7 @@ import { getRealm } from '@solana/spl-governance'
 import { Connection, PublicKey } from '@solana/web3.js'
 import { useQuery } from '@tanstack/react-query'
 import { useRealmsConnection } from '../../connection'
-import { asFindable, getNetworkFromEndpoint } from '../../utils'
+import { asFindable } from '../../utils'
 import { queryClient } from './queryClient'
 
 export const realmQueryKeys = {
@@ -46,9 +46,8 @@ export function useRealmQuery() {
 }
 
 export function fetchRealmByPubkey(connection: Connection, pubkey: PublicKey) {
-  const endpoint = getNetworkFromEndpoint(connection.rpcEndpoint)
   return queryClient.fetchQuery({
-    queryKey: realmQueryKeys.byPubkey(endpoint, pubkey),
+    queryKey: realmQueryKeys.byPubkey(connection.rpcEndpoint, pubkey),
     queryFn: () => asFindable(() => getRealm(connection, pubkey))(),
     staleTime: 3600000, // 1 hour
   })

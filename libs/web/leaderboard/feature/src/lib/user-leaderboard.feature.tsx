@@ -1,4 +1,4 @@
-import { MAINNET_RPC } from '@deanslist-platform/realms-sdk-react'
+import { useAuth } from '@deanslist-platform/web-auth-data-access'
 import { CoreUiCountdown } from '@deanslist-platform/web-core-ui'
 import {
   useAnonUserIdentityMap,
@@ -14,13 +14,10 @@ import { Wallet } from '@solana/wallet-adapter-react'
 import { Connection } from '@solana/web3.js'
 import { IconListNumbers } from '@tabler/icons-react'
 
-export function UserLeaderboardFeature({
-  apiUrl = '',
-  solanaRpcUrl = MAINNET_RPC,
-}: {
-  apiUrl?: string
-  solanaRpcUrl?: string
-}) {
+export function UserLeaderboardFeature() {
+  const apiUrl = ''
+  const { solanaRpcUrl } = useAuth()
+
   return (
     <SolanaClusterProvider autoConnect={true} endpoint={solanaRpcUrl}>
       <WalletConnectionLoader

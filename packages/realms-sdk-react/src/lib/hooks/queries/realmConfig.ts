@@ -9,8 +9,8 @@ export const realmConfigQueryKeys = {
   byRealm: (endpoint: string, k: PublicKey) => [...realmConfigQueryKeys.all(endpoint), 'for Realm', k],
 }
 
-export const fetchRealmConfigQuery = async (connection: Connection, realmPk: PublicKey) =>
-  queryClient.fetchQuery({
+export async function fetchRealmConfigQuery(connection: Connection, realmPk: PublicKey) {
+  return queryClient.fetchQuery({
     queryKey: realmConfigQueryKeys.byRealm(connection.rpcEndpoint, realmPk),
     queryFn: async () => {
       const { result: realm } = await fetchRealmByPubkey(connection, realmPk)
@@ -20,3 +20,4 @@ export const fetchRealmConfigQuery = async (connection: Connection, realmPk: Pub
       return asFindable(getRealmConfig)(connection, realmConfigPk)
     },
   })
+}
