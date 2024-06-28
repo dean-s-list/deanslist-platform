@@ -13,17 +13,35 @@ import { SolflareWalletAdapter } from '@solana/wallet-adapter-solflare'
 import { ReactNode, useCallback, useMemo } from 'react'
 import { ClusterProvider, toWalletAdapterNetwork, useCluster } from './cluster-provider'
 
-export function SolanaClusterProvider({ autoConnect, children }: { autoConnect?: boolean; children: ReactNode }) {
+export function SolanaClusterProvider({
+  autoConnect,
+  endpoint,
+  children,
+}: {
+  autoConnect?: boolean
+  endpoint?: string
+  children: ReactNode
+}) {
   return (
     <ClusterProvider>
-      <SolanaProvider autoConnect={autoConnect}>{children}</SolanaProvider>
+      <SolanaProvider autoConnect={autoConnect} endpoint={endpoint}>
+        {children}
+      </SolanaProvider>
     </ClusterProvider>
   )
 }
 
-export function SolanaProvider({ autoConnect = true, children }: { autoConnect?: boolean; children: ReactNode }) {
+export function SolanaProvider({
+  autoConnect = true,
+  endpoint: providedEndpoint,
+  children,
+}: {
+  autoConnect?: boolean
+  endpoint?: string
+  children: ReactNode
+}) {
   const { cluster } = useCluster()
-  const endpoint = useMemo(() => cluster.endpoint, [cluster])
+  const endpoint = useMemo(() => providedEndpoint ?? cluster.endpoint, [cluster, providedEndpoint])
   const wallets = useMemo(
     () => [new PhantomWalletAdapter(), new SolflareWalletAdapter({ network: toWalletAdapterNetwork(cluster.network) })],
     [cluster],

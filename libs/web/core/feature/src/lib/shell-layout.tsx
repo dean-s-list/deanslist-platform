@@ -17,6 +17,7 @@ export function ShellLayout({ children }: { children: ReactNode }) {
         { link: '/projects', label: 'Projects' },
         user?.manager ? { link: '/teams', label: 'Teams' } : null,
         { link: `${user?.profileUrl}`, label: 'Profile' },
+        { link: '/leaderboard', label: 'Leaderboard' },
       ].filter(Boolean) as CoreUiHeaderLink[],
     [user],
   )
