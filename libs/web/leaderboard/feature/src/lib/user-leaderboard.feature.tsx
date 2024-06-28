@@ -1,34 +1,65 @@
 import { MAINNET_RPC } from '@deanslist-platform/realms-sdk-react'
 import { CoreUiCountdown } from '@deanslist-platform/web-core-ui'
-import { useLeaderboardPerks, useLeaderboardRecords } from '@deanslist-platform/web-leaderboard-data-access'
+import {
+  useAnonUserIdentityMap,
+  useLeaderboardPerks,
+  useLeaderboardRecords,
+  UserIdentityMap,
+} from '@deanslist-platform/web-leaderboard-data-access'
 import { LeaderboardUiLeader, LeaderboardUiPerks, LeaderboardUiTable } from '@deanslist-platform/web-leaderboard-ui'
 import { SolanaClusterProvider, WalletConnectionLoader } from '@deanslist-platform/web-solana-data-access'
 import { Card, Center, Divider, Grid, Stack, Table, TableTbody, Title } from '@mantine/core'
-import { UiPage } from '@pubkey-ui/core'
+import { UiError, UiLoader, UiPage } from '@pubkey-ui/core'
 import { Wallet } from '@solana/wallet-adapter-react'
 import { Connection } from '@solana/web3.js'
 import { IconListNumbers } from '@tabler/icons-react'
 
-export function UserLeaderboardFeature() {
+export function UserLeaderboardFeature({
+  apiUrl = '',
+  solanaRpcUrl = MAINNET_RPC,
+}: {
+  apiUrl?: string
+  solanaRpcUrl?: string
+}) {
   return (
-    <SolanaClusterProvider autoConnect={true} endpoint={MAINNET_RPC}>
+    <SolanaClusterProvider autoConnect={true} endpoint={solanaRpcUrl}>
       <WalletConnectionLoader
-        render={({ wallet, connection }) => <LeaderboardLoader wallet={wallet} connection={connection} />}
+        render={({ wallet, connection }) => (
+          <LeaderboardLoader apiUrl={apiUrl} connection={connection} wallet={wallet} />
+        )}
       />
     </SolanaClusterProvider>
   )
 }
 
-function LeaderboardLoader({ wallet, connection }: { wallet: Wallet; connection: Connection }) {
+function LeaderboardLoader({ apiUrl, connection, wallet }: { apiUrl: string; connection: Connection; wallet: Wallet }) {
   // Here we can load fixed data for the leaderboard
   // For instance, we can fetch all the users from the database, create a map of wallet, and all the voting powers
   // We can also fetch the realm data, and the vsr client
   // All of this is passed into the LeaderboardFeature component, which can then use it to fetch the rest of the data
-  return <LeaderboardFeature wallet={wallet} connection={connection} />
+  const identityMapQuery = useAnonUserIdentityMap({ apiUrl })
+
+  if (identityMapQuery.isLoading) {
+    return <UiLoader />
+  }
+
+  if (!identityMapQuery.data) {
+    return <UiError message="Could not fetch user identity map." />
+  }
+
+  return <LeaderboardFeature wallet={wallet} connection={connection} identityMap={identityMapQuery.data} />
 }
 
-function LeaderboardFeature({ wallet, connection }: { wallet: Wallet; connection: Connection }) {
-  const { leaders, loading, loadingMessage } = useLeaderboardRecords({ wallet, connection })
+function LeaderboardFeature({
+  wallet,
+  connection,
+  identityMap,
+}: {
+  wallet: Wallet
+  connection: Connection
+  identityMap: UserIdentityMap
+}) {
+  const { leaders, loading, loadingMessage } = useLeaderboardRecords({ wallet, connection, identityMap })
   const { perks, deadline } = useLeaderboardPerks()
 
   const me = !loading && leaders?.find((l) => l.isYou)

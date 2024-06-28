@@ -5,13 +5,13 @@ import {
   useRealmQuery,
   useVsrClient,
 } from '@deanslist-platform/realms-sdk-react'
-import { useUserFindManyUser } from '@deanslist-platform/web-user-data-access'
 import { ProgramAccount, TokenOwnerRecord } from '@solana/spl-governance'
 import { Wallet } from '@solana/wallet-adapter-react'
 import { Connection, PublicKey } from '@solana/web3.js'
 import { pipe } from 'fp-ts/function'
 import { fromTaskOption, matchW } from 'fp-ts/TaskEither'
 import { useEffect, useMemo, useState } from 'react'
+import { UserIdentityMap } from './use-anon-user-identity-map'
 import { getDelegatedVotingPower } from './use-leaderboard-delegated-votes'
 
 const governingTokenMint = new PublicKey('Ds52CDgqdWbTWsua1hgT3AuSSy4FNx2Ezge1br3jQ14a')
@@ -22,17 +22,22 @@ export interface LeaderboardLeader {
   wallet: string
   name: string
   avatarUrl: string | undefined
-  profileUrl: string | undefined
   votingPower: BN
   isYou: boolean
   rank: number
 }
 
-export function useLeaderboardRecords({ wallet, connection }: { wallet: Wallet; connection: Connection }) {
+export function useLeaderboardRecords({
+  wallet,
+  connection,
+  identityMap,
+}: {
+  wallet: Wallet
+  connection: Connection
+  identityMap: UserIdentityMap
+}) {
   const { vsrClient } = useVsrClient()
   const realm = useRealmQuery().data?.result
-
-  const { items: users } = useUserFindManyUser({ limit: 100000 })
   const [tokenOwnerRecords, setTokenOwnerRecords] = useState<ProgramAccount<TokenOwnerRecord>[]>([])
   const [votePowerRecords, setVotePowerRecords] = useState<Record<string, BN> | null>(null)
   const [delegatedPowers, setDelegatedPowers] = useState<Record<string, BN> | null>(null)
@@ -84,13 +89,12 @@ export function useLeaderboardRecords({ wallet, connection }: { wallet: Wallet; 
       const votingPower = votePowerRecords && votePowerRecords[w] ? votePowerRecords[w] : new BN(0)
       const firstFour = w.substring(0, 4)
       const lastFour = w.substring(w.length - 4, w.length)
-      const user = users.find((u) => u.username?.startsWith(firstFour + lastFour))
+      const user = identityMap[w] ? identityMap[w] : { username: `${firstFour}...${lastFour}` }
 
       return {
         wallet: w,
-        name: user?.name || `${firstFour}...${lastFour}`,
-        avatarUrl: user?.avatarUrl,
-        profileUrl: user?.profileUrl,
+        name: user.username,
+        avatarUrl: user.avatarUrl,
         ownVotingPower: votingPower,
         delegatedVotingPower: delegatedPower,
         votingPower: votingPower.add(delegatedPower),
