@@ -1,5 +1,6 @@
 import { Comment } from '@deanslist-platform/sdk'
-import { Avatar, Group, Paper, Text, TypographyStylesProvider } from '@mantine/core'
+import { UserUiItem } from '@deanslist-platform/web-user-ui'
+import { Group, Paper, PaperProps, TypographyStylesProvider } from '@mantine/core'
 import { UiTime } from '@pubkey-ui/core'
 import { ReactNode } from 'react'
 
@@ -11,25 +12,23 @@ export function CommentUiComment({
   footer,
   action,
   deleteComment,
-}: {
+  to,
+  ...props
+}: PaperProps & {
   comment: Comment
   footer?: ReactNode
   action?: ReactNode
   deleteComment?: (id: string) => Promise<boolean>
+  to?: string | null
 }) {
   return (
-    <Paper withBorder radius="md" className={classes.comment}>
+    <Paper withBorder radius="md" p="md" pb="xs" {...props}>
       <Group justify="space-between">
-        <Group>
-          <Avatar src={comment.author?.avatarUrl || ''} alt={comment.author?.name || 'User'} radius="xl" />
-          <div>
-            <Text fz="sm">{comment.author?.name ?? comment.author?.username}</Text>
-            {comment.createdAt ? <UiTime fz="xs" c="dimmed" date={new Date(comment.createdAt)} /> : null}
-            {comment.updatedAt && comment.createdAt !== comment.updatedAt ? (
-              <UiTime prefix="updated" fz="xs" c="dimmed" date={new Date(comment.updatedAt)} />
-            ) : null}
-          </div>
-        </Group>
+        <UserUiItem
+          to={to}
+          user={comment.author ?? undefined}
+          label={comment.createdAt ? <UiTime fz="xs" c="dimmed" date={new Date(comment.createdAt)} /> : null}
+        />
         <Group>
           {action}
           {deleteComment ? <CommentUiIconDelete comment={comment} deleteComment={deleteComment} /> : null}

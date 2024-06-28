@@ -1,12 +1,10 @@
 import { useAuth } from '@deanslist-platform/web-auth-data-access'
-import { CommunityUiLink } from '@deanslist-platform/web-community-ui'
 import { CoreUiBackLink, CoreUiButton } from '@deanslist-platform/web-core-ui'
 import { useReviewerFindOneProject } from '@deanslist-platform/web-project-data-access'
 import {
   ProjectUiInstructions,
   ProjectUiItem,
   ProjectUiManagers,
-  ProjectUiOverview,
   ProjectUiSocials,
   ProjectUiStatusBadge,
   ProjectUiTags,
@@ -57,9 +55,13 @@ export function ReviewerProjectDetailFeature() {
             <UiGroup>
               <Group>
                 <ProjectUiItem project={item} />
+                {item.tags?.length ? <ProjectUiTags tags={item.tags} /> : null}
               </Group>
               <Group gap="xs">
                 <Group justify="center">
+                  <Group align="center">
+                    <ProjectUiStatusBadge status={item.status} />
+                  </Group>
                   <Button
                     variant="subtle"
                     radius="xl"
@@ -73,21 +75,13 @@ export function ReviewerProjectDetailFeature() {
             </UiGroup>
             <Collapse in={opened}>
               <UiStack>
-                <Group align="center">
-                  Status <ProjectUiStatusBadge status={item.status} />
-                </Group>
                 <Group>
-                  Managers
+                  Managed by
                   <ProjectUiManagers project={item} />
                 </Group>
-                <Group>
-                  Community
-                  {item.community ? <CommunityUiLink community={item.community} to={item.community.viewUrl} /> : null}
-                </Group>
-                {item.tags?.length ? <ProjectUiTags tags={item.tags} /> : null}
+
                 {item.instructions?.length ? <ProjectUiInstructions item={item} /> : null}
                 <ProjectUiSocials item={item} />
-                <ProjectUiOverview item={item} />
               </UiStack>
             </Collapse>
           </UiStack>

@@ -25,7 +25,6 @@ export class ApiProjectDataService {
 
     const isCommunityAdmin = !!found.community.managers?.find((p) => (p.userId = userId))?.admin
     const isManager = found.managers.some((p) => p.id === userId)
-    console.log({ userId, isCommunityAdmin, isManager, managers: found.community.managers })
     if (!isCommunityAdmin && !isManager) {
       throw new Error(`You are not a project manager`)
     }
@@ -63,10 +62,15 @@ export class ApiProjectDataService {
     if (!community) {
       throw new Error('Community ${communityId} not found')
     }
+    const instructions = `
+1. Go to [the app](#) to get started.
+2. Connect your wallet.
+3. Use the app.`.trim()
 
     const data: Prisma.ProjectCreateInput = {
       ...input,
       slug,
+      instructions,
       community: { connect: { id: communityId } },
       managers: { connect: { id: userId } },
     }

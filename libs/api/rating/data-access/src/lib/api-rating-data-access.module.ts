@@ -1,12 +1,12 @@
-import { Module } from '@nestjs/common'
 import { ApiCoreDataAccessModule } from '@deanslist-platform/api-core-data-access'
-import { ApiRatingService } from './api-rating.service'
-import { ApiUserRatingService } from './api-user-rating.service'
+import { Module } from '@nestjs/common'
 import { ApiAdminRatingService } from './api-admin-rating.service'
+import { ApiManagerRatingService } from './api-manager-rating.service'
+import { ApiRatingService } from './api-rating.service'
 
 @Module({
   imports: [ApiCoreDataAccessModule],
-  providers: [ApiRatingService, ApiUserRatingService, ApiAdminRatingService],
+  providers: [ApiRatingService, ApiManagerRatingService, ApiAdminRatingService],
   exports: [ApiRatingService],
 })
 export class ApiRatingDataAccessModule {}

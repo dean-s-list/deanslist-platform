@@ -1,9 +1,7 @@
 import { Prisma } from '@prisma/client'
-import { UserFindManyRatingInput } from '../dto/user-find-many-rating.input'
+import { ManagerFindManyRatingInput } from '../dto/manager-find-many-rating.input'
 
-export function getUserRatingWhereInput(
-  input: UserFindManyRatingInput,
-): Prisma.RatingWhereInput {
+export function getUserRatingWhereInput(input: ManagerFindManyRatingInput): Prisma.RatingWhereInput {
   const where: Prisma.RatingWhereInput = {}
 
   if (input.search) {

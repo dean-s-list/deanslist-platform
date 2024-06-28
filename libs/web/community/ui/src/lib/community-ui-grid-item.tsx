@@ -1,4 +1,4 @@
-import type { Community } from '@deanslist-platform/sdk'
+import { Community } from '@deanslist-platform/sdk'
 import { CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
 import { Divider, Group, Paper, Text } from '@mantine/core'
 import { UiGroup, UiStack } from '@pubkey-ui/core'

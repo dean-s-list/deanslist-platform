@@ -5,6 +5,8 @@ fragment ReviewDetails on Review {
   reviewerId
   updatedAt
   name
+  ratingAverage
+  ratingProgress
   project {
     ...ProjectDetails
   }
@@ -12,6 +14,12 @@ fragment ReviewDetails on Review {
     ...UserDetails
   }
   viewUrl
+}
+
+query managerFindManyReviewByProject($input: ManagerFindManyReviewByProjectInput!) {
+  items: managerFindManyReviewByProject(input: $input) {
+    ...ReviewDetails
+  }
 }
 
 query reviewerFindManyReviewByProject($input: ReviewerFindManyReviewByProjectInput!) {

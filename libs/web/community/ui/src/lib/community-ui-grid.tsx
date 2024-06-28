@@ -1,4 +1,4 @@
-import type { Community } from '@deanslist-platform/sdk'
+import { Community } from '@deanslist-platform/sdk'
 import { CoreUiDebugModal, CoreUiPageLimit, gridLimits } from '@deanslist-platform/web-core-ui'
 import { Group, Pagination, SimpleGrid } from '@mantine/core'
 import { UiGroup, UiStack } from '@pubkey-ui/core'

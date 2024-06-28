@@ -1,9 +1,8 @@
 import { ApiCoreService } from '@deanslist-platform/api-core-data-access'
-import { ProjectStatus } from '@deanslist-platform/sdk'
 import { Injectable } from '@nestjs/common'
+import { ProjectStatus } from '@prisma/client'
 import { ReviewerFindManyReviewByProjectInput } from './dto/reviewer-find-many-review-by-project-input'
 import { ReviewerFindManyReviewByUsernameInput } from './dto/reviewer-find-many-review-by-username-input'
-import { Review } from './entity/review.entity'
 import { getReviewerReviewByProjectWhereInput } from './helpers/get-reviewer-review-by-project-where-input'
 import { getReviewerReviewByUsernameWhereInput } from './helpers/get-reviewer-review-by-username-where-input'
 
@@ -40,19 +39,33 @@ export class ApiReviewResolveReviewerService {
     return !!deleted
   }
 
-  async findManyReviewByProject(input: ReviewerFindManyReviewByProjectInput): Promise<Review[]> {
+  async findManyReviewByProject(input: ReviewerFindManyReviewByProjectInput) {
     return this.core.data.review.findMany({
       orderBy: { createdAt: 'desc' },
       where: getReviewerReviewByProjectWhereInput(input),
-      include: { project: true, reviewer: true },
+      include: {
+        project: { include: { managers: true } },
+        reviewer: true,
+        comments: {
+          where: { parentId: null },
+          include: { ratings: true },
+        },
+      },
     })
   }
 
-  async findManyReviewByUsername(input: ReviewerFindManyReviewByUsernameInput): Promise<Review[]> {
+  async findManyReviewByUsername(input: ReviewerFindManyReviewByUsernameInput) {
     return this.core.data.review.findMany({
       orderBy: { createdAt: 'desc' },
       where: getReviewerReviewByUsernameWhereInput(input),
-      include: { project: true, reviewer: true },
+      include: {
+        project: { include: { managers: true } },
+        reviewer: true,
+        comments: {
+          where: { parentId: null },
+          include: { ratings: true },
+        },
+      },
     })
   }
 

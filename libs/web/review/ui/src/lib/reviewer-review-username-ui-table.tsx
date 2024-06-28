@@ -1,8 +1,8 @@
 import { Review } from '@deanslist-platform/sdk'
 import { ProjectUiItem, ProjectUiStatusBadge } from '@deanslist-platform/web-project-ui'
-import { ActionIcon, Group, ScrollArea } from '@mantine/core'
+import { ActionIcon, Group, Progress, Rating as MantineRating, ScrollArea, Tooltip } from '@mantine/core'
 import { UiTime } from '@pubkey-ui/core'
-import { IconZoomOut } from '@tabler/icons-react'
+import { IconMaximize } from '@tabler/icons-react'
 import { DataTable } from 'mantine-datatable'
 import { Link } from 'react-router-dom'
 
@@ -16,24 +16,49 @@ export function ReviewerReviewUsernameUiTable({ reviews = [] }: { reviews: Revie
         columns={[
           {
             accessor: 'name',
-            render: (item) => (item.project ? <ProjectUiItem project={item.project} to={item.viewUrl} /> : null),
+            render: (item) =>
+              item.project ? (
+                <ProjectUiItem
+                  project={item.project}
+                  to={item.viewUrl}
+                  label={<UiTime size="xs" c="dimmed" date={new Date(item.createdAt ?? '0')} />}
+                />
+              ) : null,
           },
           {
+            width: '15%',
             accessor: 'status',
             render: (item) => <ProjectUiStatusBadge status={item.project?.status} />,
           },
           {
-            accessor: 'created',
-            render: (item) => <UiTime date={new Date(item.createdAt ?? '0')} />,
+            width: '15%',
+            accessor: 'ratingAverage',
+            render: (item) => (
+              <Group>
+                <Tooltip label={`Rating average: ${item.ratingAverage ?? 0}`} withArrow position="top">
+                  <MantineRating fractions={2} size="sm" readOnly value={item.ratingAverage ?? 0} />
+                </Tooltip>
+              </Group>
+            ),
           },
           {
+            width: '15%',
+            accessor: 'ratingProgress',
+            render: (item) => (
+              <Tooltip label={`Rating progress: ${item.ratingProgress ?? 0}`} withArrow position="top">
+                <Progress value={item.ratingProgress ?? 0} size="lg" radius="xl" color="brand" />
+              </Tooltip>
+            ),
+          },
+          {
+            width: '5%',
             accessor: 'actions',
             title: 'Actions',
             textAlign: 'right',
             render: (item) => (
               <Group gap="xs" justify="right">
                 <ActionIcon color="brand" variant="light" size="sm" component={Link} to={`${item.viewUrl}`}>
-                  <IconZoomOut size={16} />
+                  <IconMaximize size={16} />
                 </ActionIcon>
               </Group>
             ),

@@ -1,4 +1,4 @@
-import { Comment, UserCreateCommentInput } from '@deanslist-platform/sdk'
+import { Comment, ReviewerCreateCommentInput } from '@deanslist-platform/sdk'
 import { UiStack } from '@pubkey-ui/core'
 import { CommentUiTimelineItem } from './comment-ui-timeline-item'
 
@@ -8,7 +8,7 @@ export function CommentUiTimeline({
   deleteComment,
 }: {
   comments: Comment[]
-  createComment: (res: UserCreateCommentInput) => Promise<boolean>
+  createComment: (res: ReviewerCreateCommentInput) => Promise<boolean>
   deleteComment: (id: string) => Promise<boolean>
 }) {
   return (

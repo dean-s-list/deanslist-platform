@@ -123,6 +123,9 @@ type Comment {
   createdAt: DateTime
   id: String!
   parentId: String
+  ratingAverage: Float
+  ratings: [Rating!]
+  review: Review
   reviewId: String!
   updatedAt: DateTime
   versionBrowser: String
@@ -263,6 +266,17 @@ input ManagerCreateProjectInput {
   startDate: DateTime
 }
 
+input ManagerCreateRatingInput {
+  commentId: String!
+  content: String
+  rating: Float!
+}
+
+input ManagerFindManyCommentInput {
+  projectId: String!
+  search: String
+}
+
 input ManagerFindManyCommunityInput {
   limit: Int = 10
   page: Int = 1
@@ -273,6 +287,15 @@ input ManagerFindManyProjectInput {
   communityId: String
   limit: Int = 10
   page: Int = 1
+  search: String
+}
+
+input ManagerFindManyRatingInput {
+  search: String
+}
+
+input ManagerFindManyReviewByProjectInput {
+  projectId: String!
   search: String
 }
 
@@ -300,6 +323,11 @@ input ManagerUpdateProjectInput {
   startDate: DateTime
   status: ProjectStatus
   tags: [String!]
+}
+
+input ManagerUpdateRatingInput {
+  content: String
+  rating: Float
 }
 
 type Mutation {
@@ -342,8 +370,10 @@ type Mutation {
   managerAddProjectReviewer(projectId: String!, reviewerUserId: String!): Boolean
   managerCreateCommunity(input: ManagerCreateCommunityInput!): Community
   managerCreateProject(input: ManagerCreateProjectInput!): Project
+  managerCreateRating(input: ManagerCreateRatingInput!): Rating
   managerDeleteCommunity(communityId: String!): Boolean
   managerDeleteProject(projectId: String!): Boolean
+  managerDeleteRating(ratingId: String!): Boolean
   managerRemoveCommunityManager(communityId: String!, userId: String!): Boolean
   managerRemoveProjectManager(managerUserId: String!, projectId: String!): Boolean
   managerRemoveProjectReferral(projectId: String!, referralUserId: String!): Boolean
@@ -351,18 +381,16 @@ type Mutation {
   managerToggleCommunityAdmin(communityId: String!, userId: String!): Boolean
   managerUpdateCommunity(communityId: String!, input: ManagerUpdateCommunityInput!): Community
   managerUpdateProject(input: ManagerUpdateProjectInput!, projectId: String!): Project
+  managerUpdateRating(input: ManagerUpdateRatingInput!, ratingId: String!): Rating
   register(input: RegisterInput!): User
+  reviewerCreateComment(input: ReviewerCreateCommentInput!): Comment
   reviewerCreateReview(projectId: String!): Review
+  reviewerDeleteComment(commentId: String!): Boolean
   reviewerDeleteReview(reviewId: String!): Boolean
-  userCreateComment(input: UserCreateCommentInput!): Comment
-  userCreateRating(input: UserCreateRatingInput!): Rating
-  userDeleteComment(commentId: String!): Boolean
+  reviewerUpdateComment(commentId: String!, input: ReviewerUpdateCommentInput!): Comment
   userDeleteIdentity(identityId: String!): Boolean
-  userDeleteRating(ratingId: String!): Boolean
   userLinkIdentity(input: LinkIdentityInput!): Identity
   userSetPrimaryIdentity(identityId: String!): Identity
-  userUpdateComment(commentId: String!, input: UserUpdateCommentInput!): Comment
-  userUpdateRating(input: UserUpdateRatingInput!, ratingId: String!): Rating
   userUpdateUser(input: UserUpdateUserInput!): User
   userVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
 }
@@ -441,13 +469,17 @@ type Query {
   adminGetProjectChannels(projectId: String!): [DiscordChannel!]!
   anonRequestIdentityChallenge(input: RequestIdentityChallengeInput!): IdentityChallenge
   appConfig: AppConfig!
+  managerFindManyComment(input: ManagerFindManyCommentInput!): [Comment!]
   managerFindManyCommunity(input: ManagerFindManyCommunityInput!): CommunityPaging!
   managerFindManyProject(input: ManagerFindManyProjectInput!): ProjectPaging!
+  managerFindManyRating(input: ManagerFindManyRatingInput!): [Rating!]!
+  managerFindManyReviewByProject(input: ManagerFindManyReviewByProjectInput!): [Review!]
   managerFindOneCommunity(communityId: String!): Community
   managerFindOneProject(projectId: String!): Project
   managerGetCommunityManager(communityId: String!): CommunityManager
   managerGetCommunityManagers(communityId: String!): [CommunityManager!]
   me: User
+  reviewerFindManyComment(input: ReviewerFindManyCommentInput!): [Comment!]
   reviewerFindManyProject(input: ReviewerFindManyProjectInput!): ProjectPaging!
   reviewerFindManyReviewByProject(input: ReviewerFindManyReviewByProjectInput!): [Review!]
   reviewerFindManyReviewByUsername(input: ReviewerFindManyReviewByUsernameInput!): [Review!]
@@ -455,10 +487,8 @@ type Query {
   reviewerFindOneReview(reviewId: String!): Review
   reviewerFindUserProjectReview(projectId: String!): Review
   uptime: Float!
-  userFindManyComment(input: UserFindManyCommentInput!): [Comment!]
   userFindManyCommunity(input: UserFindManyCommunityInput!): CommunityPaging!
   userFindManyIdentity(input: UserFindManyIdentityInput!): [Identity!]
-  userFindManyRating(input: UserFindManyRatingInput!): [Rating!]!
   userFindManyUser(input: UserFindManyUserInput!): UserPaging!
   userFindOneCommunity(communityId: String!): Community
   userFindOneUser(username: String!): User
@@ -469,6 +499,8 @@ type Query {
 }
 
 type Rating {
+  author: User
+  authorId: String!
   commentId: String!
   content: String
   createdAt: DateTime
@@ -493,6 +525,8 @@ type Review {
   name: String!
   project: Project
   projectId: String!
+  ratingAverage: Float
+  ratingProgress: Float
   reviewer: User
   reviewerId: String!
   updatedAt: DateTime
@@ -502,6 +536,17 @@ type Review {
 type ReviewPaging {
   data: [Review!]!
   meta: PagingMeta!
+}
+
+input ReviewerCreateCommentInput {
+  content: String!
+  parentId: String
+  reviewId: String!
+}
+
+input ReviewerFindManyCommentInput {
+  reviewId: String!
+  search: String
 }
 
 input ReviewerFindManyProjectInput {
@@ -522,6 +567,10 @@ input ReviewerFindManyReviewByUsernameInput {
   username: String!
 }
 
+input ReviewerUpdateCommentInput {
+  content: String
+}
+
 type User {
   avatarUrl: String
   createdAt: DateTime
@@ -538,23 +587,6 @@ type User {
   walletAddress: String
 }
 
-input UserCreateCommentInput {
-  content: String!
-  parentId: String
-  reviewId: String!
-}
-
-input UserCreateRatingInput {
-  commentId: String!
-  content: String
-  rating: Float!
-}
-
-input UserFindManyCommentInput {
-  reviewId: String!
-  search: String
-}
-
 input UserFindManyCommunityInput {
   limit: Int = 10
   page: Int = 1
@@ -563,10 +595,6 @@ input UserFindManyCommunityInput {
 
 input UserFindManyIdentityInput {
   username: String!
-}
-
-input UserFindManyRatingInput {
-  search: String
 }
 
 input UserFindManyUserInput {
@@ -589,15 +617,6 @@ enum UserStatus {
   Active
   Created
   Inactive
-}
-
-input UserUpdateCommentInput {
-  content: String
-}
-
-input UserUpdateRatingInput {
-  content: String
-  rating: Float
 }
 
 input UserUpdateUserInput {

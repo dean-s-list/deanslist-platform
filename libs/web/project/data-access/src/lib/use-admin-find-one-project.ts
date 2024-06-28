@@ -117,13 +117,15 @@ export function useAdminFindOneProject({ projectId }: { projectId: string }) {
           toastError(err.message)
           return null
         }),
-    updateProject: async (input: AdminUpdateProjectInput) =>
+    updateProject: async (input: AdminUpdateProjectInput, toast = true) =>
       sdk
         .adminUpdateProject({ projectId, input })
         .then((res) => res.data)
         .then(async (res) => {
           if (res) {
-            toastSuccess('Project updated')
+            if (toast) {
+              toastSuccess('Project updated')
+            }
             await query.refetch()
             return res.updated
           }

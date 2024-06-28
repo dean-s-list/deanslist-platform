@@ -14,7 +14,7 @@ import '@mantine/notifications/styles.css'
 import '@mantine/tiptap/styles.css'
 import 'mantine-datatable/styles.layer.css'
 import { BrowserRouter } from 'react-router-dom'
-import { ShellRoutes } from './shell.routes'
+import { WebCoreRoutes } from './web-core-routes'
 
 const client = new QueryClient({
   defaultOptions: {
@@ -34,7 +34,7 @@ export function WebCoreFeature() {
           <AuthProvider>
             <CoreUiThemeProvider>
               <SolanaClusterProvider autoConnect={true}>
-                <ShellRoutes />
+                <WebCoreRoutes />
               </SolanaClusterProvider>
             </CoreUiThemeProvider>
           </AuthProvider>

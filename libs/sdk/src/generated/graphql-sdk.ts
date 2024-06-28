@@ -147,6 +147,9 @@ export type Comment = {
   createdAt?: Maybe<Scalars['DateTime']['output']>
   id: Scalars['String']['output']
   parentId?: Maybe<Scalars['String']['output']>
+  ratingAverage?: Maybe<Scalars['Float']['output']>
+  ratings?: Maybe<Array<Rating>>
+  review?: Maybe<Review>
   reviewId: Scalars['String']['output']
   updatedAt?: Maybe<Scalars['DateTime']['output']>
   versionBrowser?: Maybe<Scalars['String']['output']>
@@ -286,6 +289,17 @@ export type ManagerCreateProjectInput = {
   startDate?: InputMaybe<Scalars['DateTime']['input']>
 }
 
+export type ManagerCreateRatingInput = {
+  commentId: Scalars['String']['input']
+  content?: InputMaybe<Scalars['String']['input']>
+  rating: Scalars['Float']['input']
+}
+
+export type ManagerFindManyCommentInput = {
+  projectId: Scalars['String']['input']
+  search?: InputMaybe<Scalars['String']['input']>
+}
+
 export type ManagerFindManyCommunityInput = {
   limit?: InputMaybe<Scalars['Int']['input']>
   page?: InputMaybe<Scalars['Int']['input']>
@@ -296,6 +310,15 @@ export type ManagerFindManyProjectInput = {
   communityId?: InputMaybe<Scalars['String']['input']>
   limit?: InputMaybe<Scalars['Int']['input']>
   page?: InputMaybe<Scalars['Int']['input']>
+  search?: InputMaybe<Scalars['String']['input']>
+}
+
+export type ManagerFindManyRatingInput = {
+  search?: InputMaybe<Scalars['String']['input']>
+}
+
+export type ManagerFindManyReviewByProjectInput = {
+  projectId: Scalars['String']['input']
   search?: InputMaybe<Scalars['String']['input']>
 }
 
@@ -323,6 +346,11 @@ export type ManagerUpdateProjectInput = {
   startDate?: InputMaybe<Scalars['DateTime']['input']>
   status?: InputMaybe<ProjectStatus>
   tags?: InputMaybe<Array<Scalars['String']['input']>>
+}
+
+export type ManagerUpdateRatingInput = {
+  content?: InputMaybe<Scalars['String']['input']>
+  rating?: InputMaybe<Scalars['Float']['input']>
 }
 
 export type Mutation = {
@@ -366,8 +394,10 @@ export type Mutation = {
   managerAddProjectReviewer?: Maybe<Scalars['Boolean']['output']>
   managerCreateCommunity?: Maybe<Community>
   managerCreateProject?: Maybe<Project>
+  managerCreateRating?: Maybe<Rating>
   managerDeleteCommunity?: Maybe<Scalars['Boolean']['output']>
   managerDeleteProject?: Maybe<Scalars['Boolean']['output']>
+  managerDeleteRating?: Maybe<Scalars['Boolean']['output']>
   managerRemoveCommunityManager?: Maybe<Scalars['Boolean']['output']>
   managerRemoveProjectManager?: Maybe<Scalars['Boolean']['output']>
   managerRemoveProjectReferral?: Maybe<Scalars['Boolean']['output']>
@@ -375,18 +405,16 @@ export type Mutation = {
   managerToggleCommunityAdmin?: Maybe<Scalars['Boolean']['output']>
   managerUpdateCommunity?: Maybe<Community>
   managerUpdateProject?: Maybe<Project>
+  managerUpdateRating?: Maybe<Rating>
   register?: Maybe<User>
+  reviewerCreateComment?: Maybe<Comment>
   reviewerCreateReview?: Maybe<Review>
+  reviewerDeleteComment?: Maybe<Scalars['Boolean']['output']>
   reviewerDeleteReview?: Maybe<Scalars['Boolean']['output']>
-  userCreateComment?: Maybe<Comment>
-  userCreateRating?: Maybe<Rating>
-  userDeleteComment?: Maybe<Scalars['Boolean']['output']>
+  reviewerUpdateComment?: Maybe<Comment>
   userDeleteIdentity?: Maybe<Scalars['Boolean']['output']>
-  userDeleteRating?: Maybe<Scalars['Boolean']['output']>
   userLinkIdentity?: Maybe<Identity>
   userSetPrimaryIdentity?: Maybe<Identity>
-  userUpdateComment?: Maybe<Comment>
-  userUpdateRating?: Maybe<Rating>
   userUpdateUser?: Maybe<User>
   userVerifyIdentityChallenge?: Maybe<IdentityChallenge>
 }
@@ -569,12 +597,20 @@ export type MutationManagerCreateProjectArgs = {
   input: ManagerCreateProjectInput
 }
 
+export type MutationManagerCreateRatingArgs = {
+  input: ManagerCreateRatingInput
+}
+
 export type MutationManagerDeleteCommunityArgs = {
   communityId: Scalars['String']['input']
 }
 
 export type MutationManagerDeleteProjectArgs = {
   projectId: Scalars['String']['input']
+}
+
+export type MutationManagerDeleteRatingArgs = {
+  ratingId: Scalars['String']['input']
 }
 
 export type MutationManagerRemoveCommunityManagerArgs = {
@@ -612,36 +648,38 @@ export type MutationManagerUpdateProjectArgs = {
   projectId: Scalars['String']['input']
 }
 
+export type MutationManagerUpdateRatingArgs = {
+  input: ManagerUpdateRatingInput
+  ratingId: Scalars['String']['input']
+}
+
 export type MutationRegisterArgs = {
   input: RegisterInput
+}
+
+export type MutationReviewerCreateCommentArgs = {
+  input: ReviewerCreateCommentInput
 }
 
 export type MutationReviewerCreateReviewArgs = {
   projectId: Scalars['String']['input']
 }
 
+export type MutationReviewerDeleteCommentArgs = {
+  commentId: Scalars['String']['input']
+}
+
 export type MutationReviewerDeleteReviewArgs = {
   reviewId: Scalars['String']['input']
 }
 
-export type MutationUserCreateCommentArgs = {
-  input: UserCreateCommentInput
-}
-
-export type MutationUserCreateRatingArgs = {
-  input: UserCreateRatingInput
-}
-
-export type MutationUserDeleteCommentArgs = {
+export type MutationReviewerUpdateCommentArgs = {
   commentId: Scalars['String']['input']
+  input: ReviewerUpdateCommentInput
 }
 
 export type MutationUserDeleteIdentityArgs = {
   identityId: Scalars['String']['input']
-}
-
-export type MutationUserDeleteRatingArgs = {
-  ratingId: Scalars['String']['input']
 }
 
 export type MutationUserLinkIdentityArgs = {
@@ -650,16 +688,6 @@ export type MutationUserLinkIdentityArgs = {
 
 export type MutationUserSetPrimaryIdentityArgs = {
   identityId: Scalars['String']['input']
-}
-
-export type MutationUserUpdateCommentArgs = {
-  commentId: Scalars['String']['input']
-  input: UserUpdateCommentInput
-}
-
-export type MutationUserUpdateRatingArgs = {
-  input: UserUpdateRatingInput
-  ratingId: Scalars['String']['input']
 }
 
 export type MutationUserUpdateUserArgs = {
@@ -748,13 +776,17 @@ export type Query = {
   adminGetProjectChannels: Array<DiscordChannel>
   anonRequestIdentityChallenge?: Maybe<IdentityChallenge>
   appConfig: AppConfig
+  managerFindManyComment?: Maybe<Array<Comment>>
   managerFindManyCommunity: CommunityPaging
   managerFindManyProject: ProjectPaging
+  managerFindManyRating: Array<Rating>
+  managerFindManyReviewByProject?: Maybe<Array<Review>>
   managerFindOneCommunity?: Maybe<Community>
   managerFindOneProject?: Maybe<Project>
   managerGetCommunityManager?: Maybe<CommunityManager>
   managerGetCommunityManagers?: Maybe<Array<CommunityManager>>
   me?: Maybe<User>
+  reviewerFindManyComment?: Maybe<Array<Comment>>
   reviewerFindManyProject: ProjectPaging
   reviewerFindManyReviewByProject?: Maybe<Array<Review>>
   reviewerFindManyReviewByUsername?: Maybe<Array<Review>>
@@ -762,10 +794,8 @@ export type Query = {
   reviewerFindOneReview?: Maybe<Review>
   reviewerFindUserProjectReview?: Maybe<Review>
   uptime: Scalars['Float']['output']
-  userFindManyComment?: Maybe<Array<Comment>>
   userFindManyCommunity: CommunityPaging
   userFindManyIdentity?: Maybe<Array<Identity>>
-  userFindManyRating: Array<Rating>
   userFindManyUser: UserPaging
   userFindOneCommunity?: Maybe<Community>
   userFindOneUser?: Maybe<User>
@@ -843,12 +873,24 @@ export type QueryAnonRequestIdentityChallengeArgs = {
   input: RequestIdentityChallengeInput
 }
 
+export type QueryManagerFindManyCommentArgs = {
+  input: ManagerFindManyCommentInput
+}
+
 export type QueryManagerFindManyCommunityArgs = {
   input: ManagerFindManyCommunityInput
 }
 
 export type QueryManagerFindManyProjectArgs = {
   input: ManagerFindManyProjectInput
+}
+
+export type QueryManagerFindManyRatingArgs = {
+  input: ManagerFindManyRatingInput
+}
+
+export type QueryManagerFindManyReviewByProjectArgs = {
+  input: ManagerFindManyReviewByProjectInput
 }
 
 export type QueryManagerFindOneCommunityArgs = {
@@ -865,6 +907,10 @@ export type QueryManagerGetCommunityManagerArgs = {
 
 export type QueryManagerGetCommunityManagersArgs = {
   communityId: Scalars['String']['input']
+}
+
+export type QueryReviewerFindManyCommentArgs = {
+  input: ReviewerFindManyCommentInput
 }
 
 export type QueryReviewerFindManyProjectArgs = {
@@ -891,20 +937,12 @@ export type QueryReviewerFindUserProjectReviewArgs = {
   projectId: Scalars['String']['input']
 }
 
-export type QueryUserFindManyCommentArgs = {
-  input: UserFindManyCommentInput
-}
-
 export type QueryUserFindManyCommunityArgs = {
   input: UserFindManyCommunityInput
 }
 
 export type QueryUserFindManyIdentityArgs = {
   input: UserFindManyIdentityInput
-}
-
-export type QueryUserFindManyRatingArgs = {
-  input: UserFindManyRatingInput
 }
 
 export type QueryUserFindManyUserArgs = {
@@ -933,6 +971,8 @@ export type QueryUserRequestIdentityChallengeArgs = {
 
 export type Rating = {
   __typename?: 'Rating'
+  author?: Maybe<User>
+  authorId: Scalars['String']['output']
   commentId: Scalars['String']['output']
   content?: Maybe<Scalars['String']['output']>
   createdAt?: Maybe<Scalars['DateTime']['output']>
@@ -958,6 +998,8 @@ export type Review = {
   name: Scalars['String']['output']
   project?: Maybe<Project>
   projectId: Scalars['String']['output']
+  ratingAverage?: Maybe<Scalars['Float']['output']>
+  ratingProgress?: Maybe<Scalars['Float']['output']>
   reviewer?: Maybe<User>
   reviewerId: Scalars['String']['output']
   updatedAt?: Maybe<Scalars['DateTime']['output']>
@@ -968,6 +1010,17 @@ export type ReviewPaging = {
   __typename?: 'ReviewPaging'
   data: Array<Review>
   meta: PagingMeta
+}
+
+export type ReviewerCreateCommentInput = {
+  content: Scalars['String']['input']
+  parentId?: InputMaybe<Scalars['String']['input']>
+  reviewId: Scalars['String']['input']
+}
+
+export type ReviewerFindManyCommentInput = {
+  reviewId: Scalars['String']['input']
+  search?: InputMaybe<Scalars['String']['input']>
 }
 
 export type ReviewerFindManyProjectInput = {
@@ -988,6 +1041,10 @@ export type ReviewerFindManyReviewByUsernameInput = {
   username: Scalars['String']['input']
 }
 
+export type ReviewerUpdateCommentInput = {
+  content?: InputMaybe<Scalars['String']['input']>
+}
+
 export type User = {
   __typename?: 'User'
   avatarUrl?: Maybe<Scalars['String']['output']>
@@ -1005,23 +1062,6 @@ export type User = {
   walletAddress?: Maybe<Scalars['String']['output']>
 }
 
-export type UserCreateCommentInput = {
-  content: Scalars['String']['input']
-  parentId?: InputMaybe<Scalars['String']['input']>
-  reviewId: Scalars['String']['input']
-}
-
-export type UserCreateRatingInput = {
-  commentId: Scalars['String']['input']
-  content?: InputMaybe<Scalars['String']['input']>
-  rating: Scalars['Float']['input']
-}
-
-export type UserFindManyCommentInput = {
-  reviewId: Scalars['String']['input']
-  search?: InputMaybe<Scalars['String']['input']>
-}
-
 export type UserFindManyCommunityInput = {
   limit?: InputMaybe<Scalars['Int']['input']>
   page?: InputMaybe<Scalars['Int']['input']>
@@ -1030,10 +1070,6 @@ export type UserFindManyCommunityInput = {
 
 export type UserFindManyIdentityInput = {
   username: Scalars['String']['input']
-}
-
-export type UserFindManyRatingInput = {
-  search?: InputMaybe<Scalars['String']['input']>
 }
 
 export type UserFindManyUserInput = {
@@ -1057,15 +1093,6 @@ export enum UserStatus {
   Active = 'Active',
   Created = 'Created',
   Inactive = 'Inactive',
-}
-
-export type UserUpdateCommentInput = {
-  content?: InputMaybe<Scalars['String']['input']>
-}
-
-export type UserUpdateRatingInput = {
-  content?: InputMaybe<Scalars['String']['input']>
-  rating?: InputMaybe<Scalars['Float']['input']>
 }
 
 export type UserUpdateUserInput = {
@@ -1173,6 +1200,7 @@ export type CommentDetailsFragment = {
   createdAt?: Date | null
   id: string
   parentId?: string | null
+  ratingAverage?: number | null
   reviewId: string
   updatedAt?: Date | null
   versionBrowser?: string | null
@@ -1194,11 +1222,11 @@ export type CommentDetailsFragment = {
   } | null
 }
 
-export type UserFindManyCommentQueryVariables = Exact<{
-  input: UserFindManyCommentInput
+export type ReviewerFindManyCommentQueryVariables = Exact<{
+  input: ReviewerFindManyCommentInput
 }>
 
-export type UserFindManyCommentQuery = {
+export type ReviewerFindManyCommentQuery = {
   __typename?: 'Query'
   items?: Array<{
     __typename?: 'Comment'
@@ -1208,6 +1236,7 @@ export type UserFindManyCommentQuery = {
     createdAt?: Date | null
     id: string
     parentId?: string | null
+    ratingAverage?: number | null
     reviewId: string
     updatedAt?: Date | null
     versionBrowser?: string | null
@@ -1220,6 +1249,7 @@ export type UserFindManyCommentQuery = {
       createdAt?: Date | null
       id: string
       parentId?: string | null
+      ratingAverage?: number | null
       reviewId: string
       updatedAt?: Date | null
       versionBrowser?: string | null
@@ -1258,11 +1288,11 @@ export type UserFindManyCommentQuery = {
   }> | null
 }
 
-export type UserCreateCommentMutationVariables = Exact<{
-  input: UserCreateCommentInput
+export type ReviewerCreateCommentMutationVariables = Exact<{
+  input: ReviewerCreateCommentInput
 }>
 
-export type UserCreateCommentMutation = {
+export type ReviewerCreateCommentMutation = {
   __typename?: 'Mutation'
   created?: {
     __typename?: 'Comment'
@@ -1272,6 +1302,7 @@ export type UserCreateCommentMutation = {
     createdAt?: Date | null
     id: string
     parentId?: string | null
+    ratingAverage?: number | null
     reviewId: string
     updatedAt?: Date | null
     versionBrowser?: string | null
@@ -1294,12 +1325,12 @@ export type UserCreateCommentMutation = {
   } | null
 }
 
-export type UserUpdateCommentMutationVariables = Exact<{
+export type ReviewerUpdateCommentMutationVariables = Exact<{
   commentId: Scalars['String']['input']
-  input: UserUpdateCommentInput
+  input: ReviewerUpdateCommentInput
 }>
 
-export type UserUpdateCommentMutation = {
+export type ReviewerUpdateCommentMutation = {
   __typename?: 'Mutation'
   updated?: {
     __typename?: 'Comment'
@@ -1309,6 +1340,7 @@ export type UserUpdateCommentMutation = {
     createdAt?: Date | null
     id: string
     parentId?: string | null
+    ratingAverage?: number | null
     reviewId: string
     updatedAt?: Date | null
     versionBrowser?: string | null
@@ -1331,11 +1363,11 @@ export type UserUpdateCommentMutation = {
   } | null
 }
 
-export type UserDeleteCommentMutationVariables = Exact<{
+export type ReviewerDeleteCommentMutationVariables = Exact<{
   commentId: Scalars['String']['input']
 }>
 
-export type UserDeleteCommentMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
+export type ReviewerDeleteCommentMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
 
 export type AdminFindManyCommentQueryVariables = Exact<{
   input: AdminFindManyCommentInput
@@ -1351,6 +1383,7 @@ export type AdminFindManyCommentQuery = {
     createdAt?: Date | null
     id: string
     parentId?: string | null
+    ratingAverage?: number | null
     reviewId: string
     updatedAt?: Date | null
     versionBrowser?: string | null
@@ -1363,6 +1396,7 @@ export type AdminFindManyCommentQuery = {
       createdAt?: Date | null
       id: string
       parentId?: string | null
+      ratingAverage?: number | null
       reviewId: string
       updatedAt?: Date | null
       versionBrowser?: string | null
@@ -1416,6 +1450,7 @@ export type AdminUpdateCommentMutation = {
     createdAt?: Date | null
     id: string
     parentId?: string | null
+    ratingAverage?: number | null
     reviewId: string
     updatedAt?: Date | null
     versionBrowser?: string | null
@@ -1443,6 +1478,200 @@ export type AdminDeleteCommentMutationVariables = Exact<{
 }>
 
 export type AdminDeleteCommentMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
+
+export type ManagerFindManyCommentQueryVariables = Exact<{
+  input: ManagerFindManyCommentInput
+}>
+
+export type ManagerFindManyCommentQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'Comment'
+    authorId: string
+    category: CommentCategory
+    content: string
+    createdAt?: Date | null
+    id: string
+    parentId?: string | null
+    ratingAverage?: number | null
+    reviewId: string
+    updatedAt?: Date | null
+    versionBrowser?: string | null
+    versionOs?: string | null
+    ratings?: Array<{
+      __typename?: 'Rating'
+      createdAt?: Date | null
+      id: string
+      content?: string | null
+      commentId: string
+      authorId: string
+      rating: number
+      updatedAt?: Date | null
+      author?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      } | null
+    }> | null
+    review?: {
+      __typename?: 'Review'
+      createdAt?: Date | null
+      id: string
+      projectId: string
+      reviewerId: string
+      updatedAt?: Date | null
+      name: string
+      ratingAverage?: number | null
+      ratingProgress?: number | null
+      viewUrl: string
+      project?: {
+        __typename?: 'Project'
+        amountManagerUsd?: number | null
+        amountReferralUsd?: number | null
+        amountTotalUsd?: number | null
+        avatarUrl?: string | null
+        communityId: string
+        createdAt?: Date | null
+        id: string
+        instructions?: string | null
+        linkDiscord?: string | null
+        linkGithub?: string | null
+        linkTelegram?: string | null
+        linkTwitter?: string | null
+        linkWebsite?: string | null
+        manageUrl: string
+        name: string
+        reviewCount?: number | null
+        reviewsOpen?: boolean | null
+        slug: string
+        status?: ProjectStatus | null
+        tags?: Array<string> | null
+        updatedAt?: Date | null
+        viewUrl: string
+        community?: {
+          __typename?: 'Community'
+          activeProjectsCount?: number | null
+          avatarUrl?: string | null
+          createdAt?: Date | null
+          homeServerId?: string | null
+          id: string
+          managerCount?: number | null
+          manageUrl: string
+          name: string
+          updatedAt?: Date | null
+          viewUrl: string
+          managers?: Array<{
+            __typename?: 'CommunityManager'
+            createdAt?: Date | null
+            id: string
+            userId: string
+            admin?: boolean | null
+            updatedAt?: Date | null
+            user?: {
+              __typename?: 'User'
+              avatarUrl?: string | null
+              createdAt?: Date | null
+              developer?: boolean | null
+              id: string
+              name?: string | null
+              manager?: boolean | null
+              profileUrl: string
+              role?: UserRole | null
+              status?: UserStatus | null
+              updatedAt?: Date | null
+              username?: string | null
+              walletAddress?: string | null
+            } | null
+          }> | null
+        } | null
+        managers?: Array<{
+          __typename?: 'User'
+          avatarUrl?: string | null
+          createdAt?: Date | null
+          developer?: boolean | null
+          id: string
+          name?: string | null
+          manager?: boolean | null
+          profileUrl: string
+          role?: UserRole | null
+          status?: UserStatus | null
+          updatedAt?: Date | null
+          username?: string | null
+          walletAddress?: string | null
+        }> | null
+      } | null
+      reviewer?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      } | null
+    } | null
+    children?: Array<{
+      __typename?: 'Comment'
+      authorId: string
+      category: CommentCategory
+      content: string
+      createdAt?: Date | null
+      id: string
+      parentId?: string | null
+      ratingAverage?: number | null
+      reviewId: string
+      updatedAt?: Date | null
+      versionBrowser?: string | null
+      versionOs?: string | null
+      author?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      } | null
+    }> | null
+    author?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      manager?: boolean | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+      walletAddress?: string | null
+    } | null
+  }> | null
+}
 
 export type CommunityDetailsFragment = {
   __typename?: 'Community'
@@ -3657,15 +3886,31 @@ export type RatingDetailsFragment = {
   id: string
   content?: string | null
   commentId: string
+  authorId: string
   rating: number
   updatedAt?: Date | null
+  author?: {
+    __typename?: 'User'
+    avatarUrl?: string | null
+    createdAt?: Date | null
+    developer?: boolean | null
+    id: string
+    name?: string | null
+    manager?: boolean | null
+    profileUrl: string
+    role?: UserRole | null
+    status?: UserStatus | null
+    updatedAt?: Date | null
+    username?: string | null
+    walletAddress?: string | null
+  } | null
 }
 
-export type UserFindManyRatingQueryVariables = Exact<{
-  input: UserFindManyRatingInput
+export type ManagerFindManyRatingQueryVariables = Exact<{
+  input: ManagerFindManyRatingInput
 }>
 
-export type UserFindManyRatingQuery = {
+export type ManagerFindManyRatingQuery = {
   __typename?: 'Query'
   items: Array<{
     __typename?: 'Rating'
@@ -3673,16 +3918,32 @@ export type UserFindManyRatingQuery = {
     id: string
     content?: string | null
     commentId: string
+    authorId: string
     rating: number
     updatedAt?: Date | null
+    author?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      manager?: boolean | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+      walletAddress?: string | null
+    } | null
   }>
 }
 
-export type UserCreateRatingMutationVariables = Exact<{
-  input: UserCreateRatingInput
+export type ManagerCreateRatingMutationVariables = Exact<{
+  input: ManagerCreateRatingInput
 }>
 
-export type UserCreateRatingMutation = {
+export type ManagerCreateRatingMutation = {
   __typename?: 'Mutation'
   created?: {
     __typename?: 'Rating'
@@ -3690,17 +3951,33 @@ export type UserCreateRatingMutation = {
     id: string
     content?: string | null
     commentId: string
+    authorId: string
     rating: number
     updatedAt?: Date | null
+    author?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      manager?: boolean | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+      walletAddress?: string | null
+    } | null
   } | null
 }
 
-export type UserUpdateRatingMutationVariables = Exact<{
+export type ManagerUpdateRatingMutationVariables = Exact<{
   ratingId: Scalars['String']['input']
-  input: UserUpdateRatingInput
+  input: ManagerUpdateRatingInput
 }>
 
-export type UserUpdateRatingMutation = {
+export type ManagerUpdateRatingMutation = {
   __typename?: 'Mutation'
   updated?: {
     __typename?: 'Rating'
@@ -3708,16 +3985,32 @@ export type UserUpdateRatingMutation = {
     id: string
     content?: string | null
     commentId: string
+    authorId: string
     rating: number
     updatedAt?: Date | null
+    author?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      manager?: boolean | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+      walletAddress?: string | null
+    } | null
   } | null
 }
 
-export type UserDeleteRatingMutationVariables = Exact<{
+export type ManagerDeleteRatingMutationVariables = Exact<{
   ratingId: Scalars['String']['input']
 }>
 
-export type UserDeleteRatingMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
+export type ManagerDeleteRatingMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
 
 export type AdminFindManyRatingQueryVariables = Exact<{
   input: AdminFindManyRatingInput
@@ -3731,8 +4024,24 @@ export type AdminFindManyRatingQuery = {
     id: string
     content?: string | null
     commentId: string
+    authorId: string
     rating: number
     updatedAt?: Date | null
+    author?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      manager?: boolean | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+      walletAddress?: string | null
+    } | null
   }>
 }
 
@@ -3749,8 +4058,24 @@ export type AdminUpdateRatingMutation = {
     id: string
     content?: string | null
     commentId: string
+    authorId: string
     rating: number
     updatedAt?: Date | null
+    author?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      manager?: boolean | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+      walletAddress?: string | null
+    } | null
   } | null
 }
 
@@ -3768,6 +4093,8 @@ export type ReviewDetailsFragment = {
   reviewerId: string
   updatedAt?: Date | null
   name: string
+  ratingAverage?: number | null
+  ratingProgress?: number | null
   viewUrl: string
   project?: {
     __typename?: 'Project'
@@ -3862,6 +4189,117 @@ export type ReviewDetailsFragment = {
   } | null
 }
 
+export type ManagerFindManyReviewByProjectQueryVariables = Exact<{
+  input: ManagerFindManyReviewByProjectInput
+}>
+
+export type ManagerFindManyReviewByProjectQuery = {
+  __typename?: 'Query'
+  items?: Array<{
+    __typename?: 'Review'
+    createdAt?: Date | null
+    id: string
+    projectId: string
+    reviewerId: string
+    updatedAt?: Date | null
+    name: string
+    ratingAverage?: number | null
+    ratingProgress?: number | null
+    viewUrl: string
+    project?: {
+      __typename?: 'Project'
+      amountManagerUsd?: number | null
+      amountReferralUsd?: number | null
+      amountTotalUsd?: number | null
+      avatarUrl?: string | null
+      communityId: string
+      createdAt?: Date | null
+      id: string
+      instructions?: string | null
+      linkDiscord?: string | null
+      linkGithub?: string | null
+      linkTelegram?: string | null
+      linkTwitter?: string | null
+      linkWebsite?: string | null
+      manageUrl: string
+      name: string
+      reviewCount?: number | null
+      reviewsOpen?: boolean | null
+      slug: string
+      status?: ProjectStatus | null
+      tags?: Array<string> | null
+      updatedAt?: Date | null
+      viewUrl: string
+      community?: {
+        __typename?: 'Community'
+        activeProjectsCount?: number | null
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        homeServerId?: string | null
+        id: string
+        managerCount?: number | null
+        manageUrl: string
+        name: string
+        updatedAt?: Date | null
+        viewUrl: string
+        managers?: Array<{
+          __typename?: 'CommunityManager'
+          createdAt?: Date | null
+          id: string
+          userId: string
+          admin?: boolean | null
+          updatedAt?: Date | null
+          user?: {
+            __typename?: 'User'
+            avatarUrl?: string | null
+            createdAt?: Date | null
+            developer?: boolean | null
+            id: string
+            name?: string | null
+            manager?: boolean | null
+            profileUrl: string
+            role?: UserRole | null
+            status?: UserStatus | null
+            updatedAt?: Date | null
+            username?: string | null
+            walletAddress?: string | null
+          } | null
+        }> | null
+      } | null
+      managers?: Array<{
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      }> | null
+    } | null
+    reviewer?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      manager?: boolean | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+      walletAddress?: string | null
+    } | null
+  }> | null
+}
+
 export type ReviewerFindManyReviewByProjectQueryVariables = Exact<{
   input: ReviewerFindManyReviewByProjectInput
 }>
@@ -3876,6 +4314,8 @@ export type ReviewerFindManyReviewByProjectQuery = {
     reviewerId: string
     updatedAt?: Date | null
     name: string
+    ratingAverage?: number | null
+    ratingProgress?: number | null
     viewUrl: string
     project?: {
       __typename?: 'Project'
@@ -3985,6 +4425,8 @@ export type ReviewerFindManyReviewByUsernameQuery = {
     reviewerId: string
     updatedAt?: Date | null
     name: string
+    ratingAverage?: number | null
+    ratingProgress?: number | null
     viewUrl: string
     project?: {
       __typename?: 'Project'
@@ -4094,6 +4536,8 @@ export type ReviewerFindUserProjectReviewQuery = {
     reviewerId: string
     updatedAt?: Date | null
     name: string
+    ratingAverage?: number | null
+    ratingProgress?: number | null
     viewUrl: string
     project?: {
       __typename?: 'Project'
@@ -4203,6 +4647,8 @@ export type ReviewerFindOneReviewQuery = {
     reviewerId: string
     updatedAt?: Date | null
     name: string
+    ratingAverage?: number | null
+    ratingProgress?: number | null
     viewUrl: string
     project?: {
       __typename?: 'Project'
@@ -4312,6 +4758,8 @@ export type ReviewerCreateReviewMutation = {
     reviewerId: string
     updatedAt?: Date | null
     name: string
+    ratingAverage?: number | null
+    ratingProgress?: number | null
     viewUrl: string
     project?: {
       __typename?: 'Project'
@@ -4429,6 +4877,8 @@ export type AdminFindManyReviewQuery = {
       reviewerId: string
       updatedAt?: Date | null
       name: string
+      ratingAverage?: number | null
+      ratingProgress?: number | null
       viewUrl: string
       project?: {
         __typename?: 'Project'
@@ -4549,6 +4999,8 @@ export type AdminFindOneReviewQuery = {
     reviewerId: string
     updatedAt?: Date | null
     name: string
+    ratingAverage?: number | null
+    ratingProgress?: number | null
     viewUrl: string
     project?: {
       __typename?: 'Project'
@@ -4898,6 +5350,7 @@ export const CommentDetailsFragmentDoc = gql`
     createdAt
     id
     parentId
+    ratingAverage
     reviewId
     updatedAt
     versionBrowser
@@ -5001,9 +5454,14 @@ export const RatingDetailsFragmentDoc = gql`
     id
     content
     commentId
+    authorId
+    author {
+      ...UserDetails
+    }
     rating
     updatedAt
   }
+  ${UserDetailsFragmentDoc}
 `
 export const CommunityManagerDetailsFragmentDoc = gql`
   fragment CommunityManagerDetails on CommunityManager {
@@ -5078,6 +5536,8 @@ export const ReviewDetailsFragmentDoc = gql`
     reviewerId
     updatedAt
     name
+    ratingAverage
+    ratingProgress
     project {
       ...ProjectDetails
     }
@@ -5122,9 +5582,9 @@ export const MeDocument = gql`
   ${UserDetailsFragmentDoc}
   ${IdentityDetailsFragmentDoc}
 `
-export const UserFindManyCommentDocument = gql`
-  query userFindManyComment($input: UserFindManyCommentInput!) {
-    items: userFindManyComment(input: $input) {
+export const ReviewerFindManyCommentDocument = gql`
+  query reviewerFindManyComment($input: ReviewerFindManyCommentInput!) {
+    items: reviewerFindManyComment(input: $input) {
       ...CommentDetails
       children {
         ...CommentDetails
@@ -5133,25 +5593,25 @@ export const UserFindManyCommentDocument = gql`
   }
   ${CommentDetailsFragmentDoc}
 `
-export const UserCreateCommentDocument = gql`
-  mutation userCreateComment($input: UserCreateCommentInput!) {
-    created: userCreateComment(input: $input) {
+export const ReviewerCreateCommentDocument = gql`
+  mutation reviewerCreateComment($input: ReviewerCreateCommentInput!) {
+    created: reviewerCreateComment(input: $input) {
       ...CommentDetails
     }
   }
   ${CommentDetailsFragmentDoc}
 `
-export const UserUpdateCommentDocument = gql`
-  mutation userUpdateComment($commentId: String!, $input: UserUpdateCommentInput!) {
-    updated: userUpdateComment(commentId: $commentId, input: $input) {
+export const ReviewerUpdateCommentDocument = gql`
+  mutation reviewerUpdateComment($commentId: String!, $input: ReviewerUpdateCommentInput!) {
+    updated: reviewerUpdateComment(commentId: $commentId, input: $input) {
       ...CommentDetails
     }
   }
   ${CommentDetailsFragmentDoc}
 `
-export const UserDeleteCommentDocument = gql`
-  mutation userDeleteComment($commentId: String!) {
-    deleted: userDeleteComment(commentId: $commentId)
+export const ReviewerDeleteCommentDocument = gql`
+  mutation reviewerDeleteComment($commentId: String!) {
+    deleted: reviewerDeleteComment(commentId: $commentId)
   }
 `
 export const AdminFindManyCommentDocument = gql`
@@ -5177,6 +5637,25 @@ export const AdminDeleteCommentDocument = gql`
   mutation adminDeleteComment($commentId: String!) {
     deleted: adminDeleteComment(commentId: $commentId)
   }
+`
+export const ManagerFindManyCommentDocument = gql`
+  query managerFindManyComment($input: ManagerFindManyCommentInput!) {
+    items: managerFindManyComment(input: $input) {
+      ...CommentDetails
+      ratings {
+        ...RatingDetails
+      }
+      review {
+        ...ReviewDetails
+      }
+      children {
+        ...CommentDetails
+      }
+    }
+  }
+  ${CommentDetailsFragmentDoc}
+  ${RatingDetailsFragmentDoc}
+  ${ReviewDetailsFragmentDoc}
 `
 export const UserFindManyCommunityDocument = gql`
   query userFindManyCommunity($input: UserFindManyCommunityInput!) {
@@ -5716,33 +6195,33 @@ export const ManagerRemoveProjectReferralDocument = gql`
     removed: managerRemoveProjectReferral(projectId: $projectId, referralUserId: $referralUserId)
   }
 `
-export const UserFindManyRatingDocument = gql`
-  query userFindManyRating($input: UserFindManyRatingInput!) {
-    items: userFindManyRating(input: $input) {
+export const ManagerFindManyRatingDocument = gql`
+  query managerFindManyRating($input: ManagerFindManyRatingInput!) {
+    items: managerFindManyRating(input: $input) {
       ...RatingDetails
     }
   }
   ${RatingDetailsFragmentDoc}
 `
-export const UserCreateRatingDocument = gql`
-  mutation userCreateRating($input: UserCreateRatingInput!) {
-    created: userCreateRating(input: $input) {
+export const ManagerCreateRatingDocument = gql`
+  mutation managerCreateRating($input: ManagerCreateRatingInput!) {
+    created: managerCreateRating(input: $input) {
       ...RatingDetails
     }
   }
   ${RatingDetailsFragmentDoc}
 `
-export const UserUpdateRatingDocument = gql`
-  mutation userUpdateRating($ratingId: String!, $input: UserUpdateRatingInput!) {
-    updated: userUpdateRating(ratingId: $ratingId, input: $input) {
+export const ManagerUpdateRatingDocument = gql`
+  mutation managerUpdateRating($ratingId: String!, $input: ManagerUpdateRatingInput!) {
+    updated: managerUpdateRating(ratingId: $ratingId, input: $input) {
       ...RatingDetails
     }
   }
   ${RatingDetailsFragmentDoc}
 `
-export const UserDeleteRatingDocument = gql`
-  mutation userDeleteRating($ratingId: String!) {
-    deleted: userDeleteRating(ratingId: $ratingId)
+export const ManagerDeleteRatingDocument = gql`
+  mutation managerDeleteRating($ratingId: String!) {
+    deleted: managerDeleteRating(ratingId: $ratingId)
   }
 `
 export const AdminFindManyRatingDocument = gql`
@@ -5765,6 +6244,14 @@ export const AdminDeleteRatingDocument = gql`
   mutation adminDeleteRating($ratingId: String!) {
     deleted: adminDeleteRating(ratingId: $ratingId)
   }
+`
+export const ManagerFindManyReviewByProjectDocument = gql`
+  query managerFindManyReviewByProject($input: ManagerFindManyReviewByProjectInput!) {
+    items: managerFindManyReviewByProject(input: $input) {
+      ...ReviewDetails
+    }
+  }
+  ${ReviewDetailsFragmentDoc}
 `
 export const ReviewerFindManyReviewByProjectDocument = gql`
   query reviewerFindManyReviewByProject($input: ReviewerFindManyReviewByProjectInput!) {
@@ -5928,13 +6415,14 @@ const LoginDocumentString = print(LoginDocument)
 const LogoutDocumentString = print(LogoutDocument)
 const RegisterDocumentString = print(RegisterDocument)
 const MeDocumentString = print(MeDocument)
-const UserFindManyCommentDocumentString = print(UserFindManyCommentDocument)
-const UserCreateCommentDocumentString = print(UserCreateCommentDocument)
-const UserUpdateCommentDocumentString = print(UserUpdateCommentDocument)
-const UserDeleteCommentDocumentString = print(UserDeleteCommentDocument)
+const ReviewerFindManyCommentDocumentString = print(ReviewerFindManyCommentDocument)
+const ReviewerCreateCommentDocumentString = print(ReviewerCreateCommentDocument)
+const ReviewerUpdateCommentDocumentString = print(ReviewerUpdateCommentDocument)
+const ReviewerDeleteCommentDocumentString = print(ReviewerDeleteCommentDocument)
 const AdminFindManyCommentDocumentString = print(AdminFindManyCommentDocument)
 const AdminUpdateCommentDocumentString = print(AdminUpdateCommentDocument)
 const AdminDeleteCommentDocumentString = print(AdminDeleteCommentDocument)
+const ManagerFindManyCommentDocumentString = print(ManagerFindManyCommentDocument)
 const UserFindManyCommunityDocumentString = print(UserFindManyCommunityDocument)
 const UserFindOneCommunityDocumentString = print(UserFindOneCommunityDocument)
 const ManagerGetCommunityManagersDocumentString = print(ManagerGetCommunityManagersDocument)
@@ -6007,13 +6495,14 @@ const ManagerAddProjectReviewerDocumentString = print(ManagerAddProjectReviewerD
 const ManagerRemoveProjectReviewerDocumentString = print(ManagerRemoveProjectReviewerDocument)
 const ManagerAddProjectReferralDocumentString = print(ManagerAddProjectReferralDocument)
 const ManagerRemoveProjectReferralDocumentString = print(ManagerRemoveProjectReferralDocument)
-const UserFindManyRatingDocumentString = print(UserFindManyRatingDocument)
-const UserCreateRatingDocumentString = print(UserCreateRatingDocument)
-const UserUpdateRatingDocumentString = print(UserUpdateRatingDocument)
-const UserDeleteRatingDocumentString = print(UserDeleteRatingDocument)
+const ManagerFindManyRatingDocumentString = print(ManagerFindManyRatingDocument)
+const ManagerCreateRatingDocumentString = print(ManagerCreateRatingDocument)
+const ManagerUpdateRatingDocumentString = print(ManagerUpdateRatingDocument)
+const ManagerDeleteRatingDocumentString = print(ManagerDeleteRatingDocument)
 const AdminFindManyRatingDocumentString = print(AdminFindManyRatingDocument)
 const AdminUpdateRatingDocumentString = print(AdminUpdateRatingDocument)
 const AdminDeleteRatingDocumentString = print(AdminDeleteRatingDocument)
+const ManagerFindManyReviewByProjectDocumentString = print(ManagerFindManyReviewByProjectDocument)
 const ReviewerFindManyReviewByProjectDocumentString = print(ReviewerFindManyReviewByProjectDocument)
 const ReviewerFindManyReviewByUsernameDocumentString = print(ReviewerFindManyReviewByUsernameDocument)
 const ReviewerFindUserProjectReviewDocumentString = print(ReviewerFindUserProjectReviewDocument)
@@ -6096,11 +6585,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
-    userFindManyComment(
-      variables: UserFindManyCommentQueryVariables,
+    reviewerFindManyComment(
+      variables: ReviewerFindManyCommentQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: UserFindManyCommentQuery
+      data: ReviewerFindManyCommentQuery
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -6108,20 +6597,20 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<UserFindManyCommentQuery>(UserFindManyCommentDocumentString, variables, {
+          client.rawRequest<ReviewerFindManyCommentQuery>(ReviewerFindManyCommentDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'userFindManyComment',
+        'reviewerFindManyComment',
         'query',
         variables,
       )
     },
-    userCreateComment(
-      variables: UserCreateCommentMutationVariables,
+    reviewerCreateComment(
+      variables: ReviewerCreateCommentMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: UserCreateCommentMutation
+      data: ReviewerCreateCommentMutation
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -6129,20 +6618,20 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<UserCreateCommentMutation>(UserCreateCommentDocumentString, variables, {
+          client.rawRequest<ReviewerCreateCommentMutation>(ReviewerCreateCommentDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'userCreateComment',
+        'reviewerCreateComment',
         'mutation',
         variables,
       )
     },
-    userUpdateComment(
-      variables: UserUpdateCommentMutationVariables,
+    reviewerUpdateComment(
+      variables: ReviewerUpdateCommentMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: UserUpdateCommentMutation
+      data: ReviewerUpdateCommentMutation
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -6150,20 +6639,20 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<UserUpdateCommentMutation>(UserUpdateCommentDocumentString, variables, {
+          client.rawRequest<ReviewerUpdateCommentMutation>(ReviewerUpdateCommentDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'userUpdateComment',
+        'reviewerUpdateComment',
         'mutation',
         variables,
       )
     },
-    userDeleteComment(
-      variables: UserDeleteCommentMutationVariables,
+    reviewerDeleteComment(
+      variables: ReviewerDeleteCommentMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: UserDeleteCommentMutation
+      data: ReviewerDeleteCommentMutation
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -6171,11 +6660,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<UserDeleteCommentMutation>(UserDeleteCommentDocumentString, variables, {
+          client.rawRequest<ReviewerDeleteCommentMutation>(ReviewerDeleteCommentDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'userDeleteComment',
+        'reviewerDeleteComment',
         'mutation',
         variables,
       )
@@ -6240,6 +6729,27 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
           }),
         'adminDeleteComment',
         'mutation',
+        variables,
+      )
+    },
+    managerFindManyComment(
+      variables: ManagerFindManyCommentQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: ManagerFindManyCommentQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<ManagerFindManyCommentQuery>(ManagerFindManyCommentDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'managerFindManyComment',
+        'query',
         variables,
       )
     },
@@ -7746,11 +8256,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
-    userFindManyRating(
-      variables: UserFindManyRatingQueryVariables,
+    managerFindManyRating(
+      variables: ManagerFindManyRatingQueryVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: UserFindManyRatingQuery
+      data: ManagerFindManyRatingQuery
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -7758,20 +8268,20 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<UserFindManyRatingQuery>(UserFindManyRatingDocumentString, variables, {
+          client.rawRequest<ManagerFindManyRatingQuery>(ManagerFindManyRatingDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'userFindManyRating',
+        'managerFindManyRating',
         'query',
         variables,
       )
     },
-    userCreateRating(
-      variables: UserCreateRatingMutationVariables,
+    managerCreateRating(
+      variables: ManagerCreateRatingMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: UserCreateRatingMutation
+      data: ManagerCreateRatingMutation
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -7779,20 +8289,20 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<UserCreateRatingMutation>(UserCreateRatingDocumentString, variables, {
+          client.rawRequest<ManagerCreateRatingMutation>(ManagerCreateRatingDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'userCreateRating',
+        'managerCreateRating',
         'mutation',
         variables,
       )
     },
-    userUpdateRating(
-      variables: UserUpdateRatingMutationVariables,
+    managerUpdateRating(
+      variables: ManagerUpdateRatingMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: UserUpdateRatingMutation
+      data: ManagerUpdateRatingMutation
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -7800,20 +8310,20 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<UserUpdateRatingMutation>(UserUpdateRatingDocumentString, variables, {
+          client.rawRequest<ManagerUpdateRatingMutation>(ManagerUpdateRatingDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'userUpdateRating',
+        'managerUpdateRating',
         'mutation',
         variables,
       )
     },
-    userDeleteRating(
-      variables: UserDeleteRatingMutationVariables,
+    managerDeleteRating(
+      variables: ManagerDeleteRatingMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: UserDeleteRatingMutation
+      data: ManagerDeleteRatingMutation
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -7821,11 +8331,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<UserDeleteRatingMutation>(UserDeleteRatingDocumentString, variables, {
+          client.rawRequest<ManagerDeleteRatingMutation>(ManagerDeleteRatingDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'userDeleteRating',
+        'managerDeleteRating',
         'mutation',
         variables,
       )
@@ -7890,6 +8400,28 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
           }),
         'adminDeleteRating',
         'mutation',
+        variables,
+      )
+    },
+    managerFindManyReviewByProject(
+      variables: ManagerFindManyReviewByProjectQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: ManagerFindManyReviewByProjectQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<ManagerFindManyReviewByProjectQuery>(
+            ManagerFindManyReviewByProjectDocumentString,
+            variables,
+            { ...requestHeaders, ...wrappedRequestHeaders },
+          ),
+        'managerFindManyReviewByProject',
+        'query',
         variables,
       )
     },
@@ -8441,6 +8973,21 @@ export function ManagerCreateProjectInputSchema(): z.ZodObject<Properties<Manage
   })
 }
 
+export function ManagerCreateRatingInputSchema(): z.ZodObject<Properties<ManagerCreateRatingInput>> {
+  return z.object({
+    commentId: z.string(),
+    content: z.string().nullish(),
+    rating: z.number(),
+  })
+}
+
+export function ManagerFindManyCommentInputSchema(): z.ZodObject<Properties<ManagerFindManyCommentInput>> {
+  return z.object({
+    projectId: z.string(),
+    search: z.string().nullish(),
+  })
+}
+
 export function ManagerFindManyCommunityInputSchema(): z.ZodObject<Properties<ManagerFindManyCommunityInput>> {
   return z.object({
     limit: z.number().nullish(),
@@ -8454,6 +9001,21 @@ export function ManagerFindManyProjectInputSchema(): z.ZodObject<Properties<Mana
     communityId: z.string().nullish(),
     limit: z.number().nullish(),
     page: z.number().nullish(),
+    search: z.string().nullish(),
+  })
+}
+
+export function ManagerFindManyRatingInputSchema(): z.ZodObject<Properties<ManagerFindManyRatingInput>> {
+  return z.object({
+    search: z.string().nullish(),
+  })
+}
+
+export function ManagerFindManyReviewByProjectInputSchema(): z.ZodObject<
+  Properties<ManagerFindManyReviewByProjectInput>
+> {
+  return z.object({
+    projectId: z.string(),
     search: z.string().nullish(),
   })
 }
@@ -8488,6 +9050,13 @@ export function ManagerUpdateProjectInputSchema(): z.ZodObject<Properties<Manage
   })
 }
 
+export function ManagerUpdateRatingInputSchema(): z.ZodObject<Properties<ManagerUpdateRatingInput>> {
+  return z.object({
+    content: z.string().nullish(),
+    rating: z.number().nullish(),
+  })
+}
+
 export function RegisterInputSchema(): z.ZodObject<Properties<RegisterInput>> {
   return z.object({
     password: z.string(),
@@ -8499,6 +9068,21 @@ export function RequestIdentityChallengeInputSchema(): z.ZodObject<Properties<Re
   return z.object({
     provider: IdentityProviderSchema,
     providerId: z.string(),
+  })
+}
+
+export function ReviewerCreateCommentInputSchema(): z.ZodObject<Properties<ReviewerCreateCommentInput>> {
+  return z.object({
+    content: z.string(),
+    parentId: z.string().nullish(),
+    reviewId: z.string(),
+  })
+}
+
+export function ReviewerFindManyCommentInputSchema(): z.ZodObject<Properties<ReviewerFindManyCommentInput>> {
+  return z.object({
+    reviewId: z.string(),
+    search: z.string().nullish(),
   })
 }
 
@@ -8530,26 +9114,9 @@ export function ReviewerFindManyReviewByUsernameInputSchema(): z.ZodObject<
   })
 }
 
-export function UserCreateCommentInputSchema(): z.ZodObject<Properties<UserCreateCommentInput>> {
+export function ReviewerUpdateCommentInputSchema(): z.ZodObject<Properties<ReviewerUpdateCommentInput>> {
   return z.object({
-    content: z.string(),
-    parentId: z.string().nullish(),
-    reviewId: z.string(),
-  })
-}
-
-export function UserCreateRatingInputSchema(): z.ZodObject<Properties<UserCreateRatingInput>> {
-  return z.object({
-    commentId: z.string(),
     content: z.string().nullish(),
-    rating: z.number(),
-  })
-}
-
-export function UserFindManyCommentInputSchema(): z.ZodObject<Properties<UserFindManyCommentInput>> {
-  return z.object({
-    reviewId: z.string(),
-    search: z.string().nullish(),
   })
 }
 
@@ -8567,30 +9134,11 @@ export function UserFindManyIdentityInputSchema(): z.ZodObject<Properties<UserFi
   })
 }
 
-export function UserFindManyRatingInputSchema(): z.ZodObject<Properties<UserFindManyRatingInput>> {
-  return z.object({
-    search: z.string().nullish(),
-  })
-}
-
 export function UserFindManyUserInputSchema(): z.ZodObject<Properties<UserFindManyUserInput>> {
   return z.object({
     limit: z.number().nullish(),
     page: z.number().nullish(),
     search: z.string().nullish(),
-  })
-}
-
-export function UserUpdateCommentInputSchema(): z.ZodObject<Properties<UserUpdateCommentInput>> {
-  return z.object({
-    content: z.string().nullish(),
-  })
-}
-
-export function UserUpdateRatingInputSchema(): z.ZodObject<Properties<UserUpdateRatingInput>> {
-  return z.object({
-    content: z.string().nullish(),
-    rating: z.number().nullish(),
   })
 }
 

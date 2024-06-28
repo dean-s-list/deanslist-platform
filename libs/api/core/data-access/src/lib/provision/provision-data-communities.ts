@@ -1,5 +1,4 @@
-import { ProjectStatus } from '@deanslist-platform/sdk'
-import { Prisma } from '@prisma/client'
+import { Prisma, ProjectStatus } from '@prisma/client'
 
 const avatarDeansList = 'https://avatars.githubusercontent.com/u/137821488?v=4'
 

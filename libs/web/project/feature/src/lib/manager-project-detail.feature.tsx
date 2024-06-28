@@ -2,11 +2,12 @@ import { CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
 import { useManagerFindOneProject } from '@deanslist-platform/web-project-data-access'
 import { ProjectUiItem } from '@deanslist-platform/web-project-ui'
 import { Group, Paper } from '@mantine/core'
-import { UiAlert, UiError, UiGroup, UiLoader, UiStack, UiTabRoute, UiTabRoutes } from '@pubkey-ui/core'
+import { UiError, UiLoader, UiStack, UiTabRoute, UiTabRoutes } from '@pubkey-ui/core'
 import { useParams } from 'react-router-dom'
 import { ManagerProjectDetailChannelsTab } from './manager-project-detail-channels-tab'
+import { ManagerProjectDetailPayoutsTab, ManagerProjectDetailRatingsTab } from './manager-project-detail-payouts-tab'
+import { ManagerProjectDetailSettingsTab } from './manager-project-detail-settings-tab'
 import { ManagerProjectDetailTeamTab } from './manager-project-detail-team-tab'
-import { ManagerProjectSettingsTab } from './manager-project-settings-tab'
 
 export function ManagerProjectDetailFeature() {
   const { projectId } = useParams<{ projectId: string }>() as { projectId: string }
@@ -16,11 +17,11 @@ export function ManagerProjectDetailFeature() {
     {
       path: 'settings',
       label: 'Settings',
-      element: <ManagerProjectSettingsTab projectId={projectId} />,
+      element: <ManagerProjectDetailSettingsTab projectId={projectId} />,
     },
     { path: 'team', label: 'Team', element: <ManagerProjectDetailTeamTab projectId={projectId} /> },
-    { path: 'rating', label: 'Rating', element: <UiAlert message="Coming soon." /> },
-    { path: 'payout', label: 'Payout', element: <UiAlert message="Coming soon." /> },
+    { path: 'rating', label: 'Rating', element: <ManagerProjectDetailRatingsTab projectId={projectId} /> },
+    { path: 'payouts', label: 'Payouts', element: <ManagerProjectDetailPayoutsTab projectId={projectId} /> },
     { path: 'channels', label: '', element: <ManagerProjectDetailChannelsTab projectId={projectId} /> },
   ]
 
@@ -33,18 +34,10 @@ export function ManagerProjectDetailFeature() {
 
   return (
     <UiStack gap="xl" mt="sm">
-      <Paper radius="lg" withBorder p="lg" bg="dark.7">
-        <UiStack>
-          <UiGroup>
-            <Group>
-              <ProjectUiItem project={item} />
-            </Group>
-            <Group gap="xs">
-              <CoreUiDebugModal data={item} />
-            </Group>
-          </UiGroup>
-        </UiStack>
-      </Paper>
+      <Group>
+        <ProjectUiItem project={item} />
+        <CoreUiDebugModal data={item} />
+      </Group>
       <Paper radius="lg" withBorder p="lg" bg="dark.7">
         <UiTabRoutes variant="pills" radius="xl" tabs={tabs} />
       </Paper>

@@ -1,5 +1,5 @@
 import { AdminUpdateProjectInput, getEnumOptions, Project, ProjectStatus } from '@deanslist-platform/sdk'
-import { Button, Checkbox, Fieldset, Group, NumberInput, Select, TagsInput, Textarea, TextInput } from '@mantine/core'
+import { Button, Fieldset, Group, NumberInput, Select, TagsInput, Textarea, TextInput } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { useForm } from '@mantine/form'
 import { UiStack } from '@pubkey-ui/core'
@@ -22,7 +22,6 @@ export function AdminProjectUiUpdateForm({
       amountManagerUsd: project.amountManagerUsd ?? 0,
       amountReferralUsd: project.amountReferralUsd ?? 0,
       amountTotalUsd: project.amountTotalUsd ?? 0,
-      reviewsOpen: project.reviewsOpen ?? true,
       instructions: project.instructions ?? '',
     },
 
@@ -86,11 +85,6 @@ export function AdminProjectUiUpdateForm({
                 placeholder="Status"
                 data={[...getEnumOptions(ProjectStatus)]}
                 {...form.getInputProps('status')}
-              />
-              <Checkbox
-                label="Reviews open"
-                description="If checked, reviews can be created by anyone."
-                {...form.getInputProps('reviewsOpen', { type: 'checkbox' })}
               />
               <Textarea
                 withAsterisk

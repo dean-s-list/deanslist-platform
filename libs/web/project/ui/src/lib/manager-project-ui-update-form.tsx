@@ -1,24 +1,8 @@
-import { getEnumOptions, ManagerUpdateProjectInput, Project, ProjectStatus, type User } from '@deanslist-platform/sdk'
-import { UserUiItem, UserUiSearch } from '@deanslist-platform/web-user-ui'
-import {
-  ActionIcon,
-  Button,
-  Checkbox,
-  Fieldset,
-  Group,
-  NumberInput,
-  Select,
-  Table,
-  TagsInput,
-  Textarea,
-  TextInput,
-  UnstyledButton,
-} from '@mantine/core'
+import { getEnumOptions, ManagerUpdateProjectInput, Project, ProjectStatus } from '@deanslist-platform/sdk'
+import { Button, Fieldset, Group, Select, SimpleGrid, TagsInput, Textarea, TextInput } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { useForm } from '@mantine/form'
 import { UiStack } from '@pubkey-ui/core'
-import { IconTrash } from '@tabler/icons-react'
-import { useState } from 'react'
 
 export function ManagerProjectUiUpdateForm({
   submit,
@@ -29,12 +13,8 @@ export function ManagerProjectUiUpdateForm({
 }) {
   const form = useForm<ManagerUpdateProjectInput>({
     initialValues: {
-      amountManagerUsd: project.amountManagerUsd ?? 0,
-      amountReferralUsd: project.amountReferralUsd ?? 0,
-      amountTotalUsd: project.amountTotalUsd ?? 0,
       avatarUrl: project.avatarUrl ?? '',
       duration: project.duration ?? 2,
-      reviewsOpen: project.reviewsOpen ?? true,
       instructions: project.instructions ?? '',
       linkDiscord: project.linkDiscord ?? '',
       linkGithub: project.linkGithub ?? '',
@@ -73,173 +53,112 @@ export function ManagerProjectUiUpdateForm({
         )}
       >
         <UiStack>
-          <Fieldset legend="General information">
-            <UiStack>
-              <TextInput
-                withAsterisk
-                label="Slug"
-                description="The slug is a unique identifier for the project and cannot be changed."
-                disabled
-                defaultValue={project.slug}
-              />
-              <TextInput
-                withAsterisk
-                label="Name"
-                placeholder="Name"
-                description="The name of the project must be unique within the community."
-                {...form.getInputProps('name')}
-              />
-              <TextInput
-                label="Avatar URL"
-                placeholder="Avatar URL"
-                description="The URL of the project's avatar image. Leave blank to use the default avatar."
-                {...form.getInputProps('avatarUrl')}
-              />
-              <TagsInput
-                maxTags={2}
-                label="Tags"
-                placeholder="Tags"
-                description="Tags are used to categorize projects. You can use up to 2 tags."
-                {...form.getInputProps('tags')}
-              />
-              <Select
-                label="Status"
-                placeholder="Status"
-                data={[...getEnumOptions(ProjectStatus)]}
-                {...form.getInputProps('status')}
-              />
-              <Checkbox
-                label="Reviews open"
-                description="If checked, reviews can be created by anyone."
-                {...form.getInputProps('reviewsOpen', { type: 'checkbox' })}
-              />
-              <Textarea
-                withAsterisk
-                rows={5}
-                autosize
-                label="Instructions"
-                placeholder="Write instructions for the project. You can use markdown."
-                description="The instructions for the project."
-                {...form.getInputProps('instructions')}
-              />
-            </UiStack>
-          </Fieldset>
+          <SimpleGrid cols={{ base: 1, md: 2 }}>
+            <Fieldset legend="General information">
+              <UiStack>
+                <TextInput
+                  withAsterisk
+                  label="Slug"
+                  description="The slug is a unique identifier for the project and cannot be changed."
+                  disabled
+                  defaultValue={project.slug}
+                />
+                <TextInput
+                  withAsterisk
+                  label="Name"
+                  placeholder="Name"
+                  description="The name of the project must be unique within the community."
+                  {...form.getInputProps('name')}
+                />
+                <TagsInput
+                  maxTags={2}
+                  label="Tags"
+                  placeholder="Tags"
+                  description="Tags are used to categorize projects. You can use up to 2 tags."
+                  {...form.getInputProps('tags')}
+                />
+                <Select
+                  label="Status"
+                  placeholder="Status"
+                  description="The status of the project. Only Active projects can be reviewed."
+                  data={[...getEnumOptions(ProjectStatus)]}
+                  {...form.getInputProps('status')}
+                />
+                <Textarea
+                  withAsterisk
+                  rows={5}
+                  autosize
+                  label="Instructions"
+                  placeholder="Write instructions for the project. You can use markdown."
+                  description="The instructions for the project."
+                  {...form.getInputProps('instructions')}
+                />
+              </UiStack>
+            </Fieldset>
+            <Fieldset legend="Links">
+              <UiStack>
+                <TextInput
+                  label="Avatar URL"
+                  placeholder="Avatar URL"
+                  description="The URL of the project's avatar image. Leave blank to use the default avatar."
+                  {...form.getInputProps('avatarUrl')}
+                />
+                <TextInput
+                  label="Discord"
+                  placeholder="Discord link"
+                  description="Link to an invite to the Discord server."
+                  {...form.getInputProps('linkDiscord')}
+                />
+                <TextInput
+                  label="Github"
+                  description="Link to the project's Github repository."
+                  placeholder="Github link"
+                  {...form.getInputProps('linkGithub')}
+                />
+                <TextInput
+                  label="Telegram"
+                  description="Link to the project's Telegram channel."
+                  placeholder="Telegram link"
+                  {...form.getInputProps('linkTelegram')}
+                />
+                <TextInput
+                  label="X"
+                  description="Link to the project's X (formerly Twitter) channel."
+                  placeholder="Twitter link"
+                  {...form.getInputProps('linkTwitter')}
+                />
+                <TextInput
+                  label="Website"
+                  description="Link to the project's website."
+                  placeholder="Website link"
+                  {...form.getInputProps('linkWebsite')}
+                />
+              </UiStack>
+            </Fieldset>
 
-          <Fieldset legend="Timeline">
-            <UiStack>
-              <TextInput
-                label="Duration"
-                type="number"
-                placeholder="Duration"
-                description="The duration of the project in weeks."
-                {...form.getInputProps('duration')}
-              />
-              <DateInput
-                label="Start Date"
-                placeholder="Start Date"
-                description="The start date of the project."
-                {...form.getInputProps('startDate')}
-              />
-            </UiStack>
-          </Fieldset>
-
-          <Fieldset legend="Amounts">
-            <UiStack>
-              <NumberInput
-                label="Total Amount"
-                placeholder="Amount of USDC managers get"
-                {...form.getInputProps('amountTotalUsd')}
-              />
-              <NumberInput
-                label="Manager Amount"
-                placeholder="Amount of USDC managers get"
-                {...form.getInputProps('amountManagerUsd')}
-              />
-              <NumberInput
-                label="Referral Amount"
-                placeholder="Amount of USDC the referral gets"
-                {...form.getInputProps('amountReferralUsd')}
-              />
-            </UiStack>
-          </Fieldset>
-          <Fieldset legend="Links">
-            <UiStack>
-              <TextInput label="Discord" placeholder="Discord link" {...form.getInputProps('linkDiscord')} />
-              <TextInput label="Github" placeholder="Github link" {...form.getInputProps('linkGithub')} />
-              <TextInput label="Telegram" placeholder="Telegram link" {...form.getInputProps('linkTelegram')} />
-              <TextInput label="Twitter" placeholder="Twitter link" {...form.getInputProps('linkTwitter')} />
-              <TextInput label="Website" placeholder="Website link" {...form.getInputProps('linkWebsite')} />
-            </UiStack>
-          </Fieldset>
+            <Fieldset legend="Timeline">
+              <UiStack>
+                <TextInput
+                  label="Duration"
+                  type="number"
+                  placeholder="Duration"
+                  description="The duration of the project in weeks."
+                  {...form.getInputProps('duration')}
+                />
+                <DateInput
+                  label="Start Date"
+                  placeholder="Start Date"
+                  description="The start date of the project."
+                  {...form.getInputProps('startDate')}
+                />
+              </UiStack>
+            </Fieldset>
+          </SimpleGrid>
           <Group justify="flex-end" mt="md">
             <Button type="submit">Save</Button>
           </Group>
         </UiStack>
       </form>
-    </UiStack>
-  )
-}
-
-export function ProjectUiMemberTable(props: {
-  users: User[]
-  delete: (userId: string) => Promise<boolean | null | undefined>
-}) {
-  if (!props.users?.length) {
-    return null
-  }
-  return (
-    <Table>
-      <Table.Tbody>
-        {props.users?.map((user) => (
-          <Table.Tr key={user.id}>
-            <Table.Td>
-              <UserUiItem user={user} />
-            </Table.Td>
-            <Table.Td align="right">
-              <ActionIcon
-                color="red"
-                variant="light"
-                size="sm"
-                onClick={() => {
-                  if (!window.confirm('Are you sure?')) return
-                  return props.delete(user.id)
-                }}
-              >
-                <IconTrash size={16} />
-              </ActionIcon>
-            </Table.Td>
-          </Table.Tr>
-        ))}
-      </Table.Tbody>
-    </Table>
-  )
-}
-
-export function ProjectUiMemberManager({
-  users,
-  addUser,
-  removeUser,
-}: {
-  users: User[]
-  addUser: (managerUserId: string) => Promise<boolean | null | undefined>
-  removeUser: (managerUserId: string) => Promise<boolean | null | undefined>
-}) {
-  const [user, setUser] = useState<User | undefined>(undefined)
-
-  return (
-    <UiStack>
-      <ProjectUiMemberTable users={users} delete={removeUser} />
-      <UserUiSearch select={setUser} />
-      {user ? (
-        <UnstyledButton
-          onClick={() => {
-            console.log(user)
-            addUser(user.id)
-          }}
-        >
-          <UserUiItem user={user} />
-        </UnstyledButton>
-      ) : null}
     </UiStack>
   )
 }

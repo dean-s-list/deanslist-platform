@@ -1,7 +1,7 @@
-import { Comment, UserCreateCommentInput } from '@deanslist-platform/sdk'
+import { Comment, ReviewerCreateCommentInput } from '@deanslist-platform/sdk'
 import { Button, ButtonProps, Group } from '@mantine/core'
 import { useState } from 'react'
-import { UserCommentUiForm } from './user-comment-ui-form'
+import { ReviewerCommentUiForm } from './reviewer-comment-ui-form'
 
 export function CommentUiFormButtons({
   label,
@@ -11,12 +11,12 @@ export function CommentUiFormButtons({
 }: ButtonProps & {
   label: string
   comment?: Comment
-  createComment: (res: UserCreateCommentInput) => Promise<boolean>
+  createComment: (res: ReviewerCreateCommentInput) => Promise<boolean>
 }) {
   const [showReply, setShowReply] = useState(false)
 
   return showReply ? (
-    <UserCommentUiForm
+    <ReviewerCommentUiForm
       cancel={() => setShowReply(false)}
       createComment={(res) => {
         return createComment({ ...res, parentId: comment?.id ?? undefined }).then((res) => {

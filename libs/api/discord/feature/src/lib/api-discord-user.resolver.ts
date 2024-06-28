@@ -1,10 +1,10 @@
-import { ApiAuthGraphQLAdminGuard } from '@deanslist-platform/api-auth-data-access'
+import { ApiAuthGraphQLUserGuard } from '@deanslist-platform/api-auth-data-access'
 import { ApiDiscordService, DiscordChannel, DiscordServer } from '@deanslist-platform/api-discord-data-access'
 import { UseGuards } from '@nestjs/common'
 import { Args, Query, Resolver } from '@nestjs/graphql'
 
 @Resolver()
-@UseGuards(ApiAuthGraphQLAdminGuard)
+@UseGuards(ApiAuthGraphQLUserGuard)
 export class ApiDiscordUserResolver {
   constructor(private readonly service: ApiDiscordService) {}
 

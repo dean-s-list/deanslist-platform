@@ -1,4 +1,4 @@
-import { UserCommentFeature } from '@deanslist-platform/web-comment-feature'
+import { ReviewerCommentFeature } from '@deanslist-platform/web-comment-feature'
 import { CoreUiBackLink, CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
 import { useReviewerFindOneReview } from '@deanslist-platform/web-review-data-access'
 import { Group } from '@mantine/core'
@@ -30,7 +30,7 @@ export function ReviewerReviewDetailFeature() {
         </Group>
       </UiGroup>
 
-      <UserCommentFeature reviewId={reviewId} />
+      <ReviewerCommentFeature reviewId={reviewId} />
     </UiStack>
   )
 }

@@ -1,6 +1,6 @@
 import { useAdminFindOneProject } from '@deanslist-platform/web-project-data-access'
-import { ProjectUiMemberManager } from '@deanslist-platform/web-project-ui'
-import { UiCard, UiError, UiLoader, UiStack } from '@pubkey-ui/core'
+import { UiCard, UiError, UiLoader } from '@pubkey-ui/core'
+import { ProjectUiTeamManager } from './manager-project-detail-team-tab'
 
 export function AdminProjectDetailTeamTab({ projectId }: { projectId: string }) {
   const {
@@ -12,6 +12,7 @@ export function AdminProjectDetailTeamTab({ projectId }: { projectId: string }) 
     removeProjectManager,
     removeProjectReviewer,
     removeProjectReferral,
+    updateProject,
   } = useAdminFindOneProject({ projectId })
 
   if (query.isLoading) {
@@ -22,28 +23,17 @@ export function AdminProjectDetailTeamTab({ projectId }: { projectId: string }) 
   }
 
   return (
-    <UiStack>
-      <UiCard title="Managers">
-        <ProjectUiMemberManager
-          users={item.managers ?? []}
-          addUser={addProjectManager}
-          removeUser={removeProjectManager}
-        />
-      </UiCard>
-      <UiCard title="Reviewers">
-        <ProjectUiMemberManager
-          users={item.reviewers ?? []}
-          addUser={addProjectReviewer}
-          removeUser={removeProjectReviewer}
-        />
-      </UiCard>
-      <UiCard title="Referral">
-        <ProjectUiMemberManager
-          users={item.referral ? [item.referral] : []}
-          addUser={addProjectReferral}
-          removeUser={removeProjectReferral}
-        />
-      </UiCard>
-    </UiStack>
+    <UiCard>
+      <ProjectUiTeamManager
+        project={item}
+        addProjectManager={addProjectManager}
+        addProjectReferral={addProjectReferral}
+        addProjectReviewer={addProjectReviewer}
+        removeProjectManager={removeProjectManager}
+        removeProjectReferral={removeProjectReferral}
+        removeProjectReviewer={removeProjectReviewer}
+        updateProject={(input) => updateProject(input, false).then(() => true)}
+      />
+    </UiCard>
   )
 }

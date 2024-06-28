@@ -1,6 +1,7 @@
 import { Project } from '@deanslist-platform/api-project-data-access'
 import { User } from '@deanslist-platform/api-user-data-access'
-import { Field, ObjectType } from '@nestjs/graphql'
+import { Field, HideField, ObjectType } from '@nestjs/graphql'
+import { Comment, Rating } from '@prisma/client'
 
 @ObjectType()
 export class Review {
@@ -18,4 +19,6 @@ export class Review {
   reviewer?: User
   @Field()
   reviewerId!: string
+  @HideField()
+  comments?: Comment & { ratings?: Rating[] }[]
 }

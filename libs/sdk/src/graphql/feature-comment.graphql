@@ -5,6 +5,7 @@ fragment CommentDetails on Comment {
   createdAt
   id
   parentId
+  ratingAverage
   reviewId
   updatedAt
   versionBrowser
@@ -14,8 +15,8 @@ fragment CommentDetails on Comment {
   }
 }
 
-query userFindManyComment($input: UserFindManyCommentInput!) {
-  items: userFindManyComment(input: $input) {
+query reviewerFindManyComment($input: ReviewerFindManyCommentInput!) {
+  items: reviewerFindManyComment(input: $input) {
     ...CommentDetails
     children {
       ...CommentDetails
@@ -23,20 +24,20 @@ query userFindManyComment($input: UserFindManyCommentInput!) {
   }
 }
 
-mutation userCreateComment($input: UserCreateCommentInput!) {
-  created: userCreateComment(input: $input) {
+mutation reviewerCreateComment($input: ReviewerCreateCommentInput!) {
+  created: reviewerCreateComment(input: $input) {
     ...CommentDetails
   }
 }
 
-mutation userUpdateComment($commentId: String!, $input: UserUpdateCommentInput!) {
-  updated: userUpdateComment(commentId: $commentId, input: $input) {
+mutation reviewerUpdateComment($commentId: String!, $input: ReviewerUpdateCommentInput!) {
+  updated: reviewerUpdateComment(commentId: $commentId, input: $input) {
     ...CommentDetails
   }
 }
 
-mutation userDeleteComment($commentId: String!) {
-  deleted: userDeleteComment(commentId: $commentId)
+mutation reviewerDeleteComment($commentId: String!) {
+  deleted: reviewerDeleteComment(commentId: $commentId)
 }
 
 query adminFindManyComment($input: AdminFindManyCommentInput!) {
@@ -56,4 +57,19 @@ mutation adminUpdateComment($commentId: String!, $input: AdminUpdateCommentInput
 
 mutation adminDeleteComment($commentId: String!) {
   deleted: adminDeleteComment(commentId: $commentId)
+}
+
+query managerFindManyComment($input: ManagerFindManyCommentInput!) {
+  items: managerFindManyComment(input: $input) {
+    ...CommentDetails
+    ratings {
+      ...RatingDetails
+    }
+    review {
+      ...ReviewDetails
+    }
+    children {
+      ...CommentDetails
+    }
+  }
 }

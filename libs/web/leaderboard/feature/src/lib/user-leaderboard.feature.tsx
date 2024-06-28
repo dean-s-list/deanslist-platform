@@ -7,6 +7,7 @@ import { Card, Center, Divider, Grid, Stack, Table, TableTbody, Title } from '@m
 import { UiPage } from '@pubkey-ui/core'
 import { Wallet } from '@solana/wallet-adapter-react'
 import { Connection } from '@solana/web3.js'
+import { IconListNumbers } from '@tabler/icons-react'
 
 export function UserLeaderboardFeature() {
   return (
@@ -33,8 +34,7 @@ function LeaderboardFeature({ wallet, connection }: { wallet: Wallet; connection
   const me = !loading && leaders?.find((l) => l.isYou)
 
   return (
-    <UiPage title="">
-      <Title>Governance Leaderboard</Title>
+    <UiPage title="Leaderboard" leftAction={<IconListNumbers size={28} />}>
       <Grid>
         <Grid.Col span={7}>
           <Card radius="lg">

@@ -1,9 +1,9 @@
-import type { Comment, UserCreateCommentInput } from '@deanslist-platform/sdk'
+import type { Comment, ReviewerCreateCommentInput } from '@deanslist-platform/sdk'
 import { Button, Group } from '@mantine/core'
 import { UiStack } from '@pubkey-ui/core'
 import { useState } from 'react'
 import { CommentUiComment } from './comment-ui-comment'
-import { UserCommentUiForm } from './user-comment-ui-form'
+import { ReviewerCommentUiForm } from './reviewer-comment-ui-form'
 
 export function CommentUiTimelineItem({
   comment,
@@ -11,7 +11,7 @@ export function CommentUiTimelineItem({
   deleteComment,
 }: {
   comment: Comment
-  createComment: (res: UserCreateCommentInput) => Promise<boolean>
+  createComment: (res: ReviewerCreateCommentInput) => Promise<boolean>
   deleteComment: (id: string) => Promise<boolean>
 }) {
   const [showReplies, setShowReplies] = useState(false)
@@ -30,7 +30,7 @@ export function CommentUiTimelineItem({
         ) : null}
 
         {showReplyForm ? (
-          <UserCommentUiForm
+          <ReviewerCommentUiForm
             cancel={() => setShowReplyForm(false)}
             createComment={(res) => {
               return createComment({ ...res, parentId: comment?.id ?? undefined }).then((res) => {

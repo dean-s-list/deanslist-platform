@@ -3,30 +3,34 @@ fragment RatingDetails on Rating {
   id
   content
   commentId
+  authorId
+  author {
+    ...UserDetails
+  }
   rating
   updatedAt
 }
 
-query userFindManyRating($input: UserFindManyRatingInput!) {
-  items: userFindManyRating(input: $input) {
+query managerFindManyRating($input: ManagerFindManyRatingInput!) {
+  items: managerFindManyRating(input: $input) {
     ...RatingDetails
   }
 }
 
-mutation userCreateRating($input: UserCreateRatingInput!) {
-  created: userCreateRating(input: $input) {
+mutation managerCreateRating($input: ManagerCreateRatingInput!) {
+  created: managerCreateRating(input: $input) {
     ...RatingDetails
   }
 }
 
-mutation userUpdateRating($ratingId: String!, $input: UserUpdateRatingInput!) {
-  updated: userUpdateRating(ratingId: $ratingId, input: $input) {
+mutation managerUpdateRating($ratingId: String!, $input: ManagerUpdateRatingInput!) {
+  updated: managerUpdateRating(ratingId: $ratingId, input: $input) {
     ...RatingDetails
   }
 }
 
-mutation userDeleteRating($ratingId: String!) {
-  deleted: userDeleteRating(ratingId: $ratingId)
+mutation managerDeleteRating($ratingId: String!) {
+  deleted: managerDeleteRating(ratingId: $ratingId)
 }
 
 query adminFindManyRating($input: AdminFindManyRatingInput!) {

@@ -1,4 +1,4 @@
-import type { CommunityManager } from '@deanslist-platform/sdk'
+import { CommunityManager } from '@deanslist-platform/sdk'
 import { useAuth } from '@deanslist-platform/web-auth-data-access'
 import { UserUiItem } from '@deanslist-platform/web-user-ui'
 import { ActionIcon, Group, Switch } from '@mantine/core'
