@@ -20,6 +20,7 @@ export class ApiCoreConfigService {
       authPasswordEnabled: this.authPasswordEnabled,
       authRegisterEnabled: this.authRegisterEnabled,
       authSolanaEnabled: this.authSolanaEnabled,
+      solanaMainnetUrl: this.solanaMainnetUrl,
     }
   }
 
@@ -145,6 +146,10 @@ export class ApiCoreConfigService {
 
   get sessionSecret() {
     return this.service.get<string>('sessionSecret') as string
+  }
+
+  get solanaMainnetUrl() {
+    return this.service.get<string>('solanaMainnetUrl') as string
   }
 
   get webUrl(): string {

@@ -135,6 +135,7 @@ export type AppConfig = {
   authPasswordEnabled: Scalars['Boolean']['output']
   authRegisterEnabled: Scalars['Boolean']['output']
   authSolanaEnabled: Scalars['Boolean']['output']
+  solanaMainnetUrl: Scalars['String']['output']
 }
 
 export type Comment = {
@@ -2324,6 +2325,7 @@ export type AppConfigDetailsFragment = {
   authPasswordEnabled: boolean
   authRegisterEnabled: boolean
   authSolanaEnabled: boolean
+  solanaMainnetUrl: string
 }
 
 export type PagingMetaDetailsFragment = {
@@ -2351,6 +2353,7 @@ export type AppConfigQuery = {
     authPasswordEnabled: boolean
     authRegisterEnabled: boolean
     authSolanaEnabled: boolean
+    solanaMainnetUrl: string
   }
 }
 
@@ -5367,6 +5370,7 @@ export const AppConfigDetailsFragmentDoc = gql`
     authPasswordEnabled
     authRegisterEnabled
     authSolanaEnabled
+    solanaMainnetUrl
   }
 `
 export const PagingMetaDetailsFragmentDoc = gql`

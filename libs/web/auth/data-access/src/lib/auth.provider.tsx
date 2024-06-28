@@ -25,6 +25,7 @@ export interface AuthProviderContext extends AuthState {
   isAdmin: boolean
   isManager: boolean
   isOnboarded: boolean
+  solanaRpcUrl: string
   loading: boolean
   login: (input: LoginInput) => Promise<User | undefined>
   logout: () => Promise<boolean | undefined>
@@ -119,6 +120,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const isAdmin = state.user?.role === UserRole.Admin
   const isManager = state.user?.manager || isAdmin
 
+  const solanaRpcUrl = configQuery.data?.config?.solanaMainnetUrl ?? 'http://localhost:8899'
   const value: AuthProviderContext = {
     appConfig: configQuery.data?.config,
     appConfigLoading: configQuery.isLoading,
@@ -132,6 +134,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     isAdmin,
     isManager,
     user: state.user,
+    solanaRpcUrl,
     status: state.status,
     loading: state.status === 'loading',
 
