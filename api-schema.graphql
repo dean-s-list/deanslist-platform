@@ -112,6 +112,7 @@ type AppConfig {
   authPasswordEnabled: Boolean!
   authRegisterEnabled: Boolean!
   authSolanaEnabled: Boolean!
+  solanaMainnetUrl: String!
 }
 
 type Comment {

@@ -3,6 +3,7 @@ fragment AppConfigDetails on AppConfig {
   authPasswordEnabled
   authRegisterEnabled
   authSolanaEnabled
+  solanaMainnetUrl
 }
 
 fragment PagingMetaDetails on PagingMeta {

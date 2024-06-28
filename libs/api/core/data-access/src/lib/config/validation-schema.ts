@@ -25,5 +25,6 @@ export const validationSchema = Joi.object({
   NODE_ENV: Joi.string().valid('development', 'production', 'test', 'provision').default('development'),
   PORT: Joi.number().default(3000),
   SESSION_SECRET: Joi.string().required(),
+  SOLANA_MAINNET_URL: Joi.string().required(),
   SYNC_DRY_RUN: Joi.boolean().default(false),
 })
