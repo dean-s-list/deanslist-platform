@@ -2,12 +2,11 @@ import { ApiAuthGraphQLUserGuard, CtxUserId } from '@deanslist-platform/api-auth
 import {
   ApiRatingService,
   ManagerCreateRatingInput,
-  ManagerFindManyRatingInput,
   ManagerUpdateRatingInput,
   Rating,
 } from '@deanslist-platform/api-rating-data-access'
 import { UseGuards } from '@nestjs/common'
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
 
 @Resolver()
 @UseGuards(ApiAuthGraphQLUserGuard)
@@ -22,11 +21,6 @@ export class ApiRatingManagerResolver {
   @Mutation(() => Boolean, { nullable: true })
   managerDeleteRating(@CtxUserId() userId: string, @Args('ratingId') ratingId: string) {
     return this.service.manager.deleteRating(userId, ratingId)
-  }
-
-  @Query(() => [Rating])
-  managerFindManyRating(@Args('input') input: ManagerFindManyRatingInput) {
-    return this.service.manager.findManyRating(input)
   }
 
   @Mutation(() => Rating, { nullable: true })

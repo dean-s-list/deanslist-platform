@@ -1,5 +1,5 @@
-import { ApiCoreService } from '@deanslist-platform/api-core-data-access'
 import { CommunityCreatedEvent, CommunityDeletedEvent } from '@deanslist-platform/api-community-data-access'
+import { ApiCoreService } from '@deanslist-platform/api-core-data-access'
 import { Injectable, Logger } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 import { MessageCreateOptions } from 'discord.js'
@@ -12,6 +12,10 @@ export class ApiDiscordEventCommunityService {
 
   @OnEvent(CommunityCreatedEvent.event, { async: true })
   async handleCommunityCreatedEvent(payload: CommunityCreatedEvent) {
+    if (!this.core.config.discordBotToken) {
+      this.logger.warn(`handleProjectCreatedEvent: Discord bot disabled`)
+      return
+    }
     this.logger.debug(
       `Received ${CommunityCreatedEvent.event} event [${payload.community.id}] ${payload.community.name}`,
     )

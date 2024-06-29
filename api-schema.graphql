@@ -291,10 +291,6 @@ input ManagerFindManyProjectInput {
   search: String
 }
 
-input ManagerFindManyRatingInput {
-  search: String
-}
-
 input ManagerFindManyReviewByProjectInput {
   projectId: String!
   search: String
@@ -473,7 +469,6 @@ type Query {
   managerFindManyComment(input: ManagerFindManyCommentInput!): [Comment!]
   managerFindManyCommunity(input: ManagerFindManyCommunityInput!): CommunityPaging!
   managerFindManyProject(input: ManagerFindManyProjectInput!): ProjectPaging!
-  managerFindManyRating(input: ManagerFindManyRatingInput!): [Rating!]!
   managerFindManyReviewByProject(input: ManagerFindManyReviewByProjectInput!): [Review!]
   managerFindOneCommunity(communityId: String!): Community
   managerFindOneProject(projectId: String!): Project

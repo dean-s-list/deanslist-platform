@@ -1,8 +1,8 @@
 import {
   Community,
-  UserCreateCommunityInput,
+  ManagerCreateCommunityInput,
+  ManagerUpdateCommunityInput,
   UserFindManyCommunityInput,
-  UserUpdateCommunityInput,
 } from '@deanslist-platform/sdk'
 import { getAliceCookie, getBobCookie, sdk, uniqueId } from '../support'
 
@@ -16,7 +16,7 @@ describe('api-community-feature', () => {
 
     describe('authorized', () => {
       it('should create a community', async () => {
-        const input: UserCreateCommunityInput = {
+        const input: ManagerCreateCommunityInput = {
           name: uniqueId('community'),
         }
 
@@ -30,21 +30,21 @@ describe('api-community-feature', () => {
       })
 
       it('should update a community', async () => {
-        const createInput: UserCreateCommunityInput = {
+        const createInput: ManagerCreateCommunityInput = {
           name: uniqueId('community'),
         }
         const createdRes = await sdk.managerCreateCommunity({ input: createInput }, { cookie: alice })
         const communityId = createdRes.data.created.id
-        const input: UserUpdateCommunityInput = { name: uniqueId('community') }
+        const input: ManagerUpdateCommunityInput = { name: uniqueId('community') }
 
-        const res = await sdk.userUpdateCommunity({ communityId, input }, { cookie: alice })
+        const res = await sdk.managerUpdateCommunity({ communityId, input }, { cookie: alice })
 
         const item: Community = res.data.updated
         expect(item.name).toBe(input.name)
       })
 
       it('should find a list of communities (find all)', async () => {
-        const createInput: UserCreateCommunityInput = {
+        const createInput: ManagerCreateCommunityInput = {
           name: uniqueId('community'),
         }
         const createdRes = await sdk.managerCreateCommunity({ input: createInput }, { cookie: alice })
@@ -61,7 +61,7 @@ describe('api-community-feature', () => {
       })
 
       it('should find a list of communities (find new one)', async () => {
-        const createInput: UserCreateCommunityInput = {
+        const createInput: ManagerCreateCommunityInput = {
           name: uniqueId('community'),
         }
         const createdRes = await sdk.managerCreateCommunity({ input: createInput }, { cookie: alice })
@@ -79,7 +79,7 @@ describe('api-community-feature', () => {
       })
 
       it('should find a community by id', async () => {
-        const createInput: UserCreateCommunityInput = {
+        const createInput: ManagerCreateCommunityInput = {
           name: uniqueId('community'),
         }
         const createdRes = await sdk.managerCreateCommunity({ input: createInput }, { cookie: alice })
@@ -91,7 +91,7 @@ describe('api-community-feature', () => {
       })
 
       it('should delete a community', async () => {
-        const createInput: UserCreateCommunityInput = {
+        const createInput: ManagerCreateCommunityInput = {
           name: uniqueId('community'),
         }
         const createdRes = await sdk.managerCreateCommunity({ input: createInput }, { cookie: alice })
@@ -121,7 +121,7 @@ describe('api-community-feature', () => {
 
       it('should not create a community', async () => {
         expect.assertions(1)
-        const input: UserCreateCommunityInput = { name: uniqueId('community') }
+        const input: ManagerCreateCommunityInput = { name: uniqueId('community') }
 
         try {
           await sdk.managerCreateCommunity({ input }, { cookie: bob })
@@ -135,7 +135,7 @@ describe('api-community-feature', () => {
         try {
           await sdk.managerUpdateCommunity({ communityId: aliceCommunityId, input: { name: 'test' } }, { cookie: bob })
         } catch (e) {
-          expect(e.message).toBe('You are not a community admin')
+          expect(e.message).toBe('You are not a community manager')
         }
       })
 
@@ -144,7 +144,7 @@ describe('api-community-feature', () => {
         try {
           await sdk.managerDeleteCommunity({ communityId: aliceCommunityId }, { cookie: bob })
         } catch (e) {
-          expect(e.message).toBe('You are not a community admin')
+          expect(e.message).toBe('You are not a community manager')
         }
       })
 
@@ -153,7 +153,7 @@ describe('api-community-feature', () => {
         try {
           await sdk.managerAddCommunityManager({ communityId: aliceCommunityId, userId: 'bob' }, { cookie: bob })
         } catch (e) {
-          expect(e.message).toBe('You are not a community admin')
+          expect(e.message).toBe('You are not a community manager')
         }
       })
 
@@ -162,7 +162,7 @@ describe('api-community-feature', () => {
         try {
           await sdk.managerRemoveCommunityManager({ communityId: aliceCommunityId, userId: 'bob' }, { cookie: bob })
         } catch (e) {
-          expect(e.message).toBe('You are not a community admin')
+          expect(e.message).toBe('You are not a community manager')
         }
       })
     })

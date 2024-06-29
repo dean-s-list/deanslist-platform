@@ -5,6 +5,10 @@ import { breakStringSolana } from '../support/break-string'
 
 describe('api-identity-feature', () => {
   describe('api-identity-user-resolver', () => {
+    let aliceCookie: string | null
+    beforeAll(async () => {
+      aliceCookie = await getAliceCookie()
+    })
     it('should run getIdentityVerificationChallenge', async () => {
       const res = await getIdentityChallenge(alice)
 
@@ -16,13 +20,12 @@ describe('api-identity-feature', () => {
     })
 
     it('should fail getIdentityVerificationChallenge with wrong provider', async () => {
-      const cookie = await getAliceCookie()
       expect.assertions(1)
 
       try {
         await sdk.userRequestIdentityChallenge(
           { input: { provider: IdentityProvider.Discord, providerId: alice.solana.publicKey } },
-          { cookie },
+          { cookie: aliceCookie },
         )
       } catch (e) {
         expect(e.message).toEqual('Identity provider Discord not supported')
@@ -30,13 +33,12 @@ describe('api-identity-feature', () => {
     })
 
     it('should fail getIdentityVerificationChallenge with wrong providerId', async () => {
-      const cookie = await getAliceCookie()
       expect.assertions(1)
 
       try {
         await sdk.userRequestIdentityChallenge(
           { input: { provider: IdentityProvider.Solana, providerId: 'test' } },
-          { cookie },
+          { cookie: aliceCookie },
         )
       } catch (e) {
         expect(e.message).toEqual('Invalid Solana public key.')
@@ -50,7 +52,6 @@ describe('api-identity-feature', () => {
       const signature = await signMessage(alice, challenge)
 
       // Sign the challenge
-      const cookie = await getAliceCookie()
       const res = await sdk.userVerifyIdentityChallenge(
         {
           input: {
@@ -60,7 +61,7 @@ describe('api-identity-feature', () => {
             signature: bs58.encode(signature),
           },
         },
-        { cookie },
+        { cookie: aliceCookie },
       )
 
       expect(res.data?.verified.provider).toEqual(IdentityProvider.Solana)
@@ -77,7 +78,6 @@ describe('api-identity-feature', () => {
       const signature = await signMessage(alice, challenge)
 
       // Sign the challenge
-      const cookie = await getAliceCookie()
       expect.assertions(1)
       try {
         await sdk.userVerifyIdentityChallenge(
@@ -89,7 +89,7 @@ describe('api-identity-feature', () => {
               signature: bs58.encode(signature),
             },
           },
-          { cookie },
+          { cookie: aliceCookie },
         )
       } catch (e) {
         expect(e.message).toContain('Identity challenge not found.')
@@ -103,7 +103,7 @@ describe('api-identity-feature', () => {
       const signature = await signMessage(alice, challenge)
 
       // Sign the challenge
-      const cookie = await getAliceCookie()
+
       expect.assertions(1)
       try {
         await sdk.userVerifyIdentityChallenge(
@@ -116,7 +116,7 @@ describe('api-identity-feature', () => {
               signature: breakStringSolana(bs58.encode(signature)),
             },
           },
-          { cookie },
+          { cookie: aliceCookie },
         )
       } catch (e) {
         expect(e.message).toContain('Signature verification failed')

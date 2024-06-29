@@ -9,7 +9,7 @@ describe('api-community-feature', () => {
     beforeAll(async () => {
       alice = await getAliceCookie()
       communityId = await sdk
-        .userCreateCommunity({ input: { name: uniqueId('community') } }, { cookie: alice })
+        .managerCreateCommunity({ input: { name: uniqueId('community') } }, { cookie: alice })
         .then((res) => res.data.created.id)
     })
 

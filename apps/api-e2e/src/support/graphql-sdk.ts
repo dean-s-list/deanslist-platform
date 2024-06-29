@@ -1,17 +1,19 @@
 import { getGraphQLSdk, IdentityProvider, Sdk } from '@deanslist-platform/sdk'
 import { Keypair } from '@solana/web3.js'
 import * as nacl from 'tweetnacl'
+import { CookieJar } from './cookie-jar'
 import { getApiUrl } from './get-api.url'
 import { alice, bob, TestUser } from './user-identities'
 
 export const sdk: Sdk = getGraphQLSdk(getApiUrl('/graphql'))
 
 async function getUserCookie(user: TestUser) {
-  const res = await sdk.login({
-    input: { username: user.username, password: user.password },
-  })
-
-  return res.headers.get('set-cookie')
+  const found = CookieJar.getCookie(user.username)
+  if (!found) {
+    const res = await sdk.login({ input: { username: user.username, password: user.password } })
+    return CookieJar.setCookie(user.username, res.headers.get('set-cookie'))
+  }
+  return found
 }
 
 export async function getAliceCookie() {

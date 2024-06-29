@@ -20,6 +20,7 @@ export function IdentityProviderSolanaLink({ children, refresh }: { children: Re
   const sdk = useSdk()
   const { signMessage } = useWallet()
   const createSignature = useCreateSignature()
+
   async function linkIdentity({ publicKey }: { publicKey: string }) {
     return sdk
       .userLinkIdentity({ input: { provider: IdentityProvider.Solana, providerId: publicKey } })

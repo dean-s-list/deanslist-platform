@@ -12,6 +12,7 @@ export function getCommentWhereManagerInput(input: ManagerFindManyCommentInput):
       { id: { contains: input.search, mode: 'insensitive' } },
       { content: { contains: input.search, mode: 'insensitive' } },
       { author: { username: { contains: input.search, mode: 'insensitive' } } },
+      { ratings: { some: { id: { contains: input.search, mode: 'insensitive' } } } },
       { ratings: { some: { content: { contains: input.search, mode: 'insensitive' } } } },
       { ratings: { some: { author: { username: { contains: input.search, mode: 'insensitive' } } } } },
     ]

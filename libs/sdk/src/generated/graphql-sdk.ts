@@ -314,10 +314,6 @@ export type ManagerFindManyProjectInput = {
   search?: InputMaybe<Scalars['String']['input']>
 }
 
-export type ManagerFindManyRatingInput = {
-  search?: InputMaybe<Scalars['String']['input']>
-}
-
 export type ManagerFindManyReviewByProjectInput = {
   projectId: Scalars['String']['input']
   search?: InputMaybe<Scalars['String']['input']>
@@ -780,7 +776,6 @@ export type Query = {
   managerFindManyComment?: Maybe<Array<Comment>>
   managerFindManyCommunity: CommunityPaging
   managerFindManyProject: ProjectPaging
-  managerFindManyRating: Array<Rating>
   managerFindManyReviewByProject?: Maybe<Array<Review>>
   managerFindOneCommunity?: Maybe<Community>
   managerFindOneProject?: Maybe<Project>
@@ -884,10 +879,6 @@ export type QueryManagerFindManyCommunityArgs = {
 
 export type QueryManagerFindManyProjectArgs = {
   input: ManagerFindManyProjectInput
-}
-
-export type QueryManagerFindManyRatingArgs = {
-  input: ManagerFindManyRatingInput
 }
 
 export type QueryManagerFindManyReviewByProjectArgs = {
@@ -3909,39 +3900,6 @@ export type RatingDetailsFragment = {
   } | null
 }
 
-export type ManagerFindManyRatingQueryVariables = Exact<{
-  input: ManagerFindManyRatingInput
-}>
-
-export type ManagerFindManyRatingQuery = {
-  __typename?: 'Query'
-  items: Array<{
-    __typename?: 'Rating'
-    createdAt?: Date | null
-    id: string
-    content?: string | null
-    commentId: string
-    authorId: string
-    rating: number
-    updatedAt?: Date | null
-    author?: {
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
-      id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
-      updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
-    } | null
-  }>
-}
-
 export type ManagerCreateRatingMutationVariables = Exact<{
   input: ManagerCreateRatingInput
 }>
@@ -6199,14 +6157,6 @@ export const ManagerRemoveProjectReferralDocument = gql`
     removed: managerRemoveProjectReferral(projectId: $projectId, referralUserId: $referralUserId)
   }
 `
-export const ManagerFindManyRatingDocument = gql`
-  query managerFindManyRating($input: ManagerFindManyRatingInput!) {
-    items: managerFindManyRating(input: $input) {
-      ...RatingDetails
-    }
-  }
-  ${RatingDetailsFragmentDoc}
-`
 export const ManagerCreateRatingDocument = gql`
   mutation managerCreateRating($input: ManagerCreateRatingInput!) {
     created: managerCreateRating(input: $input) {
@@ -6499,7 +6449,6 @@ const ManagerAddProjectReviewerDocumentString = print(ManagerAddProjectReviewerD
 const ManagerRemoveProjectReviewerDocumentString = print(ManagerRemoveProjectReviewerDocument)
 const ManagerAddProjectReferralDocumentString = print(ManagerAddProjectReferralDocument)
 const ManagerRemoveProjectReferralDocumentString = print(ManagerRemoveProjectReferralDocument)
-const ManagerFindManyRatingDocumentString = print(ManagerFindManyRatingDocument)
 const ManagerCreateRatingDocumentString = print(ManagerCreateRatingDocument)
 const ManagerUpdateRatingDocumentString = print(ManagerUpdateRatingDocument)
 const ManagerDeleteRatingDocumentString = print(ManagerDeleteRatingDocument)
@@ -8260,27 +8209,6 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
-    managerFindManyRating(
-      variables: ManagerFindManyRatingQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: ManagerFindManyRatingQuery
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<ManagerFindManyRatingQuery>(ManagerFindManyRatingDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'managerFindManyRating',
-        'query',
-        variables,
-      )
-    },
     managerCreateRating(
       variables: ManagerCreateRatingMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
@@ -9005,12 +8933,6 @@ export function ManagerFindManyProjectInputSchema(): z.ZodObject<Properties<Mana
     communityId: z.string().nullish(),
     limit: z.number().nullish(),
     page: z.number().nullish(),
-    search: z.string().nullish(),
-  })
-}
-
-export function ManagerFindManyRatingInputSchema(): z.ZodObject<Properties<ManagerFindManyRatingInput>> {
-  return z.object({
     search: z.string().nullish(),
   })
 }

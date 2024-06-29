@@ -1,8 +1,8 @@
 import {
   AdminCreateUserInput,
-  AdminFindManyUserInput,
   AdminUpdateUserInput,
   User,
+  UserFindManyUserInput,
   UserRole,
   UserStatus,
 } from '@deanslist-platform/sdk'
@@ -91,8 +91,8 @@ describe('api-user-feature', () => {
         const createdRes = await sdk.adminCreateUser({ input: createInput }, { cookie: alice })
         const userId = createdRes.data.created.id
 
-        const input: AdminFindManyUserInput = {
-          limit: 1000,
+        const input: UserFindManyUserInput = {
+          limit: 100000,
         }
 
         const res = await sdk.adminFindManyUser({ input }, { cookie: alice })
@@ -111,7 +111,7 @@ describe('api-user-feature', () => {
         const createdRes = await sdk.adminCreateUser({ input: createInput }, { cookie: alice })
         const userId = createdRes.data.created.id
 
-        const input: AdminFindManyUserInput = {
+        const input: UserFindManyUserInput = {
           search: userId,
         }
 

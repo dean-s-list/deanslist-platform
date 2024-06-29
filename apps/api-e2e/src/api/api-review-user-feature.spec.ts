@@ -1,4 +1,4 @@
-import { UserFindManyReviewInput } from '@deanslist-platform/sdk'
+import { ManagerFindManyReviewByProjectInput, ProjectStatus } from '@deanslist-platform/sdk'
 import { getAliceCookie, sdk, uniqueId } from '../support'
 
 describe('api-review-feature', () => {
@@ -11,19 +11,20 @@ describe('api-review-feature', () => {
     beforeAll(async () => {
       alice = await getAliceCookie()
       communityId = await sdk
-        .userCreateCommunity({ input: { name: uniqueId('community') } }, { cookie: alice })
+        .managerCreateCommunity({ input: { name: uniqueId('community') } }, { cookie: alice })
         .then((res) => res.data.created.id)
     })
 
     describe('authorized', () => {
       beforeEach(async () => {
         projectId = await sdk
-          .userCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
+          .managerCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
           .then((res) => res.data.created.id)
+        await sdk.managerUpdateProject({ projectId, input: { status: ProjectStatus.Active } }, { cookie: alice })
       })
 
       it('should create a review', async () => {
-        const createdRes = await sdk.userCreateReview({ projectId }, { cookie: alice })
+        const createdRes = await sdk.reviewerCreateReview({ projectId }, { cookie: alice })
         const item = createdRes.data.created
         expect(item.projectId).toBe(projectId)
         expect(item.id).toBeDefined()
@@ -32,51 +33,54 @@ describe('api-review-feature', () => {
       })
 
       it('should find a list of reviews (find all)', async () => {
-        const createdRes = await sdk.userCreateReview({ projectId }, { cookie: alice })
+        const createdRes = await sdk.reviewerCreateReview({ projectId }, { cookie: alice })
         const reviewId = createdRes.data.created.id
 
-        const input: UserFindManyReviewInput = { projectId }
+        const input: ManagerFindManyReviewByProjectInput = { projectId }
 
-        const res = await sdk.userFindManyReview({ input }, { cookie: alice })
+        const res = await sdk.reviewerFindManyReviewByProject({ input }, { cookie: alice })
 
-        expect(res.data.items.length).toBeGreaterThan(1)
+        expect(res.data.items.length).toBeGreaterThanOrEqual(1)
         // First item should be the one we created above
         expect(res.data.items.find((item) => item.id === reviewId)).toBeTruthy()
       })
 
       it('should find a list of reviews (find new one)', async () => {
-        const createdRes = await sdk.userCreateReview({ projectId }, { cookie: alice })
+        const createdRes = await sdk.reviewerCreateReview({ projectId }, { cookie: alice })
         const reviewId = createdRes.data.created.id
 
-        const input: UserFindManyReviewInput = {
+        const input: ManagerFindManyReviewByProjectInput = {
           projectId,
           search: reviewId,
         }
 
-        const res = await sdk.userFindManyReview({ input }, { cookie: alice })
+        const res = await sdk.reviewerFindManyReviewByProject({ input }, { cookie: alice })
 
         expect(res.data.items.length).toBe(1)
         expect(res.data.items.find((item) => item.id === reviewId)).toBeTruthy()
       })
 
       it('should find a review by id', async () => {
-        const createdRes = await sdk.userCreateReview({ projectId }, { cookie: alice })
+        const createdRes = await sdk.reviewerCreateReview({ projectId }, { cookie: alice })
         const reviewId = createdRes.data.created.id
 
-        const res = await sdk.userFindOneReview({ reviewId }, { cookie: alice })
+        const res = await sdk.reviewerFindOneReview({ reviewId }, { cookie: alice })
 
         expect(res.data.item.id).toBe(reviewId)
       })
 
       it('should delete a review', async () => {
-        const createdRes = await sdk.userCreateReview({ projectId }, { cookie: alice })
+        const createdRes = await sdk.reviewerCreateReview({ projectId }, { cookie: alice })
         const reviewId = createdRes.data.created.id
 
-        const res = await sdk.userDeleteReview({ reviewId }, { cookie: alice })
+        const res = await sdk.reviewerDeleteReview({ reviewId }, { cookie: alice })
 
         expect(res.data.deleted).toBe(true)
 
-        const findRes = await sdk.userFindManyReview({ input: { projectId, search: reviewId } }, { cookie: alice })
+        const findRes = await sdk.reviewerFindManyReviewByProject(
+          { input: { projectId, search: reviewId } },
+          { cookie: alice },
+        )
         expect(findRes.data.items.length).toBe(0)
       })
     })

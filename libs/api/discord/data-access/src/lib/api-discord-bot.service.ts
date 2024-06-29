@@ -24,7 +24,7 @@ export class ApiDiscordBotService implements OnApplicationBootstrap {
 
   async onApplicationBootstrap() {
     if (!this.core.config.discordBotToken) {
-      this.logger.verbose('Discord bot token not found, discord service disabled')
+      this.logger.warn('Discord bot token not found, discord service disabled')
       return
     }
     this.bot = new DiscordBot({ token: this.core.config.discordBotToken })

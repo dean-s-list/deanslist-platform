@@ -1,3 +1,4 @@
 node_modules
 libs/sdk/src/generated/*
 tmp
+packages/realms-sdk-react/src/*

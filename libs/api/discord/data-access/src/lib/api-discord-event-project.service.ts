@@ -11,6 +11,10 @@ export class ApiDiscordEventProjectService {
 
   @OnEvent(ProjectCreatedEvent.event, { async: true })
   async handleProjectCreatedEvent(payload: ProjectCreatedEvent) {
+    if (!this.core.config.discordBotToken) {
+      this.logger.warn(`handleProjectCreatedEvent: Discord bot disabled`)
+      return
+    }
     this.logger.debug(
       `Received ${ProjectCreatedEvent.event} event [${payload.project.id}] ${payload.project.name} in community ${payload.project.community.name}`,
     )

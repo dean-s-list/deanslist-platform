@@ -1,4 +1,4 @@
-import { AdminFindManyCommentInput, AdminUpdateCommentInput, Comment } from '@deanslist-platform/sdk'
+import { AdminFindManyCommentInput, AdminUpdateCommentInput, Comment, ProjectStatus } from '@deanslist-platform/sdk'
 import { getAliceCookie, getBobCookie, sdk, uniqueId } from '../support'
 
 describe('api-comment-feature', () => {
@@ -12,14 +12,15 @@ describe('api-comment-feature', () => {
     beforeAll(async () => {
       alice = await getAliceCookie()
       communityId = await sdk
-        .userCreateCommunity({ input: { name: uniqueId('community') } }, { cookie: alice })
+        .managerCreateCommunity({ input: { name: uniqueId('community') } }, { cookie: alice })
         .then((res) => res.data.created.id)
       projectId = await sdk
-        .userCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
+        .managerCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
         .then((res) => res.data.created.id)
-      reviewId = await sdk.userCreateReview({ projectId }, { cookie: alice }).then((res) => res.data.created.id)
+      await sdk.managerUpdateProject({ projectId, input: { status: ProjectStatus.Active } }, { cookie: alice })
+      reviewId = await sdk.reviewerCreateReview({ projectId }, { cookie: alice }).then((res) => res.data.created.id)
       commentId = await sdk
-        .userCreateComment({ input: { reviewId, content: uniqueId('comment') } }, { cookie: alice })
+        .reviewerCreateComment({ input: { reviewId, content: uniqueId('comment') } }, { cookie: alice })
         .then((res) => res.data.created.id)
     })
 

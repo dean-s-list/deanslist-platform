@@ -1,3 +1,4 @@
+import { ProjectStatus } from '@deanslist-platform/sdk'
 import { getAliceCookie, getBobCookie, sdk, uniqueId } from '../support'
 
 describe('api-rating-feature', () => {
@@ -18,12 +19,13 @@ describe('api-rating-feature', () => {
       projectId = await sdk
         .managerCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
         .then((res) => res.data.created.id)
+      await sdk.managerUpdateProject({ projectId, input: { status: ProjectStatus.Active } }, { cookie: alice })
       reviewId = await sdk.reviewerCreateReview({ projectId }, { cookie: alice }).then((res) => res.data.created.id)
       commentId = await sdk
-        .userCreateComment({ input: { reviewId, content: uniqueId('comment') } }, { cookie: alice })
+        .reviewerCreateComment({ input: { reviewId, content: uniqueId('comment') } }, { cookie: alice })
         .then((res) => res.data.created.id)
       ratingId = await sdk
-        .userCreateRating({ input: { commentId, content: uniqueId('rating'), rating: 1 } }, { cookie: alice })
+        .managerCreateRating({ input: { commentId, content: uniqueId('rating'), rating: 1 } }, { cookie: alice })
         .then((res) => res.data.created.id)
     })
 

@@ -10,10 +10,10 @@ describe('api-project-feature', () => {
     beforeAll(async () => {
       alice = await getAliceCookie()
       communityId = await sdk
-        .userCreateCommunity({ input: { name: uniqueId('community') } }, { cookie: alice })
+        .managerCreateCommunity({ input: { name: uniqueId('community') } }, { cookie: alice })
         .then((res) => res.data.created.id)
       projectId = await sdk
-        .userCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
+        .managerCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
         .then((res) => res.data.created.id)
     })
 

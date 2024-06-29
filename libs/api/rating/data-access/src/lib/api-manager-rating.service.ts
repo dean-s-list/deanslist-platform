@@ -1,49 +1,57 @@
 import { ApiCoreService } from '@deanslist-platform/api-core-data-access'
 import { Injectable } from '@nestjs/common'
 import { ManagerCreateRatingInput } from './dto/manager-create-rating.input'
-import { ManagerFindManyRatingInput } from './dto/manager-find-many-rating.input'
 import { ManagerUpdateRatingInput } from './dto/manager-update-rating.input'
-import { Rating } from './entity/rating.entity'
-import { getUserRatingWhereInput } from './helpers/get-user-rating-where.input'
 
 @Injectable()
 export class ApiManagerRatingService {
   constructor(private readonly core: ApiCoreService) {}
 
   async createRating(userId: string, input: ManagerCreateRatingInput) {
+    await this.ensureCommentProjectManager(userId, input.commentId)
+
     return this.core.data.rating.create({ data: { ...input, authorId: userId } })
   }
 
   async deleteRating(userId: string, ratingId: string) {
-    await this.ensureCommentAuthor(userId, ratingId)
+    await this.ensureRatingAuthor(userId, ratingId)
     const deleted = await this.core.data.rating.delete({ where: { id: ratingId } })
     return !!deleted
   }
 
-  async findManyRating(input: ManagerFindManyRatingInput): Promise<Rating[]> {
-    return this.core.data.rating.findMany({
-      orderBy: { createdAt: 'desc' },
-      where: getUserRatingWhereInput(input),
-    })
-  }
-
   async updateRating(userId: string, ratingId: string, input: ManagerUpdateRatingInput) {
-    await this.ensureCommentAuthor(userId, ratingId)
+    await this.ensureRatingAuthor(userId, ratingId)
     return this.core.data.rating.update({ where: { id: ratingId }, data: input })
   }
 
-  private async ensureComment(ratingId: string) {
+  private async ensureRating(ratingId: string) {
     const found = await this.core.data.rating.findUnique({ where: { id: ratingId } })
     if (!found) {
       throw new Error('Review Comment Rating not found')
     }
     return found
   }
-  private async ensureCommentAuthor(userId: string, ratingId: string) {
-    const found = await this.ensureComment(ratingId)
+
+  private async ensureRatingAuthor(userId: string, ratingId: string) {
+    const found = await this.ensureRating(ratingId)
     if (found.authorId !== userId) {
       throw new Error('Unauthorized')
     }
     return found
+  }
+
+  private async ensureCommentProjectManager(userId: string, commentId: string) {
+    const comment = await this.core.data.comment.findUnique({
+      where: { id: commentId },
+      include: { review: { include: { project: { include: { managers: true } } } } },
+    })
+    if (!comment) {
+      throw new Error(`Comment not found`)
+    }
+    const manager = comment.review.project.managers.find((m) => m.id === userId)
+    if (!manager) {
+      throw new Error(`You are not a manager of this project`)
+    }
+    return comment
   }
 }

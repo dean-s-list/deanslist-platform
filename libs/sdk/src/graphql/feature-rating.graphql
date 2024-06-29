@@ -11,12 +11,6 @@ fragment RatingDetails on Rating {
   updatedAt
 }
 
-query managerFindManyRating($input: ManagerFindManyRatingInput!) {
-  items: managerFindManyRating(input: $input) {
-    ...RatingDetails
-  }
-}
-
 mutation managerCreateRating($input: ManagerCreateRatingInput!) {
   created: managerCreateRating(input: $input) {
     ...RatingDetails
