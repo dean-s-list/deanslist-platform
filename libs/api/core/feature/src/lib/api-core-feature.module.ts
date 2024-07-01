@@ -11,6 +11,7 @@ import { ApiUserFeatureModule } from '@deanslist-platform/api-user-feature'
 import { Module } from '@nestjs/common'
 import { ApiCoreController } from './api-core.controller'
 import { ApiCoreResolver } from './api-core.resolver'
+import { ApiLeaderboardFeatureModule } from '@deanslist-platform/api-leaderboard-feature'
 
 const imports = [
   // The api-feature generator will add the imports here
@@ -24,6 +25,7 @@ const imports = [
   ApiReviewFeatureModule,
   ApiCommunityFeatureModule,
   ApiUserFeatureModule,
+  ApiLeaderboardFeatureModule,
 ]
 
 @Module({

@@ -11,7 +11,6 @@ import { SolanaClusterProvider, WalletConnectionLoader } from '@deanslist-platfo
 import { Card, Center, Divider, Grid, Stack, Table, TableTbody, Title } from '@mantine/core'
 import { UiError, UiLoader, UiPage } from '@pubkey-ui/core'
 import { Wallet } from '@solana/wallet-adapter-react'
-import { Connection } from '@solana/web3.js'
 import { IconListNumbers } from '@tabler/icons-react'
 
 export function UserLeaderboardFeature() {
@@ -21,15 +20,13 @@ export function UserLeaderboardFeature() {
   return (
     <SolanaClusterProvider autoConnect={true} endpoint={solanaRpcUrl}>
       <WalletConnectionLoader
-        render={({ wallet, connection }) => (
-          <LeaderboardLoader apiUrl={apiUrl} connection={connection} wallet={wallet} />
-        )}
+        render={({ wallet, connection }) => <LeaderboardLoader apiUrl={apiUrl} wallet={wallet} />}
       />
     </SolanaClusterProvider>
   )
 }
 
-function LeaderboardLoader({ apiUrl, connection, wallet }: { apiUrl: string; connection: Connection; wallet: Wallet }) {
+function LeaderboardLoader({ apiUrl, wallet }: { apiUrl: string; wallet: Wallet }) {
   // Here we can load fixed data for the leaderboard
   // For instance, we can fetch all the users from the database, create a map of wallet, and all the voting powers
   // We can also fetch the realm data, and the vsr client
@@ -44,19 +41,19 @@ function LeaderboardLoader({ apiUrl, connection, wallet }: { apiUrl: string; con
     return <UiError message="Could not fetch user identity map." />
   }
 
-  return <LeaderboardFeature wallet={wallet} connection={connection} identityMap={identityMapQuery.data} />
+  return <LeaderboardFeature wallet={wallet} identityMap={identityMapQuery.data} apiUrl={apiUrl} />
 }
 
 function LeaderboardFeature({
   wallet,
-  connection,
   identityMap,
+  apiUrl,
 }: {
   wallet: Wallet
-  connection: Connection
   identityMap: UserIdentityMap
+  apiUrl: string
 }) {
-  const { leaders, loading, loadingMessage } = useLeaderboardRecords({ wallet, connection, identityMap })
+  const { leaders, loading, loadingMessage, error } = useLeaderboardRecords({ wallet, identityMap, apiUrl })
   const { perks, deadline } = useLeaderboardPerks()
 
   const me = !loading && leaders?.find((l) => l.isYou)
@@ -66,7 +63,13 @@ function LeaderboardFeature({
       <Grid>
         <Grid.Col span={7}>
           <Card radius="lg">
-            <LeaderboardUiTable leaders={leaders} loading={loading} perks={perks} loadingMessage={loadingMessage} />
+            <LeaderboardUiTable
+              leaders={leaders}
+              loading={loading}
+              perks={perks}
+              loadingMessage={loadingMessage}
+              error={error}
+            />
           </Card>
         </Grid.Col>
         <Grid.Col span={5}>

@@ -1,5 +1,5 @@
 import { Center, Stack, Table, Text } from '@mantine/core'
-import { UiInfo, UiLoader } from '@pubkey-ui/core'
+import { UiError, UiInfo, UiLoader } from '@pubkey-ui/core'
 import React from 'react'
 import { LeaderboardLeader, LeaderboardPerk } from '@deanslist-platform/web-leaderboard-data-access'
 import { LeaderboardUiLeader } from './leaderboard-ui-leader'
@@ -19,12 +19,18 @@ export function LeaderboardUiTable({
   loadingMessage,
   leaders,
   perks,
+  error,
 }: {
   loading: boolean
   loadingMessage: string
   leaders: LeaderboardLeader[] | undefined
   perks: LeaderboardPerk[]
+  error: string | undefined
 }) {
+  if (error) {
+    return <UiError message={error}>{error}</UiError>
+  }
+
   if (loading) {
     return (
       <Stack p={20}>
