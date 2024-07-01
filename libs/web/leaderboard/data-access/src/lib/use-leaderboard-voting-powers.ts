@@ -12,7 +12,6 @@ import { pipe } from 'fp-ts/function'
 import { fromTaskOption, matchW } from 'fp-ts/TaskEither'
 import { useEffect, useMemo, useState } from 'react'
 import { UserIdentityMap } from './use-anon-user-identity-map'
-import { getDelegatedVotingPower } from './use-leaderboard-delegated-votes'
 
 const governingTokenMint = new PublicKey('Ds52CDgqdWbTWsua1hgT3AuSSy4FNx2Ezge1br3jQ14a')
 const programId = new PublicKey('GovER5Lthms3bLBqWub97yVrMmEogzX7xNjdXpPPCVZw')
@@ -107,20 +106,21 @@ export function useLeaderboardRecords({
     .map((l, i) => ({ ...l, rank: i + 1 }))
     .slice(0, 50)
 
-  useEffect(() => {
-    if (realm && connection && vsrClient && leaders?.length) {
-      setLoadingMessage("Fetching token holders' delegated voting power...")
-      const wals = leaders.map((l) => new PublicKey(l.wallet))
-      // const wals = [new PublicKey('Fywb7YDCXxtD7pNKThJ36CAtVe23dEeEPf7HqKzJs1VG')]
-      getDelegatedVotingPower(wals, realm, vsrClient, connection)
-        .then(setDelegatedPowers)
-        .catch(() => setError('Could not fetch delegated voting powers.'))
-    }
-  }, [leaders, realm, vsrClient, connection])
+  // useEffect(() => {
+  //   if (realm && connection && vsrClient && leaders?.length) {
+  //     setLoadingMessage("Fetching token holders' delegated voting power...")
+  //     const wals = leaders.map((l) => new PublicKey(l.wallet))
+  //     // const wals = [new PublicKey('Fywb7YDCXxtD7pNKThJ36CAtVe23dEeEPf7HqKzJs1VG')]
+  //     getDelegatedVotingPower(wals, realm, vsrClient, connection)
+  //       .then(setDelegatedPowers)
+  //       .catch(() => setError('Could not fetch delegated voting powers.'))
+  //   }
+  // }, [leaders, realm, vsrClient, connection])
 
   return {
     error,
-    loading: !tokenOwnerRecords || !votePowerRecords || !delegatedPowers,
+    // loading: !tokenOwnerRecords || !votePowerRecords || !delegatedPowers,
+    loading: !tokenOwnerRecords || !votePowerRecords,
     loadingMessage,
     leaders,
     tokenOwnerRecords,
