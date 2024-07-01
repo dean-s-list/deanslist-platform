@@ -13,7 +13,7 @@ export const ManagerRoutes = lazy(() => import('./web-core-routes-manager'))
 
 const routes: RouteObject[] = [
   // User Dashboard Routes are added by the web-crud generator
-  { path: '/dashboard', element: <Navigate to="/projects" replace /> },
+  { path: '/dashboard', element: <Navigate to="/leaderboard" replace /> },
   { path: '/manager/*', element: <ManagerRoutes /> },
   { path: '/projects/*', element: <ReviewerProjectFeature /> },
   { path: '/settings/*', element: <SettingsFeature /> },
