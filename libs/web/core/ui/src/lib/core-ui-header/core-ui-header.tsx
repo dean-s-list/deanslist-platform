@@ -32,7 +32,7 @@ export function CoreUiHeader(props: CoreUiHeaderProps) {
           <Group>
             {burger}
             <Anchor component={Link} to={props.base ?? '/'} display="flex">
-              <Group hiddenFrom="md">{props.logoSmall ?? <CoreUiLogoType height={36} />}</Group>
+              <Group>{props.logoSmall ?? <CoreUiLogoType height={50} />}</Group>
             </Anchor>
           </Group>
         </Group>
