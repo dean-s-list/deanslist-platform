@@ -1,6 +1,7 @@
 import { useAuth } from '@deanslist-platform/web-auth-data-access'
-import { CoreUiCountdown } from '@deanslist-platform/web-core-ui'
+import { CoreUiButton, CoreUiCountdown } from '@deanslist-platform/web-core-ui'
 import {
+  clearLeaderboardCache,
   useAnonUserIdentityMap,
   useLeaderboardPerks,
   useLeaderboardRecords,
@@ -59,9 +60,9 @@ function LeaderboardFeature({
   identityMap: UserIdentityMap
   apiUrl: string
 }) {
-  const { leaders, loading, loadingMessage, error } = useLeaderboardRecords({ wallet, identityMap, apiUrl })
+  const { leaders, loading, loadingMessage, error, refetch } = useLeaderboardRecords({ wallet, identityMap, apiUrl })
   const { perks, deadline } = useLeaderboardPerks()
-  const { user } = useAuth()
+  const { user, isAdmin } = useAuth()
   const navigate = useNavigate()
   const { breakpoints } = useMantineTheme()
   const isSmall = useMediaQuery(`(max-width: ${breakpoints.md}`)
@@ -95,7 +96,7 @@ function LeaderboardFeature({
               <Title order={1}>Deadline</Title>
             </Center>
             <Center>
-              <CoreUiCountdown date={deadline} textProps={{ size: '25px' }} />
+              <CoreUiCountdown date={deadline} textProps={{ size: '1rem' }} />
             </Center>
           </Stack>
           {me && <Divider />}
@@ -114,7 +115,17 @@ function LeaderboardFeature({
   }
 
   return (
-    <UiPage title="Leaderboard" leftAction={<IconListNumbers size={28} />}>
+    <UiPage
+      title="Leaderboard"
+      leftAction={<IconListNumbers size={28} />}
+      rightAction={
+        isAdmin && (
+          <CoreUiButton onClick={() => clearLeaderboardCache({ apiUrl }).then(() => refetch())}>
+            Clear Cache
+          </CoreUiButton>
+        )
+      }
+    >
       <Grid>
         {isSmall ? (
           <>

@@ -23,6 +23,10 @@ export class ApiLeaderboardVsrService {
     this.connection = new Connection(this.core.config.solanaMainnetUrl)
   }
 
+  clearCache() {
+    this.cacheVsrClient.clear()
+  }
+
   async getVsrClient() {
     const vsrClient = await this.cacheVsrClient.fetch('vsrClient')
 

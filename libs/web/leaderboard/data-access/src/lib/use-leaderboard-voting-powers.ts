@@ -25,7 +25,7 @@ export function useLeaderboardRecords({
   identityMap: UserIdentityMap
   apiUrl: string
 }) {
-  const { data: leaders, error: leadersError, isLoading } = useLeaderboardTokenHolders({ apiUrl })
+  const { data: leaders, error: leadersError, isFetching, refetch } = useLeaderboardTokenHolders({ apiUrl })
   const { user: me } = useAuth()
 
   const enhancedleaders = leaders?.map((leader) => {
@@ -54,8 +54,9 @@ export function useLeaderboardRecords({
 
   return {
     error: leadersError?.message,
-    loading: isLoading,
+    loading: isFetching,
     loadingMessage: 'Fetching top leaders including their delegated voting power...',
     leaders: enhancedleaders,
+    refetch,
   }
 }

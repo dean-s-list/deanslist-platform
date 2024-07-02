@@ -34,6 +34,11 @@ export class ApiLeaderboardRealmsService {
     this.connection = new Connection(this.core.config.solanaMainnetUrl)
   }
 
+  clearCache() {
+    this.cacheRealm.clear()
+    this.cacheRealmConfig.clear()
+  }
+
   async getRealm() {
     const realm = await this.cacheRealm.fetch('realm')
 

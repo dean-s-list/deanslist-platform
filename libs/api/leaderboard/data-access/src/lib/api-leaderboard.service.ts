@@ -24,7 +24,12 @@ export class ApiLeaderboardService {
   })
 
   constructor(private votingPowerService: ApiLeaderboardVotingPowerService, private core: ApiCoreService) {
-    this.connection = new Connection(core.config.solanaMainnetUrl)
+    this.connection = new Connection(this.core.config.solanaMainnetUrl)
+  }
+
+  clearCache() {
+    this.votingPowerService.clearCache()
+    this.tokenHolders.clear()
   }
 
   async getTokenHolders(): Promise<PublicKey[]> {

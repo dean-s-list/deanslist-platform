@@ -34,6 +34,14 @@ export class ApiLeaderboardVotingPowerService {
     this.connection = new Connection(this.core.config.solanaMainnetUrl)
   }
 
+  clearCache() {
+    this.cacheLatestBlockhash.clear()
+    this.votingPowers = {}
+    this.govAccounts = {}
+    this.realmsService.clearCache()
+    this.vsrService.clearCache()
+  }
+
   async getVotingPowerPerWallet(wallets: PublicKey[]) {
     const latestBlockhash = await this.cacheLatestBlockhash.fetch('')
     const realm = await this.realmsService.getRealm()

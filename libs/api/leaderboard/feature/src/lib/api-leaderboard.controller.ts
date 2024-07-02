@@ -1,6 +1,7 @@
 import { ApiLeaderboardService } from '@deanslist-platform/api-leaderboard-data-access'
-import { Controller, Get } from '@nestjs/common'
+import { Controller, Get, UseGuards } from '@nestjs/common'
 import { BN } from '@coral-xyz/anchor'
+import { ApiAuthGraphQLAdminGuard } from '@deanslist-platform/api-auth-data-access'
 
 @Controller('leaderboard')
 export class ApiLeaderboardController {
@@ -45,5 +46,12 @@ export class ApiLeaderboardController {
       })
       .sort(this.byVotingPower)
       .map((l, i) => ({ ...l, rank: i + 1 }))
+  }
+
+  @Get('clear-cache')
+  @UseGuards(ApiAuthGraphQLAdminGuard)
+  clearCache() {
+    this.service.clearCache()
+    return { success: 'ok' }
   }
 }
