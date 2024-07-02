@@ -1,6 +1,7 @@
 import { Button, Group } from '@mantine/core'
 import { User, UserUpdateUserInput } from '@deanslist-platform/sdk'
 import { formFieldText, UiForm, UiFormField } from '@pubkey-ui/core'
+import { useEffect, useState } from 'react'
 
 export function UpdateUserForm({
   submit,
@@ -9,12 +10,21 @@ export function UpdateUserForm({
   submit: (res: UserUpdateUserInput) => Promise<boolean>
   user: User
 }) {
-  const model = {
-    avatarUrl: user.avatarUrl ?? user.avatarUrl ?? '',
+  const [model, setModel] = useState({
+    avatarUrl: user.avatarUrl ?? '',
     developer: user.developer ?? false,
     name: user.name ?? '',
     twitter: user.twitter ?? '',
-  }
+  })
+
+  useEffect(() => {
+    setModel({
+      avatarUrl: user.avatarUrl ?? '',
+      developer: user.developer ?? false,
+      name: user.name ?? '',
+      twitter: user.twitter ?? '',
+    })
+  }, [user])
 
   const fields: UiFormField<UserUpdateUserInput>[] = [
     formFieldText('name', { label: 'Name' }),
