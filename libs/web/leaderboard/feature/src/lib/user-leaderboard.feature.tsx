@@ -8,12 +8,13 @@ import {
 } from '@deanslist-platform/web-leaderboard-data-access'
 import { LeaderboardUiLeader, LeaderboardUiPerks, LeaderboardUiTable } from '@deanslist-platform/web-leaderboard-ui'
 import { SolanaClusterProvider } from '@deanslist-platform/web-solana-data-access'
-import { Card, Center, Divider, Grid, Stack, Table, TableTbody, Title } from '@mantine/core'
+import { Card, Center, Divider, Grid, Stack, Table, TableTbody, Title, useMantineTheme } from '@mantine/core'
 import { UiError, UiLoader, UiPage } from '@pubkey-ui/core'
 import { useWallet, Wallet } from '@solana/wallet-adapter-react'
 import { IconListNumbers } from '@tabler/icons-react'
 import { WebCoreLeaderboardLayout } from './web-core-leaderboard-layout'
 import { useNavigate } from 'react-router-dom'
+import { useMediaQuery } from '@mantine/hooks'
 
 export function UserLeaderboardFeature() {
   const apiUrl = ''
@@ -62,51 +63,70 @@ function LeaderboardFeature({
   const { perks, deadline } = useLeaderboardPerks()
   const { user } = useAuth()
   const navigate = useNavigate()
+  const { breakpoints } = useMantineTheme()
+  const isSmall = useMediaQuery(`(max-width: ${breakpoints.md}`)
 
   const me = !loading && leaders?.find((l) => l.isYou)
+
+  function getLeaderboardUI() {
+    return (
+      <Card radius="lg">
+        <LeaderboardUiTable
+          leaders={leaders}
+          loading={loading}
+          perks={perks}
+          loadingMessage={loadingMessage}
+          error={error}
+        />
+      </Card>
+    )
+  }
+
+  function getPerksUi() {
+    return (
+      <Card radius="lg" pos="sticky" top="80px">
+        <Stack w="100%">
+          <Center pb={14}>
+            <Title order={2}>Package Proposals</Title>
+          </Center>
+          <Divider />
+          <Stack>
+            <Center>
+              <Title order={1}>Deadline</Title>
+            </Center>
+            <Center>
+              <CoreUiCountdown date={deadline} textProps={{ size: '25px' }} />
+            </Center>
+          </Stack>
+          {me && <Divider />}
+          {me && (
+            <Table>
+              <TableTbody>
+                <LeaderboardUiLeader leader={me} perks={perks} onClick={() => user && navigate(user.profileUrl)} />
+              </TableTbody>
+            </Table>
+          )}
+          <Divider />
+          <LeaderboardUiPerks perks={perks} />
+        </Stack>
+      </Card>
+    )
+  }
 
   return (
     <UiPage title="Leaderboard" leftAction={<IconListNumbers size={28} />}>
       <Grid>
-        <Grid.Col span={7}>
-          <Card radius="lg">
-            <LeaderboardUiTable
-              leaders={leaders}
-              loading={loading}
-              perks={perks}
-              loadingMessage={loadingMessage}
-              error={error}
-            />
-          </Card>
-        </Grid.Col>
-        <Grid.Col span={5}>
-          <Card radius="lg" pos="sticky" top="60px">
-            <Stack w="100%">
-              <Center pb={14}>
-                <Title order={2}>Package Proposals</Title>
-              </Center>
-              <Divider />
-              <Stack>
-                <Center>
-                  <Title order={1}>Deadline</Title>
-                </Center>
-                <Center>
-                  <CoreUiCountdown date={deadline} textProps={{ size: '25px' }} />
-                </Center>
-              </Stack>
-              {me && <Divider />}
-              {me && (
-                <Table>
-                  <TableTbody>
-                    <LeaderboardUiLeader leader={me} perks={perks} onClick={() => user && navigate(user.profileUrl)} />
-                  </TableTbody>
-                </Table>
-              )}
-              <Divider />
-              <LeaderboardUiPerks perks={perks} />
-            </Stack>
-          </Card>
-        </Grid.Col>
+        {isSmall ? (
+          <>
+            <Grid.Col span={12}>{getPerksUi()}</Grid.Col>
+            <Grid.Col span={12}>{getLeaderboardUI()}</Grid.Col>
+          </>
+        ) : (
+          <>
+            <Grid.Col span={7}>{getLeaderboardUI()}</Grid.Col>
+            <Grid.Col span={5}>{getPerksUi()}</Grid.Col>
+          </>
+        )}
       </Grid>
     </UiPage>
   )
