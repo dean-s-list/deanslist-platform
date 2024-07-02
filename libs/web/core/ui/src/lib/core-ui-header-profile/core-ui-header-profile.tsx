@@ -30,7 +30,7 @@ export function CoreUiHeaderProfile({ user, logout }: { user?: User | null; logo
           leftSection={
             <UiAvatar
               url={user?.avatarUrl}
-              name={user?.username}
+              name={user?.username ?? undefined}
               alt={user?.username ?? 'User Avatar'}
               radius={100}
               size={24}
