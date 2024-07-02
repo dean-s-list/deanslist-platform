@@ -7,7 +7,7 @@ import { ApiLeaderboardVotingPowerService } from './api-leaderboard-voting-power
 
 const cacheOpts = {
   max: 1000,
-  ttl: 1000 * 60 * 10, // 10 minutes
+  ttl: 1000 * 60 * 60, // 1 hour
 }
 
 @Injectable()

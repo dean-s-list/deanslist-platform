@@ -16,14 +16,22 @@ import { ApiLeaderboardVsrService } from './api-leaderboard-vsr.service'
 
 @Injectable()
 export class ApiLeaderboardVotingPowerService {
-  private connection: Connection
-  private votingPowers: Record<string, BN> = {}
-  private govAccounts: Record<string, ProgramAccount<TokenOwnerRecord>[]> = {}
+  private readonly connection: Connection
 
   private readonly cacheLatestBlockhash = new LRUCache<string, BlockhashWithExpiryBlockHeight>({
     max: 1000,
     ttl: 1000 * 30, // 30 seconds
     fetchMethod: async () => this.connection.getLatestBlockhash(),
+  })
+
+  private readonly _votingPowers = new LRUCache<string, Record<string, BN>>({
+    max: 100000,
+    ttl: 1000 * 60 * 60 * 24, // 24 hours
+  })
+
+  private readonly _govAccounts = new LRUCache<string, Record<string, ProgramAccount<TokenOwnerRecord>[]>>({
+    max: 100000,
+    ttl: 1000 * 60 * 60 * 24, // 24 hours
   })
 
   constructor(
@@ -34,10 +42,26 @@ export class ApiLeaderboardVotingPowerService {
     this.connection = new Connection(this.core.config.solanaMainnetUrl)
   }
 
+  get votingPowers() {
+    return this._votingPowers.get('votingPowers') ?? {}
+  }
+
+  set votingPowers(powers: Record<string, BN>) {
+    this._votingPowers.set('votingPowers', powers)
+  }
+
+  get govAccounts(): Record<string, ProgramAccount<TokenOwnerRecord>[]> {
+    return this._govAccounts.get('govAccounts') ?? {}
+  }
+
+  set govAccounts(accounts: Record<string, ProgramAccount<TokenOwnerRecord>[]>) {
+    this._govAccounts.set('govAccounts', accounts)
+  }
+
   clearCache() {
     this.cacheLatestBlockhash.clear()
-    this.votingPowers = {}
-    this.govAccounts = {}
+    this._votingPowers.clear()
+    this._govAccounts.clear()
     this.realmsService.clearCache()
     this.vsrService.clearCache()
   }
@@ -68,11 +92,11 @@ export class ApiLeaderboardVotingPowerService {
     }, {} as Record<string, BN>)
   }
 
-  async getGovAccounts(walletPk: PublicKey) {
+  async getGovAccounts(walletPk: PublicKey): Promise<ProgramAccount<TokenOwnerRecord>[]> {
     const walletString = walletPk.toBase58()
-    if (this.govAccounts[walletString]) {
-      console.log('Got cached gov accounts for', walletString)
-      return this.govAccounts[walletString]
+    const cachedGovAccounts = this.govAccounts
+    if (cachedGovAccounts[walletString]) {
+      return cachedGovAccounts[walletString]
     }
 
     const realm = await this.realmsService.getRealm()
@@ -82,13 +106,14 @@ export class ApiLeaderboardVotingPowerService {
     const delegatedToUserFilter = pubkeyFilter(1 + 32 + 32 + 32 + 8 + 4 + 4 + 1 + 1 + 6 + 1, walletPk)
     if (!realmFilter || !delegatedToUserFilter) throw new Error() // unclear why this would ever happen, probably it just cannot
 
-    const govAccs = await getGovernanceAccounts(this.connection, realm.owner, TokenOwnerRecord, [
+    const govAccs = (await getGovernanceAccounts(this.connection, realm.owner, TokenOwnerRecord, [
       realmFilter,
       hasDelegateFilter,
       delegatedToUserFilter,
-    ])
+    ])) as ProgramAccount<TokenOwnerRecord>[]
 
-    this.govAccounts[walletString] = govAccs
+    cachedGovAccounts[walletString] = govAccs
+    this.govAccounts = cachedGovAccounts
 
     return govAccs
   }
