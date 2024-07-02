@@ -15,37 +15,25 @@ export class ApiLeaderboardController {
   async getTokenHolders() {
     const tokenHoldersWallets = await this.service.getTokenHolders()
     const votePowerRecords = await this.service.getVotingPowerPerWallet(tokenHoldersWallets)
+    const [delegatedPowers, delegatedWallets] = await this.service.getDelegatedVotingPower(tokenHoldersWallets)
 
-    const top50Leader = tokenHoldersWallets
-      ?.map((wallet) => {
-        const w = wallet.toBase58()
-        const votingPower = votePowerRecords && votePowerRecords[w] ? votePowerRecords[w] : new BN(0)
+    return tokenHoldersWallets
+      ?.map((walletPK) => {
+        const wallet = walletPK.toBase58()
+        const votingPower = votePowerRecords && votePowerRecords[wallet] ? votePowerRecords[wallet] : new BN(0)
+        const delegatedPower = delegatedPowers && delegatedPowers[wallet] ? delegatedPowers[wallet] : new BN(0)
 
         return {
           wallet,
-          votingPower,
-        }
-      })
-      .filter((l) => !l.votingPower.isZero())
-      .sort(this.byVotingPower)
-      .slice(0, 50)
-
-    const delegatedPowers = await this.service.getDelegatedVotingPower(top50Leader.map((leader) => leader.wallet))
-
-    return top50Leader
-      .map((leader) => {
-        const w = leader.wallet.toBase58()
-        const delegatedPower = delegatedPowers && delegatedPowers[w] ? delegatedPowers[w] : new BN(0)
-
-        return {
-          wallet: leader.wallet.toBase58(),
-          ownVotingPower: leader.votingPower,
+          ownVotingPower: votingPower,
           delegatedPower,
-          votingPower: leader.votingPower.add(delegatedPower),
+          votingPower: votingPower.add(delegatedPower),
         }
       })
+      .filter((l) => !l.votingPower.isZero() && !delegatedWallets.has(l.wallet))
       .sort(this.byVotingPower)
       .map((l, i) => ({ ...l, rank: i + 1 }))
+      .slice(0, 50)
   }
 
   @Get('clear-cache')

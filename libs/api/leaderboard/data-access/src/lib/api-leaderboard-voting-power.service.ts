@@ -127,7 +127,7 @@ export class ApiLeaderboardVotingPowerService {
     return await this.getVotingPowerPerWallet(wallets)
   }
 
-  async getDelegatedVotingPower(walletPks: PublicKey[]) {
+  async getDelegatedVotingPower(walletPks: PublicKey[]): Promise<[Record<string, BN>, Set<string>]> {
     const realm = await this.realmsService.getRealm()
 
     const delegators: ProgramAccount<TokenOwnerRecord>[][] = []
@@ -136,6 +136,7 @@ export class ApiLeaderboardVotingPowerService {
       delegators.push(...delegatorsChunk)
     }
 
+    let delegatedWallets: string[] = []
     const walletDelegatedVotingPower = walletPks.map(async (walletPk, i) => {
       const walletDelegators = delegators[i]
 
@@ -145,6 +146,10 @@ export class ApiLeaderboardVotingPowerService {
         ?.filter((x) => x.account.governingTokenMint.toString() === realm.account.communityMint.toString())
         .map((x) => x.account.governingTokenOwner)
 
+      delegatedWallets = delegatedWallets.concat(
+        relevantDelegators.map((relevantDelegator) => relevantDelegator.toBase58()),
+      )
+
       const delegatorPowers = await this.getGovPower(relevantDelegators)
       const totalDelegatorPower = delegatorPowers
         ? Object.values(delegatorPowers).reduce((sum: BN, curr: BN) => sum.add(curr), new BN(0))
@@ -153,6 +158,6 @@ export class ApiLeaderboardVotingPowerService {
       return [walletPk.toBase58(), totalDelegatorPower]
     })
 
-    return Object.fromEntries(await Promise.all(walletDelegatedVotingPower))
+    return [Object.fromEntries(await Promise.all(walletDelegatedVotingPower)), new Set(delegatedWallets)]
   }
 }
