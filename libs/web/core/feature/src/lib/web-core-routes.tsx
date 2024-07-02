@@ -5,6 +5,7 @@ import { OnboardingFeature } from '@deanslist-platform/web-onboarding-feature'
 import { lazy } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useGuardedRoutes } from './use-guarded-routes'
+import { UserLeaderboardFeature } from '@deanslist-platform/web-leaderboard-feature'
 
 export const LazyAdminFeature = lazy(() => import('./web-core-routes-admin'))
 export const LazyUserFeature = lazy(() => import('./web-core-routes-user'))
@@ -33,6 +34,7 @@ export function WebCoreRoutes() {
       { path: '/register', element: <AuthRegisterFeature /> },
       // Homepage
       { path: '/*', element: <HomeFeature /> },
+      { path: '/leaderboard/*', element: <UserLeaderboardFeature /> },
       // Routes for the 404 page
       { path: '/404', element: <CoreUiNotFound /> },
       { path: '*', element: <Navigate to="/404" replace /> },

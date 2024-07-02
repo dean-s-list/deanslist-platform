@@ -1,17 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { BN } from '@coral-xyz/anchor'
 
-export interface LeaderboardLeader {
-  wallet: string
-  name: string
-  avatarUrl: string | undefined
-  votingPower: BN
-  ownVotingPower: BN
-  delegatedVotingPower: BN
-  isYou: boolean
-  rank: number
-}
-
 export interface LeaderboardLeaderResponse {
   wallet: string
   votingPower: string

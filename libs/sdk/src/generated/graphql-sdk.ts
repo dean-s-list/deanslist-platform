@@ -1058,6 +1058,7 @@ export type User = {
   profileUrl: Scalars['String']['output']
   role?: Maybe<UserRole>
   status?: Maybe<UserStatus>
+  twitter?: Maybe<Scalars['String']['output']>
   updatedAt?: Maybe<Scalars['DateTime']['output']>
   username?: Maybe<Scalars['String']['output']>
   walletAddress?: Maybe<Scalars['String']['output']>
@@ -1097,7 +1098,10 @@ export enum UserStatus {
 }
 
 export type UserUpdateUserInput = {
+  avatarUrl?: InputMaybe<Scalars['String']['input']>
   developer?: InputMaybe<Scalars['Boolean']['input']>
+  name?: InputMaybe<Scalars['String']['input']>
+  twitter?: InputMaybe<Scalars['String']['input']>
 }
 
 export type VerifyIdentityChallengeInput = {
@@ -1125,6 +1129,7 @@ export type LoginMutation = {
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
+    twitter?: string | null
     updatedAt?: Date | null
     username?: string | null
     walletAddress?: string | null
@@ -1152,6 +1157,7 @@ export type RegisterMutation = {
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
+    twitter?: string | null
     updatedAt?: Date | null
     username?: string | null
     walletAddress?: string | null
@@ -1173,6 +1179,7 @@ export type MeQuery = {
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
+    twitter?: string | null
     updatedAt?: Date | null
     username?: string | null
     walletAddress?: string | null
@@ -1217,6 +1224,7 @@ export type CommentDetailsFragment = {
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
+    twitter?: string | null
     updatedAt?: Date | null
     username?: string | null
     walletAddress?: string | null
@@ -1266,6 +1274,7 @@ export type ReviewerFindManyCommentQuery = {
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
+        twitter?: string | null
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
@@ -1282,6 +1291,7 @@ export type ReviewerFindManyCommentQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -1319,6 +1329,7 @@ export type ReviewerCreateCommentMutation = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -1357,6 +1368,7 @@ export type ReviewerUpdateCommentMutation = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -1413,6 +1425,7 @@ export type AdminFindManyCommentQuery = {
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
+        twitter?: string | null
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
@@ -1429,6 +1442,7 @@ export type AdminFindManyCommentQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -1467,6 +1481,7 @@ export type AdminUpdateCommentMutation = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -1519,6 +1534,7 @@ export type ManagerFindManyCommentQuery = {
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
+        twitter?: string | null
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
@@ -1589,6 +1605,7 @@ export type ManagerFindManyCommentQuery = {
               profileUrl: string
               role?: UserRole | null
               status?: UserStatus | null
+              twitter?: string | null
               updatedAt?: Date | null
               username?: string | null
               walletAddress?: string | null
@@ -1606,6 +1623,7 @@ export type ManagerFindManyCommentQuery = {
           profileUrl: string
           role?: UserRole | null
           status?: UserStatus | null
+          twitter?: string | null
           updatedAt?: Date | null
           username?: string | null
           walletAddress?: string | null
@@ -1622,6 +1640,7 @@ export type ManagerFindManyCommentQuery = {
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
+        twitter?: string | null
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
@@ -1651,6 +1670,7 @@ export type ManagerFindManyCommentQuery = {
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
+        twitter?: string | null
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
@@ -1667,6 +1687,7 @@ export type ManagerFindManyCommentQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -1704,6 +1725,7 @@ export type CommunityDetailsFragment = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -1729,6 +1751,7 @@ export type CommunityManagerDetailsFragment = {
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
+    twitter?: string | null
     updatedAt?: Date | null
     username?: string | null
     walletAddress?: string | null
@@ -1773,6 +1796,7 @@ export type UserFindManyCommunityQuery = {
           profileUrl: string
           role?: UserRole | null
           status?: UserStatus | null
+          twitter?: string | null
           updatedAt?: Date | null
           username?: string | null
           walletAddress?: string | null
@@ -1828,6 +1852,7 @@ export type UserFindOneCommunityQuery = {
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
+        twitter?: string | null
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
@@ -1860,6 +1885,7 @@ export type ManagerGetCommunityManagersQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -1891,6 +1917,7 @@ export type ManagerGetCommunityManagerQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -1936,6 +1963,7 @@ export type ManagerFindManyCommunityQuery = {
           profileUrl: string
           role?: UserRole | null
           status?: UserStatus | null
+          twitter?: string | null
           updatedAt?: Date | null
           username?: string | null
           walletAddress?: string | null
@@ -1991,6 +2019,7 @@ export type ManagerFindOneCommunityQuery = {
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
+        twitter?: string | null
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
@@ -2035,6 +2064,7 @@ export type ManagerCreateCommunityMutation = {
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
+        twitter?: string | null
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
@@ -2080,6 +2110,7 @@ export type ManagerUpdateCommunityMutation = {
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
+        twitter?: string | null
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
@@ -2132,6 +2163,7 @@ export type AdminFindManyCommunityQuery = {
           profileUrl: string
           role?: UserRole | null
           status?: UserStatus | null
+          twitter?: string | null
           updatedAt?: Date | null
           username?: string | null
           walletAddress?: string | null
@@ -2175,6 +2207,7 @@ export type AdminGetCommunityManagersQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -2218,6 +2251,7 @@ export type AdminFindOneCommunityQuery = {
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
+        twitter?: string | null
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
@@ -2263,6 +2297,7 @@ export type AdminUpdateCommunityMutation = {
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
+        twitter?: string | null
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
@@ -2662,6 +2697,7 @@ export type AdminFindManyIdentityQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -2907,6 +2943,7 @@ export type ProjectDetailsFragment = {
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
+        twitter?: string | null
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
@@ -2924,6 +2961,7 @@ export type ProjectDetailsFragment = {
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
+    twitter?: string | null
     updatedAt?: Date | null
     username?: string | null
     walletAddress?: string | null
@@ -2992,6 +3030,7 @@ export type ReviewerFindManyProjectQuery = {
             profileUrl: string
             role?: UserRole | null
             status?: UserStatus | null
+            twitter?: string | null
             updatedAt?: Date | null
             username?: string | null
             walletAddress?: string | null
@@ -3009,6 +3048,7 @@ export type ReviewerFindManyProjectQuery = {
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
+        twitter?: string | null
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
@@ -3087,6 +3127,7 @@ export type ReviewerFindOneProjectQuery = {
           profileUrl: string
           role?: UserRole | null
           status?: UserStatus | null
+          twitter?: string | null
           updatedAt?: Date | null
           username?: string | null
           walletAddress?: string | null
@@ -3104,6 +3145,7 @@ export type ReviewerFindOneProjectQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -3173,6 +3215,7 @@ export type AdminFindManyProjectQuery = {
             profileUrl: string
             role?: UserRole | null
             status?: UserStatus | null
+            twitter?: string | null
             updatedAt?: Date | null
             username?: string | null
             walletAddress?: string | null
@@ -3190,6 +3233,7 @@ export type AdminFindManyProjectQuery = {
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
+        twitter?: string | null
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
@@ -3249,6 +3293,7 @@ export type AdminFindOneProjectQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -3264,6 +3309,7 @@ export type AdminFindOneProjectQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -3298,6 +3344,7 @@ export type AdminFindOneProjectQuery = {
           profileUrl: string
           role?: UserRole | null
           status?: UserStatus | null
+          twitter?: string | null
           updatedAt?: Date | null
           username?: string | null
           walletAddress?: string | null
@@ -3315,6 +3362,7 @@ export type AdminFindOneProjectQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -3383,6 +3431,7 @@ export type AdminUpdateProjectMutation = {
           profileUrl: string
           role?: UserRole | null
           status?: UserStatus | null
+          twitter?: string | null
           updatedAt?: Date | null
           username?: string | null
           walletAddress?: string | null
@@ -3400,6 +3449,7 @@ export type AdminUpdateProjectMutation = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -3517,6 +3567,7 @@ export type ManagerFindManyProjectQuery = {
             profileUrl: string
             role?: UserRole | null
             status?: UserStatus | null
+            twitter?: string | null
             updatedAt?: Date | null
             username?: string | null
             walletAddress?: string | null
@@ -3534,6 +3585,7 @@ export type ManagerFindManyProjectQuery = {
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
+        twitter?: string | null
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
@@ -3593,6 +3645,7 @@ export type ManagerFindOneProjectQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -3608,6 +3661,7 @@ export type ManagerFindOneProjectQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -3642,6 +3696,7 @@ export type ManagerFindOneProjectQuery = {
           profileUrl: string
           role?: UserRole | null
           status?: UserStatus | null
+          twitter?: string | null
           updatedAt?: Date | null
           username?: string | null
           walletAddress?: string | null
@@ -3659,6 +3714,7 @@ export type ManagerFindOneProjectQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -3726,6 +3782,7 @@ export type ManagerCreateProjectMutation = {
           profileUrl: string
           role?: UserRole | null
           status?: UserStatus | null
+          twitter?: string | null
           updatedAt?: Date | null
           username?: string | null
           walletAddress?: string | null
@@ -3743,6 +3800,7 @@ export type ManagerCreateProjectMutation = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -3811,6 +3869,7 @@ export type ManagerUpdateProjectMutation = {
           profileUrl: string
           role?: UserRole | null
           status?: UserStatus | null
+          twitter?: string | null
           updatedAt?: Date | null
           username?: string | null
           walletAddress?: string | null
@@ -3828,6 +3887,7 @@ export type ManagerUpdateProjectMutation = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -3903,6 +3963,7 @@ export type RatingDetailsFragment = {
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
+    twitter?: string | null
     updatedAt?: Date | null
     username?: string | null
     walletAddress?: string | null
@@ -3935,6 +3996,7 @@ export type ManagerFindManyRatingQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -3968,6 +4030,7 @@ export type ManagerCreateRatingMutation = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -4002,6 +4065,7 @@ export type ManagerUpdateRatingMutation = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -4041,6 +4105,7 @@ export type AdminFindManyRatingQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -4075,6 +4140,7 @@ export type AdminUpdateRatingMutation = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -4153,6 +4219,7 @@ export type ReviewDetailsFragment = {
           profileUrl: string
           role?: UserRole | null
           status?: UserStatus | null
+          twitter?: string | null
           updatedAt?: Date | null
           username?: string | null
           walletAddress?: string | null
@@ -4170,6 +4237,7 @@ export type ReviewDetailsFragment = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -4186,6 +4254,7 @@ export type ReviewDetailsFragment = {
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
+    twitter?: string | null
     updatedAt?: Date | null
     username?: string | null
     walletAddress?: string | null
@@ -4263,6 +4332,7 @@ export type ManagerFindManyReviewByProjectQuery = {
             profileUrl: string
             role?: UserRole | null
             status?: UserStatus | null
+            twitter?: string | null
             updatedAt?: Date | null
             username?: string | null
             walletAddress?: string | null
@@ -4280,6 +4350,7 @@ export type ManagerFindManyReviewByProjectQuery = {
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
+        twitter?: string | null
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
@@ -4296,6 +4367,7 @@ export type ManagerFindManyReviewByProjectQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -4374,6 +4446,7 @@ export type ReviewerFindManyReviewByProjectQuery = {
             profileUrl: string
             role?: UserRole | null
             status?: UserStatus | null
+            twitter?: string | null
             updatedAt?: Date | null
             username?: string | null
             walletAddress?: string | null
@@ -4391,6 +4464,7 @@ export type ReviewerFindManyReviewByProjectQuery = {
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
+        twitter?: string | null
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
@@ -4407,6 +4481,7 @@ export type ReviewerFindManyReviewByProjectQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -4485,6 +4560,7 @@ export type ReviewerFindManyReviewByUsernameQuery = {
             profileUrl: string
             role?: UserRole | null
             status?: UserStatus | null
+            twitter?: string | null
             updatedAt?: Date | null
             username?: string | null
             walletAddress?: string | null
@@ -4502,6 +4578,7 @@ export type ReviewerFindManyReviewByUsernameQuery = {
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
+        twitter?: string | null
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
@@ -4518,6 +4595,7 @@ export type ReviewerFindManyReviewByUsernameQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -4596,6 +4674,7 @@ export type ReviewerFindUserProjectReviewQuery = {
             profileUrl: string
             role?: UserRole | null
             status?: UserStatus | null
+            twitter?: string | null
             updatedAt?: Date | null
             username?: string | null
             walletAddress?: string | null
@@ -4613,6 +4692,7 @@ export type ReviewerFindUserProjectReviewQuery = {
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
+        twitter?: string | null
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
@@ -4629,6 +4709,7 @@ export type ReviewerFindUserProjectReviewQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -4707,6 +4788,7 @@ export type ReviewerFindOneReviewQuery = {
             profileUrl: string
             role?: UserRole | null
             status?: UserStatus | null
+            twitter?: string | null
             updatedAt?: Date | null
             username?: string | null
             walletAddress?: string | null
@@ -4724,6 +4806,7 @@ export type ReviewerFindOneReviewQuery = {
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
+        twitter?: string | null
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
@@ -4740,6 +4823,7 @@ export type ReviewerFindOneReviewQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -4818,6 +4902,7 @@ export type ReviewerCreateReviewMutation = {
             profileUrl: string
             role?: UserRole | null
             status?: UserStatus | null
+            twitter?: string | null
             updatedAt?: Date | null
             username?: string | null
             walletAddress?: string | null
@@ -4835,6 +4920,7 @@ export type ReviewerCreateReviewMutation = {
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
+        twitter?: string | null
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
@@ -4851,6 +4937,7 @@ export type ReviewerCreateReviewMutation = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -4937,6 +5024,7 @@ export type AdminFindManyReviewQuery = {
               profileUrl: string
               role?: UserRole | null
               status?: UserStatus | null
+              twitter?: string | null
               updatedAt?: Date | null
               username?: string | null
               walletAddress?: string | null
@@ -4954,6 +5042,7 @@ export type AdminFindManyReviewQuery = {
           profileUrl: string
           role?: UserRole | null
           status?: UserStatus | null
+          twitter?: string | null
           updatedAt?: Date | null
           username?: string | null
           walletAddress?: string | null
@@ -4970,6 +5059,7 @@ export type AdminFindManyReviewQuery = {
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
+        twitter?: string | null
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
@@ -5059,6 +5149,7 @@ export type AdminFindOneReviewQuery = {
             profileUrl: string
             role?: UserRole | null
             status?: UserStatus | null
+            twitter?: string | null
             updatedAt?: Date | null
             username?: string | null
             walletAddress?: string | null
@@ -5076,6 +5167,7 @@ export type AdminFindOneReviewQuery = {
         profileUrl: string
         role?: UserRole | null
         status?: UserStatus | null
+        twitter?: string | null
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
@@ -5092,6 +5184,7 @@ export type AdminFindOneReviewQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -5116,6 +5209,7 @@ export type UserDetailsFragment = {
   profileUrl: string
   role?: UserRole | null
   status?: UserStatus | null
+  twitter?: string | null
   updatedAt?: Date | null
   username?: string | null
   walletAddress?: string | null
@@ -5138,6 +5232,7 @@ export type AdminCreateUserMutation = {
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
+    twitter?: string | null
     updatedAt?: Date | null
     username?: string | null
     walletAddress?: string | null
@@ -5169,6 +5264,7 @@ export type AdminFindManyUserQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -5217,6 +5313,7 @@ export type AdminFindOneUserQuery = {
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
+    twitter?: string | null
     updatedAt?: Date | null
     username?: string | null
     walletAddress?: string | null
@@ -5241,6 +5338,7 @@ export type AdminUpdateUserMutation = {
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
+    twitter?: string | null
     updatedAt?: Date | null
     username?: string | null
     walletAddress?: string | null
@@ -5266,6 +5364,7 @@ export type UserFindManyUserQuery = {
       profileUrl: string
       role?: UserRole | null
       status?: UserStatus | null
+      twitter?: string | null
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
@@ -5300,6 +5399,7 @@ export type UserFindOneUserQuery = {
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
+    twitter?: string | null
     updatedAt?: Date | null
     username?: string | null
     walletAddress?: string | null
@@ -5323,6 +5423,7 @@ export type UserUpdateUserMutation = {
     profileUrl: string
     role?: UserRole | null
     status?: UserStatus | null
+    twitter?: string | null
     updatedAt?: Date | null
     username?: string | null
     walletAddress?: string | null
@@ -5340,6 +5441,7 @@ export const UserDetailsFragmentDoc = gql`
     profileUrl
     role
     status
+    twitter
     updatedAt
     username
     walletAddress
@@ -9148,7 +9250,10 @@ export function UserFindManyUserInputSchema(): z.ZodObject<Properties<UserFindMa
 
 export function UserUpdateUserInputSchema(): z.ZodObject<Properties<UserUpdateUserInput>> {
   return z.object({
+    avatarUrl: z.string().nullish(),
     developer: z.boolean().nullish(),
+    name: z.string().nullish(),
+    twitter: z.string().nullish(),
   })
 }
 

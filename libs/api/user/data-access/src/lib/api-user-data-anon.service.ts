@@ -10,12 +10,12 @@ export class ApiUserDataAnonService {
   async anonGetUserMap() {
     const identities = await this.core.data.identity.findMany({
       where: { provider: IdentityProvider.Solana },
-      select: { providerId: true, owner: { select: { username: true, avatarUrl: true } } },
+      select: { providerId: true, owner: { select: { name: true, avatarUrl: true, twitter: true } } },
     })
 
     return identities.reduce((acc, identity) => {
-      acc[identity.providerId] = identity.owner as { username: string; avatarUrl: string }
+      acc[identity.providerId] = identity.owner as { name: string; avatarUrl: string; twitter: string }
       return acc
-    }, {} as Record<string, { username: string; avatarUrl: string }>)
+    }, {} as Record<string, { name: string; avatarUrl: string; twitter: string }>)
   }
 }

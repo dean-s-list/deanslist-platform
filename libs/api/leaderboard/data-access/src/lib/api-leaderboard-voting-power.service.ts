@@ -18,10 +18,11 @@ import { ApiLeaderboardVsrService } from './api-leaderboard-vsr.service'
 export class ApiLeaderboardVotingPowerService {
   private connection: Connection
   private votingPowers: Record<string, BN> = {}
+  private govAccounts: Record<string, ProgramAccount<TokenOwnerRecord>[]> = {}
 
   private readonly cacheLatestBlockhash = new LRUCache<string, BlockhashWithExpiryBlockHeight>({
     max: 1000,
-    ttl: 1000 * 60 * 10, // 10 minutes
+    ttl: 1000 * 30, // 30 seconds
     fetchMethod: async () => this.connection.getLatestBlockhash(),
   })
 
@@ -60,6 +61,12 @@ export class ApiLeaderboardVotingPowerService {
   }
 
   async getGovAccounts(walletPk: PublicKey) {
+    const walletString = walletPk.toBase58()
+    if (this.govAccounts[walletString]) {
+      console.log('Got cached gov accounts for', walletString)
+      return this.govAccounts[walletString]
+    }
+
     const realm = await this.realmsService.getRealm()
 
     const realmFilter = pubkeyFilter(1, realm.pubkey)
@@ -67,11 +74,15 @@ export class ApiLeaderboardVotingPowerService {
     const delegatedToUserFilter = pubkeyFilter(1 + 32 + 32 + 32 + 8 + 4 + 4 + 1 + 1 + 6 + 1, walletPk)
     if (!realmFilter || !delegatedToUserFilter) throw new Error() // unclear why this would ever happen, probably it just cannot
 
-    return await getGovernanceAccounts(this.connection, realm.owner, TokenOwnerRecord, [
+    const govAccs = await getGovernanceAccounts(this.connection, realm.owner, TokenOwnerRecord, [
       realmFilter,
       hasDelegateFilter,
       delegatedToUserFilter,
     ])
+
+    this.govAccounts[walletString] = govAccs
+
+    return govAccs
   }
 
   async getGovPower(wallets: PublicKey[]) {

@@ -202,6 +202,7 @@ model User {
   projectReferral Project[]          @relation(name: "ProjectReferral")
   comments        Comment[]
   ratings         Rating[]
+  twitter         String?
 }
 
 enum CommentCategory {

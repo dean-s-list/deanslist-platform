@@ -30,4 +30,6 @@ export class User {
   projectManagers?: unknown[] | null
   @HideField()
   communities?: unknown[] | null
+  @Field({ nullable: true })
+  twitter?: string | null
 }

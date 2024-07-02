@@ -8,6 +8,7 @@ fragment UserDetails on User {
   profileUrl
   role
   status
+  twitter
   updatedAt
   username
   walletAddress

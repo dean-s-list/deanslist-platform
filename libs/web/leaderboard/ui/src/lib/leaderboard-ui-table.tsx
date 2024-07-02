@@ -1,8 +1,8 @@
 import { Center, Stack, Table, Text } from '@mantine/core'
 import { UiError, UiInfo, UiLoader } from '@pubkey-ui/core'
 import React from 'react'
-import { LeaderboardLeader, LeaderboardPerk } from '@deanslist-platform/web-leaderboard-data-access'
 import { LeaderboardUiLeader } from './leaderboard-ui-leader'
+import { LeaderboardLeader, LeaderboardPerk } from '@deanslist-platform/web-leaderboard-data-access'
 
 function TableTh({ text, ta }: { text: string; ta?: string }) {
   return (
@@ -58,7 +58,12 @@ export function LeaderboardUiTable({
       </Table.Thead>
       <Table.Tbody>
         {leaders.map((item) => (
-          <LeaderboardUiLeader key={item.rank} leader={item} perks={perks} />
+          <LeaderboardUiLeader
+            key={item.rank}
+            leader={item}
+            perks={perks}
+            onClick={() => item.twitter && window.open(item.twitter, '_blank', 'noopener,noreferrer')}
+          />
         ))}
       </Table.Tbody>
     </Table>

@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 
 export interface UserIdentity {
-  username: string
+  name: string
   avatarUrl?: string | null
+  twitter?: string | null
 }
 
 export interface UserIdentityMap {

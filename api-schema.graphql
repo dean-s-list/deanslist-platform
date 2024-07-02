@@ -583,6 +583,7 @@ type User {
   profileUrl: String!
   role: UserRole
   status: UserStatus
+  twitter: String
   updatedAt: DateTime
   username: String
   walletAddress: String
@@ -621,7 +622,10 @@ enum UserStatus {
 }
 
 input UserUpdateUserInput {
+  avatarUrl: String
   developer: Boolean
+  name: String
+  twitter: String
 }
 
 input VerifyIdentityChallengeInput {

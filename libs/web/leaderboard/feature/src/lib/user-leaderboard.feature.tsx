@@ -7,11 +7,13 @@ import {
   UserIdentityMap,
 } from '@deanslist-platform/web-leaderboard-data-access'
 import { LeaderboardUiLeader, LeaderboardUiPerks, LeaderboardUiTable } from '@deanslist-platform/web-leaderboard-ui'
-import { SolanaClusterProvider, WalletConnectionLoader } from '@deanslist-platform/web-solana-data-access'
+import { SolanaClusterProvider } from '@deanslist-platform/web-solana-data-access'
 import { Card, Center, Divider, Grid, Stack, Table, TableTbody, Title } from '@mantine/core'
 import { UiError, UiLoader, UiPage } from '@pubkey-ui/core'
-import { Wallet } from '@solana/wallet-adapter-react'
+import { useWallet, Wallet } from '@solana/wallet-adapter-react'
 import { IconListNumbers } from '@tabler/icons-react'
+import { WebCoreLeaderboardLayout } from './web-core-leaderboard-layout'
+import { useNavigate } from 'react-router-dom'
 
 export function UserLeaderboardFeature() {
   const apiUrl = ''
@@ -19,19 +21,18 @@ export function UserLeaderboardFeature() {
 
   return (
     <SolanaClusterProvider autoConnect={true} endpoint={solanaRpcUrl}>
-      <WalletConnectionLoader
-        render={({ wallet, connection }) => <LeaderboardLoader apiUrl={apiUrl} wallet={wallet} />}
-      />
+      <LeaderboardLoader apiUrl={apiUrl} />
     </SolanaClusterProvider>
   )
 }
 
-function LeaderboardLoader({ apiUrl, wallet }: { apiUrl: string; wallet: Wallet }) {
+function LeaderboardLoader({ apiUrl }: { apiUrl: string }) {
   // Here we can load fixed data for the leaderboard
   // For instance, we can fetch all the users from the database, create a map of wallet, and all the voting powers
   // We can also fetch the realm data, and the vsr client
   // All of this is passed into the LeaderboardFeature component, which can then use it to fetch the rest of the data
   const identityMapQuery = useAnonUserIdentityMap({ apiUrl })
+  const { wallet } = useWallet()
 
   if (identityMapQuery.isLoading) {
     return <UiLoader />
@@ -41,7 +42,11 @@ function LeaderboardLoader({ apiUrl, wallet }: { apiUrl: string; wallet: Wallet 
     return <UiError message="Could not fetch user identity map." />
   }
 
-  return <LeaderboardFeature wallet={wallet} identityMap={identityMapQuery.data} apiUrl={apiUrl} />
+  return (
+    <WebCoreLeaderboardLayout>
+      <LeaderboardFeature wallet={wallet} identityMap={identityMapQuery.data} apiUrl={apiUrl} />
+    </WebCoreLeaderboardLayout>
+  )
 }
 
 function LeaderboardFeature({
@@ -49,12 +54,14 @@ function LeaderboardFeature({
   identityMap,
   apiUrl,
 }: {
-  wallet: Wallet
+  wallet: Wallet | null
   identityMap: UserIdentityMap
   apiUrl: string
 }) {
   const { leaders, loading, loadingMessage, error } = useLeaderboardRecords({ wallet, identityMap, apiUrl })
   const { perks, deadline } = useLeaderboardPerks()
+  const { user } = useAuth()
+  const navigate = useNavigate()
 
   const me = !loading && leaders?.find((l) => l.isYou)
 
@@ -91,7 +98,7 @@ function LeaderboardFeature({
               {me && (
                 <Table>
                   <TableTbody>
-                    <LeaderboardUiLeader leader={me} perks={perks} />
+                    <LeaderboardUiLeader leader={me} perks={perks} onClick={() => user && navigate(user.profileUrl)} />
                   </TableTbody>
                 </Table>
               )}

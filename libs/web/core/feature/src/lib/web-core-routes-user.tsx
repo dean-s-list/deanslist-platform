@@ -1,6 +1,5 @@
 import { UserCommunityFeature } from '@deanslist-platform/web-community-feature'
 import { CoreUiNotFound } from '@deanslist-platform/web-core-ui'
-import { UserLeaderboardFeature } from '@deanslist-platform/web-leaderboard-feature'
 import { ReviewerProjectFeature } from '@deanslist-platform/web-project-feature'
 import { ReviewerUsernameReviewFeature } from '@deanslist-platform/web-review-feature'
 import { SettingsFeature } from '@deanslist-platform/web-settings-feature'
@@ -19,7 +18,6 @@ const routes: RouteObject[] = [
   { path: '/settings/*', element: <SettingsFeature /> },
   { path: '/reviews/*', element: <ReviewerUsernameReviewFeature /> },
   { path: '/solana/*', element: <SolanaFeature /> },
-  { path: '/leaderboard/*', element: <UserLeaderboardFeature /> },
   { path: '/communities/*', element: <UserCommunityFeature /> },
   { path: '/u/*', element: <UserFeature /> },
   { path: '*', element: <CoreUiNotFound to="/dashboard" /> },

@@ -1,13 +1,12 @@
 import { Injectable } from '@nestjs/common'
 import { Connection, Keypair, PublicKey } from '@solana/web3.js'
 import { ApiCoreService } from '@deanslist-platform/api-core-data-access'
-import { getPlugins } from '../../../../../../packages/realms-sdk-react/src/lib/VoterWeightPlugins/lib/getPlugins'
 import { AnchorProvider } from '@coral-xyz/anchor'
-import { GovernanceRole, VSR_PLUGIN_PKS, VsrClient } from '@deanslist-platform/realms-sdk-react'
+import { getPlugins, GovernanceRole, VSR_PLUGIN_PKS, VsrClient } from '@deanslist-platform/realms-sdk-react'
 
-import { AnchorKeypairWallet } from '@deanslist-platform/sdk'
 import { LRUCache } from 'lru-cache'
 import { ApiLeaderboardRealmsService } from './api-leaderboard-realms.service'
+import { AnchorKeypairWallet } from './anchor-keypair-wallet'
 
 @Injectable()
 export class ApiLeaderboardVsrService {
