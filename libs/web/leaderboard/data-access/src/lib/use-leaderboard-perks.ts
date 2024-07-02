@@ -21,7 +21,15 @@ export function useLeaderboardPerks() {
     },
   ]
 
-  const deadline = new Date(1721213447000)
+  const year = 2024
+  const month = 8 // Months are zero-based, so 8 represents September
+  const day = 25
+  const hours = 11
+  const minutes = 59
+  const seconds = 59
+  const milliseconds = 0
+
+  const deadline = new Date(Date.UTC(year, month, day, hours, minutes, seconds, milliseconds))
 
   return {
     perks,

@@ -26,7 +26,7 @@ export function LeaderboardUiLeader({
         {leader.rank}.
       </Table.Td>
       <Table.Td>
-        <Group>
+        <Group wrap="nowrap">
           <Avatar src={leader.avatarUrl} radius="xl" size={45} />
           <Text>
             {leader.name} {leader.isYou && '(me)'}

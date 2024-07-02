@@ -96,7 +96,7 @@ function LeaderboardFeature({
               <Title order={1}>Deadline</Title>
             </Center>
             <Center>
-              <CoreUiCountdown date={deadline} textProps={{ size: '1rem' }} />
+              <CoreUiCountdown date={deadline} textProps={{ size: isSmall ? '18px' : '20px' }} />
             </Center>
           </Stack>
           {me && <Divider />}

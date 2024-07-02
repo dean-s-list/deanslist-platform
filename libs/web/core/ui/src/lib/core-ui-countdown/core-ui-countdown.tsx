@@ -38,9 +38,6 @@ export function CoreUiCountdown({ date, textProps }: { date: Date; textProps?: T
     const timerId = setInterval(() => {
       const time = calculateTimeLeft(date)
       setTime(time)
-      // if (time === [0, 0, 0, 0]) {
-      //   clearInterval(timerId)
-      // }
     }, 1000)
 
     return () => clearInterval(timerId)
@@ -49,7 +46,7 @@ export function CoreUiCountdown({ date, textProps }: { date: Date; textProps?: T
   const [days, hours, minutes, seconds] = time
 
   return (
-    <Group>
+    <Group gap={10} wrap="nowrap">
       <CountdownCard value={days} label="days" {...textProps} />
       <CountdownCard value={hours} label="hours" {...textProps} />
       <CountdownCard value={minutes} label="minutes" {...textProps} />

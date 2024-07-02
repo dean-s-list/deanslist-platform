@@ -1,4 +1,4 @@
-import { Center, Stack, Table, Text } from '@mantine/core'
+import { Center, ScrollArea, Stack, Table, Text } from '@mantine/core'
 import { UiError, UiInfo, UiLoader } from '@pubkey-ui/core'
 import React from 'react'
 import { LeaderboardUiLeader } from './leaderboard-ui-leader'
@@ -47,25 +47,27 @@ export function LeaderboardUiTable({
   }
 
   return (
-    <Table p="sm" verticalSpacing="md">
-      <Table.Thead>
-        <Table.Tr>
-          <TableTh text="Rank" />
-          <TableTh text="Member" ta="left" />
-          <TableTh text="Perks" />
-          <TableTh text="Governance" />
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>
-        {leaders.map((item) => (
-          <LeaderboardUiLeader
-            key={item.rank}
-            leader={item}
-            perks={perks}
-            onClick={() => item.twitter && window.open(item.twitter, '_blank', 'noopener,noreferrer')}
-          />
-        ))}
-      </Table.Tbody>
-    </Table>
+    <ScrollArea>
+      <Table p="sm" verticalSpacing="md">
+        <Table.Thead>
+          <Table.Tr>
+            <TableTh text="Rank" />
+            <TableTh text="Member" ta="left" />
+            <TableTh text="Perks" />
+            <TableTh text="Governance" />
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
+          {leaders.map((item) => (
+            <LeaderboardUiLeader
+              key={item.rank}
+              leader={item}
+              perks={perks}
+              onClick={() => item.twitter && window.open(item.twitter, '_blank', 'noopener,noreferrer')}
+            />
+          ))}
+        </Table.Tbody>
+      </Table>
+    </ScrollArea>
   )
 }
