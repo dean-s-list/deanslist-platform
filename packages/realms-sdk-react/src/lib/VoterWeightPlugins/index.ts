@@ -1,1 +1,0 @@
-export { useVsrClient } from './useVsrClient'
