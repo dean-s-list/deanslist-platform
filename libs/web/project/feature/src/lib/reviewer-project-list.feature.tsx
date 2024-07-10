@@ -21,7 +21,7 @@ export default function ReviewerProjectListFeature() {
           value={status}
           allowDeselect={false}
           onChange={(status) => setStatus((status === '' ? undefined : status) as ProjectStatus)}
-          data={[...getEnumOptions(ProjectStatus).map((o) => ({ ...o, label: `State: ${o.value}` }))]}
+          data={getEnumOptions(ProjectStatus)}
         />
       </Group>
 
