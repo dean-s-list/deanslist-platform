@@ -1,9 +1,9 @@
-import { Identity, IdentityProvider, solanaGradient } from '@deanslist-platform/sdk'
+import { Identity } from '@deanslist-platform/sdk'
 import { IdentityProviderSolanaLink } from '@deanslist-platform/web-identity-data-access'
 import { SolanaClusterProvider } from '@deanslist-platform/web-solana-data-access'
 import { Button, ButtonProps } from '@mantine/core'
 import { modals } from '@mantine/modals'
-import { IdentityUiIcon } from './identity-ui-icon'
+import { IconWallet } from '@tabler/icons-react'
 import { IdentityUiSolanaLinkWizard } from './identity-ui-solana-link-wizard'
 
 export function IdentityUiSolanaLinkButton({
@@ -20,8 +20,9 @@ export function IdentityUiSolanaLinkButton({
     <Button
       size="xl"
       variant="gradient"
-      gradient={solanaGradient}
-      leftSection={<IdentityUiIcon provider={IdentityProvider.Solana} />}
+      radius="xl"
+      className="identity-solana"
+      leftSection={<IconWallet size={28} />}
       {...props}
       onClick={() => {
         modals.open({

@@ -11,7 +11,13 @@ export function ReviewerReviewUsernameUiTable({ reviews = [] }: { reviews: Revie
     <ScrollArea>
       <DataTable
         borderRadius="sm"
-        withTableBorder
+        styles={{
+          table: { backgroundColor: 'transparent' },
+          root: { backgroundColor: 'transparent' },
+        }}
+        noHeader
+        withRowBorders={false}
+        withTableBorder={false}
         shadow="xs"
         columns={[
           {

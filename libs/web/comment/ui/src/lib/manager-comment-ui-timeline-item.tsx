@@ -25,7 +25,6 @@ export function ManagerCommentUiTimelineItem({
     <UiStack key={comment.id} gap="xs">
       <CommentUiComment
         comment={comment}
-        to={viewUrl ? `${viewUrl}#comment=${comment.id}` : null}
         footer={
           <UiStack>
             <UiStack>
@@ -53,7 +52,6 @@ export function ManagerCommentUiTimelineItem({
                 <UiStack ml="xl" gap="xs">
                   {comment.children.map((child) => (
                     <CommentUiComment
-                      withBorder={false}
                       key={child.id}
                       comment={child}
                       to={viewUrl ? `${viewUrl}#comment=${comment.id}` : null}

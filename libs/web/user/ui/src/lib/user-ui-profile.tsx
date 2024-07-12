@@ -1,5 +1,6 @@
 import { User } from '@deanslist-platform/sdk'
-import { Group, Paper, PaperProps, Text, useMantineTheme } from '@mantine/core'
+import { CoreUiCard } from '@deanslist-platform/web-core-ui'
+import { Group, PaperProps, Text } from '@mantine/core'
 
 import { ReactNode } from 'react'
 import { UserUiAvatar } from './user-ui-avatar'
@@ -12,18 +13,9 @@ export function UserUiProfile({
   action?: ReactNode
   user?: User
 }) {
-  const theme = useMantineTheme()
   if (!user) return null
   return (
-    <Paper
-      radius="md"
-      withBorder
-      p="lg"
-      style={{
-        backgroundColor: theme.colors.dark[8],
-      }}
-      {...props}
-    >
+    <CoreUiCard {...props}>
       <UserUiAvatar user={user} size={120} radius={120} mx="auto" />
       <Text ta="center" fz="lg" fw={500} mt="md">
         {user.username}
@@ -36,6 +28,6 @@ export function UserUiProfile({
           {action}
         </Group>
       ) : null}
-    </Paper>
+    </CoreUiCard>
   )
 }

@@ -6,5 +6,5 @@ export type ProjectUiAvatarProps = UiAvatarProps & {
 }
 
 export function ProjectUiAvatar({ project, ...props }: ProjectUiAvatarProps) {
-  return <UiAvatar radius="sm" url={project?.avatarUrl ?? undefined} name={project?.name} {...props} />
+  return <UiAvatar variant="filled" radius="sm" url={project?.avatarUrl ?? undefined} name={project?.name} {...props} />
 }

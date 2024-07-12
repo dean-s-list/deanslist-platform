@@ -40,7 +40,7 @@ export function ManagerCommunityDetailFeature() {
         element: isCommunityAdmin ? <ManagerCommunitySettingsGeneralTab communityId={communityId} /> : null,
       },
     ],
-    [isCommunityAdmin],
+    [isCommunityAdmin, communityId],
   )
 
   const router = useRoutes(routes)

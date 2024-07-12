@@ -1,4 +1,5 @@
 import { Comment, ReviewerCreateCommentInput } from '@deanslist-platform/sdk'
+import { Divider } from '@mantine/core'
 import { UiStack } from '@pubkey-ui/core'
 import { CommentUiTimelineItem } from './comment-ui-timeline-item'
 
@@ -14,12 +15,15 @@ export function CommentUiTimeline({
   return (
     <UiStack>
       {comments.map((comment) => (
-        <CommentUiTimelineItem
-          key={comment.id}
-          comment={comment}
-          deleteComment={deleteComment}
-          createComment={createComment}
-        />
+        <UiStack key={comment.id}>
+          <Divider />
+          <CommentUiTimelineItem
+            key={comment.id}
+            comment={comment}
+            deleteComment={deleteComment}
+            createComment={createComment}
+          />
+        </UiStack>
       ))}
     </UiStack>
   )

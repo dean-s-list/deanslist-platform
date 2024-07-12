@@ -1,5 +1,4 @@
 .body {
-  padding-left: rem(50px);
   padding-top: var(--mantine-spacing-sm);
   font-size: var(--mantine-font-size-sm);
 }

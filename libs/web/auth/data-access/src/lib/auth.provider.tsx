@@ -159,7 +159,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         .logout()
         .then((res) => {
           if (res.data.logout) {
-            toastSuccess('Logout successful')
+            toastSuccess({ title: 'Logout successful', message: 'We hope you enjoyed your stay!' })
             dispatch({ type: 'logout' })
             return res.data.logout
           }

@@ -26,7 +26,7 @@ export function ProjectUiItem({
       <Group gap="sm" {...groupProps}>
         <ProjectUiAvatar size="md" project={project} {...avatarProps} />
         <Stack gap={1}>
-          <Text size="lg" fw={500}>
+          <Text size="lg" fw={500} c="white">
             {project?.name}
           </Text>
           {label}

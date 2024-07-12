@@ -1,6 +1,6 @@
-import { ActionIcon, Group, ScrollArea } from '@mantine/core'
 import { User } from '@deanslist-platform/sdk'
 import { IdentityUiAvatarGroup } from '@deanslist-platform/web-identity-ui'
+import { ActionIcon, Group, ScrollArea } from '@mantine/core'
 import { IconPencil, IconTrash, IconUser } from '@tabler/icons-react'
 import { DataTable, DataTableProps } from 'mantine-datatable'
 import { Link } from 'react-router-dom'
@@ -28,8 +28,12 @@ export function AdminUserUiTable({
   return (
     <ScrollArea>
       <DataTable
-        borderRadius="sm"
-        withTableBorder
+        styles={{
+          table: { backgroundColor: 'transparent' },
+          root: { backgroundColor: 'transparent' },
+        }}
+        withRowBorders={false}
+        withTableBorder={false}
         shadow="xs"
         onPageChange={onPageChange}
         page={page ?? 1}

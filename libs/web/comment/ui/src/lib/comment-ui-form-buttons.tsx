@@ -1,35 +1,47 @@
 import { Comment, ReviewerCreateCommentInput } from '@deanslist-platform/sdk'
-import { Button, ButtonProps, Group } from '@mantine/core'
-import { useState } from 'react'
+import { CoreUiCard, pinkGradient } from '@deanslist-platform/web-core-ui'
+import { Button, ButtonProps, Collapse, Text } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
+import { UiGroup, UiStack } from '@pubkey-ui/core'
 import { ReviewerCommentUiForm } from './reviewer-comment-ui-form'
 
 export function CommentUiFormButtons({
   label,
+  title,
   comment,
   createComment,
   ...props
 }: ButtonProps & {
   label: string
+  title: string
   comment?: Comment
   createComment: (res: ReviewerCreateCommentInput) => Promise<boolean>
 }) {
-  const [showReply, setShowReply] = useState(false)
+  const [opened, { toggle }] = useDisclosure(false)
 
-  return showReply ? (
-    <ReviewerCommentUiForm
-      cancel={() => setShowReply(false)}
-      createComment={(res) => {
-        return createComment({ ...res, parentId: comment?.id ?? undefined }).then((res) => {
-          setShowReply(false)
-          return res
-        })
-      }}
-    />
-  ) : (
-    <Group justify="flex-end">
-      <Button {...props} onClick={() => setShowReply(!showReply)}>
-        {label}
-      </Button>
-    </Group>
+  return (
+    <UiStack>
+      <UiGroup>
+        <Text size="xl" fw={700}>
+          My review
+        </Text>
+        <Button radius="xl" styles={{ root: { ...pinkGradient } }} {...props} onClick={() => toggle()}>
+          {label}
+        </Button>
+      </UiGroup>
+      <Collapse in={opened}>
+        <CoreUiCard>
+          <ReviewerCommentUiForm
+            cancel={() => toggle()}
+            createComment={async (res) => {
+              return createComment({ ...res, parentId: comment?.id ?? undefined }).then((res) => {
+                toggle()
+                return res
+              })
+            }}
+          />
+        </CoreUiCard>
+      </Collapse>
+    </UiStack>
   )
 }

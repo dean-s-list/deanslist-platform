@@ -32,7 +32,7 @@ export function CoreUiDashboardGrid({ links }: CoreUiDashboardGridProps) {
   })
 
   return (
-    <SimpleGrid cols={{ xs: 1, sm: 2, md: 3 }} spacing={{ base: 'sm', md: 'xl' }} px="md">
+    <SimpleGrid cols={{ xs: 1, md: 2, lg: 3 }} spacing={{ base: 'sm', md: 'xl' }}>
       {items}
     </SimpleGrid>
   )

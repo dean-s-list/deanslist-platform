@@ -1,4 +1,4 @@
-import { CoreUiDebugModal, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
+import { CoreUiCard, CoreUiDebugModal, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
 import { useReviewerFindManyReviewByUsername } from '@deanslist-platform/web-review-data-access'
 import { ReviewerReviewUsernameUiTable } from '@deanslist-platform/web-review-ui'
 import { Group } from '@mantine/core'
@@ -29,7 +29,9 @@ export function ReviewerUsernameReviewListFeature({ username }: { username: stri
         {query.isLoading ? (
           <UiLoader />
         ) : items?.length ? (
-          <ReviewerReviewUsernameUiTable reviews={items} />
+          <CoreUiCard>
+            <ReviewerReviewUsernameUiTable reviews={items} />
+          </CoreUiCard>
         ) : (
           <UiInfo message="No reviews found" />
         )}

@@ -1,5 +1,5 @@
 import { getEnumOptions, ProjectStatus } from '@deanslist-platform/sdk'
-import { CoreUiSearchField } from '@deanslist-platform/web-core-ui'
+import { cardGradient, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
 import { useReviewerFindManyProject } from '@deanslist-platform/web-project-data-access'
 import { ProjectUiGrid } from '@deanslist-platform/web-project-ui'
 import { Group, Select } from '@mantine/core'
@@ -16,6 +16,7 @@ export default function ReviewerProjectListFeature() {
       <Group>
         <CoreUiSearchField placeholder="Search project" setSearch={setSearch} />
         <Select
+          styles={{ input: { ...cardGradient, border: '1px solid white' } }}
           radius="xl"
           size="lg"
           value={status}

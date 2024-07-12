@@ -1,5 +1,6 @@
 import { AppShell, AppShellNavbarConfiguration, AppShellProps, Loader, rem } from '@mantine/core'
 import { ReactNode, Suspense } from 'react'
+import { purpleGradient } from '../core-ui-constants'
 
 export function CoreUiLayout({
   children,
@@ -19,13 +20,22 @@ export function CoreUiLayout({
     <AppShell
       withBorder={false}
       layout="alt"
+      styles={{
+        root: { ...purpleGradient },
+        header: { backgroundColor: 'transparent' },
+        navbar: { backgroundColor: 'inherit' },
+      }}
       header={{ height: headerHeight }}
       navbar={navbar ? { width: 300, breakpoint: 'md', ...navbarConfig } : undefined}
       padding="md"
       {...props}
     >
       <AppShell.Header>{header}</AppShell.Header>
-      {navbar ? <AppShell.Navbar p="md">{navbar}</AppShell.Navbar> : null}
+      {navbar ? (
+        <AppShell.Navbar className="gradient-navbar" p="md">
+          {navbar}
+        </AppShell.Navbar>
+      ) : null}
       <AppShell.Main>
         <Suspense fallback={<Loader />}>{children}</Suspense>
       </AppShell.Main>

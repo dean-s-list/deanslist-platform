@@ -1,7 +1,7 @@
-import { CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
+import { CoreUiCard, CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
 import { useManagerFindOneProject } from '@deanslist-platform/web-project-data-access'
 import { ProjectUiItem } from '@deanslist-platform/web-project-ui'
-import { Group, Paper } from '@mantine/core'
+import { Group } from '@mantine/core'
 import { UiError, UiLoader, UiStack, UiTabRoute, UiTabRoutes } from '@pubkey-ui/core'
 import { useParams } from 'react-router-dom'
 import { ManagerProjectDetailChannelsTab } from './manager-project-detail-channels-tab'
@@ -38,9 +38,9 @@ export function ManagerProjectDetailFeature() {
         <ProjectUiItem project={item} />
         <CoreUiDebugModal data={item} />
       </Group>
-      <Paper radius="lg" withBorder p="lg" bg="dark.7">
+      <CoreUiCard>
         <UiTabRoutes variant="pills" radius="xl" tabs={tabs} />
-      </Paper>
+      </CoreUiCard>
     </UiStack>
   )
 }

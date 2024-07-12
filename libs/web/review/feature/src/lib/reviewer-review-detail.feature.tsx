@@ -2,7 +2,7 @@ import { ReviewerCommentFeature } from '@deanslist-platform/web-comment-feature'
 import { CoreUiBackLink, CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
 import { useReviewerFindOneReview } from '@deanslist-platform/web-review-data-access'
 import { Group } from '@mantine/core'
-import { UiError, UiGroup, UiLoader, UiStack } from '@pubkey-ui/core'
+import { UiError, UiLoader } from '@pubkey-ui/core'
 import { useParams } from 'react-router-dom'
 
 export function ReviewerReviewDetailFeature() {
@@ -20,17 +20,14 @@ export function ReviewerReviewDetailFeature() {
   }
 
   return (
-    <UiStack>
-      <UiGroup>
+    <ReviewerCommentFeature
+      review={item}
+      leftAction={
         <Group>
           <CoreUiBackLink label="Back to all reviews" />
-        </Group>
-        <Group>
           <CoreUiDebugModal data={item} />
         </Group>
-      </UiGroup>
-
-      <ReviewerCommentFeature reviewId={reviewId} />
-    </UiStack>
+      }
+    />
   )
 }

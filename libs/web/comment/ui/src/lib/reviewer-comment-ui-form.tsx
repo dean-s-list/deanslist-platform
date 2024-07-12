@@ -1,7 +1,9 @@
 import { ReviewerCreateCommentInput } from '@deanslist-platform/sdk'
+import { pinkGradient } from '@deanslist-platform/web-core-ui'
 import { Button, Group, Textarea } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { UiStack } from '@pubkey-ui/core'
+import { IconMessageCircle2Filled } from '@tabler/icons-react'
 
 export function ReviewerCommentUiForm({
   cancel,
@@ -30,11 +32,19 @@ export function ReviewerCommentUiForm({
         <Textarea required autosize minRows={2} placeholder="Write a comment..." {...form.getInputProps('content')} />
         <Group justify="flex-end">
           {cancel ? (
-            <Button variant="light" onClick={cancel}>
+            <Button radius="xl" size="xs" variant="light" onClick={cancel}>
               Cancel
             </Button>
           ) : null}
-          <Button type="submit">Comment</Button>
+          <Button
+            radius="xl"
+            size="xs"
+            styles={{ root: { ...pinkGradient } }}
+            rightSection={<IconMessageCircle2Filled size={16} />}
+            type="submit"
+          >
+            Comment
+          </Button>
         </Group>
       </UiStack>
     </form>

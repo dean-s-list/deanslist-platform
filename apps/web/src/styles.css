@@ -4,6 +4,25 @@ body,
   height: 100%;
 }
 
-:root[data-mantine-color-scheme='dark'] {
-  --mantine-color-body: var(--mantine-color-dark-8) !important;
+.gradient-purple {
+  background: linear-gradient(130.23deg, #242545 0%, #100c20 50%, #370c57 100%) !important;
+}
+
+.identity-solana,
+.identity-login-discord,
+.gradient-pink {
+  background: linear-gradient(111.92deg, #a770ef 0%, #cf8bf3 51%, #a770ef 100%) !important;
+}
+
+.gradient-navbar {
+  background: linear-gradient(
+    111.92deg,
+    rgba(167, 112, 239, 0.05) 0%,
+    rgba(207, 139, 243, 0.05) 51%,
+    rgba(167, 112, 239, 0.05) 100%
+  ) !important;
+}
+
+.gradient-card {
+  background: linear-gradient(0deg, rgba(224, 206, 248, 0.16), rgba(224, 206, 248, 0.16)) !important;
 }

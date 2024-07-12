@@ -24,7 +24,7 @@ export function CoreUiHeaderProfile({ user, logout }: { user?: User | null; logo
       <Menu.Target>
         <Button
           variant={open ? 'light' : 'default'}
-          style={{ border: '1px solid white' }}
+          style={{ border: '1px solid white', backgroundColor: 'transparent' }}
           color="brand"
           radius="xl"
           leftSection={

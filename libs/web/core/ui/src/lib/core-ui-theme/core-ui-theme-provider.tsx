@@ -11,6 +11,8 @@ const defaultTheme = createTheme({
     brand: DEFAULT_THEME.colors.violet,
   },
   primaryColor: 'brand',
+  fontFamily: `Poppins, sans-serif`,
+  headings: { fontFamily: 'Poppins, sans-serif' },
 })
 
 export interface CoreUiThemeProviderOptions {
@@ -33,7 +35,7 @@ export function CoreUiThemeProvider({ children }: CoreUiThemeProviderOptions) {
       <ColorSchemeScript defaultColorScheme="dark" />
       <MantineProvider theme={defaultTheme} defaultColorScheme="dark">
         <ModalsProvider>
-          <Notifications />
+          <Notifications position="top-center" />
           <Suspense fallback={<Loader />}>{children}</Suspense>
         </ModalsProvider>
       </MantineProvider>

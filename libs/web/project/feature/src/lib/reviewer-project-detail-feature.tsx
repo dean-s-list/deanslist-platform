@@ -1,5 +1,5 @@
 import { useAuth } from '@deanslist-platform/web-auth-data-access'
-import { CoreUiBackLink, CoreUiButton } from '@deanslist-platform/web-core-ui'
+import { CoreUiBackLink, CoreUiButton, CoreUiCard } from '@deanslist-platform/web-core-ui'
 import { useReviewerFindOneProject } from '@deanslist-platform/web-project-data-access'
 import {
   ProjectUiInstructions,
@@ -10,7 +10,7 @@ import {
   ProjectUiTags,
 } from '@deanslist-platform/web-project-ui'
 import { ReviewerProjectReviewFeature } from '@deanslist-platform/web-review-feature'
-import { Button, Collapse, Group, Paper } from '@mantine/core'
+import { Button, Collapse, Group } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { UiContainer, UiError, UiGroup, UiLoader, UiStack } from '@pubkey-ui/core'
 import { IconArrowsMaximize, IconArrowsMinimize, IconChairDirector } from '@tabler/icons-react'
@@ -50,7 +50,8 @@ export function ReviewerProjectDetailFeature() {
             </CoreUiButton>
           ) : null}
         </UiGroup>
-        <Paper radius="xl" withBorder p="xl" bg="dark.7">
+
+        <CoreUiCard>
           <UiStack>
             <UiGroup>
               <Group>
@@ -85,8 +86,8 @@ export function ReviewerProjectDetailFeature() {
               </UiStack>
             </Collapse>
           </UiStack>
-        </Paper>
-        <UiStack mt="lg">{routes}</UiStack>
+          <UiStack mt="lg">{routes}</UiStack>
+        </CoreUiCard>
       </UiStack>
     </UiContainer>
   )

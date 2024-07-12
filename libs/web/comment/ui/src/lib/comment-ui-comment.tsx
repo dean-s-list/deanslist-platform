@@ -1,7 +1,7 @@
 import { Comment } from '@deanslist-platform/sdk'
-import { UserUiItem } from '@deanslist-platform/web-user-ui'
-import { Group, Paper, PaperProps, TypographyStylesProvider } from '@mantine/core'
-import { UiTime } from '@pubkey-ui/core'
+import { UserUiAvatar } from '@deanslist-platform/web-user-ui'
+import { Box, Group, Stack, Text, TypographyStylesProvider } from '@mantine/core'
+import { UiAnchor, UiTime } from '@pubkey-ui/core'
 import { ReactNode } from 'react'
 
 import classes from './comment-ui-comment.module.css'
@@ -13,31 +13,48 @@ export function CommentUiComment({
   action,
   deleteComment,
   to,
-  ...props
-}: PaperProps & {
+}: {
   comment: Comment
   footer?: ReactNode
   action?: ReactNode
   deleteComment?: (id: string) => Promise<boolean>
   to?: string | null
 }) {
+  if (!comment.author) return null
   return (
-    <Paper withBorder radius="md" p="md" pb="xs" {...props}>
+    <Box p="md" pb="xs">
       <Group justify="space-between">
-        <UserUiItem
-          to={to}
-          user={comment.author ?? undefined}
-          label={comment.createdAt ? <UiTime fz="xs" c="dimmed" date={new Date(comment.createdAt)} /> : null}
-        />
+        <UiAnchor to={to ?? undefined} underline="never">
+          <Group gap="sm" align="start">
+            <UserUiAvatar user={comment.author} />
+            <Stack gap={0}>
+              <Group gap="xs" align="center">
+                <UiAnchor display="flex" to={comment.author.profileUrl} underline="never">
+                  <Text span size="lg" fw={700}>
+                    {comment.author.username}
+                  </Text>
+                </UiAnchor>
+                <Text size="xs" c="dimmed">
+                  {comment.createdAt ? <UiTime fz="xs" c="dimmed" date={new Date(comment.createdAt)} /> : null}
+                </Text>
+              </Group>
+              <TypographyStylesProvider
+                className={classes.body}
+                styles={{
+                  root: { margin: 0, padding: 0 },
+                }}
+              >
+                <div className={classes.content} dangerouslySetInnerHTML={{ __html: comment.content ?? '' }} />
+              </TypographyStylesProvider>
+            </Stack>
+          </Group>
+        </UiAnchor>
         <Group>
           {action}
           {deleteComment ? <CommentUiIconDelete comment={comment} deleteComment={deleteComment} /> : null}
         </Group>
       </Group>
-      <TypographyStylesProvider className={classes.body}>
-        <div className={classes.content} dangerouslySetInnerHTML={{ __html: comment.content ?? '' }} />
-      </TypographyStylesProvider>
       {footer}
-    </Paper>
+    </Box>
   )
 }

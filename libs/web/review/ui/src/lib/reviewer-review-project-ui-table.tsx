@@ -10,9 +10,13 @@ export function ReviewerReviewProjectUiTable({ reviews = [] }: { reviews: Review
   return (
     <ScrollArea>
       <DataTable
-        borderRadius="sm"
-        withTableBorder
-        shadow="xs"
+        styles={{
+          table: { backgroundColor: 'transparent' },
+          root: { backgroundColor: 'transparent' },
+        }}
+        noHeader
+        withRowBorders={false}
+        withTableBorder={false}
         columns={[
           {
             accessor: 'reviewer',

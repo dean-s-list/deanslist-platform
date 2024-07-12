@@ -16,7 +16,7 @@ export function UserUiToggleDeveloperMode({
       checked={user?.developer ?? false}
       onChange={(e) =>
         updateUser({ developer: e.target.checked }).then(() => {
-          toastInfo(`Developer mode ${e.target.checked ? 'enabled' : 'disabled'}`)
+          toastInfo(`Developer mode ${e.target.checked ? 'disabled' : 'enabled'}`)
         })
       }
     />

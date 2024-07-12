@@ -1,7 +1,8 @@
-import { Anchor, DrawerProps, Group, Stack } from '@mantine/core'
+import { Anchor, DrawerProps, Group, Stack, Text } from '@mantine/core'
 import cx from 'clsx'
 import { ComponentType, ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import { pinkGradientText } from '../core-ui-constants'
 import { CoreUiLogoType } from '../core-ui-logo'
 
 import classes from './core-ui-navbar.module.css'
@@ -37,7 +38,9 @@ export function CoreUiNavbar(props: CoreUiNavbarProps) {
     >
       <Group>
         <Icon size={24} stroke={1.5} />
-        {label}
+        <Text span styles={{ root: pathname.startsWith(link) ? pinkGradientText : undefined }}>
+          {label}
+        </Text>
       </Group>
     </Anchor>
   ))

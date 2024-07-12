@@ -24,7 +24,7 @@ export function ManagerProjectDetailPayoutsTab({ projectId }: { projectId: strin
 }
 
 export function ManagerProjectDetailRatingsTab({ projectId }: { projectId: string }) {
-  const { item, query, updateProject } = useManagerFindOneProject({ projectId })
+  const { item, query } = useManagerFindOneProject({ projectId })
 
   const routes = useRoutes([{ path: '', element: <ManagerProjectReviewFeature projectId={projectId} /> }])
   if (query.isLoading) {

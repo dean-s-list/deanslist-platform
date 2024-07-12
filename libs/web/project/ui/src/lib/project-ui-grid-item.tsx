@@ -1,7 +1,7 @@
 import type { Project } from '@deanslist-platform/sdk'
-import { Paper, Text } from '@mantine/core'
+import { CoreUiCard } from '@deanslist-platform/web-core-ui'
+import { Text } from '@mantine/core'
 import { UiGroup, UiStack } from '@pubkey-ui/core'
-import { Link } from 'react-router-dom'
 import { ProjectUiAmount } from './project-ui-amount'
 import { ProjectUiItem } from './project-ui-item'
 import { ProjectUiStatusBadge } from './project-ui-status-badge'
@@ -9,7 +9,7 @@ import { ProjectUiTags } from './project-ui-tags'
 
 export function ProjectUiGridItem({ project, to }: { project: Project; to: string }) {
   return (
-    <Paper component={Link} to={to} withBorder p="md" radius="lg">
+    <CoreUiCard to={to}>
       <UiStack>
         <UiGroup>
           <ProjectUiItem project={project} />
@@ -21,6 +21,6 @@ export function ProjectUiGridItem({ project, to }: { project: Project; to: strin
           <ProjectUiStatusBadge status={project?.status} />
         </UiGroup>
       </UiStack>
-    </Paper>
+    </CoreUiCard>
   )
 }

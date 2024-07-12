@@ -23,7 +23,7 @@ export function CommunityUiItem({
       <Group gap="sm" {...groupProps}>
         <CommunityUiAvatar community={community} {...avatarProps} />
         <Stack gap={0}>
-          <Text size="xl" fw={500}>
+          <Text size="xl" fw={500} c="white">
             {community?.name}
           </Text>
         </Stack>

@@ -1,10 +1,11 @@
 import { IdentityProvider } from '@deanslist-platform/sdk'
 import { useAuth } from '@deanslist-platform/web-auth-data-access'
+import { CoreUiLogoType } from '@deanslist-platform/web-core-ui'
 import { useUserFindManyIdentity } from '@deanslist-platform/web-identity-data-access'
 import { IdentityUiLinkButton } from '@deanslist-platform/web-identity-ui'
-import { Flex, Paper, rem, Stack, Title, useMantineTheme } from '@mantine/core'
-import { useMediaQuery } from '@mantine/hooks'
-import { UiStack, useUiColorScheme } from '@pubkey-ui/core'
+import { Box, Flex, Group, Stepper, Title } from '@mantine/core'
+import { UiStack } from '@pubkey-ui/core'
+import { useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 
 export function OnboardingFeature() {
@@ -13,30 +14,26 @@ export function OnboardingFeature() {
   const { query } = useUserFindManyIdentity({
     username: user?.username as string,
   })
-  const { breakpoints } = useMantineTheme()
-  const isSmall = useMediaQuery(`(max-width: ${breakpoints.sm}`)
-  const { colorScheme } = useUiColorScheme()
-  const border = `${rem(1)} solid var(mantine-color-${colorScheme === 'dark' ? 'dark-7' : 'gray-3'})`
-
+  const [active, setActive] = useState(1)
   if (isOnboarded) {
     return <Navigate to="/dashboard" replace />
   }
 
   return (
-    <Flex direction="column" w="100%" h="100%" justify="center" align="center">
-      <Paper
-        h={isSmall ? '100%' : undefined}
-        w={isSmall ? '100%' : rem(550)}
-        p="xl"
-        bg={colorScheme === 'dark' ? 'dark.9' : undefined}
-        style={{ border: isSmall ? undefined : border }}
-      >
-        <UiStack align="center" gap="xl">
-          <Stack align="center">
-            <Title order={2} c={colorScheme === 'dark' ? 'white' : 'black'} ta="center" my="md">
-              One more step before you begin...
-            </Title>
-          </Stack>
+    <Flex justify="center" align="center" direction="column">
+      <Box miw={400} p="lg">
+        <UiStack gap={48} align="center">
+          <Group justify="center">
+            <CoreUiLogoType height={64} />
+          </Group>
+          <Title order={1}>One more step before you begin...</Title>
+
+          <Stepper active={active} onStepClick={setActive}>
+            <Stepper.Step label="Login with Discord" />
+            <Stepper.Step label="Link wallet" />
+            <Stepper.Step label="Enjoy and earn rewards" />
+          </Stepper>
+
           <IdentityUiLinkButton
             loading={query.isLoading}
             identities={[]}
@@ -54,7 +51,7 @@ export function OnboardingFeature() {
             size="xl"
           />
         </UiStack>
-      </Paper>
+      </Box>
     </Flex>
   )
 }

@@ -10,7 +10,6 @@ export function OnboardingLayout({ children }: { children: ReactNode }) {
 
   return (
     <CoreUiLayout
-      styles={{ root: { height: '100%' }, main: { height: '100%' } }}
       header={
         <CoreUiHeader
           logoSmall={<CoreUiLogo height={28} />}

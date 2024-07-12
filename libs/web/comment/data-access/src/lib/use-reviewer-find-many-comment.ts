@@ -25,9 +25,9 @@ export function useReviewerFindManyComment(props: Partial<ReviewerFindManyCommen
         .then((res) => res.data)
         .then(async (res) => {
           if (res.created) {
-            toastSuccess(`Comment created`)
+            toastSuccess(`Your comment was added`)
           } else {
-            toastError(`Comment not created`)
+            toastError(`Your comment was not added`)
           }
           await query.refetch()
           return !!res.created

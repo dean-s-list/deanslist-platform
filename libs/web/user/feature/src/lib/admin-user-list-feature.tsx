@@ -1,5 +1,6 @@
 import {
   CoreUiBack,
+  CoreUiCard,
   CoreUiDebugModal,
   CoreUiPage,
   CoreUiPageLimit,
@@ -40,17 +41,19 @@ export function AdminUserListFeature() {
       {query.isLoading ? (
         <UiLoader />
       ) : items?.length ? (
-        <AdminUserUiTable
-          deleteUser={(user) => {
-            if (!window.confirm('Are you sure?')) return
-            return deleteUser(user.id)
-          }}
-          users={items}
-          page={pagination.page}
-          totalRecords={pagination.total}
-          recordsPerPage={pagination.limit}
-          onPageChange={(page) => void pagination.setPage(page)}
-        />
+        <CoreUiCard>
+          <AdminUserUiTable
+            deleteUser={(user) => {
+              if (!window.confirm('Are you sure?')) return
+              return deleteUser(user.id)
+            }}
+            users={items}
+            page={pagination.page}
+            totalRecords={pagination.total}
+            recordsPerPage={pagination.limit}
+            onPageChange={(page) => void pagination.setPage(page)}
+          />
+        </CoreUiCard>
       ) : (
         <UiInfo message="User not found" />
       )}
