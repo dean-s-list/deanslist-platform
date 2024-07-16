@@ -4,7 +4,9 @@ import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
-export function useReviewerFindManyComment(props: Partial<ReviewerFindManyCommentInput> & { reviewId: string }) {
+export function useReviewerFindManyComment(
+  props: Partial<ReviewerFindManyCommentInput> & { reviewId: string; onReviewUpdates?: () => void },
+) {
   const sdk = useSdk()
   const [search, setSearch] = useState<string>(props?.search ?? '')
 
@@ -26,6 +28,7 @@ export function useReviewerFindManyComment(props: Partial<ReviewerFindManyCommen
         .then(async (res) => {
           if (res.created) {
             toastSuccess(`Your comment was added`)
+            props.onReviewUpdates && props.onReviewUpdates()
           } else {
             toastError(`Your comment was not added`)
           }
@@ -40,6 +43,7 @@ export function useReviewerFindManyComment(props: Partial<ReviewerFindManyCommen
       sdk.reviewerDeleteComment({ commentId }).then(async () => {
         toastSuccess('Comment deleted')
         await query.refetch()
+        props.onReviewUpdates && props.onReviewUpdates()
         return true
       }),
   }

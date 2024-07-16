@@ -7,10 +7,19 @@ import { Group } from '@mantine/core'
 import { UiGroup, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
 import { ReactNode } from 'react'
 
-export function ReviewerCommentListFeature({ review, leftAction }: { review: Review; leftAction: ReactNode }) {
+export function ReviewerCommentListFeature({
+  review,
+  leftAction,
+  onReviewUpdates,
+}: {
+  review: Review
+  leftAction: ReactNode
+  onReviewUpdates?: () => void
+}) {
   const { user } = useAuth()
   const { createComment, deleteComment, items, query, setSearch } = useReviewerFindManyComment({
     reviewId: review.id,
+    onReviewUpdates,
   })
   const owned = user?.id === review.reviewerId
 

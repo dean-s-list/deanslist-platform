@@ -27,7 +27,16 @@ export function ReviewerCommentUiForm({
   })
 
   return (
-    <form onSubmit={form.onSubmit((values) => createComment({ ...values }))}>
+    <form
+      onSubmit={form.onSubmit((values) => {
+        createComment({ ...values }).then((created) => {
+          if (created) {
+            form.setFieldValue('content', '')
+          }
+          return created
+        })
+      })}
+    >
       <UiStack>
         <Textarea required autosize minRows={2} placeholder="Write a comment..." {...form.getInputProps('content')} />
         <Group justify="flex-end">
