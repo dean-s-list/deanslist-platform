@@ -3,11 +3,12 @@ import { UiError, UiInfo, UiLoader } from '@pubkey-ui/core'
 import React from 'react'
 import { LeaderboardUiLeader } from './leaderboard-ui-leader'
 import { LeaderboardLeader, LeaderboardPerk } from '@deanslist-platform/web-leaderboard-data-access'
+import { UiIconRank } from '@deanslist-platform/web-core-ui'
 
-function TableTh({ text, ta }: { text: string; ta?: string }) {
+function TableTh({ text, ta }: { text: any; ta?: string }) {
   return (
     <Table.Th ta="left">
-      <Text size="xl" fw={600}>
+      <Text size="xl" fw={600} lh={0.2}>
         {text}
       </Text>
     </Table.Th>
@@ -51,7 +52,7 @@ export function LeaderboardUiTable({
       <Table p="sm" verticalSpacing="md">
         <Table.Thead>
           <Table.Tr>
-            <TableTh text="Rank" />
+            <TableTh text={<UiIconRank />} />
             <TableTh text="Member" ta="left" />
             <TableTh text="Perks" />
             <TableTh text="Governance" />

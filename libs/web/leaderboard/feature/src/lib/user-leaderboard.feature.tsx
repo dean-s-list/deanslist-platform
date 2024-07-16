@@ -1,5 +1,5 @@
 import { useAuth } from '@deanslist-platform/web-auth-data-access'
-import { CoreUiButton, CoreUiCountdown } from '@deanslist-platform/web-core-ui'
+import { CoreUiButton, CoreUiCountdown, UiIconRank } from '@deanslist-platform/web-core-ui'
 import {
   clearLeaderboardCache,
   useAnonUserIdentityMap,
@@ -9,7 +9,20 @@ import {
 } from '@deanslist-platform/web-leaderboard-data-access'
 import { LeaderboardUiLeader, LeaderboardUiPerks, LeaderboardUiTable } from '@deanslist-platform/web-leaderboard-ui'
 import { SolanaClusterProvider } from '@deanslist-platform/web-solana-data-access'
-import { Card, Center, Divider, Grid, Stack, Table, TableTbody, Title, useMantineTheme } from '@mantine/core'
+import {
+  Anchor,
+  Button,
+  Card,
+  Center,
+  Divider,
+  Grid,
+  Group,
+  Stack,
+  Table,
+  TableTbody,
+  Title,
+  useMantineTheme,
+} from '@mantine/core'
 import { UiError, UiLoader, UiPage } from '@pubkey-ui/core'
 import { useWallet, Wallet } from '@solana/wallet-adapter-react'
 import { IconListNumbers } from '@tabler/icons-react'
@@ -107,6 +120,14 @@ function LeaderboardFeature({
               </TableTbody>
             </Table>
           )}
+          <Anchor href="https://app.realms.today/dao/Dean's%20List%20Network%20State" target="_blank">
+            <Button w="100%" radius="xl" size="lg">
+              <Group gap="xs">
+                <UiIconRank />
+                Rank up Now!
+              </Group>
+            </Button>
+          </Anchor>
           <Divider />
           <LeaderboardUiPerks perks={perks} />
         </Stack>
