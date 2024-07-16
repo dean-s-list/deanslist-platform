@@ -21,7 +21,7 @@ export function ReviewerProjectReviewListFeature({ projectId }: { projectId: str
         <CoreUiSearchField placeholder="Search review" setSearch={setSearch} />
         <CoreUiDebugModal data={items} />
         {item ? (
-          <Button component={Link} to={item.viewUrl}>
+          <Button component={Link} to={item.viewUrl} radius="xl" size="lg">
             Open your review
           </Button>
         ) : (
