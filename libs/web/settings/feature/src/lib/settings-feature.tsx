@@ -1,10 +1,10 @@
 import { CoreUiGrid } from '@deanslist-platform/web-core-ui'
 import { useUserProfile } from '@deanslist-platform/web-user-data-access'
 import { UserUiProfile, UserUiToggleDeveloperMode } from '@deanslist-platform/web-user-ui'
-import { Button } from '@mantine/core'
-import { UiCard, UiContainer, UiLoader, UiStack, UiWarning } from '@pubkey-ui/core'
+import { Button, Text } from '@mantine/core'
+import { UiContainer, UiLoader, UiStack, UiWarning } from '@pubkey-ui/core'
 import { Link } from 'react-router-dom'
-import { SettingsIdentityFeature } from './settings-identity-feature'
+import { SettingsWalletsFeature } from './settings-wallets-feature'
 
 export default function SettingsFeature() {
   const { updateUser, user, query } = useUserProfile()
@@ -32,12 +32,13 @@ export default function SettingsFeature() {
         }
       >
         <UiStack gap="xl">
-          <UiCard title="Manage Identities">
-            <SettingsIdentityFeature />
-          </UiCard>
-          <UiCard title="Advanced Settings">
+          <SettingsWalletsFeature />
+          <UiStack>
+            <Text fz="xl" fw={500}>
+              Advanced settings
+            </Text>
             <UserUiToggleDeveloperMode user={user} updateUser={updateUser} />
-          </UiCard>
+          </UiStack>
         </UiStack>
       </CoreUiGrid>
     </UiContainer>

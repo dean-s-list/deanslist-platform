@@ -1,9 +1,10 @@
 import { CommunityManager } from '@deanslist-platform/sdk'
 import { useAuth } from '@deanslist-platform/web-auth-data-access'
+import { CoreUiCard } from '@deanslist-platform/web-core-ui'
 import { UserUiItem } from '@deanslist-platform/web-user-ui'
 import { ActionIcon, Group, Switch } from '@mantine/core'
 import { modals } from '@mantine/modals'
-import { UiCard, UiGroup, UiStack } from '@pubkey-ui/core'
+import { UiGroup, UiStack } from '@pubkey-ui/core'
 import { IconTrash } from '@tabler/icons-react'
 
 export function CommunityUiManagerListItem({
@@ -17,7 +18,7 @@ export function CommunityUiManagerListItem({
 }) {
   const { user } = useAuth()
   return (
-    <UiCard key={item.id}>
+    <CoreUiCard key={item.id}>
       <UiStack>
         <UiGroup>
           {item.user ? <UserUiItem user={item.user} /> : <div />}
@@ -50,6 +51,6 @@ export function CommunityUiManagerListItem({
           </Group>
         </UiGroup>
       </UiStack>
-    </UiCard>
+    </CoreUiCard>
   )
 }

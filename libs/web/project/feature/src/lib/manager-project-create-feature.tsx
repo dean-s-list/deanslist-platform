@@ -1,11 +1,16 @@
 import { ManagerCreateProjectInput } from '@deanslist-platform/sdk'
-import { CoreUiBack } from '@deanslist-platform/web-core-ui'
 import { useManagerFindManyProject } from '@deanslist-platform/web-project-data-access'
 import { ManagerProjectUiCreateForm } from '@deanslist-platform/web-project-ui'
-import { toastError, UiCard, UiPage } from '@pubkey-ui/core'
+import { toastError } from '@pubkey-ui/core'
 import { useNavigate } from 'react-router-dom'
 
-export function ManagerProjectCreateFeature({ communityId }: { communityId: string }) {
+export function ManagerProjectCreateFeature({
+  communityId,
+  afterSubmit,
+}: {
+  communityId: string
+  afterSubmit: () => void
+}) {
   const navigate = useNavigate()
   const { createProject } = useManagerFindManyProject({ communityId })
 
@@ -13,7 +18,8 @@ export function ManagerProjectCreateFeature({ communityId }: { communityId: stri
     return createProject(input)
       .then((res) => {
         if (res) {
-          navigate(`../${res.id}`)
+          afterSubmit()
+          navigate(res.manageUrl)
         }
       })
       .then(() => true)
@@ -23,11 +29,5 @@ export function ManagerProjectCreateFeature({ communityId }: { communityId: stri
       })
   }
 
-  return (
-    <UiPage leftAction={<CoreUiBack />} title="Create Project">
-      <UiCard>
-        <ManagerProjectUiCreateForm submit={submit} />
-      </UiCard>
-    </UiPage>
-  )
+  return <ManagerProjectUiCreateForm submit={submit} />
 }

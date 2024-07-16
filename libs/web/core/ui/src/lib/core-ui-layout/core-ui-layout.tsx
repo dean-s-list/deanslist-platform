@@ -1,6 +1,7 @@
 import { AppShell, AppShellNavbarConfiguration, AppShellProps, Loader, rem } from '@mantine/core'
 import { ReactNode, Suspense } from 'react'
 import { purpleGradient } from '../core-ui-constants'
+import { useUiBreakpoints } from '../core-ui-theme'
 
 export function CoreUiLayout({
   children,
@@ -16,6 +17,7 @@ export function CoreUiLayout({
   navbar?: ReactNode
   navbarConfig?: Omit<AppShellNavbarConfiguration, 'width' | 'breakpoint'>
 }) {
+  const { isMd } = useUiBreakpoints()
   return (
     <AppShell
       withBorder={false}
@@ -23,7 +25,9 @@ export function CoreUiLayout({
       styles={{
         root: { ...purpleGradient },
         header: { backgroundColor: 'transparent' },
-        navbar: { backgroundColor: 'inherit' },
+        navbar: {
+          backgroundColor: isMd ? 'var(--mantine-color-body)!important' : 'inherit',
+        },
       }}
       header={{ height: headerHeight }}
       navbar={navbar ? { width: 300, breakpoint: 'md', ...navbarConfig } : undefined}

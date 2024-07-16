@@ -94,24 +94,20 @@ export const provisionDataCommunities: Prisma.CommunityCreateInput[] = [
       create: [
         {
           avatarUrl: 'https://pbs.twimg.com/profile_images/1764858894701015040/6lI5MAwe_400x400.jpg',
-          name: 'Triad',
-          slug: 'triad',
-          managers: { connect: [{ id: 'beeman.dev' }, { id: 'parzicano' }, { id: 'scientistjoe' }] },
+          name: 'FoSho',
+          slug: 'fosho',
+          managers: { connect: [{ id: 'beeman.dev' }] },
           amountTotalUsd: 1500,
           amountManagerUsd: 500,
           amountReferralUsd: 100,
           duration: 2,
           startDate: new Date(),
           status: ProjectStatus.Active,
-          tags: ['defi', 'dapp'],
-          instructions: `1. Go to [app.triadfi.co](https://app.triadfi.co) to get started.
+          tags: ['dapp'],
+          instructions: `1. Go to the app to get started.
 2. Connect your wallet.
-3. Use the app and create positions.
+3. Use the app and create content.
 `,
-          linkDiscord: 'https://discord.gg/triadfi',
-          linkGithub: 'https://github.com/triadxyz',
-          linkTwitter: 'https://x.com/triadfi',
-          linkWebsite: 'https://triadfi.co/',
         },
       ],
     },
