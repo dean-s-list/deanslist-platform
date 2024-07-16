@@ -6,6 +6,28 @@ import { modals } from '@mantine/modals'
 import { IconWallet } from '@tabler/icons-react'
 import { IdentityUiSolanaLinkWizard } from './identity-ui-solana-link-wizard'
 
+export function identityLinkSolanaModal({ identities, refresh }: { identities?: Identity[]; refresh: () => void }) {
+  modals.open({
+    size: 'xl',
+    title: 'Link Solana Wallet',
+    zIndex: 100,
+    centered: true,
+    children: (
+      <SolanaClusterProvider autoConnect={false}>
+        <IdentityProviderSolanaLink refresh={refresh}>
+          <IdentityUiSolanaLinkWizard
+            identities={identities ?? []}
+            refresh={() => {
+              refresh()
+              modals.closeAll()
+            }}
+          />
+        </IdentityProviderSolanaLink>
+      </SolanaClusterProvider>
+    ),
+  })
+}
+
 export function IdentityUiSolanaLinkButton({
   identities = [],
   label,
@@ -25,25 +47,7 @@ export function IdentityUiSolanaLinkButton({
       leftSection={<IconWallet size={28} />}
       {...props}
       onClick={() => {
-        modals.open({
-          size: 'xl',
-          title: 'Link Solana Wallet',
-          zIndex: 100,
-          centered: true,
-          children: (
-            <SolanaClusterProvider autoConnect={false}>
-              <IdentityProviderSolanaLink refresh={refresh}>
-                <IdentityUiSolanaLinkWizard
-                  identities={identities ?? []}
-                  refresh={() => {
-                    refresh()
-                    modals.closeAll()
-                  }}
-                />
-              </IdentityProviderSolanaLink>
-            </SolanaClusterProvider>
-          ),
-        })
+        identityLinkSolanaModal({ identities, refresh })
       }}
     >
       {label ?? 'Link Solana Wallet'}

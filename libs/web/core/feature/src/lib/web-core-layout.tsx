@@ -22,8 +22,8 @@ export function WebCoreLayout({ children }: { children: ReactNode }) {
         { link: '/projects', label: 'Projects', icon: IconCube },
         { link: '/reviews', label: 'My reviews', icon: IconCheckupList },
         isManager ? { link: '/manager/communities', label: 'Communities', icon: IconUsersGroup } : null,
-        isAdmin ? { link: '/admin', label: 'Admin', icon: IconShield } : null,
         { link: `/settings`, label: 'Settings', icon: IconSettings },
+        isAdmin ? { link: '/admin', label: 'Admin', icon: IconShield } : null,
       ].filter(Boolean) as CoreUiNavbarLink[],
     [isAdmin, isManager],
   )
