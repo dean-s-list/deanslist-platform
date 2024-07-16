@@ -2,15 +2,18 @@ import { useAuth } from '@deanslist-platform/web-auth-data-access'
 import { CoreUiBackLink, CoreUiButton, CoreUiCard } from '@deanslist-platform/web-core-ui'
 import { useReviewerFindOneProject } from '@deanslist-platform/web-project-data-access'
 import {
+  ProjectUiAmount,
+  ProjectUiDeadline,
   ProjectUiInstructions,
   ProjectUiItem,
   ProjectUiManagers,
+  ProjectUiParticipants,
   ProjectUiSocials,
   ProjectUiStatusBadge,
   ProjectUiTags,
 } from '@deanslist-platform/web-project-ui'
 import { ReviewerProjectReviewFeature } from '@deanslist-platform/web-review-feature'
-import { Button, Collapse, Group } from '@mantine/core'
+import { Button, Collapse, Divider, Group } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { UiContainer, UiError, UiGroup, UiLoader, UiStack } from '@pubkey-ui/core'
 import { IconArrowsMaximize, IconArrowsMinimize, IconChairDirector } from '@tabler/icons-react'
@@ -83,6 +86,15 @@ export function ReviewerProjectDetailFeature() {
 
                 {item.instructions?.length ? <ProjectUiInstructions item={item} /> : null}
                 <ProjectUiSocials item={item} />
+                <Divider />
+                <Group justify="space-between">
+                  <Group>
+                    <ProjectUiDeadline project={item} />
+                    <ProjectUiParticipants project={item} />
+                  </Group>
+                  <ProjectUiAmount amount={item.amountTotalUsd} label="total" />
+                </Group>
+                <Divider />
               </UiStack>
             </Collapse>
           </UiStack>

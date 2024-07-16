@@ -1534,6 +1534,8 @@ export type ManagerFindManyCommentQuery = {
         avatarUrl?: string | null
         communityId: string
         createdAt?: Date | null
+        duration?: number | null
+        endDate?: Date | null
         id: string
         instructions?: string | null
         linkDiscord?: string | null
@@ -1546,6 +1548,7 @@ export type ManagerFindManyCommentQuery = {
         reviewCount?: number | null
         reviewsOpen?: boolean | null
         slug: string
+        startDate?: Date | null
         status?: ProjectStatus | null
         tags?: Array<string> | null
         updatedAt?: Date | null
@@ -2852,6 +2855,8 @@ export type ProjectDetailsFragment = {
   avatarUrl?: string | null
   communityId: string
   createdAt?: Date | null
+  duration?: number | null
+  endDate?: Date | null
   id: string
   instructions?: string | null
   linkDiscord?: string | null
@@ -2864,6 +2869,7 @@ export type ProjectDetailsFragment = {
   reviewCount?: number | null
   reviewsOpen?: boolean | null
   slug: string
+  startDate?: Date | null
   status?: ProjectStatus | null
   tags?: Array<string> | null
   updatedAt?: Date | null
@@ -2937,6 +2943,8 @@ export type ReviewerFindManyProjectQuery = {
       avatarUrl?: string | null
       communityId: string
       createdAt?: Date | null
+      duration?: number | null
+      endDate?: Date | null
       id: string
       instructions?: string | null
       linkDiscord?: string | null
@@ -2949,6 +2957,7 @@ export type ReviewerFindManyProjectQuery = {
       reviewCount?: number | null
       reviewsOpen?: boolean | null
       slug: string
+      startDate?: Date | null
       status?: ProjectStatus | null
       tags?: Array<string> | null
       updatedAt?: Date | null
@@ -3032,6 +3041,8 @@ export type ReviewerFindOneProjectQuery = {
     avatarUrl?: string | null
     communityId: string
     createdAt?: Date | null
+    duration?: number | null
+    endDate?: Date | null
     id: string
     instructions?: string | null
     linkDiscord?: string | null
@@ -3044,6 +3055,7 @@ export type ReviewerFindOneProjectQuery = {
     reviewCount?: number | null
     reviewsOpen?: boolean | null
     slug: string
+    startDate?: Date | null
     status?: ProjectStatus | null
     tags?: Array<string> | null
     updatedAt?: Date | null
@@ -3118,6 +3130,8 @@ export type AdminFindManyProjectQuery = {
       avatarUrl?: string | null
       communityId: string
       createdAt?: Date | null
+      duration?: number | null
+      endDate?: Date | null
       id: string
       instructions?: string | null
       linkDiscord?: string | null
@@ -3130,6 +3144,7 @@ export type AdminFindManyProjectQuery = {
       reviewCount?: number | null
       reviewsOpen?: boolean | null
       slug: string
+      startDate?: Date | null
       status?: ProjectStatus | null
       tags?: Array<string> | null
       updatedAt?: Date | null
@@ -3213,6 +3228,8 @@ export type AdminFindOneProjectQuery = {
     avatarUrl?: string | null
     communityId: string
     createdAt?: Date | null
+    duration?: number | null
+    endDate?: Date | null
     id: string
     instructions?: string | null
     linkDiscord?: string | null
@@ -3225,6 +3242,7 @@ export type AdminFindOneProjectQuery = {
     reviewCount?: number | null
     reviewsOpen?: boolean | null
     slug: string
+    startDate?: Date | null
     status?: ProjectStatus | null
     tags?: Array<string> | null
     updatedAt?: Date | null
@@ -3328,6 +3346,8 @@ export type AdminUpdateProjectMutation = {
     avatarUrl?: string | null
     communityId: string
     createdAt?: Date | null
+    duration?: number | null
+    endDate?: Date | null
     id: string
     instructions?: string | null
     linkDiscord?: string | null
@@ -3340,6 +3360,7 @@ export type AdminUpdateProjectMutation = {
     reviewCount?: number | null
     reviewsOpen?: boolean | null
     slug: string
+    startDate?: Date | null
     status?: ProjectStatus | null
     tags?: Array<string> | null
     updatedAt?: Date | null
@@ -3462,6 +3483,8 @@ export type ManagerFindManyProjectQuery = {
       avatarUrl?: string | null
       communityId: string
       createdAt?: Date | null
+      duration?: number | null
+      endDate?: Date | null
       id: string
       instructions?: string | null
       linkDiscord?: string | null
@@ -3474,6 +3497,7 @@ export type ManagerFindManyProjectQuery = {
       reviewCount?: number | null
       reviewsOpen?: boolean | null
       slug: string
+      startDate?: Date | null
       status?: ProjectStatus | null
       tags?: Array<string> | null
       updatedAt?: Date | null
@@ -3557,6 +3581,8 @@ export type ManagerFindOneProjectQuery = {
     avatarUrl?: string | null
     communityId: string
     createdAt?: Date | null
+    duration?: number | null
+    endDate?: Date | null
     id: string
     instructions?: string | null
     linkDiscord?: string | null
@@ -3569,6 +3595,7 @@ export type ManagerFindOneProjectQuery = {
     reviewCount?: number | null
     reviewsOpen?: boolean | null
     slug: string
+    startDate?: Date | null
     status?: ProjectStatus | null
     tags?: Array<string> | null
     updatedAt?: Date | null
@@ -3671,6 +3698,8 @@ export type ManagerCreateProjectMutation = {
     avatarUrl?: string | null
     communityId: string
     createdAt?: Date | null
+    duration?: number | null
+    endDate?: Date | null
     id: string
     instructions?: string | null
     linkDiscord?: string | null
@@ -3683,6 +3712,7 @@ export type ManagerCreateProjectMutation = {
     reviewCount?: number | null
     reviewsOpen?: boolean | null
     slug: string
+    startDate?: Date | null
     status?: ProjectStatus | null
     tags?: Array<string> | null
     updatedAt?: Date | null
@@ -3756,6 +3786,8 @@ export type ManagerUpdateProjectMutation = {
     avatarUrl?: string | null
     communityId: string
     createdAt?: Date | null
+    duration?: number | null
+    endDate?: Date | null
     id: string
     instructions?: string | null
     linkDiscord?: string | null
@@ -3768,6 +3800,7 @@ export type ManagerUpdateProjectMutation = {
     reviewCount?: number | null
     reviewsOpen?: boolean | null
     slug: string
+    startDate?: Date | null
     status?: ProjectStatus | null
     tags?: Array<string> | null
     updatedAt?: Date | null
@@ -4065,6 +4098,8 @@ export type ReviewDetailsFragment = {
     avatarUrl?: string | null
     communityId: string
     createdAt?: Date | null
+    duration?: number | null
+    endDate?: Date | null
     id: string
     instructions?: string | null
     linkDiscord?: string | null
@@ -4077,6 +4112,7 @@ export type ReviewDetailsFragment = {
     reviewCount?: number | null
     reviewsOpen?: boolean | null
     slug: string
+    startDate?: Date | null
     status?: ProjectStatus | null
     tags?: Array<string> | null
     updatedAt?: Date | null
@@ -4175,6 +4211,8 @@ export type ManagerFindManyReviewByProjectQuery = {
       avatarUrl?: string | null
       communityId: string
       createdAt?: Date | null
+      duration?: number | null
+      endDate?: Date | null
       id: string
       instructions?: string | null
       linkDiscord?: string | null
@@ -4187,6 +4225,7 @@ export type ManagerFindManyReviewByProjectQuery = {
       reviewCount?: number | null
       reviewsOpen?: boolean | null
       slug: string
+      startDate?: Date | null
       status?: ProjectStatus | null
       tags?: Array<string> | null
       updatedAt?: Date | null
@@ -4286,6 +4325,8 @@ export type ReviewerFindManyReviewByProjectQuery = {
       avatarUrl?: string | null
       communityId: string
       createdAt?: Date | null
+      duration?: number | null
+      endDate?: Date | null
       id: string
       instructions?: string | null
       linkDiscord?: string | null
@@ -4298,6 +4339,7 @@ export type ReviewerFindManyReviewByProjectQuery = {
       reviewCount?: number | null
       reviewsOpen?: boolean | null
       slug: string
+      startDate?: Date | null
       status?: ProjectStatus | null
       tags?: Array<string> | null
       updatedAt?: Date | null
@@ -4397,6 +4439,8 @@ export type ReviewerFindManyReviewByUsernameQuery = {
       avatarUrl?: string | null
       communityId: string
       createdAt?: Date | null
+      duration?: number | null
+      endDate?: Date | null
       id: string
       instructions?: string | null
       linkDiscord?: string | null
@@ -4409,6 +4453,7 @@ export type ReviewerFindManyReviewByUsernameQuery = {
       reviewCount?: number | null
       reviewsOpen?: boolean | null
       slug: string
+      startDate?: Date | null
       status?: ProjectStatus | null
       tags?: Array<string> | null
       updatedAt?: Date | null
@@ -4508,6 +4553,8 @@ export type ReviewerFindUserProjectReviewQuery = {
       avatarUrl?: string | null
       communityId: string
       createdAt?: Date | null
+      duration?: number | null
+      endDate?: Date | null
       id: string
       instructions?: string | null
       linkDiscord?: string | null
@@ -4520,6 +4567,7 @@ export type ReviewerFindUserProjectReviewQuery = {
       reviewCount?: number | null
       reviewsOpen?: boolean | null
       slug: string
+      startDate?: Date | null
       status?: ProjectStatus | null
       tags?: Array<string> | null
       updatedAt?: Date | null
@@ -4619,6 +4667,8 @@ export type ReviewerFindOneReviewQuery = {
       avatarUrl?: string | null
       communityId: string
       createdAt?: Date | null
+      duration?: number | null
+      endDate?: Date | null
       id: string
       instructions?: string | null
       linkDiscord?: string | null
@@ -4631,6 +4681,7 @@ export type ReviewerFindOneReviewQuery = {
       reviewCount?: number | null
       reviewsOpen?: boolean | null
       slug: string
+      startDate?: Date | null
       status?: ProjectStatus | null
       tags?: Array<string> | null
       updatedAt?: Date | null
@@ -4730,6 +4781,8 @@ export type ReviewerCreateReviewMutation = {
       avatarUrl?: string | null
       communityId: string
       createdAt?: Date | null
+      duration?: number | null
+      endDate?: Date | null
       id: string
       instructions?: string | null
       linkDiscord?: string | null
@@ -4742,6 +4795,7 @@ export type ReviewerCreateReviewMutation = {
       reviewCount?: number | null
       reviewsOpen?: boolean | null
       slug: string
+      startDate?: Date | null
       status?: ProjectStatus | null
       tags?: Array<string> | null
       updatedAt?: Date | null
@@ -4849,6 +4903,8 @@ export type AdminFindManyReviewQuery = {
         avatarUrl?: string | null
         communityId: string
         createdAt?: Date | null
+        duration?: number | null
+        endDate?: Date | null
         id: string
         instructions?: string | null
         linkDiscord?: string | null
@@ -4861,6 +4917,7 @@ export type AdminFindManyReviewQuery = {
         reviewCount?: number | null
         reviewsOpen?: boolean | null
         slug: string
+        startDate?: Date | null
         status?: ProjectStatus | null
         tags?: Array<string> | null
         updatedAt?: Date | null
@@ -4971,6 +5028,8 @@ export type AdminFindOneReviewQuery = {
       avatarUrl?: string | null
       communityId: string
       createdAt?: Date | null
+      duration?: number | null
+      endDate?: Date | null
       id: string
       instructions?: string | null
       linkDiscord?: string | null
@@ -4983,6 +5042,7 @@ export type AdminFindOneReviewQuery = {
       reviewCount?: number | null
       reviewsOpen?: boolean | null
       slug: string
+      startDate?: Date | null
       status?: ProjectStatus | null
       tags?: Array<string> | null
       updatedAt?: Date | null
@@ -5467,6 +5527,8 @@ export const ProjectDetailsFragmentDoc = gql`
       ...CommunityDetails
     }
     createdAt
+    duration
+    endDate
     id
     instructions
     linkDiscord
@@ -5482,6 +5544,7 @@ export const ProjectDetailsFragmentDoc = gql`
     reviewCount
     reviewsOpen
     slug
+    startDate
     status
     tags
     updatedAt

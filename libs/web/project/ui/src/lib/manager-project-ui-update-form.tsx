@@ -22,7 +22,7 @@ export function ManagerProjectUiUpdateForm({
       linkTwitter: project.linkTwitter ?? '',
       linkWebsite: project.linkWebsite ?? '',
       name: project.name ?? '',
-      startDate: project.startDate,
+      startDate: new Date(project.startDate ?? new Date()),
       status: project.status ?? ProjectStatus.Draft,
       tags: project.tags ?? [],
     },
@@ -40,7 +40,9 @@ export function ManagerProjectUiUpdateForm({
         if (value && value < 1) return 'Duration must be at least 1 week.'
       },
       startDate: (value) => {
-        if (value && new Date(value) < new Date()) return 'Start date must be in the future.'
+        if (!value) return
+        if (value && new Date(value ?? new Date()).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0))
+          return 'Start date must be in the future.'
       },
     },
   })
@@ -138,18 +140,19 @@ export function ManagerProjectUiUpdateForm({
 
             <Fieldset legend="Timeline">
               <UiStack>
+                <DateInput
+                  label="Start Date"
+                  placeholder="Start Date"
+                  description="The start date of the project. The end date will be calculated based on the duration."
+                  minDate={new Date()}
+                  {...form.getInputProps('startDate')}
+                />
                 <TextInput
                   label="Duration"
                   type="number"
                   placeholder="Duration"
                   description="The duration of the project in weeks."
                   {...form.getInputProps('duration')}
-                />
-                <DateInput
-                  label="Start Date"
-                  placeholder="Start Date"
-                  description="The start date of the project."
-                  {...form.getInputProps('startDate')}
                 />
               </UiStack>
             </Fieldset>

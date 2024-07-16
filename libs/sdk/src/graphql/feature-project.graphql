@@ -8,6 +8,8 @@ fragment ProjectDetails on Project {
     ...CommunityDetails
   }
   createdAt
+  duration
+  endDate
   id
   instructions
   linkDiscord
@@ -23,6 +25,7 @@ fragment ProjectDetails on Project {
   reviewCount
   reviewsOpen
   slug
+  startDate
   status
   tags
   updatedAt

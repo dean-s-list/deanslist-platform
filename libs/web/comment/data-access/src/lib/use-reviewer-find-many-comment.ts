@@ -1,11 +1,15 @@
 import { ReviewerCreateCommentInput, ReviewerFindManyCommentInput } from '@deanslist-platform/sdk'
 import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { useReviewerFindOneProject } from '@deanslist-platform/web-project-data-access'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 
 export function useReviewerFindManyComment(props: Partial<ReviewerFindManyCommentInput> & { reviewId: string }) {
   const sdk = useSdk()
+  const { projectId } = useParams<{ projectId: string }>() as { projectId: string }
+  const { invalidate: invalidateProjectParticipants } = useReviewerFindOneProject({ projectId })
   const [search, setSearch] = useState<string>(props?.search ?? '')
 
   const input: ReviewerFindManyCommentInput = { search, reviewId: props.reviewId }
@@ -26,6 +30,7 @@ export function useReviewerFindManyComment(props: Partial<ReviewerFindManyCommen
         .then(async (res) => {
           if (res.created) {
             toastSuccess(`Your comment was added`)
+            await invalidateProjectParticipants()
           } else {
             toastError(`Your comment was not added`)
           }
@@ -40,6 +45,7 @@ export function useReviewerFindManyComment(props: Partial<ReviewerFindManyCommen
       sdk.reviewerDeleteComment({ commentId }).then(async () => {
         toastSuccess('Comment deleted')
         await query.refetch()
+        await invalidateProjectParticipants()
         return true
       }),
   }

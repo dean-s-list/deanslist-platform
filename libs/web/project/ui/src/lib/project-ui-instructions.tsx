@@ -1,5 +1,5 @@
 import { Project } from '@deanslist-platform/sdk'
-import { TypographyStylesProvider } from '@mantine/core'
+import { Text, TypographyStylesProvider } from '@mantine/core'
 import Markdown from 'react-markdown'
 
 export function ProjectUiInstructions({ item }: { item: Project }) {
@@ -7,7 +7,8 @@ export function ProjectUiInstructions({ item }: { item: Project }) {
     return null
   }
   return (
-    <TypographyStylesProvider>
+    <TypographyStylesProvider p={0}>
+      <Text>Instructions</Text>
       <Markdown>{item.instructions}</Markdown>
     </TypographyStylesProvider>
   )
