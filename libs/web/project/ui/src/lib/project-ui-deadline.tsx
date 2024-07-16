@@ -3,9 +3,7 @@ import { Group, Text } from '@mantine/core'
 import { IconCalendar } from '@tabler/icons-react'
 
 function getRemainingDays(date: Date): number {
-  const now = new Date().getTime()
-  const target = date.getTime()
-  const difference = target - now
+  const difference = new Date(date).getTime() - new Date().getTime()
 
   if (difference < 0) {
     return 0
