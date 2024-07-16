@@ -1,5 +1,6 @@
-import { DiscordServer, ManagerUpdateCommunityInput, Community } from '@deanslist-platform/sdk'
-import { Button, Fieldset, Group, Select, TextInput } from '@mantine/core'
+import { Community, DiscordServer, ManagerUpdateCommunityInput } from '@deanslist-platform/sdk'
+import { CoreUiCard } from '@deanslist-platform/web-core-ui'
+import { Button, Group, Select, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { UiStack } from '@pubkey-ui/core'
 
@@ -35,7 +36,7 @@ export function ManagerCommunityUiUpdateForm({
     <UiStack>
       <form onSubmit={form.onSubmit((values) => submit({ ...values }))}>
         <UiStack>
-          <Fieldset legend="General information">
+          <CoreUiCard title="General information">
             <UiStack>
               <TextInput
                 withAsterisk
@@ -58,7 +59,7 @@ export function ManagerCommunityUiUpdateForm({
                 {...form.getInputProps('homeServerId')}
               />
             </UiStack>
-          </Fieldset>
+          </CoreUiCard>
           <Group justify="flex-end">
             <Button type="submit">Save</Button>
           </Group>

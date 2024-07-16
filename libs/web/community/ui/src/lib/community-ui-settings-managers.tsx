@@ -1,5 +1,6 @@
 import type { CommunityManager } from '@deanslist-platform/sdk'
-import { UiCard, UiError, UiLoader, UiStack } from '@pubkey-ui/core'
+import { CoreUiCard } from '@deanslist-platform/web-core-ui'
+import { UiError, UiLoader, UiStack } from '@pubkey-ui/core'
 import { CommunityUiAddManagerForm } from './community-ui-add-manager-form'
 import { CommunityUiManagerListItem } from './community-ui-manager-list-item'
 
@@ -18,9 +19,9 @@ export function CommunityUiSettingsManagers({
 }) {
   return (
     <UiStack maw={600}>
-      <UiCard title="Add Manager">
+      <CoreUiCard title="Add Manager">
         <CommunityUiAddManagerForm add={(userId) => add(userId)} />
-      </UiCard>
+      </CoreUiCard>
       {isLoading ? (
         <UiLoader />
       ) : items?.length ? (

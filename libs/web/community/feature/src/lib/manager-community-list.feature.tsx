@@ -1,11 +1,13 @@
+import { useAuth } from '@deanslist-platform/web-auth-data-access'
 import { useManagerFindManyCommunity } from '@deanslist-platform/web-community-data-access'
 import { CommunityUiGrid } from '@deanslist-platform/web-community-ui'
 import { CoreUiButton, CoreUiDebugModal, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
 import { Group } from '@mantine/core'
-import { UiDebugModal, UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
+import { UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
 import { IconPlus, IconUsersGroup } from '@tabler/icons-react'
 
 export function ManagerCommunityListFeature() {
+  const { isAdmin } = useAuth()
   const { items, pagination, query, setSearch } = useManagerFindManyCommunity({
     limit: 12,
   })
@@ -17,9 +19,11 @@ export function ManagerCommunityListFeature() {
       rightAction={
         <Group>
           <CoreUiDebugModal data={items} />
-          <CoreUiButton size="xs" variant="light" to="create" iconLeft={IconPlus}>
-            Add Community
-          </CoreUiButton>
+          {isAdmin ? (
+            <CoreUiButton size="xs" variant="light" to="create" iconLeft={IconPlus}>
+              Add Community
+            </CoreUiButton>
+          ) : null}
         </Group>
       }
     >

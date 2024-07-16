@@ -1,4 +1,4 @@
-import { ManagerCreateProjectInput, ManagerFindManyProjectInput } from '@deanslist-platform/sdk'
+import { ManagerCreateProjectInput, ManagerFindManyProjectInput, Project } from '@deanslist-platform/sdk'
 import { useSdk } from '@deanslist-platform/web-core-data-access'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
@@ -39,7 +39,7 @@ export function useManagerFindManyProject(props: Partial<ManagerFindManyProjectI
           } else {
             toastError(`Project not created`)
           }
-          return res.created
+          return res.created as Project
         })
         .catch((err) => {
           toastError(err.message)
