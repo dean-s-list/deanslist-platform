@@ -29,7 +29,7 @@ export function ReviewerProjectDetailFeature() {
     { index: true, element: <Navigate to="reviews" replace /> },
     {
       path: '/reviews/*',
-      element: <ReviewerProjectReviewFeature projectId={projectId} onReviewUpdates={() => query.refetch()} />,
+      element: <ReviewerProjectReviewFeature projectId={projectId} />,
     },
   ])
 

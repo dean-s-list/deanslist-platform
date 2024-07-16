@@ -3,11 +3,13 @@ import { useSdk } from '@deanslist-platform/web-core-data-access'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { useReviewerFindOneProject } from '@deanslist-platform/web-project-data-access'
 
-export function useReviewerFindManyComment(
-  props: Partial<ReviewerFindManyCommentInput> & { reviewId: string; onReviewUpdates?: () => void },
-) {
+export function useReviewerFindManyComment(props: Partial<ReviewerFindManyCommentInput> & { reviewId: string }) {
   const sdk = useSdk()
+  const { projectId } = useParams()
+  const { invalidate: invalidateProjectParticipants } = useReviewerFindOneProject({ projectId: projectId ?? '' })
   const [search, setSearch] = useState<string>(props?.search ?? '')
 
   const input: ReviewerFindManyCommentInput = { search, reviewId: props.reviewId }
@@ -28,7 +30,7 @@ export function useReviewerFindManyComment(
         .then(async (res) => {
           if (res.created) {
             toastSuccess(`Your comment was added`)
-            props.onReviewUpdates && props.onReviewUpdates()
+            await invalidateProjectParticipants()
           } else {
             toastError(`Your comment was not added`)
           }
@@ -43,7 +45,7 @@ export function useReviewerFindManyComment(
       sdk.reviewerDeleteComment({ commentId }).then(async () => {
         toastSuccess('Comment deleted')
         await query.refetch()
-        props.onReviewUpdates && props.onReviewUpdates()
+        await invalidateProjectParticipants()
         return true
       }),
   }

@@ -5,7 +5,7 @@ import { Group } from '@mantine/core'
 import { UiError, UiLoader } from '@pubkey-ui/core'
 import { useParams } from 'react-router-dom'
 
-export function ReviewerReviewDetailFeature({ onReviewUpdates }: { onReviewUpdates?: () => void }) {
+export function ReviewerReviewDetailFeature() {
   const { reviewId } = useParams<{ reviewId: string }>() as { reviewId: string }
   const { item, query } = useReviewerFindOneReview({ reviewId })
 
@@ -22,7 +22,6 @@ export function ReviewerReviewDetailFeature({ onReviewUpdates }: { onReviewUpdat
   return (
     <ReviewerCommentFeature
       review={item}
-      onReviewUpdates={onReviewUpdates}
       leftAction={
         <Group>
           <CoreUiBackLink label="Back to all reviews" />
