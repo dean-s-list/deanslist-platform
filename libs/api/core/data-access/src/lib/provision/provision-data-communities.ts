@@ -53,19 +53,27 @@ export const provisionDataCommunities: Prisma.CommunityCreateInput[] = [
     homeServerId: '1187522687531233381',
     avatarUrl: avatarDeansList,
     managers: {
-      create: [
-        { userId: 'beeman.dev', admin: true },
-        { userId: 'parzicano', admin: true },
-        { userId: 'scientistjoe', admin: true },
-      ],
+      create: [{ userId: 'beeman.dev', admin: true }],
     },
     projects: {
       create: [
         {
+          name: 'Dashboard v2',
+          slug: 'dashboard-v2',
+          managers: { connect: [{ id: 'beeman.dev' }] },
+          amountTotalUsd: 500,
+          amountManagerUsd: 0,
+          amountReferralUsd: 0,
+          duration: 1,
+          startDate: new Date(),
+          status: ProjectStatus.Active,
+          tags: ['dashboard', 'v2'],
+        },
+        {
           avatarUrl: 'https://pbs.twimg.com/profile_images/1764858894701015040/6lI5MAwe_400x400.jpg',
           name: 'Triad',
           slug: 'triad',
-          managers: { connect: [{ id: 'beeman.dev' }, { id: 'parzicano' }, { id: 'scientistjoe' }] },
+          managers: { connect: [{ id: 'beeman.dev' }] },
           amountTotalUsd: 1500,
           amountManagerUsd: 500,
           amountReferralUsd: 100,

@@ -40,28 +40,4 @@ export const provisionDataUsers: Prisma.UserCreateInput[] = [
       ],
     },
   },
-  {
-    username: 'parzicano',
-    role: UserRole.Admin,
-    developer: true,
-    avatarUrl: 'https://cdn.discordapp.com/avatars/890501255653380136/db98f62ac66dba63d48638e188cf3ee9.png?size=128',
-    identities: {
-      create: [
-        { provider: IdentityProvider.Discord, providerId: '890501255653380136' },
-        { provider: IdentityProvider.Solana, providerId: '8m95q25FsDw1FpUBVvpk1WfUnSWzPamyY7jW3MitQXu6' },
-      ],
-    },
-  },
-  {
-    username: 'scientistjoe',
-    role: UserRole.Admin,
-    developer: true,
-    avatarUrl: 'https://cdn.discordapp.com/avatars/828022302221271101/c883f1e1fc6c93e88770b62ae014cb94.webp',
-    identities: {
-      create: [
-        { provider: IdentityProvider.Discord, providerId: '828022302221271101' },
-        { provider: IdentityProvider.Solana, providerId: 'CLcXVZpCwF9QH2aNjFhPSzyeUVifkP9W88WHwfe6sMww' },
-      ],
-    },
-  },
 ]
