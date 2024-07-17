@@ -30,7 +30,6 @@ export function AuthUiPage({ authEnabled, children }: { authEnabled: boolean; ch
             </Stack>
 
             <Stack mt="xl" align="center" gap={0}>
-              <Text c="white">Your adventure starts with...</Text>
               {children}
             </Stack>
           </UiStack>

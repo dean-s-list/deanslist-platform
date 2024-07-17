@@ -93,7 +93,6 @@ export const provisionDataCommunities: Prisma.CommunityCreateInput[] = [
     projects: {
       create: [
         {
-          avatarUrl: 'https://pbs.twimg.com/profile_images/1764858894701015040/6lI5MAwe_400x400.jpg',
           name: 'FoSho',
           slug: 'fosho',
           managers: { connect: [{ id: 'beeman.dev' }] },

@@ -6,14 +6,10 @@ import { UiGroup, UiStack } from '@pubkey-ui/core'
 import { ReviewerCommentUiForm } from './reviewer-comment-ui-form'
 
 export function CommentUiFormButtons({
-  label,
-  title,
   comment,
   createComment,
   ...props
 }: ButtonProps & {
-  label: string
-  title: string
   comment?: Comment
   createComment: (res: ReviewerCreateCommentInput) => Promise<boolean>
 }) {
@@ -26,13 +22,12 @@ export function CommentUiFormButtons({
           My review
         </Text>
         <Button radius="xl" styles={{ root: { ...pinkGradient } }} {...props} onClick={() => toggle()}>
-          {label}
+          {opened ? 'Cancel' : 'Add comment'}
         </Button>
       </UiGroup>
       <Collapse in={opened}>
         <CoreUiCard>
           <ReviewerCommentUiForm
-            cancel={() => toggle()}
             createComment={async (res) => {
               return createComment({ ...res, parentId: comment?.id ?? undefined }).then((res) => {
                 toggle()

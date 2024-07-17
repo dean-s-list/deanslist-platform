@@ -22,21 +22,19 @@ export function CommentUiComment({
 }) {
   if (!comment.author) return null
   return (
-    <Box p="md" pb="xs">
-      <Group justify="space-between">
+    <Box p="xs" pb="xs">
+      <Group gap="xs" justify="space-between" wrap="nowrap" align="start">
         <UiAnchor to={to ?? undefined} underline="never">
-          <Group gap="sm" align="start">
-            <UserUiAvatar user={comment.author} />
-            <Stack gap={0}>
+          <Group gap="xs" align="start" wrap="nowrap">
+            <UserUiAvatar size="sm" user={comment.author} />
+            <Stack gap="xs">
               <Group gap="xs" align="center">
                 <UiAnchor display="flex" to={comment.author.profileUrl} underline="never">
-                  <Text span size="lg" fw={700}>
+                  <Text span fw={700}>
                     {comment.author.username}
                   </Text>
                 </UiAnchor>
-                <Text size="xs" c="dimmed">
-                  {comment.createdAt ? <UiTime fz="xs" c="dimmed" date={new Date(comment.createdAt)} /> : null}
-                </Text>
+                {comment.createdAt ? <UiTime fz="xs" c="dimmed" date={new Date(comment.createdAt)} /> : null}
               </Group>
               <TypographyStylesProvider
                 className={classes.body}

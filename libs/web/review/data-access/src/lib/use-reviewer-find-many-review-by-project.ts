@@ -31,9 +31,9 @@ export function useReviewerFindManyReviewByProject(
         .then((res) => res.data)
         .then(async (res) => {
           if (res.created) {
-            toastSuccess(`Review created`)
+            toastSuccess(`Review started`)
           } else {
-            toastError(`Review not created`)
+            toastError(`Review not started`)
           }
           await query.refetch()
           return res.created

@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core'
 import { ApiCoreService } from '@deanslist-platform/api-core-data-access'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
+import { json } from 'express'
 import { exec } from 'node:child_process'
 import { AppModule } from './app/app.module'
 
@@ -11,6 +12,7 @@ async function bootstrap() {
   const core = app.get(ApiCoreService)
   app.setGlobalPrefix(core.config.prefix)
   app.use(cookieParser())
+  app.use(json({ limit: '10mb' }))
   app.use(
     session({
       secret: core.config.sessionSecret,

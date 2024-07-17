@@ -24,7 +24,7 @@ export function ReviewerCommentListFeature({ review, leftAction }: { review: Rev
         </Group>
       </UiGroup>
 
-      {owned ? <CommentUiFormButtons title="My review" label="Add comment" createComment={createComment} /> : null}
+      {owned ? <CommentUiFormButtons createComment={createComment} /> : null}
 
       {query.isLoading ? (
         <UiLoader />

@@ -21,12 +21,12 @@ export function CommentUiTimelineItem({
     <UiStack key={comment.id}>
       <CommentUiComment comment={comment} deleteComment={deleteComment} />
 
-      <UiStack>
+      <UiStack gap="xs">
         {showReplyForm ? (
           <ReviewerCommentUiForm
             cancel={() => setShowReplyForm(false)}
-            createComment={(res) => {
-              return createComment({ ...res, parentId: comment?.id ?? undefined }).then((res) => {
+            createComment={async (res) => {
+              return createComment({ ...res, parentId: comment.id }).then((res) => {
                 setShowReplyForm(false)
                 return res
               })
