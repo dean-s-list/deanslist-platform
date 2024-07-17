@@ -14,6 +14,7 @@ export function getReviewerReviewByProjectWhereInput(
       { project: { name: { contains: input.search, mode: 'insensitive' } } },
       { project: { id: { contains: input.search, mode: 'insensitive' } } },
       { reviewer: { name: { contains: input.search, mode: 'insensitive' } } },
+      { comments: { some: { content: { contains: input.search, mode: 'insensitive' } } } },
       { reviewer: { username: { contains: input.search, mode: 'insensitive' } } },
       { reviewer: { id: { contains: input.search, mode: 'insensitive' } } },
     ]
