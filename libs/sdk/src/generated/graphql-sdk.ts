@@ -739,6 +739,13 @@ export type Project = {
   viewUrl: Scalars['String']['output']
 }
 
+export type ProjectOrderBy = {
+  field: Scalars['String']['input']
+  label: Scalars['String']['input']
+  sort?: Scalars['String']['input']
+  value: Scalars['String']['input']
+}
+
 export type ProjectPaging = {
   __typename?: 'ProjectPaging'
   data: Array<Project>
@@ -1018,6 +1025,7 @@ export type ReviewerFindManyCommentInput = {
 export type ReviewerFindManyProjectInput = {
   communityId?: InputMaybe<Scalars['String']['input']>
   limit?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<ProjectOrderBy>
   page?: InputMaybe<Scalars['Int']['input']>
   search?: InputMaybe<Scalars['String']['input']>
   status?: InputMaybe<ProjectStatus>
@@ -9046,6 +9054,15 @@ export function ManagerUpdateRatingInputSchema(): z.ZodObject<Properties<Manager
   })
 }
 
+export function ProjectOrderBySchema(): z.ZodObject<Properties<ProjectOrderBy>> {
+  return z.object({
+    field: z.string(),
+    label: z.string(),
+    sort: z.string(),
+    value: z.string(),
+  })
+}
+
 export function RegisterInputSchema(): z.ZodObject<Properties<RegisterInput>> {
   return z.object({
     password: z.string(),
@@ -9079,6 +9096,7 @@ export function ReviewerFindManyProjectInputSchema(): z.ZodObject<Properties<Rev
   return z.object({
     communityId: z.string().nullish(),
     limit: z.number().nullish(),
+    orderBy: ProjectOrderBySchema().nullish(),
     page: z.number().nullish(),
     search: z.string().nullish(),
     status: ProjectStatusSchema.nullish(),

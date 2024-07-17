@@ -434,6 +434,13 @@ type Project {
   viewUrl: String!
 }
 
+input ProjectOrderBy {
+  field: String!
+  label: String!
+  sort: String! = "desc"
+  value: String!
+}
+
 type ProjectPaging {
   data: [Project!]!
   meta: PagingMeta!
@@ -548,6 +555,7 @@ input ReviewerFindManyCommentInput {
 input ReviewerFindManyProjectInput {
   communityId: String
   limit: Int = 10
+  orderBy: ProjectOrderBy
   page: Int = 1
   search: String
   status: ProjectStatus
