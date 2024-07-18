@@ -1,10 +1,10 @@
 import { getEnumOptions, ProjectStatus } from '@deanslist-platform/sdk'
-import { cardGradient, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
+import { CoreUiCustomSelect, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
 import { orderByOptions, useReviewerFindManyProject } from '@deanslist-platform/web-project-data-access'
 import { ProjectUiGrid } from '@deanslist-platform/web-project-ui'
-import { Group, Select } from '@mantine/core'
+import { Group } from '@mantine/core'
 import { UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
-import { IconCube } from '@tabler/icons-react'
+import { IconArrowDown, IconArrowsUpDown, IconArrowUp, IconCube, IconFilter } from '@tabler/icons-react'
 
 function getOrderByOption(value: string | null) {
   return orderByOptions.find((option) => option.value === value) ?? orderByOptions[0]
@@ -19,25 +19,26 @@ export default function ReviewerProjectListFeature() {
     <UiPage title="Projects" leftAction={<IconCube size={28} />}>
       <Group justify="space-between">
         <Group>
-          <Select
-            styles={{ input: { ...cardGradient, border: '1px solid white' } }}
-            radius="xl"
-            size="sm"
-            leftSection="State:"
-            leftSectionWidth={70}
+          <CoreUiCustomSelect
+            label="State"
+            smIcon={<IconFilter />}
             value={status}
-            allowDeselect={false}
-            onChange={(status) => setStatus((status === '' ? undefined : status) as ProjectStatus)}
+            onChange={(status) => setStatus(status as ProjectStatus)}
             data={getEnumOptions(ProjectStatus)}
           />
-          <Select
-            styles={{ input: { ...cardGradient, border: '1px solid white' } }}
-            radius="xl"
-            size="sm"
+          <CoreUiCustomSelect
+            label="Order by"
+            smIcon={<IconArrowsUpDown />}
             value={orderBy.value}
-            leftSection="Order by:"
-            leftSectionWidth={85}
-            allowDeselect={false}
+            renderOption={(value) => {
+              const option = getOrderByOption(value)
+              return (
+                <Group gap={5}>
+                  {option.label}
+                  {option.sort === 'asc' ? <IconArrowUp size={16} /> : <IconArrowDown size={16} />}
+                </Group>
+              )
+            }}
             onChange={(value) => setOrderBy(getOrderByOption(value))}
             data={orderByOptions}
           />

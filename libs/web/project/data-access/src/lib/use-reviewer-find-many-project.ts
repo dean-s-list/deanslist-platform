@@ -6,25 +6,25 @@ import { ProjectOrderBy } from '@deanslist-platform/api-project-data-access'
 
 export const orderByOptions: ProjectOrderBy[] = [
   {
-    label: 'End date (desc)',
+    label: 'End date',
     value: 'endDate-desc',
     field: 'endDate',
     sort: 'desc',
   },
   {
-    label: 'End date (asc)',
+    label: 'End date',
     value: 'endDate-asc',
     field: 'endDate',
     sort: 'asc',
   },
   {
-    label: 'Value (desc)',
+    label: 'Value',
     value: 'amountTotalUsd-desc',
     field: 'amountTotalUsd',
     sort: 'desc',
   },
   {
-    label: 'Value (asc)',
+    label: 'Value',
     value: 'amountTotalUsd-asc',
     field: 'amountTotalUsd',
     sort: 'asc',
