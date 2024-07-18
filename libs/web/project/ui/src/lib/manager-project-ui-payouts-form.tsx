@@ -28,17 +28,17 @@ export function ManagerProjectUiPayoutsForm({
         <UiStack>
           <NumberInput
             label="Total Amount"
-            placeholder="Amount of USDC managers get"
+            description="Total amount of USDC to be rewarded in this project"
             {...form.getInputProps('amountTotalUsd')}
           />
           <NumberInput
             label="Manager Amount"
-            placeholder="Amount of USDC managers get"
+            description="Amount of USDC managers get"
             {...form.getInputProps('amountManagerUsd')}
           />
           <NumberInput
             label="Referral Amount"
-            placeholder="Amount of USDC the referral gets"
+            description="Amount of USDC the referral gets"
             {...form.getInputProps('amountReferralUsd')}
           />
         </UiStack>
