@@ -18,7 +18,9 @@ export class ApiCommentResolveManagerService {
       where: getCommentWhereManagerInput(input),
       include: {
         author: true,
-        review: true,
+        review: {
+          include: { project: true, reviewer: true },
+        },
         children: {
           orderBy: { createdAt: 'asc' },
           include: { author: true },
