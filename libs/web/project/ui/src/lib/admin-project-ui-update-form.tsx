@@ -1,5 +1,6 @@
 import { AdminUpdateProjectInput, getEnumOptions, Project, ProjectStatus } from '@deanslist-platform/sdk'
-import { Button, Fieldset, Group, NumberInput, Select, TagsInput, Textarea, TextInput } from '@mantine/core'
+import { CoreUiCurrencyInput } from '@deanslist-platform/web-core-ui'
+import { Button, Fieldset, Group, Select, TagsInput, Textarea, TextInput } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { useForm } from '@mantine/form'
 import { UiStack } from '@pubkey-ui/core'
@@ -118,17 +119,17 @@ export function AdminProjectUiUpdateForm({
 
           <Fieldset legend="Amounts">
             <UiStack>
-              <NumberInput
+              <CoreUiCurrencyInput
                 label="Total Amount"
                 description="Total amount of USDC to be rewarded in this project"
                 {...form.getInputProps('amountTotalUsd')}
               />
-              <NumberInput
+              <CoreUiCurrencyInput
                 label="Manager Amount"
                 description="Amount of USDC managers get"
                 {...form.getInputProps('amountManagerUsd')}
               />
-              <NumberInput
+              <CoreUiCurrencyInput
                 label="Referral Amount"
                 description="Amount of USDC the referral gets"
                 {...form.getInputProps('amountReferralUsd')}

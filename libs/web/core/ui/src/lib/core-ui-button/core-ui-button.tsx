@@ -19,7 +19,7 @@ export function CoreUiButton({
   to,
   ...props
 }: CoreUiButtonProps) {
-  const extraProps: ButtonProps = {
+  const defaultProps: ButtonProps = {
     leftSection: IconLeft ? <IconLeft size={16} /> : undefined,
     rightSection: IconRight ? <IconRight size={16} /> : undefined,
     radius: props.radius ?? 'xl',
@@ -28,7 +28,7 @@ export function CoreUiButton({
 
   return (
     <UiAnchor to={to}>
-      <Button {...extraProps} {...props} onClick={onClick}>
+      <Button {...defaultProps} {...props} onClick={onClick}>
         {children}
       </Button>
     </UiAnchor>

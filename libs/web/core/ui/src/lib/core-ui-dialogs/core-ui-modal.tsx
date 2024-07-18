@@ -1,11 +1,11 @@
-import { Modal, ModalProps, Text, Title } from '@mantine/core'
+import { Modal, ModalProps, Title } from '@mantine/core'
 
 export interface CoreUiModalProps extends ModalProps {
   title: string
 }
 
 export function CoreUiModal({ title, ...props }: CoreUiModalProps) {
-  const extraProps: ModalProps = {
+  const defaultProps: ModalProps = {
     title: <Title size="h3">{title}</Title>,
     withCloseButton: props.withCloseButton || true,
     size: props.size || 'lg',
@@ -16,7 +16,7 @@ export function CoreUiModal({ title, ...props }: CoreUiModalProps) {
   }
 
   return (
-    <Modal {...extraProps} {...props}>
+    <Modal {...defaultProps} {...props}>
       {props.children}
     </Modal>
   )

@@ -1,5 +1,6 @@
 import { ManagerUpdateProjectInput, Project } from '@deanslist-platform/sdk'
-import { Button, Group, NumberInput } from '@mantine/core'
+import { CoreUiCurrencyInput } from '@deanslist-platform/web-core-ui'
+import { Button, Group } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { UiStack } from '@pubkey-ui/core'
 
@@ -26,17 +27,17 @@ export function ManagerProjectUiPayoutsForm({
     >
       <UiStack>
         <UiStack>
-          <NumberInput
+          <CoreUiCurrencyInput
             label="Total Amount"
             description="Total amount of USDC to be rewarded in this project"
             {...form.getInputProps('amountTotalUsd')}
           />
-          <NumberInput
+          <CoreUiCurrencyInput
             label="Manager Amount"
             description="Amount of USDC managers get"
             {...form.getInputProps('amountManagerUsd')}
           />
-          <NumberInput
+          <CoreUiCurrencyInput
             label="Referral Amount"
             description="Amount of USDC the referral gets"
             {...form.getInputProps('amountReferralUsd')}
