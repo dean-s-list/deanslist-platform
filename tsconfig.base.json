@@ -68,7 +68,6 @@
       "@deanslist-platform/web-project-feature": ["libs/web/project/feature/src/index.ts"],
       "@deanslist-platform/web-project-ui": ["libs/web/project/ui/src/index.ts"],
       "@deanslist-platform/web-rating-data-access": ["libs/web/rating/data-access/src/index.ts"],
-      "@deanslist-platform/web-rating-feature": ["libs/web/rating/feature/src/index.ts"],
       "@deanslist-platform/web-rating-ui": ["libs/web/rating/ui/src/index.ts"],
       "@deanslist-platform/web-review-data-access": ["libs/web/review/data-access/src/index.ts"],
       "@deanslist-platform/web-review-feature": ["libs/web/review/feature/src/index.ts"],

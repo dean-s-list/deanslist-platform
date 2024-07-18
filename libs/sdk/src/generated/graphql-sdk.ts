@@ -58,11 +58,6 @@ export type AdminFindManyProjectInput = {
   search?: InputMaybe<Scalars['String']['input']>
 }
 
-export type AdminFindManyRatingInput = {
-  commentId?: InputMaybe<Scalars['String']['input']>
-  search?: InputMaybe<Scalars['String']['input']>
-}
-
 export type AdminFindManyReviewInput = {
   limit?: InputMaybe<Scalars['Int']['input']>
   page?: InputMaybe<Scalars['Int']['input']>
@@ -823,7 +818,6 @@ export type Query = {
   adminFindManyFaqItem: Array<FaqItem>
   adminFindManyIdentity?: Maybe<Array<Identity>>
   adminFindManyProject: ProjectPaging
-  adminFindManyRating: Array<Rating>
   adminFindManyReview: ReviewPaging
   adminFindManyUser: UserPaging
   adminFindOneCommunity?: Maybe<Community>
@@ -887,10 +881,6 @@ export type QueryAdminFindManyIdentityArgs = {
 
 export type QueryAdminFindManyProjectArgs = {
   input: AdminFindManyProjectInput
-}
-
-export type QueryAdminFindManyRatingArgs = {
-  input: AdminFindManyRatingInput
 }
 
 export type QueryAdminFindManyReviewArgs = {
@@ -4282,39 +4272,6 @@ export type ManagerDeleteRatingMutationVariables = Exact<{
 
 export type ManagerDeleteRatingMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
 
-export type AdminFindManyRatingQueryVariables = Exact<{
-  input: AdminFindManyRatingInput
-}>
-
-export type AdminFindManyRatingQuery = {
-  __typename?: 'Query'
-  items: Array<{
-    __typename?: 'Rating'
-    createdAt?: Date | null
-    id: string
-    content?: string | null
-    commentId: string
-    authorId: string
-    rating: number
-    updatedAt?: Date | null
-    author?: {
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
-      id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
-      updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
-    } | null
-  }>
-}
-
 export type AdminUpdateRatingMutationVariables = Exact<{
   ratingId: Scalars['String']['input']
   input: AdminUpdateRatingInput
@@ -6584,14 +6541,6 @@ export const ManagerDeleteRatingDocument = gql`
     deleted: managerDeleteRating(ratingId: $ratingId)
   }
 `
-export const AdminFindManyRatingDocument = gql`
-  query adminFindManyRating($input: AdminFindManyRatingInput!) {
-    items: adminFindManyRating(input: $input) {
-      ...RatingDetails
-    }
-  }
-  ${RatingDetailsFragmentDoc}
-`
 export const AdminUpdateRatingDocument = gql`
   mutation adminUpdateRating($ratingId: String!, $input: AdminUpdateRatingInput!) {
     updated: adminUpdateRating(ratingId: $ratingId, input: $input) {
@@ -6865,7 +6814,6 @@ const ManagerRemoveProjectReferralDocumentString = print(ManagerRemoveProjectRef
 const ManagerCreateRatingDocumentString = print(ManagerCreateRatingDocument)
 const ManagerUpdateRatingDocumentString = print(ManagerUpdateRatingDocument)
 const ManagerDeleteRatingDocumentString = print(ManagerDeleteRatingDocument)
-const AdminFindManyRatingDocumentString = print(AdminFindManyRatingDocument)
 const AdminUpdateRatingDocumentString = print(AdminUpdateRatingDocument)
 const AdminDeleteRatingDocumentString = print(AdminDeleteRatingDocument)
 const ManagerFindManyReviewByProjectDocumentString = print(ManagerFindManyReviewByProjectDocument)
@@ -8832,27 +8780,6 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
-    adminFindManyRating(
-      variables: AdminFindManyRatingQueryVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: AdminFindManyRatingQuery
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<AdminFindManyRatingQuery>(AdminFindManyRatingDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'adminFindManyRating',
-        'query',
-        variables,
-      )
-    },
     adminUpdateRating(
       variables: AdminUpdateRatingMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
@@ -9347,13 +9274,6 @@ export function AdminFindManyProjectInputSchema(): z.ZodObject<Properties<AdminF
     communityId: z.string().nullish(),
     limit: z.number().nullish(),
     page: z.number().nullish(),
-    search: z.string().nullish(),
-  })
-}
-
-export function AdminFindManyRatingInputSchema(): z.ZodObject<Properties<AdminFindManyRatingInput>> {
-  return z.object({
-    commentId: z.string().nullish(),
     search: z.string().nullish(),
   })
 }

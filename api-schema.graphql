@@ -36,11 +36,6 @@ input AdminFindManyProjectInput {
   search: String
 }
 
-input AdminFindManyRatingInput {
-  commentId: String
-  search: String
-}
-
 input AdminFindManyReviewInput {
   limit: Int = 10
   page: Int = 1
@@ -496,7 +491,6 @@ type Query {
   adminFindManyFaqItem(input: FaqItemAdminFindManyInput!): [FaqItem!]!
   adminFindManyIdentity(input: AdminFindManyIdentityInput!): [Identity!]
   adminFindManyProject(input: AdminFindManyProjectInput!): ProjectPaging!
-  adminFindManyRating(input: AdminFindManyRatingInput!): [Rating!]!
   adminFindManyReview(input: AdminFindManyReviewInput!): ReviewPaging!
   adminFindManyUser(input: AdminFindManyUserInput!): UserPaging!
   adminFindOneCommunity(communityId: String!): Community

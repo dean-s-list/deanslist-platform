@@ -27,12 +27,6 @@ mutation managerDeleteRating($ratingId: String!) {
   deleted: managerDeleteRating(ratingId: $ratingId)
 }
 
-query adminFindManyRating($input: AdminFindManyRatingInput!) {
-  items: adminFindManyRating(input: $input) {
-    ...RatingDetails
-  }
-}
-
 mutation adminUpdateRating($ratingId: String!, $input: AdminUpdateRatingInput!) {
   updated: adminUpdateRating(ratingId: $ratingId, input: $input) {
     ...RatingDetails

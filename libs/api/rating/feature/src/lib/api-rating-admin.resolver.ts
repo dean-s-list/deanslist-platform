@@ -1,12 +1,7 @@
 import { ApiAuthGraphQLAdminGuard } from '@deanslist-platform/api-auth-data-access'
-import {
-  AdminFindManyRatingInput,
-  AdminUpdateRatingInput,
-  ApiRatingService,
-  Rating,
-} from '@deanslist-platform/api-rating-data-access'
+import { AdminUpdateRatingInput, ApiRatingService, Rating } from '@deanslist-platform/api-rating-data-access'
 import { UseGuards } from '@nestjs/common'
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Args, Mutation, Resolver } from '@nestjs/graphql'
 
 @Resolver()
 @UseGuards(ApiAuthGraphQLAdminGuard)
@@ -16,11 +11,6 @@ export class ApiRatingAdminResolver {
   @Mutation(() => Boolean, { nullable: true })
   adminDeleteRating(@Args('ratingId') ratingId: string) {
     return this.service.admin.deleteRating(ratingId)
-  }
-
-  @Query(() => [Rating])
-  adminFindManyRating(@Args('input') input: AdminFindManyRatingInput) {
-    return this.service.admin.findManyRating(input)
   }
 
   @Mutation(() => Rating, { nullable: true })

@@ -4,7 +4,6 @@ import { DevAdminRoutes } from '@deanslist-platform/web-dev-feature'
 import { AdminDiscordFeature } from '@deanslist-platform/web-discord-feature'
 import { AdminFaqItemFeature } from '@deanslist-platform/web-faq-item-feature'
 import { AdminProjectFeature } from '@deanslist-platform/web-project-feature'
-import { AdminRatingFeature } from '@deanslist-platform/web-rating-feature'
 import { AdminUserFeature } from '@deanslist-platform/web-user-feature'
 import { Box } from '@mantine/core'
 import { UiPage } from '@pubkey-ui/core'
@@ -27,9 +26,7 @@ const routes: RouteObject[] = [
   { path: 'projects/*', element: <AdminProjectFeature /> },
   { path: 'users/*', element: <AdminUserFeature /> },
   { path: 'communities/*', element: <AdminCommunityFeature /> },
-
-  { path: 'ratings/*', element: <AdminRatingFeature /> },
-  { path: '/faq-items/*', element: <AdminFaqItemFeature /> },
+  { path: 'faq-items/*', element: <AdminFaqItemFeature /> },
 ]
 
 export default function WebCoreRoutesAdmin() {
