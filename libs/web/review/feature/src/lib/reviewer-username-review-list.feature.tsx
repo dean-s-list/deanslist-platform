@@ -2,7 +2,7 @@ import { CoreUiCard, CoreUiDebugModal, CoreUiSearchField } from '@deanslist-plat
 import { useReviewerFindManyReviewByUsername } from '@deanslist-platform/web-review-data-access'
 import { ReviewerReviewUsernameUiTable } from '@deanslist-platform/web-review-ui'
 import { Group } from '@mantine/core'
-import { UiInfo, UiLoader, UiPage, UiStack } from '@pubkey-ui/core'
+import { UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
 import { IconCheckupList } from '@tabler/icons-react'
 
 export function ReviewerUsernameReviewListFeature({ username }: { username: string }) {
@@ -20,22 +20,19 @@ export function ReviewerUsernameReviewListFeature({ username }: { username: stri
         </Group>
       }
     >
-      <UiStack>
-        <Group>
-          <CoreUiSearchField placeholder="Search review" setSearch={setSearch} />
-          <CoreUiDebugModal data={items} />
-        </Group>
-
-        {query.isLoading ? (
-          <UiLoader />
-        ) : items?.length ? (
-          <CoreUiCard>
-            <ReviewerReviewUsernameUiTable reviews={items} />
-          </CoreUiCard>
-        ) : (
-          <UiInfo message="No reviews found" />
-        )}
-      </UiStack>
+      <Group>
+        <CoreUiSearchField placeholder="Search review" setSearch={setSearch} />
+        <CoreUiDebugModal data={items} />
+      </Group>
+      {query.isLoading ? (
+        <UiLoader />
+      ) : items?.length ? (
+        <CoreUiCard>
+          <ReviewerReviewUsernameUiTable reviews={items} />
+        </CoreUiCard>
+      ) : (
+        <UiInfo message="No reviews found" />
+      )}
     </UiPage>
   )
 }
