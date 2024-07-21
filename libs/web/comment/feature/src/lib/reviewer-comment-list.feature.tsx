@@ -24,12 +24,15 @@ export function ReviewerCommentListFeature({ review, leftAction }: { review: Rev
         </Group>
       </UiGroup>
 
-      {owned ? <CommentUiFormButtons createComment={createComment} /> : null}
-
       {query.isLoading ? (
         <UiLoader />
       ) : items?.length ? (
-        <CommentUiTimeline deleteComment={deleteComment} createComment={createComment} comments={items} />
+        <UiStack>
+          {owned ? <CommentUiFormButtons createComment={createComment} /> : null}
+          <CommentUiTimeline deleteComment={deleteComment} createComment={createComment} comments={items} />
+        </UiStack>
+      ) : owned ? (
+        <CommentUiFormButtons createComment={createComment} open />
       ) : (
         <UiInfo message="No comments found" />
       )}

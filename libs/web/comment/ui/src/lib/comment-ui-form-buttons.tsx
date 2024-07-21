@@ -8,12 +8,14 @@ import { ReviewerCommentUiForm } from './reviewer-comment-ui-form'
 export function CommentUiFormButtons({
   comment,
   createComment,
+  open = false,
   ...props
 }: ButtonProps & {
   comment?: Comment
   createComment: (res: ReviewerCreateCommentInput) => Promise<boolean>
+  open?: boolean
 }) {
-  const [opened, { toggle }] = useDisclosure(false)
+  const [opened, { toggle }] = useDisclosure(open)
 
   return (
     <UiStack>
