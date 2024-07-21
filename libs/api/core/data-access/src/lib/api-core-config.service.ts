@@ -112,10 +112,6 @@ export class ApiCoreConfigService {
     return this.service.get<boolean>('databaseProvision')
   }
 
-  get databaseReset() {
-    return this.service.get<boolean>('databaseReset')
-  }
-
   get discordBotToken() {
     return this.service.get('discordBotToken')
   }

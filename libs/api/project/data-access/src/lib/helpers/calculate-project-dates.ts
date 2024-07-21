@@ -1,16 +1,16 @@
 import { addDays, beforeToday, setDateToEndOfDay, setDateToStartOfDay } from '@deanslist-platform/api-core-data-access'
-import { Prisma, Project } from '@prisma/client'
+import { Project } from '@prisma/client'
 
-export function normalizeProjectUpdateInput({
+export function calculateProjectDates({
   input,
   found,
 }: {
-  input: Prisma.ProjectUpdateInput
-  found: Project
-}): Prisma.ProjectUpdateInput {
-  let durationDays: number = typeof input.durationDays === 'number' ? input.durationDays : found.durationDays
-  let endDate: Date | null = found.endDate
-  let startDate: Date | null = found.startDate
+  found?: Project
+  input: { durationDays?: number | null; startDate: Date | string | null }
+}): { endDate: Date | null; durationDays: number; startDate: Date | null } {
+  let durationDays: number = typeof input.durationDays === 'number' ? input.durationDays : found?.durationDays ?? 7
+  let endDate: Date | null = found?.endDate ?? null
+  let startDate: Date | null = found?.startDate ?? null
 
   // If we receive a duration, we want to make sure it's a number higher than 1
   if (typeof input.durationDays !== 'undefined') {
@@ -22,7 +22,7 @@ export function normalizeProjectUpdateInput({
 
   // If we receive a startDate, we want to set it to the start of the day
   if (input.startDate) {
-    startDate = setDateToStartOfDay(input.startDate as string)
+    startDate = setDateToStartOfDay(input.startDate as string) as Date
     // If it's a date in before today, we want to throw an error
     if (beforeToday(startDate)) {
       throw new Error('Start date must be in the future.')
@@ -33,13 +33,12 @@ export function normalizeProjectUpdateInput({
   if (durationDays && startDate) {
     const calculatedEndDate = setDateToEndOfDay(addDays({ date: startDate, days: durationDays }))
 
-    if (calculatedEndDate.getTime() !== found.endDate?.getTime()) {
+    if (calculatedEndDate.getTime() !== found?.endDate?.getTime()) {
       endDate = calculatedEndDate
     }
   }
 
   return {
-    ...input,
     durationDays,
     startDate,
     endDate,

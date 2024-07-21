@@ -16,7 +16,6 @@ export const validationSchema = Joi.object({
   COOKIE_NAME: Joi.string().default('__session'),
   COOKIE_SECURE: Joi.boolean().default(true),
   DATABASE_PROVISION: Joi.boolean().default(false),
-  DATABASE_RESET: Joi.boolean().default(false),
   DATABASE_URL: Joi.string(),
   DISCORD_BOT_TOKEN: Joi.string(),
   GRAPHQL_PLAYGROUND: Joi.boolean().default(false),

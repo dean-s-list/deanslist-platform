@@ -5,7 +5,7 @@ import { CommunityPaging } from './entity/community-paging.entity'
 import { getAdminCommunityWhereInput } from './helpers/get-admin-community-where.input'
 
 @Injectable()
-export class ApiCommunityResolveAdminService {
+export class ApiCommunityDataAdminService {
   constructor(private readonly data: ApiCommunityDataService) {}
 
   async findManyCommunity(input: AdminFindManyCommunityInput): Promise<CommunityPaging> {

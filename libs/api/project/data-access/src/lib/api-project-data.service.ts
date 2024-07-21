@@ -5,7 +5,7 @@ import { Prisma } from '@prisma/client'
 import { ApiProjectEventService } from './api-project-event.service'
 import { ProjectPaging } from './entity/project-paging.entity'
 import { ProjectCreatedEvent } from './event/project-created.event'
-import { normalizeProjectUpdateInput } from './helpers/normalize-project-update-input'
+import { calculateProjectDates } from './helpers/calculate-project-dates'
 
 @Injectable()
 export class ApiProjectDataService {
@@ -68,8 +68,15 @@ export class ApiProjectDataService {
 2. Connect your wallet.
 3. Use the app.`.trim()
 
+    const { durationDays, endDate, startDate } = calculateProjectDates({
+      input: { durationDays: input.durationDays as number | null, startDate: input.startDate as Date | string | null },
+    })
+
     const data: Prisma.ProjectCreateInput = {
       ...input,
+      durationDays,
+      endDate,
+      startDate,
       slug,
       instructions,
       community: { connect: { id: communityId } },
@@ -127,9 +134,15 @@ export class ApiProjectDataService {
 
   async updateProject(userId: string, projectId: string, input: Prisma.ProjectUpdateInput) {
     const found = await this.findOneProject(projectId)
-    const data = normalizeProjectUpdateInput({ found, input })
+    const { durationDays, endDate, startDate } = calculateProjectDates({
+      found,
+      input: { durationDays: input.durationDays as number | null, startDate: input.startDate as Date | string | null },
+    })
 
-    return this.core.data.project.update({ where: { id: found.id }, data })
+    return this.core.data.project.update({
+      where: { id: found.id },
+      data: { ...input, durationDays, endDate, startDate },
+    })
   }
 
   async addProjectManager(userId: string, projectId: string, managerUserId: string) {

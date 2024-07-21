@@ -1,21 +1,23 @@
-import { ApiCoreDataAccessModule } from '@deanslist-platform/api-core-data-access'
 import { ApiCommunityDataAccessModule } from '@deanslist-platform/api-community-data-access'
+import { ApiCoreDataAccessModule } from '@deanslist-platform/api-core-data-access'
 import { Module } from '@nestjs/common'
+import { ApiProjectDataAdminService } from './api-project-data-admin.service'
+import { ApiProjectDataManagerService } from './api-project-data-manager.service'
+import { ApiProjectDataReviewerService } from './api-project-data-reviewer.service'
 import { ApiProjectDataService } from './api-project-data.service'
 import { ApiProjectEventService } from './api-project-event.service'
-import { ApiProjectResolveAdminService } from './api-project-resolve-admin.service'
-import { ApiProjectResolveManagerService } from './api-project-resolve-manager.service'
-import { ApiProjectResolveReviewerService } from './api-project-resolve-reviewer.service'
+import { ApiProjectProvisionService } from './api-project-provision.service'
 import { ApiProjectService } from './api-project.service'
 
 @Module({
   imports: [ApiCoreDataAccessModule, ApiCommunityDataAccessModule],
   providers: [
+    ApiProjectDataAdminService,
+    ApiProjectDataManagerService,
+    ApiProjectDataReviewerService,
     ApiProjectDataService,
     ApiProjectEventService,
-    ApiProjectResolveAdminService,
-    ApiProjectResolveManagerService,
-    ApiProjectResolveReviewerService,
+    ApiProjectProvisionService,
     ApiProjectService,
   ],
   exports: [ApiProjectService],

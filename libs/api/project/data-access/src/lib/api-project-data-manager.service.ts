@@ -7,7 +7,7 @@ import { ProjectPaging } from './entity/project-paging.entity'
 import { getProjectWhereManagerInput } from './helpers/get-project-where-manager.input'
 
 @Injectable()
-export class ApiProjectResolveManagerService {
+export class ApiProjectDataManagerService {
   constructor(private readonly data: ApiProjectDataService) {}
 
   async createProject(userId: string, input: ManagerCreateProjectInput) {

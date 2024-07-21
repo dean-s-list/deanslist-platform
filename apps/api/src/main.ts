@@ -1,9 +1,9 @@
+import { ApiCoreService, CORE_APP_STARTED } from '@deanslist-platform/api-core-data-access'
 import { Logger } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
-import { ApiCoreService } from '@deanslist-platform/api-core-data-access'
 import cookieParser from 'cookie-parser'
-import session from 'express-session'
 import { json } from 'express'
+import session from 'express-session'
 import { exec } from 'node:child_process'
 import { AppModule } from './app/app.module'
 
@@ -33,6 +33,7 @@ async function bootstrap() {
     Logger.warn(`🐞 Application is running in development mode.`)
     exec('prettier --write ./api-schema.graphql ./api-swagger.json', { cwd: process.cwd() })
   }
+  core.event.emit(CORE_APP_STARTED)
 }
 
 bootstrap()

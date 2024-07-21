@@ -8,7 +8,6 @@ import { ServeStaticModule } from '@nestjs/serve-static'
 import { join } from 'path'
 
 import { ApiCoreConfigService } from './api-core-config.service'
-import { ApiCoreProvisionService } from './api-core-provision.service'
 import { ApiCoreService } from './api-core.service'
 import { configuration } from './config/configuration'
 import { validationSchema } from './config/validation-schema'
@@ -41,7 +40,7 @@ import { serveStaticFactory } from './helpers/serve-static-factory'
     ScheduleModule.forRoot(),
     ServeStaticModule.forRootAsync({ useFactory: serveStaticFactory() }),
   ],
-  providers: [ApiCoreService, ApiCoreConfigService, ApiCoreProvisionService],
+  providers: [ApiCoreService, ApiCoreConfigService],
   exports: [ApiCoreService],
 })
 export class ApiCoreDataAccessModule {}

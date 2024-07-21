@@ -5,7 +5,7 @@ import { ProjectPaging } from './entity/project-paging.entity'
 import { getProjectWhereUserInput } from './helpers/get-project-where-user.input'
 
 @Injectable()
-export class ApiProjectResolveReviewerService {
+export class ApiProjectDataReviewerService {
   constructor(private readonly data: ApiProjectDataService) {}
 
   async findManyProject(input: ReviewerFindManyProjectInput): Promise<ProjectPaging> {

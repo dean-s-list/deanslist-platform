@@ -39,7 +39,6 @@ export interface ApiCoreConfig {
   corsOrigins: string[]
   // Database Seed
   databaseProvision: boolean
-  databaseReset: boolean
   // Discord Bot
   discordBotToken: string
   // Environment
@@ -68,7 +67,6 @@ export function configuration(): ApiCoreConfig {
     cookieSecure: process.env['COOKIE_SECURE'] === 'true',
     corsOrigins,
     databaseProvision: process.env['DATABASE_PROVISION'] === 'true',
-    databaseReset: process.env['DATABASE_RESET'] === 'true',
     discordBotToken: process.env['DISCORD_BOT_TOKEN'] as string,
     environment: (process.env['NODE_ENV'] as Env) || 'development',
     host: process.env['HOST'] as string,

@@ -1,6 +1,6 @@
 import { IdentityProvider, Prisma, UserRole, UserStatus } from '@prisma/client'
 
-export const provisionDataUsers: Prisma.UserCreateInput[] = [
+export const provisionUsers: Prisma.UserCreateInput[] = [
   {
     username: 'alice',
     password: 'password',

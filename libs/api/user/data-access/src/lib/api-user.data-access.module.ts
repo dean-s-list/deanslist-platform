@@ -5,6 +5,7 @@ import { ApiUserDataAnonService } from './api-user-data-anon.service'
 import { ApiUserDataUserService } from './api-user-data-user.service'
 import { ApiUserDataService } from './api-user-data.service'
 import { ApiUserEventService } from './api-user-event.service'
+import { ApiUserProvisionService } from './api-user-provision.service'
 import { ApiUserService } from './api-user.service'
 
 @Module({
@@ -16,6 +17,7 @@ import { ApiUserService } from './api-user.service'
     ApiUserEventService,
     ApiUserDataAdminService,
     ApiUserDataUserService,
+    ApiUserProvisionService,
   ],
   exports: [ApiUserService],
 })

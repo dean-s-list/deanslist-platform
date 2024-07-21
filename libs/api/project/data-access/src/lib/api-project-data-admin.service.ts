@@ -6,7 +6,7 @@ import { ProjectPaging } from './entity/project-paging.entity'
 import { getProjectWhereAdminInput } from './helpers/get-project-where-admin.input'
 
 @Injectable()
-export class ApiProjectResolveAdminService {
+export class ApiProjectDataAdminService {
   constructor(private readonly data: ApiProjectDataService) {}
 
   async deleteProject(userId: string, projectId: string) {

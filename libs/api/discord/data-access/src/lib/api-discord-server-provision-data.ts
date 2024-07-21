@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client'
 
-export const provisionDataDiscordServers: Prisma.DiscordServerCreateInput[] = [
+export const provisionDiscordServers: Prisma.DiscordServerCreateInput[] = [
   {
     id: '1083213946078625853', // PubKey Dev
     createChannels: true,

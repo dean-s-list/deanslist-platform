@@ -1,4 +1,5 @@
 export * from './lib/api-core-data-access.module'
+export * from './lib/api-core.events'
 export * from './lib/api-core.service'
 export * from './lib/cache/create-identity-provider-cache'
 export * from './lib/dto/paging.input'

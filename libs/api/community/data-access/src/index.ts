@@ -1,6 +1,7 @@
 export * from './lib/api-community-data.service'
 export * from './lib/api-community-event.service'
 export * from './lib/api-community.data-access.module'
+export * from './lib/api-community.events'
 export * from './lib/api-community.service'
 export * from './lib/dto/admin-find-many-community.input'
 export * from './lib/dto/admin-update-community.input'

@@ -1,4 +1,5 @@
 export * from './lib/api-user.data-access.module'
+export * from './lib/api-user.events'
 export * from './lib/api-user.service'
 export * from './lib/dto/admin-create-user.input'
 export * from './lib/dto/admin-find-many-user.input'

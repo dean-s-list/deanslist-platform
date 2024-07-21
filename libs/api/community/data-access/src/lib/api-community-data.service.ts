@@ -33,7 +33,7 @@ export class ApiCommunityDataService {
     const data: Prisma.CommunityCreateInput = {
       ...input,
       id,
-      managers: { create: { userId, admin: true } },
+      managers: input.managers ? input.managers : { create: { userId, admin: true } },
     }
 
     const community = await this.core.data.community.create({ data })
