@@ -21,9 +21,13 @@ export class ApiProjectProvisionService {
 
   private async provisionProject(input: ProjectProvisionInput) {
     const name = input.name.trim()
-    const id = slugifyId(name, true)
-    if (!(await this.core.data.project.findUnique({ where: { id } }))) {
-      await this.data.createProject('alice', { ...input, id, name })
+    const slug = slugifyId(name, true)
+    if (
+      !(await this.core.data.project.findUnique({
+        where: { communityId_slug: { communityId: input.communityId, slug } },
+      }))
+    ) {
+      await this.data.createProject('alice', { ...input, name })
       this.logger.verbose(`Provisioned project ${input.name} `)
     }
   }

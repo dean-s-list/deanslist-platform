@@ -695,6 +695,11 @@ export type MutationUserVerifyIdentityChallengeArgs = {
   input: VerifyIdentityChallengeInput
 }
 
+export enum OrderDirection {
+  Asc = 'Asc',
+  Desc = 'Desc',
+}
+
 export type PagingMeta = {
   __typename?: 'PagingMeta'
   currentPage: Scalars['Int']['output']
@@ -739,11 +744,10 @@ export type Project = {
   viewUrl: Scalars['String']['output']
 }
 
-export type ProjectOrderBy = {
-  field: Scalars['String']['input']
-  label: Scalars['String']['input']
-  sort?: Scalars['String']['input']
-  value: Scalars['String']['input']
+export enum ProjectOrderBy {
+  Amount = 'Amount',
+  CreatedAt = 'CreatedAt',
+  EndDate = 'EndDate',
 }
 
 export type ProjectPaging = {
@@ -1026,6 +1030,7 @@ export type ReviewerFindManyProjectInput = {
   communityId?: InputMaybe<Scalars['String']['input']>
   limit?: InputMaybe<Scalars['Int']['input']>
   orderBy?: InputMaybe<ProjectOrderBy>
+  orderDirection?: InputMaybe<OrderDirection>
   page?: InputMaybe<Scalars['Int']['input']>
   search?: InputMaybe<Scalars['String']['input']>
   status?: InputMaybe<ProjectStatus>
@@ -8806,6 +8811,10 @@ export const CommentCategorySchema = z.nativeEnum(CommentCategory)
 
 export const IdentityProviderSchema = z.nativeEnum(IdentityProvider)
 
+export const OrderDirectionSchema = z.nativeEnum(OrderDirection)
+
+export const ProjectOrderBySchema = z.nativeEnum(ProjectOrderBy)
+
 export const ProjectStatusSchema = z.nativeEnum(ProjectStatus)
 
 export const UserRoleSchema = z.nativeEnum(UserRole)
@@ -9054,15 +9063,6 @@ export function ManagerUpdateRatingInputSchema(): z.ZodObject<Properties<Manager
   })
 }
 
-export function ProjectOrderBySchema(): z.ZodObject<Properties<ProjectOrderBy>> {
-  return z.object({
-    field: z.string(),
-    label: z.string(),
-    sort: z.string(),
-    value: z.string(),
-  })
-}
-
 export function RegisterInputSchema(): z.ZodObject<Properties<RegisterInput>> {
   return z.object({
     password: z.string(),
@@ -9096,7 +9096,8 @@ export function ReviewerFindManyProjectInputSchema(): z.ZodObject<Properties<Rev
   return z.object({
     communityId: z.string().nullish(),
     limit: z.number().nullish(),
-    orderBy: ProjectOrderBySchema().nullish(),
+    orderBy: ProjectOrderBySchema.nullish(),
+    orderDirection: OrderDirectionSchema.nullish(),
     page: z.number().nullish(),
     search: z.string().nullish(),
     status: ProjectStatusSchema.nullish(),

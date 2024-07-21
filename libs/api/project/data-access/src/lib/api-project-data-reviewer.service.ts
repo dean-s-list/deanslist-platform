@@ -12,7 +12,7 @@ export class ApiProjectDataReviewerService {
     return this.data.findManyProject({
       limit: input.limit ?? 10,
       page: input.page ?? 1,
-      orderBy: input.orderBy && { [input.orderBy.field]: input.orderBy.sort },
+      orderBy: input.orderBy ? { [input.orderBy]: input.orderDirection ?? 'asc' } : { createdAt: 'desc' },
       where: getProjectWhereUserInput(input),
       include: { reviews: { include: { comments: true } } },
     })

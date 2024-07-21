@@ -1,17 +1,13 @@
-import { getEnumOptions, ProjectStatus } from '@deanslist-platform/sdk'
+import { getEnumOptions, OrderDirection, projectOrderByOptions, ProjectStatus } from '@deanslist-platform/sdk'
 import { CoreUiCustomSelect, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
-import { orderByOptions, useReviewerFindManyProject } from '@deanslist-platform/web-project-data-access'
+import { useReviewerFindManyProject } from '@deanslist-platform/web-project-data-access'
 import { ProjectUiGrid } from '@deanslist-platform/web-project-ui'
 import { Group } from '@mantine/core'
 import { UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
 import { IconArrowDown, IconArrowsUpDown, IconArrowUp, IconCube, IconFilter } from '@tabler/icons-react'
 
-function getOrderByOption(value: string | null) {
-  return orderByOptions.find((option) => option.value === value) ?? orderByOptions[0]
-}
-
 export default function ReviewerProjectListFeature() {
-  const { items, pagination, query, setSearch, status, setStatus, orderBy, setOrderBy } = useReviewerFindManyProject({
+  const { items, pagination, query, setSearch, status, setStatus, order, setOrder } = useReviewerFindManyProject({
     limit: 24,
   })
 
@@ -23,27 +19,22 @@ export default function ReviewerProjectListFeature() {
             label="State"
             smIcon={<IconFilter />}
             value={status}
-            onChange={(status) => setStatus(status as ProjectStatus)}
+            onChange={(status: string | null) => {
+              if (!status) return
+              setStatus(status as ProjectStatus)
+            }}
             data={getEnumOptions(ProjectStatus)}
           />
           <CoreUiCustomSelect
             label="Order by"
             smIcon={<IconArrowsUpDown />}
-            value={orderBy.value}
-            renderOption={(value) => {
-              const option = getOrderByOption(value)
-              return (
-                <Group gap={5}>
-                  {option.label}
-                  {option.sort === 'asc' ? <IconArrowUp size={16} /> : <IconArrowDown size={16} />}
-                </Group>
-              )
-            }}
-            onChange={(value) => setOrderBy(getOrderByOption(value))}
-            data={orderByOptions}
+            value={order}
+            renderOption={(value) => <OrderOptionLabel value={value} />}
+            onChange={(val: string | null) => setOrder(val)}
+            data={projectOrderByOptions}
           />
         </Group>
-        <CoreUiSearchField placeholder="Search project" setSearch={setSearch} size="md" />
+        <CoreUiSearchField maw={160} placeholder="Search project" setSearch={setSearch} size="md" />
       </Group>
 
       {query.isLoading ? (
@@ -62,5 +53,18 @@ export default function ReviewerProjectListFeature() {
         <UiInfo message="No projects found" />
       )}
     </UiPage>
+  )
+}
+
+function OrderOptionLabel({ value }: { value: string | null }) {
+  const option = projectOrderByOptions.find((o) => o.value === value)
+
+  if (!option) return null
+
+  return (
+    <Group component="span" gap={5}>
+      {option.label}
+      {option.direction === OrderDirection.Desc ? <IconArrowUp size={16} /> : <IconArrowDown size={16} />}
+    </Group>
   )
 }
