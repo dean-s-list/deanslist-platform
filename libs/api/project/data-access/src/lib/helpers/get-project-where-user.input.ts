@@ -10,6 +10,9 @@ export function getProjectWhereUserInput(input: ReviewerFindManyProjectInput): P
   if (input.search) {
     where.OR = [
       { id: { contains: input.search, mode: 'insensitive' } },
+      { community: { id: { contains: input.search, mode: 'insensitive' } } },
+      { community: { name: { contains: input.search, mode: 'insensitive' } } },
+      { slug: { contains: input.search, mode: 'insensitive' } },
       { name: { contains: input.search, mode: 'insensitive' } },
     ]
   }

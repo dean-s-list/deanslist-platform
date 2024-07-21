@@ -1,8 +1,7 @@
-import { Button, Group, Popover, Stack, Text } from '@mantine/core'
+import { Button, Divider, Group, Popover, Stack, Text, UnstyledButton } from '@mantine/core'
 import { ComboboxItem } from '@mantine/core/lib/components/Combobox'
-import { IconCheck, IconSelector } from '@tabler/icons-react'
 import { ReactNode, useState } from 'react'
-import { cardGradient } from '../core-ui-constants'
+import { dropdownBackground, dropdownDivider } from '../core-ui-constants'
 import { useUiBreakpoints } from '../core-ui-theme'
 
 export function CoreUiCustomSelect({
@@ -25,18 +24,20 @@ export function CoreUiCustomSelect({
   const isResponsive = smIcon && isSm
 
   return (
-    <Popover width={!isSm ? 'target' : null} radius="md" opened={opened} onChange={setOpened}>
+    <Popover
+      styles={{ dropdown: { ...dropdownBackground, borderRadius: 16, color: 'white' } }}
+      width={!isSm ? 'target' : null}
+      radius="md"
+      opened={opened}
+      onChange={setOpened}
+    >
       <Popover.Target>
         <Button
-          style={{
-            borderColor: 'white',
-            ...cardGradient,
-          }}
+          style={{ borderColor: 'white', background: 'transparent' }}
           onClick={() => setOpened((o) => !o)}
           c="white"
           variant="outline"
           radius="xl"
-          rightSection={!isResponsive && <IconSelector size={16} color="gray" />}
         >
           {isResponsive && smIcon}
           <Group gap={10} visibleFrom={isResponsive ? 'sm' : undefined}>
@@ -48,22 +49,18 @@ export function CoreUiCustomSelect({
         </Button>
       </Popover.Target>
       <Popover.Dropdown>
-        <Stack gap={4}>
-          {data.map((option: string | ComboboxItem) => {
+        <Stack gap={0}>
+          {data.map((option: string | ComboboxItem, index: number) => {
             const optionValue = typeof option === 'string' ? option : option.value
             return (
-              <Button
-                c="gray"
-                size="xs"
-                key={optionValue}
-                justify="left"
-                variant="transparent"
-                onClick={() => onChange(optionValue)}
-                p={0}
-                leftSection={value === optionValue ? <IconCheck size={16} color="gray" /> : null}
-              >
-                {renderOption(optionValue)}
-              </Button>
+              <div key={optionValue}>
+                <UnstyledButton onClick={() => onChange(optionValue)} p={0}>
+                  <Text span size="sm">
+                    {renderOption(optionValue)}
+                  </Text>
+                </UnstyledButton>
+                {index !== data.length - 1 ? <Divider style={{ ...dropdownDivider }} /> : null}
+              </div>
             )
           })}
         </Stack>

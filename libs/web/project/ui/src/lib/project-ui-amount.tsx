@@ -8,7 +8,7 @@ export function ProjectUiAmount({ amount, label }: { amount?: number | null; lab
         {amount} USDC
       </Text>
       {label ? (
-        <Text size="md" c="dimmed">
+        <Text size="sm" fw={400}>
           {label}
         </Text>
       ) : null}

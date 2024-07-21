@@ -4,9 +4,11 @@ import { IconUsers } from '@tabler/icons-react'
 
 export function ProjectUiParticipants({ project }: { project: Project }) {
   return (
-    <Group gap={5}>
+    <Group gap={6}>
       <IconUsers size={16} />
-      <Text>{project.reviewCount ?? 0} participants</Text>
+      <Text size="sm" fw={400}>
+        {project.reviewCount ?? 0} participants
+      </Text>
     </Group>
   )
 }

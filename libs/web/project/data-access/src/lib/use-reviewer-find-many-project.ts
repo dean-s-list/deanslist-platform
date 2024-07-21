@@ -49,6 +49,7 @@ export function useReviewerFindManyProject(props: Partial<ReviewerFindManyProjec
       setLimit,
       total,
     },
+    search,
     setSearch,
   }
 }

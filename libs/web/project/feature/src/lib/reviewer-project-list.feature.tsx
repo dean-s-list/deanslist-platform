@@ -2,14 +2,15 @@ import { getEnumOptions, OrderDirection, projectOrderByOptions, ProjectStatus } 
 import { CoreUiCustomSelect, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
 import { useReviewerFindManyProject } from '@deanslist-platform/web-project-data-access'
 import { ProjectUiGrid } from '@deanslist-platform/web-project-ui'
-import { Group } from '@mantine/core'
-import { UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
+import { Group, Text } from '@mantine/core'
+import { UiLoader, UiPage, UiStack } from '@pubkey-ui/core'
 import { IconArrowDown, IconArrowsUpDown, IconArrowUp, IconCube, IconFilter } from '@tabler/icons-react'
 
 export default function ReviewerProjectListFeature() {
-  const { items, pagination, query, setSearch, status, setStatus, order, setOrder } = useReviewerFindManyProject({
-    limit: 24,
-  })
+  const { items, pagination, query, search, setSearch, status, setStatus, order, setOrder } =
+    useReviewerFindManyProject({
+      limit: 24,
+    })
 
   return (
     <UiPage title="Projects" leftAction={<IconCube size={28} />}>
@@ -50,9 +51,35 @@ export default function ReviewerProjectListFeature() {
           setPage={pagination.setPage}
         />
       ) : (
-        <UiInfo message="No projects found" />
+        <ProjectEmptyState search={search} />
       )}
     </UiPage>
+  )
+}
+
+function ProjectEmptyState({ search }: { search?: string }) {
+  return (
+    <UiStack align="center" justify="center" gap={0}>
+      <Text fz={48} c="white" ta="center">
+        <span role="img" aria-label="detective">
+          🕵️
+        </span>
+      </Text>
+      <Text size="xl" c="white" ta="center">
+        We couldn't find any results
+        {search ? (
+          <span>
+            {' '}
+            for <strong>{search}</strong>
+          </span>
+        ) : null}
+        .
+      </Text>
+      <Text size="xl" c="white" ta="center">
+        Try adjusting the filters and give it another try. If you still can't find it, then it looks like we don't have
+        it yet.
+      </Text>
+    </UiStack>
   )
 }
 

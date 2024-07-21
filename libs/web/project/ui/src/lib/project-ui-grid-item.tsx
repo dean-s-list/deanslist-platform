@@ -10,7 +10,7 @@ import { ProjectUiParticipants } from './project-ui-participants'
 
 export function ProjectUiGridItem({ project, to }: { project: Project; to: string }) {
   return (
-    <CoreUiCard to={to}>
+    <CoreUiCard to={to} style={{ color: 'white' }}>
       <UiStack>
         <UiGroup align="start">
           <ProjectUiItem project={project} />

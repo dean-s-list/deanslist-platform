@@ -17,3 +17,10 @@ export const purpleGradient: CSSProperties = {
 export const cardGradient: CSSProperties = {
   background: 'linear-gradient(0deg, rgba(224, 206, 248, 0.16), rgba(224, 206, 248, 0.16))',
 }
+
+export const dropdownBackground: CSSProperties = {
+  background: 'rgba(61, 58, 65, 1)',
+}
+export const dropdownDivider: CSSProperties = {
+  color: 'rgba(224, 206, 248, 0.16)',
+}
