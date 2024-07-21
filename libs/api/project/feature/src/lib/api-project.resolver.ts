@@ -1,9 +1,12 @@
-import { ApiProjectService, Project } from '@deanslist-platform/api-project-data-access'
+import { getRemainingDays, Project } from '@deanslist-platform/api-project-data-access'
 import { Int, Parent, ResolveField, Resolver } from '@nestjs/graphql'
 
 @Resolver(() => Project)
 export class ApiProjectResolver {
-  constructor(private readonly service: ApiProjectService) {}
+  @ResolveField(() => Int, { nullable: true })
+  remainingDays(@Parent() project: Project) {
+    return project.endDate ? getRemainingDays(project.endDate) : 0
+  }
 
   @ResolveField(() => Int, { nullable: true })
   reviewCount(@Parent() project: Project) {

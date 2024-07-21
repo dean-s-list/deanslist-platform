@@ -428,6 +428,7 @@ type Project {
   managers: [User!]
   name: String!
   referral: User
+  remainingDays: Int
   reviewCount: Int
   reviewers: [User!]
   reviewsOpen: Boolean

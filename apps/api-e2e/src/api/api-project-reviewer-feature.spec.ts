@@ -23,7 +23,6 @@ describe('api-project-feature', () => {
               projectId,
               input: {
                 status: ProjectStatus.Active,
-                amountTotalUsd: 1,
                 startDate: new Date(),
                 durationDays: 7,
               },
@@ -79,6 +78,7 @@ describe('api-project-feature', () => {
         const res = await sdk.reviewerFindOneProject({ projectId }, { cookie: alice })
 
         expect(res.data.item.id).toBe(projectId)
+        expect(res.data.item.remainingDays).toBe(8)
       })
 
       describe('ordering', () => {
@@ -97,11 +97,11 @@ describe('api-project-feature', () => {
             .then((res) => res.data.paging.data)
 
           // ASSERT
-          expect(itemsAsc[0].amountTotalUsd).toBe(1)
+          expect(itemsAsc[0].amountTotalUsd).toBe(0)
           expect(itemsAsc[itemsAsc.length - 1].amountTotalUsd).toBe(1_000_000)
 
           expect(itemsDesc[0].amountTotalUsd).toBe(1_000_000)
-          expect(itemsDesc[itemsDesc.length - 1].amountTotalUsd).toBe(1)
+          expect(itemsDesc[itemsDesc.length - 1].amountTotalUsd).toBe(0)
         })
 
         it('should find a list of projects (with ProjectOrderBy.EndDate)', async () => {

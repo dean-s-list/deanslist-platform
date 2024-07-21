@@ -52,7 +52,6 @@ export class ApiAnonIdentityService {
                   username: slugifyUsername(`${ellipsify(providerId)}-${provider}`),
                   role: admin ? UserRole.Admin : UserRole.User,
                   status: UserStatus.Active,
-                  developer: admin,
                 },
               },
             },

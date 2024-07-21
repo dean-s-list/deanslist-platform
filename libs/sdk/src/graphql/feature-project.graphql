@@ -22,6 +22,7 @@ fragment ProjectDetails on Project {
   }
   manageUrl
   name
+  remainingDays
   reviewCount
   reviewsOpen
   slug

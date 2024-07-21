@@ -1,4 +1,4 @@
-import { Button, Group, Popover, SelectProps, Stack, Text } from '@mantine/core'
+import { Button, Group, Popover, Stack, Text } from '@mantine/core'
 import { ComboboxItem } from '@mantine/core/lib/components/Combobox'
 import { IconCheck, IconSelector } from '@tabler/icons-react'
 import { ReactNode, useState } from 'react'
@@ -12,7 +12,7 @@ export function CoreUiCustomSelect({
   onChange,
   renderOption = (value: string) => value,
   smIcon,
-}: SelectProps & {
+}: {
   label: string
   value: string
   data: Array<string | ComboboxItem>
