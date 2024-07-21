@@ -733,6 +733,7 @@ export type Project = {
   managers?: Maybe<Array<User>>
   name: Scalars['String']['output']
   referral?: Maybe<User>
+  remainingDays?: Maybe<Scalars['Int']['output']>
   reviewCount?: Maybe<Scalars['Int']['output']>
   reviewers?: Maybe<Array<User>>
   reviewsOpen?: Maybe<Scalars['Boolean']['output']>
@@ -1558,6 +1559,7 @@ export type ManagerFindManyCommentQuery = {
         linkWebsite?: string | null
         manageUrl: string
         name: string
+        remainingDays?: number | null
         reviewCount?: number | null
         reviewsOpen?: boolean | null
         slug: string
@@ -2879,6 +2881,7 @@ export type ProjectDetailsFragment = {
   linkWebsite?: string | null
   manageUrl: string
   name: string
+  remainingDays?: number | null
   reviewCount?: number | null
   reviewsOpen?: boolean | null
   slug: string
@@ -2967,6 +2970,7 @@ export type ReviewerFindManyProjectQuery = {
       linkWebsite?: string | null
       manageUrl: string
       name: string
+      remainingDays?: number | null
       reviewCount?: number | null
       reviewsOpen?: boolean | null
       slug: string
@@ -3065,6 +3069,7 @@ export type ReviewerFindOneProjectQuery = {
     linkWebsite?: string | null
     manageUrl: string
     name: string
+    remainingDays?: number | null
     reviewCount?: number | null
     reviewsOpen?: boolean | null
     slug: string
@@ -3154,6 +3159,7 @@ export type AdminFindManyProjectQuery = {
       linkWebsite?: string | null
       manageUrl: string
       name: string
+      remainingDays?: number | null
       reviewCount?: number | null
       reviewsOpen?: boolean | null
       slug: string
@@ -3252,6 +3258,7 @@ export type AdminFindOneProjectQuery = {
     linkWebsite?: string | null
     manageUrl: string
     name: string
+    remainingDays?: number | null
     reviewCount?: number | null
     reviewsOpen?: boolean | null
     slug: string
@@ -3370,6 +3377,7 @@ export type AdminUpdateProjectMutation = {
     linkWebsite?: string | null
     manageUrl: string
     name: string
+    remainingDays?: number | null
     reviewCount?: number | null
     reviewsOpen?: boolean | null
     slug: string
@@ -3507,6 +3515,7 @@ export type ManagerFindManyProjectQuery = {
       linkWebsite?: string | null
       manageUrl: string
       name: string
+      remainingDays?: number | null
       reviewCount?: number | null
       reviewsOpen?: boolean | null
       slug: string
@@ -3605,6 +3614,7 @@ export type ManagerFindOneProjectQuery = {
     linkWebsite?: string | null
     manageUrl: string
     name: string
+    remainingDays?: number | null
     reviewCount?: number | null
     reviewsOpen?: boolean | null
     slug: string
@@ -3722,6 +3732,7 @@ export type ManagerCreateProjectMutation = {
     linkWebsite?: string | null
     manageUrl: string
     name: string
+    remainingDays?: number | null
     reviewCount?: number | null
     reviewsOpen?: boolean | null
     slug: string
@@ -3810,6 +3821,7 @@ export type ManagerUpdateProjectMutation = {
     linkWebsite?: string | null
     manageUrl: string
     name: string
+    remainingDays?: number | null
     reviewCount?: number | null
     reviewsOpen?: boolean | null
     slug: string
@@ -4122,6 +4134,7 @@ export type ReviewDetailsFragment = {
     linkWebsite?: string | null
     manageUrl: string
     name: string
+    remainingDays?: number | null
     reviewCount?: number | null
     reviewsOpen?: boolean | null
     slug: string
@@ -4235,6 +4248,7 @@ export type ManagerFindManyReviewByProjectQuery = {
       linkWebsite?: string | null
       manageUrl: string
       name: string
+      remainingDays?: number | null
       reviewCount?: number | null
       reviewsOpen?: boolean | null
       slug: string
@@ -4349,6 +4363,7 @@ export type ReviewerFindManyReviewByProjectQuery = {
       linkWebsite?: string | null
       manageUrl: string
       name: string
+      remainingDays?: number | null
       reviewCount?: number | null
       reviewsOpen?: boolean | null
       slug: string
@@ -4463,6 +4478,7 @@ export type ReviewerFindManyReviewByUsernameQuery = {
       linkWebsite?: string | null
       manageUrl: string
       name: string
+      remainingDays?: number | null
       reviewCount?: number | null
       reviewsOpen?: boolean | null
       slug: string
@@ -4577,6 +4593,7 @@ export type ReviewerFindUserProjectReviewQuery = {
       linkWebsite?: string | null
       manageUrl: string
       name: string
+      remainingDays?: number | null
       reviewCount?: number | null
       reviewsOpen?: boolean | null
       slug: string
@@ -4691,6 +4708,7 @@ export type ReviewerFindOneReviewQuery = {
       linkWebsite?: string | null
       manageUrl: string
       name: string
+      remainingDays?: number | null
       reviewCount?: number | null
       reviewsOpen?: boolean | null
       slug: string
@@ -4805,6 +4823,7 @@ export type ReviewerCreateReviewMutation = {
       linkWebsite?: string | null
       manageUrl: string
       name: string
+      remainingDays?: number | null
       reviewCount?: number | null
       reviewsOpen?: boolean | null
       slug: string
@@ -4927,6 +4946,7 @@ export type AdminFindManyReviewQuery = {
         linkWebsite?: string | null
         manageUrl: string
         name: string
+        remainingDays?: number | null
         reviewCount?: number | null
         reviewsOpen?: boolean | null
         slug: string
@@ -5052,6 +5072,7 @@ export type AdminFindOneReviewQuery = {
       linkWebsite?: string | null
       manageUrl: string
       name: string
+      remainingDays?: number | null
       reviewCount?: number | null
       reviewsOpen?: boolean | null
       slug: string
@@ -5554,6 +5575,7 @@ export const ProjectDetailsFragmentDoc = gql`
     }
     manageUrl
     name
+    remainingDays
     reviewCount
     reviewsOpen
     slug

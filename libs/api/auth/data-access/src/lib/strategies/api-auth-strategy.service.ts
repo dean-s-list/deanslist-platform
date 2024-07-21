@@ -76,7 +76,6 @@ export class ApiAuthStrategyService {
     const user = await this.core.data.user.create({
       data: {
         avatarUrl: (identity.profile as { avatarUrl?: string })?.avatarUrl,
-        developer: admin,
         role: admin ? UserRole.Admin : UserRole.User,
         status: UserStatus.Active,
         username,
