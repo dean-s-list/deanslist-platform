@@ -392,6 +392,11 @@ type Mutation {
   userVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
 }
 
+enum OrderDirection {
+  Asc
+  Desc
+}
+
 type PagingMeta {
   currentPage: Int!
   isFirstPage: Boolean!
@@ -432,6 +437,12 @@ type Project {
   tags: [String!]
   updatedAt: DateTime
   viewUrl: String!
+}
+
+enum ProjectOrderBy {
+  Amount
+  CreatedAt
+  EndDate
 }
 
 type ProjectPaging {
@@ -548,6 +559,8 @@ input ReviewerFindManyCommentInput {
 input ReviewerFindManyProjectInput {
   communityId: String
   limit: Int = 10
+  orderBy: ProjectOrderBy
+  orderDirection: OrderDirection
   page: Int = 1
   search: String
   status: ProjectStatus

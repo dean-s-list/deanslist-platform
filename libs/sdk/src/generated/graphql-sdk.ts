@@ -695,6 +695,11 @@ export type MutationUserVerifyIdentityChallengeArgs = {
   input: VerifyIdentityChallengeInput
 }
 
+export enum OrderDirection {
+  Asc = 'Asc',
+  Desc = 'Desc',
+}
+
 export type PagingMeta = {
   __typename?: 'PagingMeta'
   currentPage: Scalars['Int']['output']
@@ -737,6 +742,12 @@ export type Project = {
   tags?: Maybe<Array<Scalars['String']['output']>>
   updatedAt?: Maybe<Scalars['DateTime']['output']>
   viewUrl: Scalars['String']['output']
+}
+
+export enum ProjectOrderBy {
+  Amount = 'Amount',
+  CreatedAt = 'CreatedAt',
+  EndDate = 'EndDate',
 }
 
 export type ProjectPaging = {
@@ -1018,6 +1029,8 @@ export type ReviewerFindManyCommentInput = {
 export type ReviewerFindManyProjectInput = {
   communityId?: InputMaybe<Scalars['String']['input']>
   limit?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<ProjectOrderBy>
+  orderDirection?: InputMaybe<OrderDirection>
   page?: InputMaybe<Scalars['Int']['input']>
   search?: InputMaybe<Scalars['String']['input']>
   status?: InputMaybe<ProjectStatus>
@@ -8798,6 +8811,10 @@ export const CommentCategorySchema = z.nativeEnum(CommentCategory)
 
 export const IdentityProviderSchema = z.nativeEnum(IdentityProvider)
 
+export const OrderDirectionSchema = z.nativeEnum(OrderDirection)
+
+export const ProjectOrderBySchema = z.nativeEnum(ProjectOrderBy)
+
 export const ProjectStatusSchema = z.nativeEnum(ProjectStatus)
 
 export const UserRoleSchema = z.nativeEnum(UserRole)
@@ -9079,6 +9096,8 @@ export function ReviewerFindManyProjectInputSchema(): z.ZodObject<Properties<Rev
   return z.object({
     communityId: z.string().nullish(),
     limit: z.number().nullish(),
+    orderBy: ProjectOrderBySchema.nullish(),
+    orderDirection: OrderDirectionSchema.nullish(),
     page: z.number().nullish(),
     search: z.string().nullish(),
     status: ProjectStatusSchema.nullish(),

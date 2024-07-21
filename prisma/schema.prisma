@@ -137,7 +137,7 @@ model Project {
   durationDays      Int              @default(7)
   amountManagerUsd  Int?
   amountReferralUsd Int?
-  amountTotalUsd    Int?
+  amountTotalUsd    Int              @default(0)
   reviewsOpen       Boolean          @default(true)
   endDate           DateTime?
   startDate         DateTime?
