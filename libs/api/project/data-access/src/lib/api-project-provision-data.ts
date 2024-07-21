@@ -15,7 +15,6 @@ export const provisionProjects: ProjectProvisionInput[] = [
     durationDays: 14,
     startDate: new Date(),
     status: ProjectStatus.Active,
-    tags: ['nfts', 'identity'],
     instructions: `1. Go to [app.triadfi.co](https://app.triadfi.co) to get started.
 2. Connect your wallet.
 3. Use the app and create positions.
@@ -32,7 +31,6 @@ export const provisionProjects: ProjectProvisionInput[] = [
     durationDays: 14,
     startDate: new Date(),
     status: ProjectStatus.Active,
-    tags: ['nfts', 'daos'],
     instructions: `1. Go to [app.triadfi.co](https://app.triadfi.co) to get started.
 2. Connect your wallet.
 3. Use the app and create positions.
@@ -48,7 +46,6 @@ export const provisionProjects: ProjectProvisionInput[] = [
     durationDays: 7,
     startDate: new Date(),
     status: ProjectStatus.Active,
-    tags: ['dashboard', 'v2'],
   },
   {
     communityId: 'deans-list',
@@ -61,7 +58,6 @@ export const provisionProjects: ProjectProvisionInput[] = [
     durationDays: 14,
     startDate: new Date(),
     status: ProjectStatus.Active,
-    tags: ['defi', 'dapp'],
     instructions: `1. Go to [app.triadfi.co](https://app.triadfi.co) to get started.
 2. Connect your wallet.
 3. Use the app and create positions.
@@ -81,7 +77,6 @@ export const provisionProjects: ProjectProvisionInput[] = [
     durationDays: 14,
     startDate: new Date(),
     status: ProjectStatus.Active,
-    tags: ['dapp'],
     instructions: `1. Go to the app to get started.
 2. Connect your wallet.
 3. Use the app and create content.

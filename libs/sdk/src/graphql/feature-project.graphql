@@ -28,7 +28,6 @@ fragment ProjectDetails on Project {
   slug
   startDate
   status
-  tags
   updatedAt
   viewUrl
 }

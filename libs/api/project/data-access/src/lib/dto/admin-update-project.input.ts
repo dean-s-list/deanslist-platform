@@ -15,8 +15,6 @@ export class AdminUpdateProjectInput {
   startDate?: Date | null
   @Field(() => ProjectStatus, { nullable: true })
   status?: ProjectStatus
-  @Field(() => [String], { nullable: true })
-  tags!: string[]
   @Field(() => Int, { nullable: true })
   amountManagerUsd?: number
   @Field(() => Int, { nullable: true })

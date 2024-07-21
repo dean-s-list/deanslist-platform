@@ -1,5 +1,5 @@
 import { useAuth } from '@deanslist-platform/web-auth-data-access'
-import { CoreUiBackLink, CoreUiButton, CoreUiCard } from '@deanslist-platform/web-core-ui'
+import { CoreUiBackLink, CoreUiButton, CoreUiCard, CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
 import { useReviewerFindOneProject } from '@deanslist-platform/web-project-data-access'
 import {
   ProjectUiAmount,
@@ -10,7 +10,6 @@ import {
   ProjectUiParticipants,
   ProjectUiSocials,
   ProjectUiStatusBadge,
-  ProjectUiTags,
 } from '@deanslist-platform/web-project-ui'
 import { ReviewerProjectReviewFeature } from '@deanslist-platform/web-review-feature'
 import { Button, Collapse, Divider, Group } from '@mantine/core'
@@ -46,7 +45,10 @@ export function ReviewerProjectDetailFeature() {
     <UiContainer>
       <UiStack>
         <UiGroup>
-          <CoreUiBackLink label="Back to overview" />
+          <Group>
+            <CoreUiBackLink label="Back to overview" />
+            <CoreUiDebugModal data={item} />
+          </Group>
           {isManager ? (
             <CoreUiButton variant="light" to={item.manageUrl} iconLeft={IconChairDirector}>
               Manage project
@@ -59,7 +61,6 @@ export function ReviewerProjectDetailFeature() {
             <UiGroup>
               <Group>
                 <ProjectUiItem project={item} />
-                {item.tags?.length ? <ProjectUiTags tags={item.tags} /> : null}
               </Group>
               <Group gap="xs">
                 <Group justify="center">

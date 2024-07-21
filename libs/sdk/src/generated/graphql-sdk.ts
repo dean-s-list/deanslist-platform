@@ -112,7 +112,6 @@ export type AdminUpdateProjectInput = {
   reviewsOpen?: InputMaybe<Scalars['Boolean']['input']>
   startDate?: InputMaybe<Scalars['DateTime']['input']>
   status?: InputMaybe<ProjectStatus>
-  tags?: InputMaybe<Array<Scalars['String']['input']>>
 }
 
 export type AdminUpdateRatingInput = {
@@ -342,7 +341,6 @@ export type ManagerUpdateProjectInput = {
   reviewsOpen?: InputMaybe<Scalars['Boolean']['input']>
   startDate?: InputMaybe<Scalars['DateTime']['input']>
   status?: InputMaybe<ProjectStatus>
-  tags?: InputMaybe<Array<Scalars['String']['input']>>
 }
 
 export type ManagerUpdateRatingInput = {
@@ -740,7 +738,6 @@ export type Project = {
   slug: Scalars['String']['output']
   startDate?: Maybe<Scalars['DateTime']['output']>
   status?: Maybe<ProjectStatus>
-  tags?: Maybe<Array<Scalars['String']['output']>>
   updatedAt?: Maybe<Scalars['DateTime']['output']>
   viewUrl: Scalars['String']['output']
 }
@@ -1565,7 +1562,6 @@ export type ManagerFindManyCommentQuery = {
         slug: string
         startDate?: Date | null
         status?: ProjectStatus | null
-        tags?: Array<string> | null
         updatedAt?: Date | null
         viewUrl: string
         community?: {
@@ -2887,7 +2883,6 @@ export type ProjectDetailsFragment = {
   slug: string
   startDate?: Date | null
   status?: ProjectStatus | null
-  tags?: Array<string> | null
   updatedAt?: Date | null
   viewUrl: string
   community?: {
@@ -2976,7 +2971,6 @@ export type ReviewerFindManyProjectQuery = {
       slug: string
       startDate?: Date | null
       status?: ProjectStatus | null
-      tags?: Array<string> | null
       updatedAt?: Date | null
       viewUrl: string
       community?: {
@@ -3075,7 +3069,6 @@ export type ReviewerFindOneProjectQuery = {
     slug: string
     startDate?: Date | null
     status?: ProjectStatus | null
-    tags?: Array<string> | null
     updatedAt?: Date | null
     viewUrl: string
     community?: {
@@ -3165,7 +3158,6 @@ export type AdminFindManyProjectQuery = {
       slug: string
       startDate?: Date | null
       status?: ProjectStatus | null
-      tags?: Array<string> | null
       updatedAt?: Date | null
       viewUrl: string
       community?: {
@@ -3264,7 +3256,6 @@ export type AdminFindOneProjectQuery = {
     slug: string
     startDate?: Date | null
     status?: ProjectStatus | null
-    tags?: Array<string> | null
     updatedAt?: Date | null
     viewUrl: string
     referral?: {
@@ -3383,7 +3374,6 @@ export type AdminUpdateProjectMutation = {
     slug: string
     startDate?: Date | null
     status?: ProjectStatus | null
-    tags?: Array<string> | null
     updatedAt?: Date | null
     viewUrl: string
     community?: {
@@ -3521,7 +3511,6 @@ export type ManagerFindManyProjectQuery = {
       slug: string
       startDate?: Date | null
       status?: ProjectStatus | null
-      tags?: Array<string> | null
       updatedAt?: Date | null
       viewUrl: string
       community?: {
@@ -3620,7 +3609,6 @@ export type ManagerFindOneProjectQuery = {
     slug: string
     startDate?: Date | null
     status?: ProjectStatus | null
-    tags?: Array<string> | null
     updatedAt?: Date | null
     viewUrl: string
     referral?: {
@@ -3738,7 +3726,6 @@ export type ManagerCreateProjectMutation = {
     slug: string
     startDate?: Date | null
     status?: ProjectStatus | null
-    tags?: Array<string> | null
     updatedAt?: Date | null
     viewUrl: string
     community?: {
@@ -3827,7 +3814,6 @@ export type ManagerUpdateProjectMutation = {
     slug: string
     startDate?: Date | null
     status?: ProjectStatus | null
-    tags?: Array<string> | null
     updatedAt?: Date | null
     viewUrl: string
     community?: {
@@ -4140,7 +4126,6 @@ export type ReviewDetailsFragment = {
     slug: string
     startDate?: Date | null
     status?: ProjectStatus | null
-    tags?: Array<string> | null
     updatedAt?: Date | null
     viewUrl: string
     community?: {
@@ -4254,7 +4239,6 @@ export type ManagerFindManyReviewByProjectQuery = {
       slug: string
       startDate?: Date | null
       status?: ProjectStatus | null
-      tags?: Array<string> | null
       updatedAt?: Date | null
       viewUrl: string
       community?: {
@@ -4369,7 +4353,6 @@ export type ReviewerFindManyReviewByProjectQuery = {
       slug: string
       startDate?: Date | null
       status?: ProjectStatus | null
-      tags?: Array<string> | null
       updatedAt?: Date | null
       viewUrl: string
       community?: {
@@ -4484,7 +4467,6 @@ export type ReviewerFindManyReviewByUsernameQuery = {
       slug: string
       startDate?: Date | null
       status?: ProjectStatus | null
-      tags?: Array<string> | null
       updatedAt?: Date | null
       viewUrl: string
       community?: {
@@ -4599,7 +4581,6 @@ export type ReviewerFindUserProjectReviewQuery = {
       slug: string
       startDate?: Date | null
       status?: ProjectStatus | null
-      tags?: Array<string> | null
       updatedAt?: Date | null
       viewUrl: string
       community?: {
@@ -4714,7 +4695,6 @@ export type ReviewerFindOneReviewQuery = {
       slug: string
       startDate?: Date | null
       status?: ProjectStatus | null
-      tags?: Array<string> | null
       updatedAt?: Date | null
       viewUrl: string
       community?: {
@@ -4829,7 +4809,6 @@ export type ReviewerCreateReviewMutation = {
       slug: string
       startDate?: Date | null
       status?: ProjectStatus | null
-      tags?: Array<string> | null
       updatedAt?: Date | null
       viewUrl: string
       community?: {
@@ -4952,7 +4931,6 @@ export type AdminFindManyReviewQuery = {
         slug: string
         startDate?: Date | null
         status?: ProjectStatus | null
-        tags?: Array<string> | null
         updatedAt?: Date | null
         viewUrl: string
         community?: {
@@ -5078,7 +5056,6 @@ export type AdminFindOneReviewQuery = {
       slug: string
       startDate?: Date | null
       status?: ProjectStatus | null
-      tags?: Array<string> | null
       updatedAt?: Date | null
       viewUrl: string
       community?: {
@@ -5581,7 +5558,6 @@ export const ProjectDetailsFragmentDoc = gql`
     slug
     startDate
     status
-    tags
     updatedAt
     viewUrl
   }
@@ -8956,7 +8932,6 @@ export function AdminUpdateProjectInputSchema(): z.ZodObject<Properties<AdminUpd
     reviewsOpen: z.boolean().nullish(),
     startDate: definedNonNullAnySchema.nullish(),
     status: ProjectStatusSchema.nullish(),
-    tags: z.array(z.string()).nullish(),
   })
 }
 
@@ -9074,7 +9049,6 @@ export function ManagerUpdateProjectInputSchema(): z.ZodObject<Properties<Manage
     reviewsOpen: z.boolean().nullish(),
     startDate: definedNonNullAnySchema.nullish(),
     status: ProjectStatusSchema.nullish(),
-    tags: z.array(z.string()).nullish(),
   })
 }
 

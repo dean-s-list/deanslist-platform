@@ -1,6 +1,6 @@
 import { AdminUpdateProjectInput, getEnumOptions, Project, ProjectStatus } from '@deanslist-platform/sdk'
 import { CoreUiCurrencyInput } from '@deanslist-platform/web-core-ui'
-import { Button, Fieldset, Group, Select, TagsInput, Textarea, TextInput } from '@mantine/core'
+import { Button, Fieldset, Group, Select, Textarea, TextInput } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { useForm } from '@mantine/form'
 import { UiStack } from '@pubkey-ui/core'
@@ -19,7 +19,6 @@ export function AdminProjectUiUpdateForm({
       durationDays: project.durationDays ?? 7,
       startDate: project.startDate,
       status: project.status ?? ProjectStatus.Draft,
-      tags: project.tags ?? [],
       amountManagerUsd: project.amountManagerUsd ?? 0,
       amountReferralUsd: project.amountReferralUsd ?? 0,
       amountTotalUsd: project.amountTotalUsd ?? 0,
@@ -73,13 +72,6 @@ export function AdminProjectUiUpdateForm({
                 placeholder="Avatar URL"
                 description="The URL of the project's avatar image. Leave blank to use the default avatar."
                 {...form.getInputProps('avatarUrl')}
-              />
-              <TagsInput
-                maxTags={2}
-                label="Tags"
-                placeholder="Tags"
-                description="Tags are used to categorize projects."
-                {...form.getInputProps('tags')}
               />
               <Select
                 label="Status"

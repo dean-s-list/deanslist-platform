@@ -143,7 +143,6 @@ model Project {
   startDate         DateTime?
   avatarUrl         String?
   status            ProjectStatus    @default(Draft)
-  tags              String[]
   channels          DiscordChannel[]
   reviews           Review[]
   managers          User[]           @relation(name: "ProjectManagers")

@@ -47,8 +47,6 @@ export class Project {
   reviewsOpen?: boolean
   @Field(() => ProjectStatus, { nullable: true })
   status!: ProjectStatus
-  @Field(() => [String], { nullable: true })
-  tags!: string[]
   @Field(() => Int, { nullable: true })
   durationDays!: number
   @Field({ nullable: true })

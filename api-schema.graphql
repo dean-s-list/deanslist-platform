@@ -90,7 +90,6 @@ input AdminUpdateProjectInput {
   reviewsOpen: Boolean
   startDate: DateTime
   status: ProjectStatus
-  tags: [String!]
 }
 
 input AdminUpdateRatingInput {
@@ -319,7 +318,6 @@ input ManagerUpdateProjectInput {
   reviewsOpen: Boolean
   startDate: DateTime
   status: ProjectStatus
-  tags: [String!]
 }
 
 input ManagerUpdateRatingInput {
@@ -435,7 +433,6 @@ type Project {
   slug: String!
   startDate: DateTime
   status: ProjectStatus
-  tags: [String!]
   updatedAt: DateTime
   viewUrl: String!
 }

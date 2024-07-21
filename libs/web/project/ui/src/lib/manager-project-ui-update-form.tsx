@@ -1,5 +1,5 @@
 import { getEnumOptions, ManagerUpdateProjectInput, Project, ProjectStatus } from '@deanslist-platform/sdk'
-import { Button, Fieldset, Group, Select, SimpleGrid, TagsInput, Textarea, TextInput } from '@mantine/core'
+import { Button, Fieldset, Group, Select, SimpleGrid, Textarea, TextInput } from '@mantine/core'
 import { DateInput } from '@mantine/dates'
 import { useForm } from '@mantine/form'
 import { UiStack } from '@pubkey-ui/core'
@@ -24,7 +24,6 @@ export function ManagerProjectUiUpdateForm({
       name: project.name ?? '',
       startDate: new Date(project.startDate ?? new Date()),
       status: project.status ?? ProjectStatus.Draft,
-      tags: project.tags ?? [],
     },
 
     validate: {
@@ -71,13 +70,6 @@ export function ManagerProjectUiUpdateForm({
                   placeholder="Name"
                   description="The name of the project must be unique within the community."
                   {...form.getInputProps('name')}
-                />
-                <TagsInput
-                  maxTags={2}
-                  label="Tags"
-                  placeholder="Tags"
-                  description="Tags are used to categorize projects. You can use up to 2 tags."
-                  {...form.getInputProps('tags')}
                 />
                 <Select
                   label="Status"
