@@ -1,14 +1,34 @@
 import { Prisma, ProjectStatus } from '@prisma/client'
 import { ReviewerFindManyProjectInput } from '../dto/reviewer-find-many-project-input'
 
-export function getProjectWhereUserInput(input: ReviewerFindManyProjectInput): Prisma.ProjectWhereInput {
+export function getProjectWhereReviewerInput(
+  userId: string,
+  input: ReviewerFindManyProjectInput,
+): Prisma.ProjectWhereInput {
   const where: Prisma.ProjectWhereInput = {
     communityId: input.communityId ?? undefined,
     status: input.status ?? ProjectStatus.Active,
   }
 
+  if (input.mineOnly) {
+    where.OR = [
+      ...(where.OR ?? []),
+      { managers: { some: { id: userId } } },
+      { reviewers: { some: { id: userId } } },
+      { referral: { id: userId } },
+      {
+        reviews: {
+          some: {
+            AND: [{ reviewerId: userId }, { comments: { some: { authorId: userId } } }],
+          },
+        },
+      },
+    ]
+  }
+
   if (input.search) {
     where.OR = [
+      ...(where.OR ?? []),
       { id: { contains: input.search, mode: 'insensitive' } },
       { community: { id: { contains: input.search, mode: 'insensitive' } } },
       { community: { name: { contains: input.search, mode: 'insensitive' } } },

@@ -2,18 +2,18 @@ import { Injectable } from '@nestjs/common'
 import { ApiProjectDataService } from './api-project-data.service'
 import { ReviewerFindManyProjectInput } from './dto/reviewer-find-many-project-input'
 import { ProjectPaging } from './entity/project-paging.entity'
-import { getProjectWhereUserInput } from './helpers/get-project-where-user.input'
+import { getProjectWhereReviewerInput } from './helpers/get-project-where-reviewer.input'
 
 @Injectable()
 export class ApiProjectDataReviewerService {
   constructor(private readonly data: ApiProjectDataService) {}
 
-  async findManyProject(input: ReviewerFindManyProjectInput): Promise<ProjectPaging> {
+  async findManyProject(userId: string, input: ReviewerFindManyProjectInput): Promise<ProjectPaging> {
     return this.data.findManyProject({
       limit: input.limit ?? 10,
       page: input.page ?? 1,
       orderBy: input.orderBy ? { [input.orderBy]: input.orderDirection ?? 'asc' } : { createdAt: 'desc' },
-      where: getProjectWhereUserInput(input),
+      where: getProjectWhereReviewerInput(userId, input),
       include: { reviews: { include: { comments: true } } },
     })
   }

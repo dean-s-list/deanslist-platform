@@ -2,12 +2,12 @@ import { getEnumOptions, OrderDirection, projectOrderByOptions, ProjectStatus } 
 import { CoreUiCustomSelect, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
 import { useReviewerFindManyProject } from '@deanslist-platform/web-project-data-access'
 import { ProjectUiGrid } from '@deanslist-platform/web-project-ui'
-import { Group, Text } from '@mantine/core'
+import { Group, Switch, Text } from '@mantine/core'
 import { UiLoader, UiPage, UiStack } from '@pubkey-ui/core'
 import { IconArrowDown, IconArrowsUpDown, IconArrowUp, IconCube, IconFilter } from '@tabler/icons-react'
 
 export default function ReviewerProjectListFeature() {
-  const { items, pagination, query, search, setSearch, status, setStatus, order, setOrder } =
+  const { items, pagination, query, mineOnly, setMineOnly, search, setSearch, status, setStatus, order, setOrder } =
     useReviewerFindManyProject({
       limit: 24,
     })
@@ -16,6 +16,11 @@ export default function ReviewerProjectListFeature() {
     <UiPage title="Projects" leftAction={<IconCube size={28} />}>
       <Group justify="space-between">
         <Group>
+          <Switch
+            label="Show my projects only"
+            checked={mineOnly}
+            onChange={(e) => setMineOnly(e.currentTarget.checked)}
+          />
           <CoreUiCustomSelect
             label="State"
             smIcon={<IconFilter />}

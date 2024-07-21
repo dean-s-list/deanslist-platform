@@ -1,4 +1,4 @@
-import { ApiAuthGraphQLUserGuard } from '@deanslist-platform/api-auth-data-access'
+import { ApiAuthGraphQLUserGuard, CtxUserId } from '@deanslist-platform/api-auth-data-access'
 import {
   ApiProjectService,
   Project,
@@ -14,8 +14,8 @@ export class ApiProjectReviewerResolver {
   constructor(private readonly service: ApiProjectService) {}
 
   @Query(() => ProjectPaging)
-  reviewerFindManyProject(@Args('input') input: ReviewerFindManyProjectInput) {
-    return this.service.reviewer.findManyProject(input)
+  reviewerFindManyProject(@CtxUserId() userId: string, @Args('input') input: ReviewerFindManyProjectInput) {
+    return this.service.reviewer.findManyProject(userId, input)
   }
 
   @Query(() => Project, { nullable: true })

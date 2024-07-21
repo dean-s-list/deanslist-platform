@@ -7,6 +7,7 @@ export function useReviewerFindManyProject(props: Partial<ReviewerFindManyProjec
   const sdk = useSdk()
   const [limit, setLimit] = useState(props?.limit ?? 10)
   const [page, setPage] = useState(props?.page ?? 1)
+  const [mineOnly, setMineOnly] = useState(props?.mineOnly ?? false)
   const [orderBy, setOrderBy] = useState<ProjectOrderBy>(ProjectOrderBy.EndDate)
   const [orderDirection, setOrderDirection] = useState<OrderDirection>(OrderDirection.Asc)
   const [status, setStatus] = useState<ProjectStatus>(props?.status ?? ProjectStatus.Active)
@@ -15,6 +16,7 @@ export function useReviewerFindManyProject(props: Partial<ReviewerFindManyProjec
   const input: ReviewerFindManyProjectInput = {
     page,
     limit,
+    mineOnly,
     search,
     status,
     orderBy,
@@ -33,6 +35,8 @@ export function useReviewerFindManyProject(props: Partial<ReviewerFindManyProjec
     query,
     status,
     setStatus,
+    mineOnly,
+    setMineOnly,
     orderBy,
     order: `${orderBy}-${orderDirection}`,
     setOrder: (input: string | null) => {

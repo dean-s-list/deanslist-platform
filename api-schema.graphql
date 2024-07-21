@@ -557,6 +557,7 @@ input ReviewerFindManyCommentInput {
 input ReviewerFindManyProjectInput {
   communityId: String
   limit: Int = 10
+  mineOnly: Boolean
   orderBy: ProjectOrderBy
   orderDirection: OrderDirection
   page: Int = 1
