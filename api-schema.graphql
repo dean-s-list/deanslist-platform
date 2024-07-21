@@ -79,7 +79,7 @@ input AdminUpdateProjectInput {
   amountTotalUsd: Int
   avatarUrl: String
   communityId: String
-  duration: Int
+  durationDays: Int
   instructions: String
   linkDiscord: String
   linkGithub: String
@@ -307,7 +307,7 @@ input ManagerUpdateProjectInput {
   amountReferralUsd: Int
   amountTotalUsd: Int
   avatarUrl: String
-  duration: Int
+  durationDays: Int
   instructions: String
   linkDiscord: String
   linkGithub: String
@@ -410,7 +410,7 @@ type Project {
   community: Community
   communityId: String!
   createdAt: DateTime
-  duration: Int
+  durationDays: Int
   endDate: DateTime
   id: String!
   instructions: String

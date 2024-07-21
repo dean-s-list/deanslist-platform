@@ -101,7 +101,7 @@ export type AdminUpdateProjectInput = {
   amountTotalUsd?: InputMaybe<Scalars['Int']['input']>
   avatarUrl?: InputMaybe<Scalars['String']['input']>
   communityId?: InputMaybe<Scalars['String']['input']>
-  duration?: InputMaybe<Scalars['Int']['input']>
+  durationDays?: InputMaybe<Scalars['Int']['input']>
   instructions?: InputMaybe<Scalars['String']['input']>
   linkDiscord?: InputMaybe<Scalars['String']['input']>
   linkGithub?: InputMaybe<Scalars['String']['input']>
@@ -330,7 +330,7 @@ export type ManagerUpdateProjectInput = {
   amountReferralUsd?: InputMaybe<Scalars['Int']['input']>
   amountTotalUsd?: InputMaybe<Scalars['Int']['input']>
   avatarUrl?: InputMaybe<Scalars['String']['input']>
-  duration?: InputMaybe<Scalars['Int']['input']>
+  durationDays?: InputMaybe<Scalars['Int']['input']>
   instructions?: InputMaybe<Scalars['String']['input']>
   linkDiscord?: InputMaybe<Scalars['String']['input']>
   linkGithub?: InputMaybe<Scalars['String']['input']>
@@ -715,7 +715,7 @@ export type Project = {
   community?: Maybe<Community>
   communityId: Scalars['String']['output']
   createdAt?: Maybe<Scalars['DateTime']['output']>
-  duration?: Maybe<Scalars['Int']['output']>
+  durationDays?: Maybe<Scalars['Int']['output']>
   endDate?: Maybe<Scalars['DateTime']['output']>
   id: Scalars['String']['output']
   instructions?: Maybe<Scalars['String']['output']>
@@ -1534,7 +1534,7 @@ export type ManagerFindManyCommentQuery = {
         avatarUrl?: string | null
         communityId: string
         createdAt?: Date | null
-        duration?: number | null
+        durationDays?: number | null
         endDate?: Date | null
         id: string
         instructions?: string | null
@@ -2855,7 +2855,7 @@ export type ProjectDetailsFragment = {
   avatarUrl?: string | null
   communityId: string
   createdAt?: Date | null
-  duration?: number | null
+  durationDays?: number | null
   endDate?: Date | null
   id: string
   instructions?: string | null
@@ -2943,7 +2943,7 @@ export type ReviewerFindManyProjectQuery = {
       avatarUrl?: string | null
       communityId: string
       createdAt?: Date | null
-      duration?: number | null
+      durationDays?: number | null
       endDate?: Date | null
       id: string
       instructions?: string | null
@@ -3041,7 +3041,7 @@ export type ReviewerFindOneProjectQuery = {
     avatarUrl?: string | null
     communityId: string
     createdAt?: Date | null
-    duration?: number | null
+    durationDays?: number | null
     endDate?: Date | null
     id: string
     instructions?: string | null
@@ -3130,7 +3130,7 @@ export type AdminFindManyProjectQuery = {
       avatarUrl?: string | null
       communityId: string
       createdAt?: Date | null
-      duration?: number | null
+      durationDays?: number | null
       endDate?: Date | null
       id: string
       instructions?: string | null
@@ -3228,7 +3228,7 @@ export type AdminFindOneProjectQuery = {
     avatarUrl?: string | null
     communityId: string
     createdAt?: Date | null
-    duration?: number | null
+    durationDays?: number | null
     endDate?: Date | null
     id: string
     instructions?: string | null
@@ -3346,7 +3346,7 @@ export type AdminUpdateProjectMutation = {
     avatarUrl?: string | null
     communityId: string
     createdAt?: Date | null
-    duration?: number | null
+    durationDays?: number | null
     endDate?: Date | null
     id: string
     instructions?: string | null
@@ -3483,7 +3483,7 @@ export type ManagerFindManyProjectQuery = {
       avatarUrl?: string | null
       communityId: string
       createdAt?: Date | null
-      duration?: number | null
+      durationDays?: number | null
       endDate?: Date | null
       id: string
       instructions?: string | null
@@ -3581,7 +3581,7 @@ export type ManagerFindOneProjectQuery = {
     avatarUrl?: string | null
     communityId: string
     createdAt?: Date | null
-    duration?: number | null
+    durationDays?: number | null
     endDate?: Date | null
     id: string
     instructions?: string | null
@@ -3698,7 +3698,7 @@ export type ManagerCreateProjectMutation = {
     avatarUrl?: string | null
     communityId: string
     createdAt?: Date | null
-    duration?: number | null
+    durationDays?: number | null
     endDate?: Date | null
     id: string
     instructions?: string | null
@@ -3786,7 +3786,7 @@ export type ManagerUpdateProjectMutation = {
     avatarUrl?: string | null
     communityId: string
     createdAt?: Date | null
-    duration?: number | null
+    durationDays?: number | null
     endDate?: Date | null
     id: string
     instructions?: string | null
@@ -4098,7 +4098,7 @@ export type ReviewDetailsFragment = {
     avatarUrl?: string | null
     communityId: string
     createdAt?: Date | null
-    duration?: number | null
+    durationDays?: number | null
     endDate?: Date | null
     id: string
     instructions?: string | null
@@ -4211,7 +4211,7 @@ export type ManagerFindManyReviewByProjectQuery = {
       avatarUrl?: string | null
       communityId: string
       createdAt?: Date | null
-      duration?: number | null
+      durationDays?: number | null
       endDate?: Date | null
       id: string
       instructions?: string | null
@@ -4325,7 +4325,7 @@ export type ReviewerFindManyReviewByProjectQuery = {
       avatarUrl?: string | null
       communityId: string
       createdAt?: Date | null
-      duration?: number | null
+      durationDays?: number | null
       endDate?: Date | null
       id: string
       instructions?: string | null
@@ -4439,7 +4439,7 @@ export type ReviewerFindManyReviewByUsernameQuery = {
       avatarUrl?: string | null
       communityId: string
       createdAt?: Date | null
-      duration?: number | null
+      durationDays?: number | null
       endDate?: Date | null
       id: string
       instructions?: string | null
@@ -4553,7 +4553,7 @@ export type ReviewerFindUserProjectReviewQuery = {
       avatarUrl?: string | null
       communityId: string
       createdAt?: Date | null
-      duration?: number | null
+      durationDays?: number | null
       endDate?: Date | null
       id: string
       instructions?: string | null
@@ -4667,7 +4667,7 @@ export type ReviewerFindOneReviewQuery = {
       avatarUrl?: string | null
       communityId: string
       createdAt?: Date | null
-      duration?: number | null
+      durationDays?: number | null
       endDate?: Date | null
       id: string
       instructions?: string | null
@@ -4781,7 +4781,7 @@ export type ReviewerCreateReviewMutation = {
       avatarUrl?: string | null
       communityId: string
       createdAt?: Date | null
-      duration?: number | null
+      durationDays?: number | null
       endDate?: Date | null
       id: string
       instructions?: string | null
@@ -4903,7 +4903,7 @@ export type AdminFindManyReviewQuery = {
         avatarUrl?: string | null
         communityId: string
         createdAt?: Date | null
-        duration?: number | null
+        durationDays?: number | null
         endDate?: Date | null
         id: string
         instructions?: string | null
@@ -5028,7 +5028,7 @@ export type AdminFindOneReviewQuery = {
       avatarUrl?: string | null
       communityId: string
       createdAt?: Date | null
-      duration?: number | null
+      durationDays?: number | null
       endDate?: Date | null
       id: string
       instructions?: string | null
@@ -5527,7 +5527,7 @@ export const ProjectDetailsFragmentDoc = gql`
       ...CommunityDetails
     }
     createdAt
-    duration
+    durationDays
     endDate
     id
     instructions
@@ -8906,7 +8906,7 @@ export function AdminUpdateProjectInputSchema(): z.ZodObject<Properties<AdminUpd
     amountTotalUsd: z.number().nullish(),
     avatarUrl: z.string().nullish(),
     communityId: z.string().nullish(),
-    duration: z.number().nullish(),
+    durationDays: z.number().nullish(),
     instructions: z.string().nullish(),
     linkDiscord: z.string().nullish(),
     linkGithub: z.string().nullish(),
@@ -9023,7 +9023,7 @@ export function ManagerUpdateProjectInputSchema(): z.ZodObject<Properties<Manage
     amountReferralUsd: z.number().nullish(),
     amountTotalUsd: z.number().nullish(),
     avatarUrl: z.string().nullish(),
-    duration: z.number().nullish(),
+    durationDays: z.number().nullish(),
     instructions: z.string().nullish(),
     linkDiscord: z.string().nullish(),
     linkGithub: z.string().nullish(),

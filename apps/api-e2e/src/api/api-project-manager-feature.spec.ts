@@ -1,3 +1,4 @@
+import { addDays, setDateToEndOfDay, setDateToStartOfDay } from '@deanslist-platform/api-core-data-access'
 import {
   ManagerCreateProjectInput,
   ManagerFindManyProjectInput,
@@ -7,19 +8,14 @@ import {
 import { getAliceCookie, sdk, uniqueId } from '../support'
 
 describe('api-project-feature', () => {
-  describe('api-project-user-resolver', () => {
-    const projectName = uniqueId('acme-project')
+  describe('api-project-manager-resolver', () => {
     let communityId: string
-    let projectId: string
     let alice: string
 
     beforeAll(async () => {
       alice = await getAliceCookie()
       communityId = await sdk
         .managerCreateCommunity({ input: { name: uniqueId('community') } }, { cookie: alice })
-        .then((res) => res.data.created.id)
-      projectId = await sdk
-        .managerCreateProject({ input: { communityId, name: projectName } }, { cookie: alice })
         .then((res) => res.data.created.id)
     })
 
@@ -121,6 +117,112 @@ describe('api-project-feature', () => {
         const findRes = await sdk.managerFindManyProject({ input: { search: projectId } }, { cookie: alice })
         expect(findRes.data.paging.meta.totalCount).toBe(0)
         expect(findRes.data.paging.data.length).toBe(0)
+      })
+    })
+
+    describe('project dates', () => {
+      it('should create a project and set startDate and duration', async () => {
+        // ARRANGE
+        const projectId = await sdk
+          .managerCreateProject(
+            {
+              input: {
+                communityId,
+                name: uniqueId('project'),
+              },
+            },
+            { cookie: alice },
+          )
+          .then((res) => res.data.created.id)
+
+        const date = new Date()
+        const days = 14
+        const endDate = addDays({ date, days })
+
+        // ACT
+        const updated = await sdk
+          .managerUpdateProject(
+            {
+              projectId,
+              input: {
+                startDate: date,
+                durationDays: days,
+              },
+            },
+            { cookie: alice },
+          )
+          .then((res) => res.data.updated)
+
+        // ASSERT
+        expect(new Date(updated.startDate).getTime()).toEqual(setDateToStartOfDay(date).getTime())
+        expect(new Date(updated.endDate).getTime()).toEqual(setDateToEndOfDay(endDate).getTime())
+        expect(updated.durationDays).toEqual(days)
+      })
+
+      it('should throw an error if durationDays is less than 1', async () => {
+        // ARRANGE
+        const projectId = await sdk
+          .managerCreateProject(
+            {
+              input: {
+                communityId,
+                name: uniqueId('project'),
+              },
+            },
+            { cookie: alice },
+          )
+          .then((res) => res.data.created.id)
+
+        // ACT
+        expect.assertions(1)
+        try {
+          await sdk.managerUpdateProject(
+            {
+              projectId,
+              input: {
+                durationDays: 0,
+              },
+            },
+            { cookie: alice },
+          )
+        } catch (e) {
+          expect(e.message).toBe('Duration must be a number higher than 0')
+        }
+      })
+
+      it('should throw an error if startDate is in the past', async () => {
+        // ARRANGE
+        const projectId = await sdk
+          .managerCreateProject(
+            {
+              input: {
+                communityId,
+                name: uniqueId('project'),
+              },
+            },
+            { cookie: alice },
+          )
+          .then((res) => res.data.created.id)
+
+        const date = new Date('2023-01-01T00:00:00.000Z')
+        const days = 14
+
+        // ACT
+        expect.assertions(1)
+        try {
+          await sdk.managerUpdateProject(
+            {
+              projectId,
+              input: {
+                startDate: date,
+                durationDays: days,
+              },
+            },
+            { cookie: alice },
+          )
+        } catch (e) {
+          expect(e.message).toBe('Start date must be in the future.')
+        }
       })
     })
   })

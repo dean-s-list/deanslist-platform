@@ -50,9 +50,11 @@ export class Project {
   @Field(() => [String], { nullable: true })
   tags!: string[]
   @Field(() => Int, { nullable: true })
-  duration?: number | null
+  durationDays!: number
   @Field({ nullable: true })
   startDate?: Date | null
+  @Field({ nullable: true })
+  endDate?: Date | null
   @Field({ nullable: true })
   avatarUrl?: string | null
   @HideField()

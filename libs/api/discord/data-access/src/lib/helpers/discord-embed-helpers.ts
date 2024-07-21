@@ -80,6 +80,6 @@ function createProjectFields(item: Project): APIEmbedField[] {
     { name: 'Created', value: item.createdAt.toISOString() },
     { name: 'Updated', value: item.updatedAt.toISOString() },
     { name: 'Start Date', value: item.startDate?.toISOString() ?? 'N/A' },
-    { name: 'Duration', value: `${item.duration} weeks` },
+    { name: 'Duration', value: `${item.durationDays} days` },
   ]
 }

@@ -1,3 +1,6 @@
+import { dayjs } from './extended-dayjs'
+import { setDateToStartOfDay } from './set-date-to-start-of-day'
+
 export function beforeToday(date: string | Date) {
-  return new Date(date).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)
+  return dayjs(setDateToStartOfDay(date)).isBefore(setDateToStartOfDay(dayjs().toDate()), 'day')
 }

@@ -8,7 +8,7 @@ export class ManagerUpdateProjectInput {
   @Field({ nullable: true })
   avatarUrl?: string | null
   @Field(() => Int, { nullable: true })
-  duration?: number
+  durationDays?: number
   @Field({ nullable: true })
   startDate?: Date
   @Field(() => ProjectStatus, { nullable: true })

@@ -8,7 +8,7 @@ fragment ProjectDetails on Project {
     ...CommunityDetails
   }
   createdAt
-  duration
+  durationDays
   endDate
   id
   instructions

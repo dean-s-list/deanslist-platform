@@ -134,7 +134,7 @@ model Project {
   linkTelegram      String?
   linkTwitter       String?
   linkWebsite       String?
-  duration          Int              @default(2)
+  durationDays      Int              @default(7)
   amountManagerUsd  Int?
   amountReferralUsd Int?
   amountTotalUsd    Int?

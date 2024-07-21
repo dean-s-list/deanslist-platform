@@ -8,7 +8,7 @@ export function ProjectUiOverview({ item }: { item: Project }) {
     <UiInfoTable
       withTableBorder
       items={[
-        ['Duration', item.duration ? <Text size="lg">{item.duration} weeks</Text> : 'N/A'],
+        ['Duration', item.durationDays ? <Text size="lg">{item.durationDays} days</Text> : 'N/A'],
         ['Start Date', item.startDate ? <CoreUiDateLabel size="lg" date={item.startDate} /> : 'N/A'],
         ['End Date', item.endDate ? <CoreUiDateLabel size="lg" date={item.endDate} /> : 'N/A'],
         ['Reviews', `${item.reviewCount ?? 0}`],

@@ -1,10 +1,11 @@
 import { ApiCommunityService } from '@deanslist-platform/api-community-data-access'
-import { ApiCoreService, beforeToday, slugifyId } from '@deanslist-platform/api-core-data-access'
+import { ApiCoreService, slugifyId } from '@deanslist-platform/api-core-data-access'
 import { Injectable } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
 import { ApiProjectEventService } from './api-project-event.service'
 import { ProjectPaging } from './entity/project-paging.entity'
 import { ProjectCreatedEvent } from './event/project-created.event'
+import { normalizeProjectUpdateInput } from './helpers/normalize-project-update-input'
 
 @Injectable()
 export class ApiProjectDataService {
@@ -124,12 +125,9 @@ export class ApiProjectDataService {
     return found
   }
 
-  async updateProject(userId: string, projectId: string, data: Prisma.ProjectUpdateInput) {
+  async updateProject(userId: string, projectId: string, input: Prisma.ProjectUpdateInput) {
     const found = await this.findOneProject(projectId)
-
-    if (data.startDate && beforeToday(data.startDate as string)) {
-      throw new Error('Start date must be in the future.')
-    }
+    const data = normalizeProjectUpdateInput({ found, input })
 
     return this.core.data.project.update({ where: { id: found.id }, data })
   }

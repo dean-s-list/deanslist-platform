@@ -20,11 +20,7 @@ export function ManagerProjectUiPayoutsForm({
   })
 
   return (
-    <form
-      onSubmit={form.onSubmit((values) =>
-        submit({ ...values, duration: parseInt(values.duration?.toString() ?? '2') }),
-      )}
-    >
+    <form onSubmit={form.onSubmit((values) => submit(values))}>
       <UiStack>
         <UiStack>
           <CoreUiCurrencyInput

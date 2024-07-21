@@ -14,7 +14,7 @@ export function ManagerProjectUiUpdateForm({
   const form = useForm<ManagerUpdateProjectInput>({
     initialValues: {
       avatarUrl: project.avatarUrl ?? '',
-      duration: project.duration ?? 2,
+      durationDays: project.durationDays ?? 7,
       instructions: project.instructions ?? '',
       linkDiscord: project.linkDiscord ?? '',
       linkGithub: project.linkGithub ?? '',
@@ -36,8 +36,8 @@ export function ManagerProjectUiUpdateForm({
       avatarUrl: (value) => {
         if (value && !value.startsWith('http')) return 'Avatar URL must be a valid URL.'
       },
-      duration: (value) => {
-        if (value && value < 1) return 'Duration must be at least 1 week.'
+      durationDays: (value) => {
+        if (value && value < 1) return 'Duration must be at least 1 day.'
       },
       startDate: (value) => {
         if (!value) return
@@ -51,7 +51,7 @@ export function ManagerProjectUiUpdateForm({
     <UiStack>
       <form
         onSubmit={form.onSubmit((values) =>
-          submit({ ...values, duration: parseInt(values.duration?.toString() ?? '2') }),
+          submit({ ...values, durationDays: parseInt(values.durationDays?.toString() ?? '2') }),
         )}
       >
         <UiStack>
@@ -151,8 +151,8 @@ export function ManagerProjectUiUpdateForm({
                   label="Duration"
                   type="number"
                   placeholder="Duration"
-                  description="The duration of the project in weeks."
-                  {...form.getInputProps('duration')}
+                  description="The duration of the project in days."
+                  {...form.getInputProps('durationDays')}
                 />
               </UiStack>
             </Fieldset>
