@@ -1,7 +1,8 @@
 import type { Comment, ReviewerCreateCommentInput } from '@deanslist-platform/sdk'
 import { Button, Divider, Group } from '@mantine/core'
-import { UiStack } from '@pubkey-ui/core'
-import { IconArrowsMaximize, IconArrowsMinimize, IconMessageCircle2Filled } from '@tabler/icons-react'
+import { modals } from '@mantine/modals'
+import { UiInfoTable, UiStack } from '@pubkey-ui/core'
+import { IconArrowsMaximize, IconArrowsMinimize, IconInfoCircle, IconMessageCircle2Filled } from '@tabler/icons-react'
 import React, { useState } from 'react'
 import { CommentUiComment } from './comment-ui-comment'
 import { ReviewerCommentUiForm } from './reviewer-comment-ui-form'
@@ -15,7 +16,7 @@ export function CommentUiTimelineItem({
   createComment: (res: ReviewerCreateCommentInput) => Promise<boolean>
   deleteComment: (id: string) => Promise<boolean>
 }) {
-  const [showReplies, setShowReplies] = useState(true)
+  const [showReplies, setShowReplies] = useState(false)
   const [showReplyForm, setShowReplyForm] = useState(false)
   return (
     <UiStack key={comment.id}>
@@ -23,17 +24,42 @@ export function CommentUiTimelineItem({
 
       <UiStack gap="xs">
         {showReplyForm ? (
-          <ReviewerCommentUiForm
-            cancel={() => setShowReplyForm(false)}
-            createComment={async (res) => {
-              return createComment({ ...res, parentId: comment.id }).then((res) => {
-                setShowReplyForm(false)
-                return res
-              })
-            }}
-          />
+          <UiStack ml="xl" pl="xl">
+            <ReviewerCommentUiForm
+              cancel={() => setShowReplyForm(false)}
+              createComment={async (res) => {
+                return createComment({ ...res, parentId: comment.id }).then((res) => {
+                  setShowReplyForm(false)
+                  return res
+                })
+              }}
+            />
+          </UiStack>
         ) : (
           <Group justify="flex-end">
+            <Button
+              size="xs"
+              radius="xl"
+              rightSection={<IconInfoCircle size={16} />}
+              variant="light"
+              onClick={() =>
+                modals.open({
+                  size: 'lg',
+                  centered: true,
+                  title: 'Comment Details',
+                  children: (
+                    <UiInfoTable
+                      items={[
+                        ['Browser version', comment.versionBrowser ?? 'Unknown'],
+                        ['OS version', comment.versionOs ?? 'Unknown'],
+                      ]}
+                    />
+                  ),
+                })
+              }
+            >
+              Details
+            </Button>
             <Button
               size="xs"
               radius="xl"
@@ -42,7 +68,7 @@ export function CommentUiTimelineItem({
               variant="light"
               onClick={() => setShowReplies(!showReplies)}
             >
-              {showReplies ? 'Collapse' : 'Expand'} Replies
+              {showReplies ? 'Collapse' : 'Expand'} {comment.children?.length ?? 0} Replies
             </Button>
             <Button
               size="xs"

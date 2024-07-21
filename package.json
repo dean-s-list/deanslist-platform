@@ -53,6 +53,7 @@
     "@nestjs/schedule": "^4.0.0",
     "@nestjs/serve-static": "^4.0.0",
     "@nx/devkit": "19.2.2",
+    "@oieduardorabelo/use-user-agent": "^5.0.1",
     "@prisma/client": "5.8.0",
     "@pubkey-ui/core": "^1.7.0",
     "@pubkey-ui/generators": "^1.7.0",

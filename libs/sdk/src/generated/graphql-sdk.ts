@@ -1017,6 +1017,8 @@ export type ReviewerCreateCommentInput = {
   content: Scalars['String']['input']
   parentId?: InputMaybe<Scalars['String']['input']>
   reviewId: Scalars['String']['input']
+  versionBrowser?: InputMaybe<Scalars['String']['input']>
+  versionOs?: InputMaybe<Scalars['String']['input']>
 }
 
 export type ReviewerFindManyCommentInput = {
@@ -9079,6 +9081,8 @@ export function ReviewerCreateCommentInputSchema(): z.ZodObject<Properties<Revie
     content: z.string(),
     parentId: z.string().nullish(),
     reviewId: z.string(),
+    versionBrowser: z.string().nullish(),
+    versionOs: z.string().nullish(),
   })
 }
 

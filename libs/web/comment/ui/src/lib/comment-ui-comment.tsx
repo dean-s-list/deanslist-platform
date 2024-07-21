@@ -1,4 +1,5 @@
 import { Comment } from '@deanslist-platform/sdk'
+import { CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
 import { UserUiAvatar } from '@deanslist-platform/web-user-ui'
 import { Box, Group, Stack, Text, TypographyStylesProvider } from '@mantine/core'
 import { UiAnchor, UiTime } from '@pubkey-ui/core'
@@ -49,6 +50,7 @@ export function CommentUiComment({
         </UiAnchor>
         <Group>
           {action}
+          <CoreUiDebugModal data={comment} />
           {deleteComment ? <CommentUiIconDelete comment={comment} deleteComment={deleteComment} /> : null}
         </Group>
       </Group>

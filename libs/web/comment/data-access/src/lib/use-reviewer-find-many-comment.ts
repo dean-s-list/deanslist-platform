@@ -1,5 +1,5 @@
 import { ReviewerCreateCommentInput, ReviewerFindManyCommentInput } from '@deanslist-platform/sdk'
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { useBrowserVersion, useSdk } from '@deanslist-platform/web-core-data-access'
 import { useReviewerFindOneProject } from '@deanslist-platform/web-project-data-access'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom'
 
 export function useReviewerFindManyComment(props: Partial<ReviewerFindManyCommentInput> & { reviewId: string }) {
   const sdk = useSdk()
+  const { browser: versionBrowser, os: versionOs } = useBrowserVersion()
   const { projectId } = useParams<{ projectId: string }>() as { projectId: string }
   const { invalidate: invalidateProjectParticipants } = useReviewerFindOneProject({ projectId })
   const [search, setSearch] = useState<string>(props?.search ?? '')
@@ -25,7 +26,14 @@ export function useReviewerFindManyComment(props: Partial<ReviewerFindManyCommen
     setSearch,
     createComment: (input: ReviewerCreateCommentInput) =>
       sdk
-        .reviewerCreateComment({ input: { ...input, reviewId: props.reviewId } })
+        .reviewerCreateComment({
+          input: {
+            ...input,
+            versionBrowser: `${versionBrowser ?? 'Unknown'}`,
+            versionOs: `${versionOs ?? 'Unknown'}`,
+            reviewId: props.reviewId,
+          },
+        })
         .then((res) => res.data)
         .then(async (res) => {
           if (res.created) {

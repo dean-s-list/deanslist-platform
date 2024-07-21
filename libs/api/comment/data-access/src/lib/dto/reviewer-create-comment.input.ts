@@ -8,4 +8,8 @@ export class ReviewerCreateCommentInput {
   content!: string
   @Field({ nullable: true })
   parentId?: string
+  @Field({ nullable: true })
+  versionBrowser?: string
+  @Field({ nullable: true })
+  versionOs?: string
 }

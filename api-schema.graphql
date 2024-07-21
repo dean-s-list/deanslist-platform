@@ -547,6 +547,8 @@ input ReviewerCreateCommentInput {
   content: String!
   parentId: String
   reviewId: String!
+  versionBrowser: String
+  versionOs: String
 }
 
 input ReviewerFindManyCommentInput {
