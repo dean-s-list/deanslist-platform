@@ -14,8 +14,11 @@ export function calculateProjectDates({
 
   // If we receive a duration, we want to make sure it's a number higher than 1
   if (typeof input.durationDays !== 'undefined') {
-    if (typeof input.durationDays !== 'number' || input.durationDays < 1) {
-      throw new Error('Duration must be a number higher than 0')
+    if (typeof input.durationDays !== 'number') {
+      throw new Error('Duration must be a number')
+    }
+    if (input.durationDays < 1) {
+      throw new Error(`Duration must be higher than 0`)
     }
     durationDays = input.durationDays
   }

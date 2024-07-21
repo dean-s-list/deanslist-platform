@@ -29,7 +29,7 @@ export default function ReviewerProjectListFeature() {
             label="Order by"
             smIcon={<IconArrowsUpDown />}
             value={order}
-            renderOption={(value) => <OrderOptionLabel value={value} />}
+            renderOption={(value) => <OrderOptionLabel value={value.toString()} />}
             onChange={(val: string | null) => setOrder(val)}
             data={projectOrderByOptions}
           />

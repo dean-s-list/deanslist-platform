@@ -1,16 +1,16 @@
 import { Button, Group, Popover, SelectProps, Stack, Text } from '@mantine/core'
-import { ReactNode, useState } from 'react'
-import { useUiBreakpoints } from '../core-ui-theme'
-import { IconCheck, IconSelector } from '@tabler/icons-react'
 import { ComboboxItem } from '@mantine/core/lib/components/Combobox'
+import { IconCheck, IconSelector } from '@tabler/icons-react'
+import { ReactNode, useState } from 'react'
 import { cardGradient } from '../core-ui-constants'
+import { useUiBreakpoints } from '../core-ui-theme'
 
 export function CoreUiCustomSelect({
   label,
   value,
   data,
   onChange,
-  renderOption = (value) => value,
+  renderOption = (value: string) => value,
   smIcon,
 }: SelectProps & {
   label: string

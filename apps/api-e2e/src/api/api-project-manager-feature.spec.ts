@@ -186,7 +186,7 @@ describe('api-project-feature', () => {
             { cookie: alice },
           )
         } catch (e) {
-          expect(e.message).toBe('Duration must be a number higher than 0')
+          expect(e.message).toBe('Duration must be higher than 0')
         }
       })
 
