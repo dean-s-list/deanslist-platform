@@ -4,6 +4,7 @@ import { ManagerCreateProjectInput } from './dto/manager-create-project.input'
 import { ManagerFindManyProjectInput } from './dto/manager-find-many-project.input'
 import { ManagerUpdateProjectInput } from './dto/manager-update-project.input'
 import { ProjectPaging } from './entity/project-paging.entity'
+import { getProjectWhereManagerAccessInput } from './helpers/get-project-where-manager-access-input'
 import { getProjectWhereManagerInput } from './helpers/get-project-where-manager.input'
 
 @Injectable()
@@ -32,20 +33,10 @@ export class ApiProjectDataManagerService {
   }
 
   async findOneProject(userId: string, projectId: string) {
-    return this.data.findOneProject(
-      projectId,
-      { reviewers: true, referral: true },
-      {
-        OR: [
-          {
-            managers: { some: { id: userId } },
-          },
-          {
-            community: { managers: { some: { userId, admin: true } } },
-          },
-        ],
-      },
-    )
+    return this.data.findOneProject(projectId, {
+      include: { reviewers: true, referral: true },
+      where: getProjectWhereManagerAccessInput(userId),
+    })
   }
 
   async updateProject(userId: string, projectId: string, input: ManagerUpdateProjectInput) {

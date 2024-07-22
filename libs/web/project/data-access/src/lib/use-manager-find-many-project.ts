@@ -4,13 +4,13 @@ import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
-export function useManagerFindManyProject(props: Partial<ManagerFindManyProjectInput> & { communityId?: string }) {
+export function useManagerFindManyProject(props?: Partial<ManagerFindManyProjectInput>) {
   const sdk = useSdk()
   const [limit, setLimit] = useState(props?.limit ?? 24)
   const [page, setPage] = useState(props?.page ?? 1)
   const [search, setSearch] = useState<string>(props?.search ?? '')
 
-  const input: ManagerFindManyProjectInput = { page, limit, search, communityId: props.communityId }
+  const input: ManagerFindManyProjectInput = { page, limit, search, communityId: props?.communityId ?? undefined }
   const query = useQuery({
     queryKey: ['manager', 'find-many-project', input],
     queryFn: () => sdk.managerFindManyProject({ input }).then((res) => res.data),
@@ -28,10 +28,11 @@ export function useManagerFindManyProject(props: Partial<ManagerFindManyProjectI
       setLimit,
       total,
     },
+    search,
     setSearch,
     createProject: (input: ManagerCreateProjectInput) =>
       sdk
-        .managerCreateProject({ input: { ...input, communityId: props.communityId ?? input.communityId } })
+        .managerCreateProject({ input: { ...input } })
         .then((res) => res.data)
         .then((res) => {
           if (res.created) {

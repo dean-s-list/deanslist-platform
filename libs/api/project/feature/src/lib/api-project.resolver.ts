@@ -17,7 +17,7 @@ export class ApiProjectResolver {
 
   @ResolveField(() => String)
   manageUrl(@Parent() project: Project) {
-    return `/manager/communities/${project.communityId}/projects/${project.id}`
+    return `/manager/projects/${project.id}`
   }
 
   @ResolveField(() => String)

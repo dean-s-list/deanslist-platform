@@ -24,7 +24,7 @@ export class ApiProjectDataAdminService {
   }
 
   async findOneProject(projectId: string) {
-    return this.data.findOneProject(projectId, { reviewers: true, referral: true })
+    return this.data.findOneProject(projectId, { include: { reviewers: true, referral: true } })
   }
 
   async updateProject(userId: string, projectId: string, input: AdminUpdateProjectInput) {

@@ -1,18 +1,20 @@
-import { CoreUiDebugModal, CoreUiSearchField, pinkGradient } from '@deanslist-platform/web-core-ui'
+import { useManagerFindManyCommunity } from '@deanslist-platform/web-community-data-access'
+import { CoreUiDebugModal, CoreUiSearchField, modalStyles, pinkGradient } from '@deanslist-platform/web-core-ui'
 import { useManagerFindManyProject } from '@deanslist-platform/web-project-data-access'
-import { ProjectUiGrid } from '@deanslist-platform/web-project-ui'
+import { ProjectUiEmptyState, ProjectUiGrid } from '@deanslist-platform/web-project-ui'
 import { Button, Group } from '@mantine/core'
 import { modals } from '@mantine/modals'
-import { UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
-import { IconPlus } from '@tabler/icons-react'
+import { UiError, UiLoader, UiPage, UiStack } from '@pubkey-ui/core'
+import { IconChairDirector, IconPlus } from '@tabler/icons-react'
 import { ManagerProjectCreateFeature } from './manager-project-create-feature'
 
-export function ManagerProjectListFeature({ communityId }: { communityId: string }) {
-  const { items, pagination, query, setSearch } = useManagerFindManyProject({
+export function ManagerProjectListFeature({ communityId }: { communityId?: string }) {
+  const { items: communities } = useManagerFindManyCommunity()
+  const { items, pagination, query, search, setSearch } = useManagerFindManyProject({
     communityId,
   })
 
-  return (
+  const page = (
     <UiStack>
       <Group>
         <CoreUiSearchField placeholder="Search project" setSearch={setSearch} />
@@ -24,13 +26,16 @@ export function ManagerProjectListFeature({ communityId }: { communityId: string
           onClick={() => {
             modals.open({
               title: 'Create a project',
+              centered: true,
+              radius: 'xl',
+              styles: { ...modalStyles },
               children: (
                 <ManagerProjectCreateFeature
-                  communityId={communityId}
-                  afterSubmit={async () => {
-                    query.refetch()
-                    modals.closeAll()
+                  communities={communities}
+                  refresh={async () => {
+                    await query.refetch()
                   }}
+                  close={() => modals.closeAll()}
                 />
               ),
             })
@@ -42,6 +47,8 @@ export function ManagerProjectListFeature({ communityId }: { communityId: string
 
       {query.isLoading ? (
         <UiLoader />
+      ) : query.isError ? (
+        <UiError title="Error loading projects" message={`${query.error?.message}`} />
       ) : items?.length ? (
         <ProjectUiGrid
           projects={items}
@@ -53,8 +60,16 @@ export function ManagerProjectListFeature({ communityId }: { communityId: string
           setPage={pagination.setPage}
         />
       ) : (
-        <UiInfo message="No projects found" />
+        <ProjectUiEmptyState search={search} />
       )}
     </UiStack>
+  )
+
+  return communityId ? (
+    page
+  ) : (
+    <UiPage title="Manage Projects" leftAction={<IconChairDirector size={28} />}>
+      {page}
+    </UiPage>
   )
 }

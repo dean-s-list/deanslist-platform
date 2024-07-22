@@ -1,8 +1,18 @@
 import { getEnumOptions, ManagerUpdateProjectInput, Project, ProjectStatus } from '@deanslist-platform/sdk'
-import { Button, Fieldset, Group, Select, SimpleGrid, Textarea, TextInput } from '@mantine/core'
-import { DateInput } from '@mantine/dates'
+import {
+  cardGradient,
+  CoreUiButton,
+  CoreUiDateInput,
+  CoreUiInput,
+  dividerColor,
+  dropdownBackground,
+  pinkGradient,
+} from '@deanslist-platform/web-core-ui'
+import { Divider, Group, Select, SimpleGrid, Textarea } from '@mantine/core'
 import { useForm } from '@mantine/form'
+import { useWindowScroll } from '@mantine/hooks'
 import { UiStack } from '@pubkey-ui/core'
+import { ReactNode } from 'react'
 
 export function ManagerProjectUiUpdateForm({
   submit,
@@ -11,6 +21,8 @@ export function ManagerProjectUiUpdateForm({
   submit: (res: ManagerUpdateProjectInput) => Promise<boolean>
   project: Project
 }) {
+  const [scroll, scrollTo] = useWindowScroll()
+
   const form = useForm<ManagerUpdateProjectInput>({
     initialValues: {
       avatarUrl: project.avatarUrl ?? '',
@@ -37,11 +49,28 @@ export function ManagerProjectUiUpdateForm({
       },
       durationDays: (value) => {
         if (value && value < 1) return 'Duration must be at least 1 day.'
+        if (value && value > 365) return 'Duration must be less than 1 year.'
       },
       startDate: (value) => {
         if (!value) return
         if (value && new Date(value ?? new Date()).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0))
           return 'Start date must be in the future.'
+      },
+      linkDiscord: (value) => {
+        if (value && !['https://discord.com/invite/', 'https://discord.gg/'].includes(value))
+          return 'Must be a valid Discord invite.'
+      },
+      linkGithub: (value) => {
+        if (value && !value.startsWith('https://github.com/')) return 'Must be a valid Github repository, user or org.'
+      },
+      linkTelegram: (value) => {
+        if (value && !value.startsWith('https://t.me/')) return 'Must be a valid Telegram link.'
+      },
+      linkTwitter: (value) => {
+        if (value && !['https://twitter.com/', 'https://x.com/'].includes(value)) return 'Must be a valid X page.'
+      },
+      linkWebsite: (value) => {
+        if (value && !value.startsWith('https://')) return 'Must be a valid website.'
       },
     },
   })
@@ -54,106 +83,96 @@ export function ManagerProjectUiUpdateForm({
         )}
       >
         <UiStack>
-          <SimpleGrid cols={{ base: 1, md: 2 }}>
-            <Fieldset legend="General information">
-              <UiStack>
-                <TextInput
-                  withAsterisk
-                  label="Slug"
-                  description="The slug is a unique identifier for the project and cannot be changed."
-                  disabled
-                  defaultValue={project.slug}
-                />
-                <TextInput
-                  withAsterisk
-                  label="Name"
-                  placeholder="Name"
-                  description="The name of the project must be unique within the community."
-                  {...form.getInputProps('name')}
-                />
-                <Select
-                  label="Status"
-                  placeholder="Status"
-                  description="The status of the project. Only Active projects can be reviewed."
-                  data={[...getEnumOptions(ProjectStatus)]}
-                  {...form.getInputProps('status')}
-                />
-                <Textarea
-                  withAsterisk
-                  rows={5}
-                  autosize
-                  label="Instructions"
-                  placeholder="Write instructions for the project. You can use markdown."
-                  description="The instructions for the project."
-                  {...form.getInputProps('instructions')}
-                />
-              </UiStack>
-            </Fieldset>
-            <Fieldset legend="Links">
-              <UiStack>
-                <TextInput
-                  label="Avatar URL"
-                  placeholder="Avatar URL"
-                  description="The URL of the project's avatar image. Leave blank to use the default avatar."
-                  {...form.getInputProps('avatarUrl')}
-                />
-                <TextInput
-                  label="Discord"
-                  placeholder="Discord link"
-                  description="Link to an invite to the Discord server."
-                  {...form.getInputProps('linkDiscord')}
-                />
-                <TextInput
-                  label="Github"
-                  description="Link to the project's Github repository."
-                  placeholder="Github link"
-                  {...form.getInputProps('linkGithub')}
-                />
-                <TextInput
-                  label="Telegram"
-                  description="Link to the project's Telegram channel."
-                  placeholder="Telegram link"
-                  {...form.getInputProps('linkTelegram')}
-                />
-                <TextInput
-                  label="X"
-                  description="Link to the project's X (formerly Twitter) channel."
-                  placeholder="Twitter link"
-                  {...form.getInputProps('linkTwitter')}
-                />
-                <TextInput
-                  label="Website"
-                  description="Link to the project's website."
-                  placeholder="Website link"
-                  {...form.getInputProps('linkWebsite')}
-                />
-              </UiStack>
-            </Fieldset>
-
-            <Fieldset legend="Timeline">
-              <UiStack>
-                <DateInput
-                  label="Start Date"
-                  placeholder="Start Date"
-                  description="The start date of the project. The end date will be calculated based on the duration."
-                  minDate={new Date()}
-                  {...form.getInputProps('startDate')}
-                />
-                <TextInput
-                  label="Duration"
-                  type="number"
-                  placeholder="Duration"
-                  description="The duration of the project in days."
-                  {...form.getInputProps('durationDays')}
-                />
-              </UiStack>
-            </Fieldset>
-          </SimpleGrid>
+          <UiStack>
+            <FormGrid>
+              <CoreUiInput
+                withAsterisk
+                label="Name"
+                placeholder="Name"
+                description="The name of the project must be unique within the community."
+                {...form.getInputProps('name')}
+              />
+              <Select
+                styles={{
+                  input: { border: 'none', ...cardGradient },
+                  dropdown: { ...dropdownBackground, border: 'none' },
+                }}
+                label="Status"
+                placeholder="Status"
+                description="The status of the project. Only Active projects can be reviewed."
+                data={[...getEnumOptions(ProjectStatus)]}
+                {...form.getInputProps('status')}
+              />
+            </FormGrid>
+            <Textarea
+              styles={{ input: { border: 'none', ...cardGradient } }}
+              withAsterisk
+              minRows={10}
+              autosize
+              label="Instructions"
+              placeholder="Write instructions for the project. You can use markdown."
+              {...form.getInputProps('instructions')}
+            />
+          </UiStack>
+          <Divider color={dividerColor} />
+          <FormGrid>
+            <CoreUiDateInput
+              label="Start Date"
+              placeholder="The start date of the project."
+              minDate={new Date()}
+              {...form.getInputProps('startDate')}
+            />
+            <CoreUiInput
+              label="Duration (days)"
+              type="number"
+              placeholder="The duration of the project in days."
+              {...form.getInputProps('durationDays')}
+            />
+          </FormGrid>
+          <Divider color={dividerColor} />
+          <FormGrid>
+            <CoreUiInput
+              label="Avatar URL"
+              placeholder="The URL of the project's avatar image."
+              {...form.getInputProps('avatarUrl')}
+            />
+            <CoreUiInput
+              label="Discord"
+              placeholder="Link to an invite to the Discord server."
+              {...form.getInputProps('linkDiscord')}
+            />
+            <CoreUiInput
+              label="Github"
+              placeholder="Link to the Github repository, user or org."
+              {...form.getInputProps('linkGithub')}
+            />
+            <CoreUiInput
+              label="Telegram"
+              placeholder="Link to the project's Telegram channel."
+              {...form.getInputProps('linkTelegram')}
+            />
+            <CoreUiInput
+              label="X (formerly Twitter)"
+              placeholder="Link to the project's X page."
+              {...form.getInputProps('linkTwitter')}
+            />
+            <CoreUiInput
+              label="Website"
+              placeholder="Link to the project's website."
+              {...form.getInputProps('linkWebsite')}
+            />
+          </FormGrid>
           <Group justify="flex-end" mt="md">
-            <Button type="submit">Save</Button>
+            <CoreUiButton styles={{ root: { ...pinkGradient } }} type="submit">
+              Save changes
+            </CoreUiButton>
           </Group>
         </UiStack>
       </form>
     </UiStack>
   )
+}
+
+function FormGrid({ children }: { children: ReactNode }) {
+  return <SimpleGrid cols={{ base: 1, md: 2, lg: 4 }}>{children}</SimpleGrid>
 }

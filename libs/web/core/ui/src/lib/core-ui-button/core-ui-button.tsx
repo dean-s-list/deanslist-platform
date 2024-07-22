@@ -2,12 +2,13 @@ import { Button, ButtonProps } from '@mantine/core'
 import { UiAnchor } from '@pubkey-ui/core'
 import { ComponentType, MouseEventHandler } from 'react'
 
-export interface CoreUiButtonProps extends ButtonProps {
+export interface CoreUiButtonProps extends Omit<ButtonProps, 'type'> {
   iconLeft?: ComponentType<{ size?: number }>
   iconRight?: ComponentType<{ size?: number }>
   onClick?: MouseEventHandler<HTMLButtonElement> | undefined
   outline?: boolean
   to?: string
+  type?: 'submit' | 'button'
 }
 
 export function CoreUiButton({
@@ -17,6 +18,7 @@ export function CoreUiButton({
   onClick,
   outline,
   to,
+  type = 'button',
   ...props
 }: CoreUiButtonProps) {
   const defaultProps: ButtonProps = {
@@ -28,7 +30,7 @@ export function CoreUiButton({
 
   return (
     <UiAnchor to={to}>
-      <Button {...defaultProps} {...props} onClick={onClick}>
+      <Button type={type} {...defaultProps} {...props} onClick={onClick}>
         {children}
       </Button>
     </UiAnchor>

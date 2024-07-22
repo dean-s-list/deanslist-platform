@@ -5,7 +5,7 @@ import {
 } from '@deanslist-platform/web-community-data-access'
 import { CommunityUiItem } from '@deanslist-platform/web-community-ui'
 import { CoreUiButton, CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
-import { ManagerProjectCommunityFeature } from '@deanslist-platform/web-project-feature'
+import { ManagerProjectFeature } from '@deanslist-platform/web-project-feature'
 import { Group } from '@mantine/core'
 import { UiContainer, UiError, UiGroup, UiLoader, UiStack } from '@pubkey-ui/core'
 import { IconSettings, IconShield, IconUsers } from '@tabler/icons-react'
@@ -29,7 +29,7 @@ export function ManagerCommunityDetailFeature() {
       },
       {
         path: 'projects/*',
-        element: <ManagerProjectCommunityFeature communityId={communityId} />,
+        element: <ManagerProjectFeature communityId={communityId} />,
       },
       {
         path: 'managers',

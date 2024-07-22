@@ -20,6 +20,9 @@ export function calculateProjectDates({
     if (input.durationDays < 1) {
       throw new Error(`Duration must be higher than 0`)
     }
+    if (input.durationDays > 365) {
+      throw new Error(`Duration must be less than 1 year`)
+    }
     durationDays = input.durationDays
   }
 

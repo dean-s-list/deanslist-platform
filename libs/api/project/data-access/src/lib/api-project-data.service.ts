@@ -119,8 +119,10 @@ export class ApiProjectDataService {
 
   async findOneProject(
     projectId: string,
-    include: Prisma.ProjectInclude = {},
-    where: Omit<Prisma.ProjectWhereInput, 'id'> = {},
+    { include, where }: { include?: Prisma.ProjectInclude; where?: Omit<Prisma.ProjectWhereInput, 'id'> } = {
+      include: {},
+      where: {},
+    },
   ) {
     const found = await this.core.data.project.findUnique({
       where: { id: projectId, ...where },

@@ -24,9 +24,8 @@ export class ApiProjectDataReviewerService {
   }
 
   async findOneProject(projectId: string) {
-    return this.data.findOneProject(
-      projectId,
-      {
+    return this.data.findOneProject(projectId, {
+      include: {
         reviewers: true,
         reviews: {
           include: {
@@ -35,7 +34,7 @@ export class ApiProjectDataReviewerService {
           },
         },
       },
-      { status: { in: this.statuses } },
-    )
+      where: { status: { in: this.statuses } },
+    })
   }
 }

@@ -4,12 +4,11 @@ import { CoreUiBack, CoreUiButton, CoreUiDebugModal, CoreUiPage } from '@deansli
 import { Group } from '@mantine/core'
 import { UiCard, UiError, UiLoader, UiTabRoutes } from '@pubkey-ui/core'
 import { IconChairDirector } from '@tabler/icons-react'
-import { useLocation, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { AdminCommunityDetailChannelsTab } from './admin-community-detail-channels-tab'
 import { AdminCommunityDetailManagersTab } from './admin-community-detail-managers-tab'
 
 export function AdminCommunityDetailFeature() {
-  const { pathname } = useLocation()
   const { communityId } = useParams<{ communityId: string }>() as { communityId: string }
   const { item, query, updateCommunity } = useAdminFindOneCommunity({ communityId })
 
