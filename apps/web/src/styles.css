@@ -26,3 +26,11 @@ body,
 .gradient-card {
   background: linear-gradient(0deg, rgba(224, 206, 248, 0.16), rgba(224, 206, 248, 0.16)) !important;
 }
+
+.core-ui-content :is(h1, h2, h3, h4, h5, h6) {
+  margin-top: 0 !important;
+}
+.core-ui-content :is(.core-ui-content-image) {
+  max-height: 500px;
+  max-width: 500px;
+}

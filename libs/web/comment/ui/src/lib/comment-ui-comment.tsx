@@ -1,11 +1,9 @@
 import { Comment } from '@deanslist-platform/sdk'
-import { CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
+import { CoreUiContent, CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
 import { UserUiAvatar } from '@deanslist-platform/web-user-ui'
-import { Box, Group, Stack, Text, TypographyStylesProvider } from '@mantine/core'
+import { Box, Group, Stack, Text } from '@mantine/core'
 import { UiAnchor, UiTime } from '@pubkey-ui/core'
 import { ReactNode } from 'react'
-
-import classes from './comment-ui-comment.module.css'
 import { CommentUiIconDelete } from './comment-ui-icon-delete'
 
 export function CommentUiComment({
@@ -37,14 +35,7 @@ export function CommentUiComment({
                 </UiAnchor>
                 {comment.createdAt ? <UiTime fz="xs" c="dimmed" date={new Date(comment.createdAt)} /> : null}
               </Group>
-              <TypographyStylesProvider
-                className={classes.body}
-                styles={{
-                  root: { margin: 0, padding: 0 },
-                }}
-              >
-                <div className={classes.content} dangerouslySetInnerHTML={{ __html: comment.content ?? '' }} />
-              </TypographyStylesProvider>
+              <CoreUiContent content={comment.content ?? ''} />
             </Stack>
           </Group>
         </UiAnchor>
