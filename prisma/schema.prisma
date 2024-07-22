@@ -216,8 +216,8 @@ enum IdentityProvider {
 
 enum ProjectStatus {
   Active
+  Closed
   Draft
-  Inactive
 }
 
 enum UserRole {

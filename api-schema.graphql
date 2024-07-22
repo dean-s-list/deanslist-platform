@@ -450,8 +450,8 @@ type ProjectPaging {
 
 enum ProjectStatus {
   Active
+  Closed
   Draft
-  Inactive
 }
 
 type Query {

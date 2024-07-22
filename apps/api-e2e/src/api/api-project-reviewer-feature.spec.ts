@@ -6,12 +6,17 @@ describe('api-project-feature', () => {
   describe('api-project-reviewer-resolver', () => {
     let communityId: string
     let projectId: string
+    let draftProjectId: string
     let alice: string
 
     beforeAll(async () => {
       alice = await getAliceCookie()
       communityId = await sdk
         .managerCreateCommunity({ input: { name: uniqueId('community') } }, { cookie: alice })
+        .then((res) => res.data.created.id)
+
+      draftProjectId = await sdk
+        .managerCreateProject({ input: { communityId, name: uniqueId('draft-project') } }, { cookie: alice })
         .then((res) => res.data.created.id)
 
       await sdk
@@ -79,6 +84,24 @@ describe('api-project-feature', () => {
 
         expect(res.data.item.id).toBe(projectId)
         expect(res.data.item.remainingDays).toBe(8)
+      })
+
+      describe('draft projects', () => {
+        it('should throw an error if a reviewer tries to find many draft projects', async () => {
+          try {
+            await sdk.reviewerFindManyProject({ input: { status: ProjectStatus.Draft } }, { cookie: alice })
+          } catch (e) {
+            expect(e.message).toBe('You are not allowed to view Draft projects')
+          }
+        })
+
+        it('should throw an error if a reviewer tries to find a draft project', async () => {
+          try {
+            await sdk.reviewerFindOneProject({ projectId: draftProjectId }, { cookie: alice })
+          } catch (e) {
+            expect(e.message).toBe('Project not found')
+          }
+        })
       })
 
       describe('ordering', () => {

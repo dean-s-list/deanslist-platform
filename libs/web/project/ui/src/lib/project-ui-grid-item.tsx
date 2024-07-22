@@ -1,4 +1,4 @@
-import type { Project } from '@deanslist-platform/sdk'
+import { Project } from '@deanslist-platform/sdk'
 import { CoreUiCard } from '@deanslist-platform/web-core-ui'
 import { Divider } from '@mantine/core'
 import { UiGroup, UiStack } from '@pubkey-ui/core'

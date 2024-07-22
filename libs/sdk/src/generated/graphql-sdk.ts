@@ -756,8 +756,8 @@ export type ProjectPaging = {
 
 export enum ProjectStatus {
   Active = 'Active',
+  Closed = 'Closed',
   Draft = 'Draft',
-  Inactive = 'Inactive',
 }
 
 export type Query = {

@@ -29,7 +29,7 @@ export default function ReviewerProjectListFeature() {
               if (!status) return
               setStatus(status as ProjectStatus)
             }}
-            data={getEnumOptions(ProjectStatus)}
+            data={getEnumOptions(ProjectStatus).filter((item) => item.value !== ProjectStatus.Draft)}
           />
           <CoreUiCustomSelect
             label="Order by"
@@ -40,11 +40,12 @@ export default function ReviewerProjectListFeature() {
             data={projectOrderByOptions}
           />
         </Group>
-        <CoreUiSearchField maw={160} placeholder="Search project" setSearch={setSearch} size="md" />
       </Group>
 
       {query.isLoading ? (
         <UiLoader />
+      ) : query.isError ? (
+        <UiError title="Error loading projects" message={`${query.error?.message}`} />
       ) : items?.length ? (
         <ProjectUiGrid
           projects={items}
@@ -96,7 +97,7 @@ function OrderOptionLabel({ value }: { value: string | null }) {
   return (
     <Group component="span" gap={5}>
       {option.label}
-      {option.direction === OrderDirection.Desc ? <IconArrowUp size={16} /> : <IconArrowDown size={16} />}
+      {option.direction === OrderDirection.Asc ? <IconArrowUp size={16} /> : <IconArrowDown size={16} />}
     </Group>
   )
 }
