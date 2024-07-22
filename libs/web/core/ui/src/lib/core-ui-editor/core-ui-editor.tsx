@@ -1,43 +1,67 @@
-import { Link, RichTextEditor } from '@mantine/tiptap'
-import { Image } from '@tiptap/extension-image'
-import { Placeholder } from '@tiptap/extension-placeholder'
-import { Editor, useEditor } from '@tiptap/react'
-import { StarterKit } from '@tiptap/starter-kit'
-import { useEffect } from 'react'
+import { modals } from '@mantine/modals'
+import { RichTextEditor } from '@mantine/tiptap'
+import { IconPhoto } from '@tabler/icons-react'
+import { Editor } from '@tiptap/react'
+import { cardGradient, modalStyles } from '../core-ui-constants'
+import { CoreUiEditorAddImageForm } from './core-ui-editor-add-image-form'
 
 export interface CoreUiEditorProps {
   editor: Editor
 }
 
-export function useCoreUiEditor({ content }: { content: string }) {
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Link,
-      Image.configure({
-        allowBase64: true,
-      }),
-      Placeholder.configure({ placeholder: 'Write something amazing...' }),
-    ],
-    content: content ?? '',
-  })
-
-  useEffect(() => {
-    if (editor && content) {
-      editor.commands.setContent(content)
-    }
-  }, [content, editor])
-
-  return {
-    editor: editor as Editor,
-  }
-}
 export function CoreUiEditor({ editor }: CoreUiEditorProps) {
   if (!editor) {
     return null
   }
+
+  function addImage() {
+    modals.open({
+      title: 'Add image from URL',
+      centered: true,
+      radius: 'xl',
+      styles: { ...modalStyles },
+      children: (
+        <CoreUiEditorAddImageForm
+          close={(src) => {
+            if (src.length) {
+              editor.chain().focus().setImage({ src }).run()
+            }
+            modals.closeAll()
+          }}
+        />
+      ),
+    })
+  }
+
   return (
-    <RichTextEditor editor={editor}>
+    <RichTextEditor
+      editor={editor}
+      styles={{
+        root: {
+          ...cardGradient,
+          borderRadius: 24,
+        },
+        toolbar: {
+          background: 'transparent',
+          borderTopLeftRadius: 24,
+          borderTopRightRadius: 24,
+          borderBottom: 0,
+          paddingTop: 20,
+          paddingBottom: 0,
+        },
+        content: {
+          background: 'transparent',
+          borderBottomLeftRadius: 24,
+          borderBottomRightRadius: 24,
+        },
+        control: {
+          color: 'white',
+        },
+        controlsGroup: {
+          background: 'transparent',
+        },
+      }}
+    >
       <RichTextEditor.Toolbar sticky stickyOffset={60}>
         <RichTextEditor.ControlsGroup>
           <RichTextEditor.Bold />
@@ -46,19 +70,10 @@ export function CoreUiEditor({ editor }: CoreUiEditorProps) {
           <RichTextEditor.ClearFormatting />
           <RichTextEditor.Code />
         </RichTextEditor.ControlsGroup>
-
         <RichTextEditor.ControlsGroup>
-          <RichTextEditor.H1 />
-          <RichTextEditor.H2 />
-          <RichTextEditor.H3 />
-          <RichTextEditor.H4 />
-        </RichTextEditor.ControlsGroup>
-
-        <RichTextEditor.ControlsGroup>
-          <RichTextEditor.Blockquote />
-          <RichTextEditor.Hr />
-          <RichTextEditor.BulletList />
-          <RichTextEditor.OrderedList />
+          <RichTextEditor.Control onClick={addImage}>
+            <IconPhoto size="1rem" stroke={1.5} />
+          </RichTextEditor.Control>
         </RichTextEditor.ControlsGroup>
 
         <RichTextEditor.ControlsGroup>
@@ -67,10 +82,9 @@ export function CoreUiEditor({ editor }: CoreUiEditorProps) {
         </RichTextEditor.ControlsGroup>
 
         <RichTextEditor.ControlsGroup>
-          <RichTextEditor.AlignLeft />
-          <RichTextEditor.AlignCenter />
-          <RichTextEditor.AlignJustify />
-          <RichTextEditor.AlignRight />
+          <RichTextEditor.BulletList />
+          <RichTextEditor.OrderedList />
+          <RichTextEditor.Blockquote />
         </RichTextEditor.ControlsGroup>
 
         <RichTextEditor.ControlsGroup>

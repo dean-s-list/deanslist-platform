@@ -31,6 +31,6 @@ body,
   margin-top: 0 !important;
 }
 .core-ui-content :is(.core-ui-content-image) {
-  max-height: 500px;
-  max-width: 500px;
+  max-height: 600px;
+  max-width: 100%;
 }
