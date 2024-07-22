@@ -1,8 +1,8 @@
-import { Anchor, DrawerProps, Group, Stack, Text } from '@mantine/core'
+import { Anchor, Divider, DrawerProps, Group, Stack, Text } from '@mantine/core'
 import cx from 'clsx'
 import { ComponentType, ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { pinkGradientText } from '../core-ui-constants'
+import { dividerColor, pinkGradientText } from '../core-ui-constants'
 import { CoreUiLogoType } from '../core-ui-logo'
 
 import classes from './core-ui-navbar.module.css'
@@ -12,10 +12,13 @@ export interface CoreUiNavbarProps {
   drawerProps?: DrawerProps
   logo?: ReactNode
   logoSmall?: ReactNode
-  links?: CoreUiNavbarLink[]
+  linksTop?: CoreUiNavbarLink[]
+  linksMiddle?: CoreUiNavbarLink[]
+  linksBottom?: CoreUiNavbarLink[]
   opened?: boolean
   toggle?: () => void
 }
+
 export interface CoreUiNavbarLink {
   link: string
   label: string
@@ -23,10 +26,38 @@ export interface CoreUiNavbarLink {
 }
 
 export function CoreUiNavbar(props: CoreUiNavbarProps) {
-  const { pathname } = useLocation()
   const opened = props.opened
 
-  const items = props.links?.map(({ link, label, icon: Icon }) => (
+  function close() {
+    if (!opened || !props.toggle) return
+    props.toggle()
+  }
+
+  return (
+    <Stack gap="lg">
+      <Group justify="center" py="md">
+        <Anchor component={Link} to={props.base ?? '/'} display="flex">
+          <CoreUiLogoType height={64} />
+        </Anchor>
+      </Group>
+      {props.linksTop?.map(({ link, label, icon: Icon }) => (
+        <CoreUiNavbarItem key={label} link={link} label={label} icon={Icon} close={close} />
+      ))}
+      {props.linksMiddle?.length ? <Divider color={dividerColor} /> : null}
+      {props.linksMiddle?.map(({ link, label, icon: Icon }) => (
+        <CoreUiNavbarItem key={label} link={link} label={label} icon={Icon} close={close} />
+      ))}
+      {props.linksBottom?.length ? <Divider color={dividerColor} /> : null}
+      {props.linksBottom?.map(({ link, label, icon: Icon }) => (
+        <CoreUiNavbarItem key={label} link={link} label={label} icon={Icon} close={close} />
+      ))}
+    </Stack>
+  )
+}
+
+function CoreUiNavbarItem({ close, link, label, icon: Icon }: CoreUiNavbarLink & { close: () => void }) {
+  const { pathname } = useLocation()
+  return (
     <Anchor
       component={Link}
       key={label}
@@ -43,21 +74,5 @@ export function CoreUiNavbar(props: CoreUiNavbarProps) {
         </Text>
       </Group>
     </Anchor>
-  ))
-
-  function close() {
-    if (!opened || !props.toggle) return
-    props.toggle()
-  }
-
-  return (
-    <Stack gap="lg">
-      <Group justify="center" py="md">
-        <Anchor component={Link} to={props.base ?? '/'} display="flex">
-          <CoreUiLogoType height={64} />
-        </Anchor>
-      </Group>
-      {items}
-    </Stack>
   )
 }
