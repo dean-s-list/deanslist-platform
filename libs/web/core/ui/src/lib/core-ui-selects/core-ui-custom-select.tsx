@@ -14,7 +14,7 @@ export function CoreUiCustomSelect({
 }: {
   label: string
   value: string
-  data: Array<string | ComboboxItem>
+  data: ComboboxItem[]
   onChange: (value: string) => void
   renderOption?: (value: string) => ReactNode
   smIcon?: ReactNode
@@ -50,19 +50,22 @@ export function CoreUiCustomSelect({
       </Popover.Target>
       <Popover.Dropdown>
         <Stack gap={0}>
-          {data.map((option: string | ComboboxItem, index: number) => {
-            const optionValue = typeof option === 'string' ? option : option.value
-            return (
-              <div key={optionValue}>
-                <UnstyledButton onClick={() => onChange(optionValue)} p={0}>
-                  <Text span size="sm">
-                    {renderOption(optionValue)}
-                  </Text>
-                </UnstyledButton>
-                {index !== data.length - 1 ? <Divider style={{ ...dropdownDivider }} /> : null}
-              </div>
-            )
-          })}
+          {data.map((option: ComboboxItem, index: number) => (
+            <div key={option.value}>
+              <UnstyledButton
+                w="100%"
+                onClick={() => {
+                  onChange(option.value)
+                  setOpened(false)
+                }}
+              >
+                <Text span size="sm">
+                  {renderOption(option.value)}
+                </Text>
+              </UnstyledButton>
+              {index !== data.length - 1 ? <Divider style={{ ...dropdownDivider }} /> : null}
+            </div>
+          ))}
         </Stack>
       </Popover.Dropdown>
     </Popover>
