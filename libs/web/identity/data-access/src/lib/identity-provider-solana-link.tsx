@@ -1,6 +1,6 @@
 import { IdentityProvider } from '@deanslist-platform/sdk'
 import { useSdk } from '@deanslist-platform/web-core-data-access'
-import { toastError, toastSuccess } from '@pubkey-ui/core'
+import { toastError } from '@pubkey-ui/core'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { createContext, ReactNode, useContext } from 'react'
 import { useCreateSignature } from './use-create-signature'
@@ -24,13 +24,11 @@ export function IdentityProviderSolanaLink({ children, refresh }: { children: Re
   async function linkIdentity({ publicKey }: { publicKey: string }) {
     return sdk
       .userLinkIdentity({ input: { provider: IdentityProvider.Solana, providerId: publicKey } })
-      .then((res) => {
-        toastSuccess('Identity linked')
+      .then(() => {
         refresh()
       })
       .catch((err) => {
         console.log('Error linking identity', err)
-        toastError('Error linking identity')
       })
   }
 
@@ -71,7 +69,6 @@ export function IdentityProviderSolanaLink({ children, refresh }: { children: Re
         },
       })
       .then((res) => {
-        toastSuccess('Identity verified')
         refresh()
         return !!res.data.verified
       })
