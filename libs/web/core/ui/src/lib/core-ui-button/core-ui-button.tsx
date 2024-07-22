@@ -1,11 +1,11 @@
 import { Button, ButtonProps } from '@mantine/core'
 import { UiAnchor } from '@pubkey-ui/core'
-import { ComponentType } from 'react'
+import { ComponentType, MouseEventHandler } from 'react'
 
 export interface CoreUiButtonProps extends ButtonProps {
   iconLeft?: ComponentType<{ size?: number }>
   iconRight?: ComponentType<{ size?: number }>
-  onClick?: () => void
+  onClick?: MouseEventHandler<HTMLButtonElement> | undefined
   outline?: boolean
   to?: string
 }

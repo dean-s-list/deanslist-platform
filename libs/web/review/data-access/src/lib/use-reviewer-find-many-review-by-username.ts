@@ -19,6 +19,7 @@ export function useReviewerFindManyReviewByUsername(
   return {
     items,
     query,
+    search,
     setSearch,
   }
 }

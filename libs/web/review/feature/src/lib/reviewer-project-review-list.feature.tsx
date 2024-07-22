@@ -1,15 +1,14 @@
 import { CoreUiDebugModal, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
+import { ProjectUiUserReviewButton } from '@deanslist-platform/web-project-ui'
 import {
   useReviewerFindManyReviewByProject,
   useUserFindUserProjectReview,
 } from '@deanslist-platform/web-review-data-access'
 import { ReviewerReviewProjectUiTable } from '@deanslist-platform/web-review-ui'
-import { Button, Group } from '@mantine/core'
+import { Group } from '@mantine/core'
 import { UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
-import { Link, useNavigate } from 'react-router-dom'
 
 export function ReviewerProjectReviewListFeature({ projectId }: { projectId: string }) {
-  const navigate = useNavigate()
   const { item } = useUserFindUserProjectReview({ projectId })
   const { items, createReview, query, setSearch } = useReviewerFindManyReviewByProject({
     projectId,
@@ -18,25 +17,9 @@ export function ReviewerProjectReviewListFeature({ projectId }: { projectId: str
   return (
     <UiStack>
       <Group>
-        <CoreUiSearchField placeholder="Search review" setSearch={setSearch} />
+        <CoreUiSearchField size="sm" placeholder="Search review" setSearch={setSearch} />
         <CoreUiDebugModal data={items} />
-        {item ? (
-          <Button component={Link} to={item.viewUrl} radius="xl" size="lg">
-            Open your review
-          </Button>
-        ) : (
-          <Button
-            onClick={() =>
-              createReview().then((res) => {
-                if (!res) return
-                console.log('created', res.id)
-                navigate(`./${res.id}`)
-              })
-            }
-          >
-            Start your review
-          </Button>
-        )}
+        <ProjectUiUserReviewButton create={createReview} review={item} />
       </Group>
 
       {query.isLoading ? (

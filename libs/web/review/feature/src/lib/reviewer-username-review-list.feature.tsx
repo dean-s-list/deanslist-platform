@@ -1,12 +1,12 @@
 import { CoreUiCard, CoreUiDebugModal, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
 import { useReviewerFindManyReviewByUsername } from '@deanslist-platform/web-review-data-access'
-import { ReviewerReviewUsernameUiTable } from '@deanslist-platform/web-review-ui'
+import { ReviewerReviewUsernameUiTable, ReviewUiEmptyState } from '@deanslist-platform/web-review-ui'
 import { Group } from '@mantine/core'
-import { UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
+import { UiLoader, UiPage } from '@pubkey-ui/core'
 import { IconCheckupList } from '@tabler/icons-react'
 
 export function ReviewerUsernameReviewListFeature({ username }: { username: string }) {
-  const { items, query, setSearch } = useReviewerFindManyReviewByUsername({
+  const { items, query, search, setSearch } = useReviewerFindManyReviewByUsername({
     username,
   })
 
@@ -17,13 +17,16 @@ export function ReviewerUsernameReviewListFeature({ username }: { username: stri
       rightAction={
         <Group>
           <CoreUiDebugModal data={items} />
+          <CoreUiSearchField
+            miw={300}
+            maw={500}
+            size="md"
+            placeholder="Search by project title or comment"
+            setSearch={setSearch}
+          />
         </Group>
       }
     >
-      <Group>
-        <CoreUiSearchField placeholder="Search review" setSearch={setSearch} />
-        <CoreUiDebugModal data={items} />
-      </Group>
       {query.isLoading ? (
         <UiLoader />
       ) : items?.length ? (
@@ -31,7 +34,7 @@ export function ReviewerUsernameReviewListFeature({ username }: { username: stri
           <ReviewerReviewUsernameUiTable reviews={items} />
         </CoreUiCard>
       ) : (
-        <UiInfo message="No reviews found" />
+        <ReviewUiEmptyState search={search} username={username} />
       )}
     </UiPage>
   )
