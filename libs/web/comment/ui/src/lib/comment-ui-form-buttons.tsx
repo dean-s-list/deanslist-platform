@@ -1,5 +1,5 @@
 import { Comment, ReviewerCreateCommentInput } from '@deanslist-platform/sdk'
-import { CoreUiCard, pinkGradient } from '@deanslist-platform/web-core-ui'
+import { pinkGradient } from '@deanslist-platform/web-core-ui'
 import { Button, ButtonProps, Collapse, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { UiGroup, UiStack } from '@pubkey-ui/core'
@@ -28,16 +28,15 @@ export function CommentUiFormButtons({
         </Button>
       </UiGroup>
       <Collapse in={opened}>
-        <CoreUiCard>
-          <ReviewerCommentUiForm
-            createComment={async (res) => {
-              return createComment({ ...res, parentId: comment?.id ?? undefined }).then((res) => {
-                toggle()
-                return res
-              })
-            }}
-          />
-        </CoreUiCard>
+        <ReviewerCommentUiForm
+          placeholder="Write your comment here..."
+          createComment={async (res) => {
+            return createComment({ ...res, parentId: comment?.id ?? undefined }).then((res) => {
+              toggle()
+              return res
+            })
+          }}
+        />
       </Collapse>
     </UiStack>
   )

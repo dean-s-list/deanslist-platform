@@ -1,6 +1,7 @@
 import { Comment, ReviewerCreateCommentInput } from '@deanslist-platform/sdk'
-import { Divider } from '@mantine/core'
+import { CoreUiDivider } from '@deanslist-platform/web-core-ui'
 import { UiStack } from '@pubkey-ui/core'
+import React from 'react'
 import { CommentUiTimelineItem } from './comment-ui-timeline-item'
 
 export function CommentUiTimeline({
@@ -16,7 +17,7 @@ export function CommentUiTimeline({
     <UiStack>
       {comments.map((comment) => (
         <UiStack key={comment.id}>
-          <Divider />
+          <CoreUiDivider />
           <CommentUiTimelineItem
             key={comment.id}
             comment={comment}

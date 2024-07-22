@@ -1,8 +1,8 @@
 import { Project } from '@deanslist-platform/sdk'
-import { CoreUiCard } from '@deanslist-platform/web-core-ui'
-import { Divider } from '@mantine/core'
+import { CoreUiCard, CoreUiDivider } from '@deanslist-platform/web-core-ui'
 import { UiGroup, UiStack } from '@pubkey-ui/core'
 import { IconExternalLink } from '@tabler/icons-react'
+import React from 'react'
 import { ProjectUiAmount } from './project-ui-amount'
 import { ProjectUiDeadline } from './project-ui-deadline'
 import { ProjectUiItem } from './project-ui-item'
@@ -17,7 +17,7 @@ export function ProjectUiGridItem({ project, to }: { project: Project; to: strin
           <IconExternalLink />
         </UiGroup>
         <ProjectUiAmount amount={project.amountTotalUsd} label="total" />
-        <Divider />
+        <CoreUiDivider />
         <UiGroup>
           <ProjectUiDeadline project={project} />
           <ProjectUiParticipants project={project} />

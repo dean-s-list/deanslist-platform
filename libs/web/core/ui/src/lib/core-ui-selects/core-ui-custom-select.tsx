@@ -1,7 +1,8 @@
-import { Button, Divider, Group, Popover, Stack, Text, UnstyledButton } from '@mantine/core'
+import { Button, Group, Popover, Stack, Text, UnstyledButton } from '@mantine/core'
 import { ComboboxItem } from '@mantine/core/lib/components/Combobox'
 import { ReactNode, useState } from 'react'
-import { dividerColor, dropdownBackground } from '../core-ui-constants'
+import { dropdownBackground } from '../core-ui-constants'
+import { CoreUiDivider } from '../core-ui-content'
 import { useUiBreakpoints } from '../core-ui-theme'
 
 export function CoreUiCustomSelect({
@@ -63,7 +64,7 @@ export function CoreUiCustomSelect({
                   {renderOption(option.value)}
                 </Text>
               </UnstyledButton>
-              {index !== data.length - 1 ? <Divider style={{ color: dividerColor }} /> : null}
+              {index !== data.length - 1 ? <CoreUiDivider /> : null}
             </div>
           ))}
         </Stack>

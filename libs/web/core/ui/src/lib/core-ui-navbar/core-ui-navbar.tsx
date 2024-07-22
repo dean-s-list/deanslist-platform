@@ -1,8 +1,9 @@
-import { Anchor, Divider, DrawerProps, Group, Stack, Text } from '@mantine/core'
+import { Anchor, DrawerProps, Group, Stack, Text } from '@mantine/core'
 import cx from 'clsx'
 import { ComponentType, ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { dividerColor, pinkGradientText } from '../core-ui-constants'
+import { pinkGradientText } from '../core-ui-constants'
+import { CoreUiDivider } from '../core-ui-content'
 import { CoreUiLogoType } from '../core-ui-logo'
 
 import classes from './core-ui-navbar.module.css'
@@ -43,11 +44,11 @@ export function CoreUiNavbar(props: CoreUiNavbarProps) {
       {props.linksTop?.map(({ link, label, icon: Icon }) => (
         <CoreUiNavbarItem key={label} link={link} label={label} icon={Icon} close={close} />
       ))}
-      {props.linksMiddle?.length ? <Divider color={dividerColor} /> : null}
+      {props.linksMiddle?.length ? <CoreUiDivider /> : null}
       {props.linksMiddle?.map(({ link, label, icon: Icon }) => (
         <CoreUiNavbarItem key={label} link={link} label={label} icon={Icon} close={close} />
       ))}
-      {props.linksBottom?.length ? <Divider color={dividerColor} /> : null}
+      {props.linksBottom?.length ? <CoreUiDivider /> : null}
       {props.linksBottom?.map(({ link, label, icon: Icon }) => (
         <CoreUiNavbarItem key={label} link={link} label={label} icon={Icon} close={close} />
       ))}

@@ -1,5 +1,6 @@
 import type { Comment, ReviewerCreateCommentInput } from '@deanslist-platform/sdk'
-import { Button, Divider, Group } from '@mantine/core'
+import { CoreUiDivider } from '@deanslist-platform/web-core-ui'
+import { Button, Group } from '@mantine/core'
 import { modals } from '@mantine/modals'
 import { UiInfoTable, UiStack } from '@pubkey-ui/core'
 import { IconArrowsMaximize, IconArrowsMinimize, IconInfoCircle, IconMessageCircle2Filled } from '@tabler/icons-react'
@@ -19,13 +20,14 @@ export function CommentUiTimelineItem({
   const [showReplies, setShowReplies] = useState(false)
   const [showReplyForm, setShowReplyForm] = useState(false)
   return (
-    <UiStack key={comment.id}>
+    <UiStack key={comment.id} gap={0}>
       <CommentUiComment comment={comment} deleteComment={deleteComment} />
 
       <UiStack gap="xs">
         {showReplyForm ? (
           <UiStack ml="xl" pl="xl">
             <ReviewerCommentUiForm
+              placeholder="Write your reply here..."
               cancel={() => setShowReplyForm(false)}
               createComment={async (res) => {
                 return createComment({ ...res, parentId: comment.id }).then((res) => {
@@ -36,7 +38,7 @@ export function CommentUiTimelineItem({
             />
           </UiStack>
         ) : (
-          <Group justify="flex-end">
+          <Group justify="flex-end" wrap="nowrap">
             <Button
               size="xs"
               radius="xl"
@@ -85,8 +87,8 @@ export function CommentUiTimelineItem({
           <UiStack>
             {comment.children.map((child) => (
               <UiStack key={child.id}>
-                <Divider />
                 <UiStack ml="xl" pl="xl">
+                  <CoreUiDivider />
                   <CommentUiComment key={child.id} comment={child} deleteComment={deleteComment} />
                 </UiStack>
               </UiStack>

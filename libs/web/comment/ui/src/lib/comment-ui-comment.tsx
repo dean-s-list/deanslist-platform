@@ -21,7 +21,7 @@ export function CommentUiComment({
 }) {
   if (!comment.author) return null
   return (
-    <Box p="xs" pb="xs">
+    <Box>
       <Group gap="xs" justify="space-between" wrap="nowrap" align="start">
         <UiAnchor to={to ?? undefined} underline="never">
           <Group gap="xs" align="start" wrap="nowrap">
@@ -39,7 +39,7 @@ export function CommentUiComment({
             </Stack>
           </Group>
         </UiAnchor>
-        <Group>
+        <Group wrap="nowrap" gap="xs">
           {action}
           <CoreUiDebugModal data={comment} />
           {deleteComment ? <CommentUiIconDelete comment={comment} deleteComment={deleteComment} /> : null}

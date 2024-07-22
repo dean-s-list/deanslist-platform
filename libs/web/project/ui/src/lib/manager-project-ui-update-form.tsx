@@ -3,12 +3,12 @@ import {
   cardGradient,
   CoreUiButton,
   CoreUiDateInput,
+  CoreUiDivider,
   CoreUiInput,
-  dividerColor,
   dropdownBackground,
   pinkGradient,
 } from '@deanslist-platform/web-core-ui'
-import { Divider, Group, Select, SimpleGrid, Textarea } from '@mantine/core'
+import { Group, Select, SimpleGrid, Textarea } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { useWindowScroll } from '@mantine/hooks'
 import { UiStack } from '@pubkey-ui/core'
@@ -114,7 +114,7 @@ export function ManagerProjectUiUpdateForm({
               {...form.getInputProps('instructions')}
             />
           </UiStack>
-          <Divider color={dividerColor} />
+          <CoreUiDivider />
           <FormGrid>
             <CoreUiDateInput
               label="Start Date"
@@ -129,7 +129,7 @@ export function ManagerProjectUiUpdateForm({
               {...form.getInputProps('durationDays')}
             />
           </FormGrid>
-          <Divider color={dividerColor} />
+          <CoreUiDivider />
           <FormGrid>
             <CoreUiInput
               label="Avatar URL"

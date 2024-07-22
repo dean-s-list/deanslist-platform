@@ -1,4 +1,5 @@
-import { TypographyStylesProvider } from '@mantine/core'
+import { Divider, DividerProps, TypographyStylesProvider } from '@mantine/core'
+import { dividerColor } from '../core-ui-constants'
 import classes from './core-ui-content.module.css'
 
 export function CoreUiContent({ content }: { content: string }) {
@@ -13,4 +14,8 @@ export function CoreUiContent({ content }: { content: string }) {
       <div className={classes.content} dangerouslySetInnerHTML={{ __html: content ?? '' }} />
     </TypographyStylesProvider>
   )
+}
+
+export function CoreUiDivider(props: DividerProps) {
+  return <Divider color={dividerColor} {...props} />
 }
