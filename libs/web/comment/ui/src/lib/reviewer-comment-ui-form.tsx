@@ -1,7 +1,7 @@
 import { ReviewerCreateCommentInput } from '@deanslist-platform/sdk'
 import { CoreUiButton, CoreUiEditor, pinkGradient, useCoreUiEditor } from '@deanslist-platform/web-core-ui'
 import { Button, Group } from '@mantine/core'
-import { UiStack } from '@pubkey-ui/core'
+import { toastError, UiStack } from '@pubkey-ui/core'
 import { IconMessageCircle2Filled } from '@tabler/icons-react'
 import { useState } from 'react'
 
@@ -27,6 +27,10 @@ export function ReviewerCommentUiForm({
           styles={{ root: { ...pinkGradient } }}
           rightSection={<IconMessageCircle2Filled size={16} />}
           onClick={() => {
+            if (!editor.getText().length) {
+              toastError('Comment cannot be empty')
+              return
+            }
             setLoading(true)
             createComment({ reviewId: '', content: editor.getHTML() }).then((created) => {
               if (created) {
