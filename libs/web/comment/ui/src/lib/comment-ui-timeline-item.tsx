@@ -25,16 +25,17 @@ export function CommentUiTimelineItem({
 
       <UiStack gap="xs">
         {showReplyForm ? (
-          <UiStack ml="xl" pl="xl">
+          <UiStack ml="xl" pl="xl" pt="sm" pb="xs">
             <ReviewerCommentUiForm
               placeholder="Write your reply here..."
               cancel={() => setShowReplyForm(false)}
-              createComment={async (res) => {
-                return createComment({ ...res, parentId: comment.id }).then((res) => {
+              createComment={async (res) =>
+                createComment({ ...res, parentId: comment.id }).then((res) => {
                   setShowReplyForm(false)
+                  setShowReplies(true)
                   return res
                 })
-              }}
+              }
             />
           </UiStack>
         ) : (
