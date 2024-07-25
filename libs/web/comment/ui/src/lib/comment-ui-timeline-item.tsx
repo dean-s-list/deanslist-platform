@@ -1,11 +1,11 @@
 import type { Comment, ReviewerCreateCommentInput } from '@deanslist-platform/sdk'
 import { CoreUiDivider } from '@deanslist-platform/web-core-ui'
 import { Button, Group } from '@mantine/core'
-import { modals } from '@mantine/modals'
-import { UiInfoTable, UiStack } from '@pubkey-ui/core'
-import { IconArrowsMaximize, IconArrowsMinimize, IconInfoCircle, IconMessageCircle2Filled } from '@tabler/icons-react'
+import { UiStack } from '@pubkey-ui/core'
+import { IconArrowsMaximize, IconArrowsMinimize, IconMessageCircle2Filled } from '@tabler/icons-react'
 import React, { useState } from 'react'
 import { CommentUiComment } from './comment-ui-comment'
+import { CommentUiDetailsPopover } from './comment-ui-details-popover'
 import { ReviewerCommentUiForm } from './reviewer-comment-ui-form'
 
 export function CommentUiTimelineItem({
@@ -40,29 +40,7 @@ export function CommentUiTimelineItem({
           </UiStack>
         ) : (
           <Group justify="flex-end" wrap="nowrap">
-            <Button
-              size="xs"
-              radius="xl"
-              rightSection={<IconInfoCircle size={16} />}
-              variant="light"
-              onClick={() =>
-                modals.open({
-                  size: 'lg',
-                  centered: true,
-                  title: 'Comment Details',
-                  children: (
-                    <UiInfoTable
-                      items={[
-                        ['Browser version', comment.versionBrowser ?? 'Unknown'],
-                        ['OS version', comment.versionOs ?? 'Unknown'],
-                      ]}
-                    />
-                  ),
-                })
-              }
-            >
-              Details
-            </Button>
+            <CommentUiDetailsPopover comment={comment} />
             <Button
               size="xs"
               radius="xl"
@@ -71,7 +49,7 @@ export function CommentUiTimelineItem({
               variant="light"
               onClick={() => setShowReplies(!showReplies)}
             >
-              {showReplies ? 'Collapse' : 'Expand'} {comment.children?.length ?? 0} Replies
+              {showReplies ? 'Collapse' : 'Expand'} {comment.children?.length ?? 0} replies
             </Button>
             <Button
               size="xs"
