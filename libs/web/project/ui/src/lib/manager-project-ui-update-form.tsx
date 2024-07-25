@@ -40,37 +40,58 @@ export function ManagerProjectUiUpdateForm({
 
     validate: {
       name: (value) => {
-        if (!value) return 'Name is required.'
-        if (value.length < 3) return 'Name must be at least 3 characters.'
-        if (value.length > 100) return 'Name must be less than 100 characters.'
+        if (!value) {
+          return 'Name is required.'
+        }
+        if (value.length < 3) {
+          return 'Name must be at least 3 characters.'
+        }
+        if (value.length > 100) {
+          return 'Name must be less than 100 characters.'
+        }
       },
       avatarUrl: (value) => {
-        if (value && !value.startsWith('http')) return 'Avatar URL must be a valid URL.'
+        if (value && !value.startsWith('http')) {
+          return 'Avatar URL must be a valid URL.'
+        }
       },
       durationDays: (value) => {
-        if (value && value < 1) return 'Duration must be at least 1 day.'
-        if (value && value > 365) return 'Duration must be less than 1 year.'
+        if (value && value < 1) {
+          return 'Duration must be at least 1 day.'
+        }
+        if (value && value > 365) {
+          return 'Duration must be less than 1 year.'
+        }
       },
       startDate: (value) => {
-        if (!value) return
-        if (value && new Date(value ?? new Date()).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0))
+        if (value && new Date(value ?? new Date()).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)) {
           return 'Start date must be in the future.'
+        }
       },
       linkDiscord: (value) => {
-        if (value && !['https://discord.com/invite/', 'https://discord.gg/'].includes(value))
+        if (value && !value.startsWith('https://discord.com/invite/') && !value.startsWith('https://discord.gg/')) {
           return 'Must be a valid Discord invite.'
+        }
       },
       linkGithub: (value) => {
-        if (value && !value.startsWith('https://github.com/')) return 'Must be a valid Github repository, user or org.'
+        if (value && !value.startsWith('https://github.com/')) {
+          return 'Must be a valid Github repository, user or org.'
+        }
       },
       linkTelegram: (value) => {
-        if (value && !value.startsWith('https://t.me/')) return 'Must be a valid Telegram link.'
+        if (value && !value.startsWith('https://t.me/')) {
+          return 'Must be a valid Telegram link.'
+        }
       },
       linkTwitter: (value) => {
-        if (value && !['https://twitter.com/', 'https://x.com/'].includes(value)) return 'Must be a valid X page.'
+        if (value && !value.startsWith('https://twitter.com/') && !value.startsWith('https://x.com/')) {
+          return 'Must be a valid X page.'
+        }
       },
       linkWebsite: (value) => {
-        if (value && !value.startsWith('https://')) return 'Must be a valid website.'
+        if (value && !value.startsWith('https://')) {
+          return 'Must be a valid website.'
+        }
       },
     },
   })
