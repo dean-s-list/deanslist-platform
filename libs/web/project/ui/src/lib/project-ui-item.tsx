@@ -7,15 +7,15 @@ import { ProjectUiAvatar } from './project-ui-avatar'
 export function ProjectUiItem({
   anchorProps,
   avatarProps,
+  children,
   groupProps,
-  label,
   project,
   to,
 }: {
   anchorProps?: UiAnchorProps
   avatarProps?: Omit<AvatarProps, 'src'>
+  children?: ReactNode
   groupProps?: GroupProps
-  label?: ReactNode
   project?: Project
   to?: string | null
 }) {
@@ -26,10 +26,10 @@ export function ProjectUiItem({
       <Group gap="sm" {...groupProps}>
         <ProjectUiAvatar size="md" project={project} {...avatarProps} />
         <Stack gap={1}>
-          <Text size="lg" fw={500} c="white">
+          <Text size="lg" fw={500}>
             {project?.name}
           </Text>
-          {label}
+          {children}
         </Stack>
       </Group>
     </UiAnchor>

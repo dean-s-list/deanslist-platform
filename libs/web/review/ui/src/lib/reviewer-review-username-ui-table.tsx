@@ -24,11 +24,9 @@ export function ReviewerReviewUsernameUiTable({ reviews = [] }: { reviews: Revie
             accessor: 'name',
             render: (item) =>
               item.project ? (
-                <ProjectUiItem
-                  project={item.project}
-                  to={item.viewUrl}
-                  label={<UiTime size="xs" c="dimmed" date={new Date(item.createdAt ?? '0')} />}
-                />
+                <ProjectUiItem project={item.project} to={item.viewUrl}>
+                  <UiTime size="xs" c="dimmed" date={new Date(item.createdAt ?? '0')} />
+                </ProjectUiItem>
               ) : null,
           },
           {
