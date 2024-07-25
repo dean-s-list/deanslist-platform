@@ -9,20 +9,19 @@ export function ProjectUiGrid({
   projects = [],
   onPageChange,
   page,
-  totalRecords,
+  totalPages,
   limit,
   setLimit,
   setPage,
 }: {
   projects: Project[]
   page: DataTableProps['page']
-  totalRecords: number
+  totalPages: number
   onPageChange: (page: number) => void
   limit: number
   setLimit: (limit: number) => void
   setPage: (page: number) => void
 }) {
-  const totalPages = totalRecords / limit + 1
   return (
     <UiStack>
       <SimpleGrid cols={{ base: 1, sm: 2, xl: 3 }} spacing="md">

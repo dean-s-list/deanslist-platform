@@ -22,7 +22,7 @@ export function CommunityUiGrid({
   setLimit: (limit: number) => void
   setPage: (page: number) => void
 }) {
-  const totalPages = totalRecords / limit + 1
+  const totalPages = totalRecords / limit
   return (
     <UiStack>
       <SimpleGrid cols={{ base: 1, sm: 2 }} spacing="md">

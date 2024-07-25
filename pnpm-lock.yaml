@@ -222,8 +222,8 @@ importers:
         specifier: ^4.0.1
         version: 4.0.1
       prisma-extension-pagination:
-        specifier: ^0.6.0
-        version: 0.6.0(@prisma/client@5.8.0(prisma@5.8.0))
+        specifier: ^0.7.4
+        version: 0.7.4(@prisma/client@5.8.0(prisma@5.8.0))
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -9528,8 +9528,8 @@ packages:
     resolution: {integrity: sha512-Pdlw/oPxN+aXdmM9R00JVC9WVFoCLTKJvDVLgmJ+qAffBMxsV85l/Lu7sNx4zSzPyoL2euImuEwHhOXdEgNFZQ==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
 
-  prisma-extension-pagination@0.6.0:
-    resolution: {integrity: sha512-xur3CX4Q9X3NLeCvayTAMuAy88HtnHq31LeYhKUhcXDx6sHNl53aW9oe5j57cgxY9bwvHD3ygQLKD0Aly7xzIA==}
+  prisma-extension-pagination@0.7.4:
+    resolution: {integrity: sha512-MmfyinDbcTucvttlO8UOrLqKW7DxlXe3ToiUZcLbvhGHHPewHKKWvucVnLHsYSzEIbEE1YfK/hsYdmpoRzkAAg==}
     peerDependencies:
       '@prisma/client': ^4.9.0 || ^5.0.0
 
@@ -24803,7 +24803,7 @@ snapshots:
       ansi-styles: 5.2.0
       react-is: 18.2.0
 
-  prisma-extension-pagination@0.6.0(@prisma/client@5.8.0(prisma@5.8.0)):
+  prisma-extension-pagination@0.7.4(@prisma/client@5.8.0(prisma@5.8.0)):
     dependencies:
       '@prisma/client': 5.8.0(prisma@5.8.0)
 
