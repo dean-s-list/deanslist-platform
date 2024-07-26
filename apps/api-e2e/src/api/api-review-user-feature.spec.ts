@@ -20,7 +20,7 @@ describe('api-review-feature', () => {
         projectId = await sdk
           .managerCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
           .then((res) => res.data.created.id)
-        await sdk.managerUpdateProject({ projectId, input: { status: ProjectStatus.Active } }, { cookie: alice })
+        await sdk.adminUpdateProject({ projectId, input: { status: ProjectStatus.Active } }, { cookie: alice })
       })
 
       it('should create a review', async () => {

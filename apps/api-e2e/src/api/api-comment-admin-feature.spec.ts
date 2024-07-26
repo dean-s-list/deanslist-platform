@@ -17,7 +17,7 @@ describe('api-comment-feature', () => {
       projectId = await sdk
         .managerCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
         .then((res) => res.data.created.id)
-      await sdk.managerUpdateProject({ projectId, input: { status: ProjectStatus.Active } }, { cookie: alice })
+      await sdk.adminUpdateProject({ projectId, input: { status: ProjectStatus.Active } }, { cookie: alice })
       reviewId = await sdk.reviewerCreateReview({ projectId }, { cookie: alice }).then((res) => res.data.created.id)
       commentId = await sdk
         .reviewerCreateComment({ input: { reviewId, content: uniqueId('comment') } }, { cookie: alice })

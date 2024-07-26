@@ -120,6 +120,10 @@ query managerFindManyProject($input: ManagerFindManyProjectInput!) {
 query managerFindOneProject($projectId: String!) {
   item: managerFindOneProject(projectId: $projectId) {
     ...ProjectDetails
+    message {
+      message
+      nextStatus
+    }
     referral {
       ...UserDetails
     }
@@ -137,6 +141,12 @@ mutation managerCreateProject($input: ManagerCreateProjectInput!) {
 
 mutation managerUpdateProject($projectId: String!, $input: ManagerUpdateProjectInput!) {
   updated: managerUpdateProject(projectId: $projectId, input: $input) {
+    ...ProjectDetails
+  }
+}
+
+mutation managerUpdateProjectStatus($projectId: String!, $status: ProjectStatus!) {
+  updated: managerUpdateProjectStatus(projectId: $projectId, status: $status) {
     ...ProjectDetails
   }
 }

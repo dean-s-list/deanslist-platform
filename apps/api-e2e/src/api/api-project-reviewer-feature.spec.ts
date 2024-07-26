@@ -23,7 +23,7 @@ describe('api-project-feature', () => {
         .managerCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
         .then((res) => res.data.created.id)
         .then(async (projectId) => {
-          await sdk.managerUpdateProject(
+          await sdk.adminUpdateProject(
             {
               projectId,
               input: {
@@ -41,7 +41,7 @@ describe('api-project-feature', () => {
       projectId = await sdk
         .managerCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
         .then((res) => res.data.created.id)
-      await sdk.managerUpdateProject(
+      await sdk.adminUpdateProject(
         {
           projectId,
           input: {

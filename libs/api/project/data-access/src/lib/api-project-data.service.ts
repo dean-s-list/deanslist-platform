@@ -1,9 +1,11 @@
 import { ApiCommunityService } from '@deanslist-platform/api-community-data-access'
-import { addDays, ApiCoreService, slugifyId } from '@deanslist-platform/api-core-data-access'
+import { addDays, ApiCoreService, setDateToStartOfDay, slugifyId } from '@deanslist-platform/api-core-data-access'
 import { Injectable } from '@nestjs/common'
-import { Prisma } from '@prisma/client'
+import { Prisma, Project } from '@prisma/client'
 import { ApiProjectEventService } from './api-project-event.service'
+import { ProjectMessage } from './entity/project-message.entity'
 import { ProjectPaging } from './entity/project-paging.entity'
+import { ProjectStatus } from './entity/project-status.enum'
 import { ProjectCreatedEvent } from './event/project-created.event'
 import { calculateProjectDates } from './helpers/calculate-project-dates'
 
@@ -134,16 +136,36 @@ export class ApiProjectDataService {
     return found
   }
 
-  async updateProject(userId: string, projectId: string, input: Prisma.ProjectUpdateInput) {
+  getProjectMessage(project: Project): ProjectMessage | undefined {
+    const nextStatus = getNextStatus(project?.status)
+    if (nextStatus) {
+      return getStatusMessage({ project, nextStatus })
+    }
+    return undefined
+  }
+
+  async updateProject(projectId: string, input: Prisma.ProjectUpdateInput, allowStartDateInPast = false) {
     const found = await this.findOneProject(projectId)
     const { durationDays, endDate, startDate } = calculateProjectDates({
       found,
       input: { durationDays: input.durationDays as number | null, startDate: input.startDate as Date | string | null },
+      allowStartDateInPast,
     })
 
     return this.core.data.project.update({
       where: { id: found.id },
       data: { ...input, durationDays, endDate, startDate },
+    })
+  }
+
+  async updateProjectStatus(projectId: string, nextStatus: ProjectStatus) {
+    const found = await this.findOneProject(projectId)
+
+    allowStatusTransition({ project: found, nextStatus })
+
+    return this.core.data.project.update({
+      where: { id: found.id },
+      data: { status: nextStatus },
     })
   }
 
@@ -204,5 +226,86 @@ export class ApiProjectDataService {
     })
     // TODO: Emit events, announce in Discord.
     return !!removed
+  }
+}
+
+function allowStatusTransition({ project, nextStatus }: { project: Project; nextStatus: ProjectStatus }) {
+  const { message } = getStatusMessage({ project, nextStatus })
+
+  if (message) {
+    throw new Error(message)
+  }
+}
+
+function getStatusMessage({ project, nextStatus }: { project: Project; nextStatus: ProjectStatus }): ProjectMessage {
+  const today = setDateToStartOfDay(new Date()).getTime()
+  const startDate = project.startDate ? new Date(project.startDate).getTime() : undefined
+  const endDate = project.endDate ? new Date(project.endDate).getTime() : undefined
+
+  // We can not transition to our current status
+  if (project.status === nextStatus) {
+    return { nextStatus: undefined, message: `Cannot transition to ${nextStatus.toString()}` }
+  }
+
+  // We can only transition from Draft to Active
+  if (project.status === ProjectStatus.Draft) {
+    if (nextStatus !== ProjectStatus.Active) {
+      return { nextStatus, message: `Cannot transition from ${project.status} to ${nextStatus.toString()}` }
+    }
+  }
+
+  if (nextStatus === ProjectStatus.Active) {
+    // Current status must be Draft or Active
+    if (project.status !== ProjectStatus.Draft && project.status !== ProjectStatus.Active) {
+      return { nextStatus, message: `Cannot transition from ${project.status} to ${nextStatus.toString()}` }
+    }
+    // Project must have a startDate
+    if (project.startDate === null) {
+      return { nextStatus, message: `Start date must be set` }
+    }
+    // Project startDate must be today or in the future
+    if (startDate && startDate < today) {
+      return { nextStatus, message: `Start date must be today or in the future` }
+    }
+    // Project must have a duration
+    if (project.durationDays <= 0) {
+      return { nextStatus, message: `Duration must be greater than 0` }
+    }
+    // the amountTotalUsd must be greater than 0
+    if (project.amountTotalUsd <= 0) {
+      return { nextStatus, message: `Amount total USD must be greater than 0` }
+    }
+
+    // If all the checks pass, return the next status
+    return { nextStatus }
+  }
+
+  if (nextStatus === ProjectStatus.Closed) {
+    // We can only close an Active project
+    if (project.status !== ProjectStatus.Active) {
+      return {
+        nextStatus,
+        message: `Cannot transition to Closed from ${project.status.toString()}`,
+      }
+    }
+    // Project endDate must be in the future
+    if (endDate && endDate > today) {
+      return { nextStatus, message: `End date must be in the future` }
+    }
+    // If all the checks pass, return the next status
+    return { nextStatus }
+  }
+
+  return { nextStatus }
+}
+
+function getNextStatus(status: ProjectStatus) {
+  switch (status) {
+    case ProjectStatus.Draft:
+      return ProjectStatus.Active
+    case ProjectStatus.Active:
+      return ProjectStatus.Closed
+    case ProjectStatus.Closed:
+      return undefined
   }
 }

@@ -10,7 +10,7 @@ export function CoreUiBackLink({
   return (
     <Button
       color="gray"
-      size="xs"
+      size="sm"
       variant="transparent"
       component={Link}
       to={to}

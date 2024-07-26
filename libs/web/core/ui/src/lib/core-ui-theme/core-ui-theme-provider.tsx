@@ -5,6 +5,7 @@ import { createContext, ReactNode, Suspense, useContext } from 'react'
 
 // Import the mantine theme styles
 import './ui-theme-styles'
+import { cardGradient, dropdownBackground } from '../core-ui-constants'
 
 const defaultTheme = createTheme({
   colors: {
@@ -13,6 +14,14 @@ const defaultTheme = createTheme({
   primaryColor: 'brand',
   fontFamily: `Poppins, sans-serif`,
   headings: { fontFamily: 'Poppins, sans-serif' },
+  components: {
+    Select: {
+      styles: {
+        input: { border: 'none', ...cardGradient },
+        dropdown: { border: 'none', ...dropdownBackground },
+      },
+    },
+  },
 })
 
 export interface CoreUiThemeProviderOptions {

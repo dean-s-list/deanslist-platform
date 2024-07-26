@@ -1,5 +1,4 @@
 import { Field, InputType, Int } from '@nestjs/graphql'
-import { ProjectStatus } from '../entity/project-status.enum'
 
 @InputType()
 export class ManagerUpdateProjectInput {
@@ -11,8 +10,6 @@ export class ManagerUpdateProjectInput {
   durationDays?: number
   @Field({ nullable: true })
   startDate?: Date
-  @Field(() => ProjectStatus, { nullable: true })
-  status?: ProjectStatus
   @Field(() => Int, { nullable: true })
   amountManagerUsd?: number
   @Field(() => Int, { nullable: true })

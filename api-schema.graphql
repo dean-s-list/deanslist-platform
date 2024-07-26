@@ -317,7 +317,6 @@ input ManagerUpdateProjectInput {
   referralId: String
   reviewsOpen: Boolean
   startDate: DateTime
-  status: ProjectStatus
 }
 
 input ManagerUpdateRatingInput {
@@ -376,6 +375,7 @@ type Mutation {
   managerToggleCommunityAdmin(communityId: String!, userId: String!): Boolean
   managerUpdateCommunity(communityId: String!, input: ManagerUpdateCommunityInput!): Community
   managerUpdateProject(input: ManagerUpdateProjectInput!, projectId: String!): Project
+  managerUpdateProjectStatus(projectId: String!, status: ProjectStatus!): Project
   managerUpdateRating(input: ManagerUpdateRatingInput!, ratingId: String!): Rating
   register(input: RegisterInput!): User
   reviewerCreateComment(input: ReviewerCreateCommentInput!): Comment
@@ -424,6 +424,7 @@ type Project {
   linkWebsite: String
   manageUrl: String!
   managers: [User!]
+  message: ProjectMessage
   name: String!
   referral: User
   remainingDays: Int
@@ -435,6 +436,11 @@ type Project {
   status: ProjectStatus
   updatedAt: DateTime
   viewUrl: String!
+}
+
+type ProjectMessage {
+  message: String
+  nextStatus: ProjectStatus
 }
 
 enum ProjectOrderBy {

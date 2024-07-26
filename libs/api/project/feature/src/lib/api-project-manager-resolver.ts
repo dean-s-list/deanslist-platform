@@ -6,6 +6,7 @@ import {
   ManagerUpdateProjectInput,
   Project,
   ProjectPaging,
+  ProjectStatus,
 } from '@deanslist-platform/api-project-data-access'
 import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
@@ -96,5 +97,14 @@ export class ApiProjectManagerResolver {
     @Args('input') input: ManagerUpdateProjectInput,
   ) {
     return this.service.manager.updateProject(userId, projectId, input)
+  }
+
+  @Mutation(() => Project, { nullable: true })
+  managerUpdateProjectStatus(
+    @CtxUserId() userId: string,
+    @Args('projectId') projectId: string,
+    @Args({ name: 'status', type: () => ProjectStatus }) status: ProjectStatus,
+  ) {
+    return this.service.manager.updateProjectStatus(userId, projectId, status)
   }
 }

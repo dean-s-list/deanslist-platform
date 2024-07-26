@@ -28,7 +28,7 @@ export class ApiProjectDataAdminService {
   }
 
   async updateProject(userId: string, projectId: string, input: AdminUpdateProjectInput) {
-    return this.data.updateProject(userId, projectId, input)
+    return this.data.updateProject(projectId, input, true)
   }
 
   async addProjectManager(userId: string, projectId: string, managerUserId: string) {

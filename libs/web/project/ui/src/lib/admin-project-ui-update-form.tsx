@@ -17,7 +17,7 @@ export function AdminProjectUiUpdateForm({
       name: project.name ?? '',
       avatarUrl: project.avatarUrl ?? '',
       durationDays: project.durationDays ?? 7,
-      startDate: project.startDate,
+      startDate: new Date(project.startDate ?? new Date()),
       status: project.status ?? ProjectStatus.Draft,
       amountManagerUsd: project.amountManagerUsd ?? 0,
       amountReferralUsd: project.amountReferralUsd ?? 0,

@@ -4,9 +4,11 @@ import { Project } from '@prisma/client'
 export function calculateProjectDates({
   input,
   found,
+  allowStartDateInPast = false,
 }: {
   found?: Project
   input: { durationDays?: number | null; startDate: Date | string | null }
+  allowStartDateInPast?: boolean
 }): { endDate: Date | null; durationDays: number; startDate: Date | null } {
   let durationDays: number = typeof input.durationDays === 'number' ? input.durationDays : found?.durationDays ?? 7
   let endDate: Date | null = found?.endDate ?? null
@@ -30,7 +32,7 @@ export function calculateProjectDates({
   if (input.startDate) {
     startDate = setDateToStartOfDay(input.startDate as string) as Date
     // If it's a date in before today, we want to throw an error
-    if (beforeToday(startDate)) {
+    if (beforeToday(startDate) && !allowStartDateInPast) {
       throw new Error('Start date must be in the future.')
     }
   }

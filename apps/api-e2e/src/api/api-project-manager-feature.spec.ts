@@ -4,6 +4,7 @@ import {
   ManagerFindManyProjectInput,
   ManagerUpdateProjectInput,
   Project,
+  ProjectStatus,
 } from '@deanslist-platform/sdk'
 import { getAliceCookie, sdk, uniqueId } from '../support'
 
@@ -223,6 +224,62 @@ describe('api-project-feature', () => {
         } catch (e) {
           expect(e.message).toBe('Start date must be in the future.')
         }
+      })
+    })
+
+    describe('project statuses', () => {
+      it('should not status to active: require amount total USD must be greater than 0', async () => {
+        // ARRANGE
+        const projectId = await sdk
+          .managerCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
+          .then((res) => res.data.created.id)
+
+        expect.assertions(1)
+        try {
+          // ACT
+          await sdk.managerUpdateProjectStatus({ projectId, status: ProjectStatus.Active }, { cookie: alice })
+        } catch (e) {
+          // ASSERT
+          expect(e.message).toBe('Amount total USD must be greater than 0')
+        }
+      })
+
+      it('should not changing status to active: require Start date must be today or in the future', async () => {
+        // ARRANGE
+        const projectId = await sdk
+          .managerCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
+          .then((res) => res.data.created.id)
+        const startDate = new Date(new Date().setDate(new Date().getDate() - 1))
+        await sdk.adminUpdateProject({ projectId, input: { amountTotalUsd: 1, startDate } }, { cookie: alice })
+
+        expect.assertions(1)
+        try {
+          // ACT
+          await sdk.managerUpdateProjectStatus({ projectId, status: ProjectStatus.Active }, { cookie: alice })
+        } catch (e) {
+          // ASSERT
+          expect(e.message).toBe('Start date must be today or in the future')
+        }
+      })
+
+      it('should set status to active if all conditions are met', async () => {
+        // ARRANGE
+        const project = await sdk
+          .managerCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
+          .then((res) => res.data.created)
+        const projectId = project.id
+        const startDate = new Date(new Date().setDate(new Date().getDate() + 1))
+        await sdk.adminUpdateProject({ projectId, input: { amountTotalUsd: 1, startDate } }, { cookie: alice })
+
+        // ACT
+        const updated = await sdk
+          .managerUpdateProjectStatus({ projectId, status: ProjectStatus.Active }, { cookie: alice })
+          .then((res) => res.data.updated)
+
+        // ASSERT
+        expect(project.status).toBe(ProjectStatus.Draft)
+        expect(new Date(updated.startDate).getTime()).toBe(setDateToStartOfDay(startDate).getTime())
+        expect(updated.status).toBe(ProjectStatus.Active)
       })
     })
   })

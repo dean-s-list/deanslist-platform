@@ -18,7 +18,7 @@ export class Project {
   @Field(() => [User], { nullable: true })
   reviewers?: User[]
   @Field(() => User, { nullable: true })
-  referral?: User
+  referral?: User | null
   @Field()
   communityId!: string
   @Field()

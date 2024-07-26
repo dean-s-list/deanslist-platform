@@ -1,16 +1,14 @@
-import { getEnumOptions, ManagerUpdateProjectInput, Project, ProjectStatus } from '@deanslist-platform/sdk'
+import { ManagerUpdateProjectInput, Project } from '@deanslist-platform/sdk'
 import {
   cardGradient,
   CoreUiButton,
   CoreUiDateInput,
   CoreUiDivider,
   CoreUiInput,
-  dropdownBackground,
   pinkGradient,
 } from '@deanslist-platform/web-core-ui'
-import { Group, Select, SimpleGrid, Textarea } from '@mantine/core'
+import { Group, SimpleGrid, Textarea } from '@mantine/core'
 import { useForm } from '@mantine/form'
-import { useWindowScroll } from '@mantine/hooks'
 import { UiStack } from '@pubkey-ui/core'
 import { ReactNode } from 'react'
 
@@ -21,8 +19,6 @@ export function ManagerProjectUiUpdateForm({
   submit: (res: ManagerUpdateProjectInput) => Promise<boolean>
   project: Project
 }) {
-  const [scroll, scrollTo] = useWindowScroll()
-
   const form = useForm<ManagerUpdateProjectInput>({
     initialValues: {
       avatarUrl: project.avatarUrl ?? '',
@@ -35,7 +31,6 @@ export function ManagerProjectUiUpdateForm({
       linkWebsite: project.linkWebsite ?? '',
       name: project.name ?? '',
       startDate: new Date(project.startDate ?? new Date()),
-      status: project.status ?? ProjectStatus.Draft,
     },
 
     validate: {
@@ -112,17 +107,6 @@ export function ManagerProjectUiUpdateForm({
                 placeholder="Name"
                 description="The name of the project must be unique within the community."
                 {...form.getInputProps('name')}
-              />
-              <Select
-                styles={{
-                  input: { border: 'none', ...cardGradient },
-                  dropdown: { ...dropdownBackground, border: 'none' },
-                }}
-                label="Status"
-                placeholder="Status"
-                description="The status of the project. Only Active projects can be reviewed."
-                data={[...getEnumOptions(ProjectStatus)]}
-                {...form.getInputProps('status')}
               />
             </FormGrid>
             <Textarea

@@ -4,6 +4,7 @@ import { ManagerCreateProjectInput } from './dto/manager-create-project.input'
 import { ManagerFindManyProjectInput } from './dto/manager-find-many-project.input'
 import { ManagerUpdateProjectInput } from './dto/manager-update-project.input'
 import { ProjectPaging } from './entity/project-paging.entity'
+import { ProjectStatus } from './entity/project-status.enum'
 import { getProjectWhereManagerAccessInput } from './helpers/get-project-where-manager-access-input'
 import { getProjectWhereManagerInput } from './helpers/get-project-where-manager.input'
 
@@ -42,7 +43,13 @@ export class ApiProjectDataManagerService {
   async updateProject(userId: string, projectId: string, input: ManagerUpdateProjectInput) {
     await this.data.ensureProjectManager({ projectId, userId })
 
-    return this.data.updateProject(userId, projectId, input)
+    return this.data.updateProject(projectId, input)
+  }
+
+  async updateProjectStatus(userId: string, projectId: string, status: ProjectStatus) {
+    await this.data.ensureProjectManager({ projectId, userId })
+
+    return this.data.updateProjectStatus(projectId, status)
   }
 
   async addProjectManager(userId: string, projectId: string, managerUserId: string) {

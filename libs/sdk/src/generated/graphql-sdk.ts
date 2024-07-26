@@ -340,7 +340,6 @@ export type ManagerUpdateProjectInput = {
   referralId?: InputMaybe<Scalars['String']['input']>
   reviewsOpen?: InputMaybe<Scalars['Boolean']['input']>
   startDate?: InputMaybe<Scalars['DateTime']['input']>
-  status?: InputMaybe<ProjectStatus>
 }
 
 export type ManagerUpdateRatingInput = {
@@ -400,6 +399,7 @@ export type Mutation = {
   managerToggleCommunityAdmin?: Maybe<Scalars['Boolean']['output']>
   managerUpdateCommunity?: Maybe<Community>
   managerUpdateProject?: Maybe<Project>
+  managerUpdateProjectStatus?: Maybe<Project>
   managerUpdateRating?: Maybe<Rating>
   register?: Maybe<User>
   reviewerCreateComment?: Maybe<Comment>
@@ -643,6 +643,11 @@ export type MutationManagerUpdateProjectArgs = {
   projectId: Scalars['String']['input']
 }
 
+export type MutationManagerUpdateProjectStatusArgs = {
+  projectId: Scalars['String']['input']
+  status: ProjectStatus
+}
+
 export type MutationManagerUpdateRatingArgs = {
   input: ManagerUpdateRatingInput
   ratingId: Scalars['String']['input']
@@ -729,6 +734,7 @@ export type Project = {
   linkWebsite?: Maybe<Scalars['String']['output']>
   manageUrl: Scalars['String']['output']
   managers?: Maybe<Array<User>>
+  message?: Maybe<ProjectMessage>
   name: Scalars['String']['output']
   referral?: Maybe<User>
   remainingDays?: Maybe<Scalars['Int']['output']>
@@ -740,6 +746,12 @@ export type Project = {
   status?: Maybe<ProjectStatus>
   updatedAt?: Maybe<Scalars['DateTime']['output']>
   viewUrl: Scalars['String']['output']
+}
+
+export type ProjectMessage = {
+  __typename?: 'ProjectMessage'
+  message?: Maybe<Scalars['String']['output']>
+  nextStatus?: Maybe<ProjectStatus>
 }
 
 export enum ProjectOrderBy {
@@ -3614,6 +3626,7 @@ export type ManagerFindOneProjectQuery = {
     status?: ProjectStatus | null
     updatedAt?: Date | null
     viewUrl: string
+    message?: { __typename?: 'ProjectMessage'; message?: string | null; nextStatus?: ProjectStatus | null } | null
     referral?: {
       __typename?: 'User'
       avatarUrl?: string | null
@@ -3791,6 +3804,94 @@ export type ManagerUpdateProjectMutationVariables = Exact<{
 }>
 
 export type ManagerUpdateProjectMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'Project'
+    amountManagerUsd?: number | null
+    amountReferralUsd?: number | null
+    amountTotalUsd?: number | null
+    avatarUrl?: string | null
+    communityId: string
+    createdAt?: Date | null
+    durationDays?: number | null
+    endDate?: Date | null
+    id: string
+    instructions?: string | null
+    linkDiscord?: string | null
+    linkGithub?: string | null
+    linkTelegram?: string | null
+    linkTwitter?: string | null
+    linkWebsite?: string | null
+    manageUrl: string
+    name: string
+    remainingDays?: number | null
+    reviewCount?: number | null
+    reviewsOpen?: boolean | null
+    slug: string
+    startDate?: Date | null
+    status?: ProjectStatus | null
+    updatedAt?: Date | null
+    viewUrl: string
+    community?: {
+      __typename?: 'Community'
+      activeProjectsCount?: number | null
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      homeServerId?: string | null
+      id: string
+      managerCount?: number | null
+      manageUrl: string
+      name: string
+      updatedAt?: Date | null
+      viewUrl: string
+      managers?: Array<{
+        __typename?: 'CommunityManager'
+        createdAt?: Date | null
+        id: string
+        userId: string
+        admin?: boolean | null
+        updatedAt?: Date | null
+        user?: {
+          __typename?: 'User'
+          avatarUrl?: string | null
+          createdAt?: Date | null
+          developer?: boolean | null
+          id: string
+          name?: string | null
+          manager?: boolean | null
+          profileUrl: string
+          role?: UserRole | null
+          status?: UserStatus | null
+          updatedAt?: Date | null
+          username?: string | null
+          walletAddress?: string | null
+        } | null
+      }> | null
+    } | null
+    managers?: Array<{
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      manager?: boolean | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+      walletAddress?: string | null
+    }> | null
+  } | null
+}
+
+export type ManagerUpdateProjectStatusMutationVariables = Exact<{
+  projectId: Scalars['String']['input']
+  status: ProjectStatus
+}>
+
+export type ManagerUpdateProjectStatusMutation = {
   __typename?: 'Mutation'
   updated?: {
     __typename?: 'Project'
@@ -6172,6 +6273,10 @@ export const ManagerFindOneProjectDocument = gql`
   query managerFindOneProject($projectId: String!) {
     item: managerFindOneProject(projectId: $projectId) {
       ...ProjectDetails
+      message {
+        message
+        nextStatus
+      }
       referral {
         ...UserDetails
       }
@@ -6194,6 +6299,14 @@ export const ManagerCreateProjectDocument = gql`
 export const ManagerUpdateProjectDocument = gql`
   mutation managerUpdateProject($projectId: String!, $input: ManagerUpdateProjectInput!) {
     updated: managerUpdateProject(projectId: $projectId, input: $input) {
+      ...ProjectDetails
+    }
+  }
+  ${ProjectDetailsFragmentDoc}
+`
+export const ManagerUpdateProjectStatusDocument = gql`
+  mutation managerUpdateProjectStatus($projectId: String!, $status: ProjectStatus!) {
+    updated: managerUpdateProjectStatus(projectId: $projectId, status: $status) {
       ...ProjectDetails
     }
   }
@@ -6519,6 +6632,7 @@ const ManagerFindManyProjectDocumentString = print(ManagerFindManyProjectDocumen
 const ManagerFindOneProjectDocumentString = print(ManagerFindOneProjectDocument)
 const ManagerCreateProjectDocumentString = print(ManagerCreateProjectDocument)
 const ManagerUpdateProjectDocumentString = print(ManagerUpdateProjectDocument)
+const ManagerUpdateProjectStatusDocumentString = print(ManagerUpdateProjectStatusDocument)
 const ManagerDeleteProjectDocumentString = print(ManagerDeleteProjectDocument)
 const ManagerAddProjectManagerDocumentString = print(ManagerAddProjectManagerDocument)
 const ManagerRemoveProjectManagerDocumentString = print(ManagerRemoveProjectManagerDocument)
@@ -8137,6 +8251,27 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
+    managerUpdateProjectStatus(
+      variables: ManagerUpdateProjectStatusMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: ManagerUpdateProjectStatusMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<ManagerUpdateProjectStatusMutation>(ManagerUpdateProjectStatusDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'managerUpdateProjectStatus',
+        'mutation',
+        variables,
+      )
+    },
     managerDeleteProject(
       variables: ManagerDeleteProjectMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
@@ -9051,7 +9186,6 @@ export function ManagerUpdateProjectInputSchema(): z.ZodObject<Properties<Manage
     referralId: z.string().nullish(),
     reviewsOpen: z.boolean().nullish(),
     startDate: definedNonNullAnySchema.nullish(),
-    status: ProjectStatusSchema.nullish(),
   })
 }
 

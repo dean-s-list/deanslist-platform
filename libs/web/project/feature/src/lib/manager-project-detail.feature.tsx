@@ -1,11 +1,13 @@
 import { CoreUiBackLink, CoreUiCard, CoreUiDebugModal, dividerColor } from '@deanslist-platform/web-core-ui'
 import { useManagerFindOneProject } from '@deanslist-platform/web-project-data-access'
-import { ProjectUiItem } from '@deanslist-platform/web-project-ui'
+import { ProjectUiItem, ProjectUiStatusBadge } from '@deanslist-platform/web-project-ui'
 import { UiContainer, UiError, UiGroup, UiLoader, UiStack, UiTabRoute, UiTabRoutes } from '@pubkey-ui/core'
+import React from 'react'
 import { useParams } from 'react-router-dom'
 import { ManagerProjectDetailPayoutsTab } from './manager-project-detail-payouts-tab'
 import { ManagerProjectDetailRatingsTab } from './manager-project-detail-ratings-tab'
 import { ManagerProjectDetailSettingsTab } from './manager-project-detail-settings-tab'
+import { ManagerProjectDetailStatusTab } from './manager-project-detail-status-tab'
 import { ManagerProjectDetailTeamTab } from './manager-project-detail-team-tab'
 
 export function ManagerProjectDetailFeature() {
@@ -17,6 +19,11 @@ export function ManagerProjectDetailFeature() {
       path: 'settings',
       label: 'Settings',
       element: <ManagerProjectDetailSettingsTab projectId={projectId} />,
+    },
+    {
+      path: 'status',
+      label: 'Status',
+      element: <ManagerProjectDetailStatusTab projectId={projectId} />,
     },
     { path: 'team', label: 'Team', element: <ManagerProjectDetailTeamTab projectId={projectId} /> },
     { path: 'rating', label: 'Rating', element: <ManagerProjectDetailRatingsTab projectId={projectId} /> },
@@ -37,7 +44,9 @@ export function ManagerProjectDetailFeature() {
       <CoreUiCard>
         <UiStack>
           <UiGroup>
-            <ProjectUiItem project={item} />
+            <ProjectUiItem project={item}>
+              <ProjectUiStatusBadge size="xs" status={item.status} />
+            </ProjectUiItem>
             <CoreUiDebugModal data={item} />
           </UiGroup>
           <UiTabRoutes

@@ -1,4 +1,4 @@
-import { ManagerUpdateProjectInput } from '@deanslist-platform/sdk'
+import { ManagerUpdateProjectInput, ProjectStatus } from '@deanslist-platform/sdk'
 import { useSdk } from '@deanslist-platform/web-core-data-access'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
@@ -126,6 +126,23 @@ export function useManagerFindOneProject({ projectId }: { projectId: string }) {
             if (toast) {
               toastSuccess('Project updated')
             }
+            await query.refetch()
+            return true
+          }
+          toastError('Project not updated')
+          return false
+        })
+        .catch((err) => {
+          toastError(err.message)
+          return false
+        }),
+    updateProjectStatus: (status: ProjectStatus) =>
+      sdk
+        .managerUpdateProjectStatus({ projectId, status })
+        .then((res) => res.data)
+        .then(async (res) => {
+          if (res) {
+            toastSuccess('Project status updated')
             await query.refetch()
             return true
           }
