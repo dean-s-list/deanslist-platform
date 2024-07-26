@@ -1,0 +1,7 @@
+export * from './lib/admin-faq-item-ui-create-form'
+export * from './lib/admin-faq-item-ui-table'
+export * from './lib/admin-faq-item-ui-update-form'
+export * from './lib/faq-item-ui-avatar'
+export * from './lib/faq-item-ui-info'
+export * from './lib/faq-item-ui-item'
+export * from './lib/faq-item-ui-list'

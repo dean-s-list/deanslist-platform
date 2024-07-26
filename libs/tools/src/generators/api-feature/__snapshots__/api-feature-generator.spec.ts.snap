@@ -98,7 +98,7 @@ export class ApiTestDataUserService {
 exports[`api-feature generator should generate the feature libraries with crud for admin and user  6`] = `
 "import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { ApiCoreService, PagingInputFields } from '@proj/api-core-data-access';
+import { ApiCoreService } from '@proj/api-core-data-access';
 import { TestPaging } from './entity/test.entity';
 
 @Injectable()
@@ -119,7 +119,10 @@ export class ApiTestDataService {
     limit = 10,
     page = 1,
     ...input
-  }: Prisma.TestFindManyArgs & PagingInputFields): Promise<TestPaging> {
+  }: Prisma.TestFindManyArgs & {
+    limit: number;
+    page: number;
+  }): Promise<TestPaging> {
     return this.core.data.test
       .paginate(input)
       .withPages({ limit, page })

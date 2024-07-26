@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { Prisma } from '@prisma/client'
-import { <%= app.className %>CoreService, PagingInputFields } from '@<%= npmScope %>/<%= app.fileName %>-core-data-access'
+import { <%= app.className %>CoreService } from '@<%= npmScope %>/<%= app.fileName %>-core-data-access'
 import { <%= model.className %>Paging } from './entity/<%= model.fileName %>.entity'
 
 @Injectable()
@@ -21,7 +21,7 @@ export class <%= app.className %><%= model.className %>DataService {
     limit = 10,
     page = 1,
     ...input
-  }: Prisma.<%= model.className %>FindManyArgs & PagingInputFields): Promise<<%= model.className %>Paging> {
+  }: Prisma.<%= model.className %>FindManyArgs & { limit: number; page: number }): Promise<<%= model.className %>Paging> {
     return this.core.data.<%= model.propertyName %>
       .paginate(input)
       .withPages({ limit, page })

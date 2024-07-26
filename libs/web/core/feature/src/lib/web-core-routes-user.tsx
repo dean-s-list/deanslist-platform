@@ -1,6 +1,6 @@
 import { UserCommunityFeature } from '@deanslist-platform/web-community-feature'
 import { CoreUiNotFound } from '@deanslist-platform/web-core-ui'
-import { FaqFeature } from '@deanslist-platform/web-faq-feature'
+import { UserFaqItemFeature } from '@deanslist-platform/web-faq-item-feature'
 import { ReviewerProjectFeature } from '@deanslist-platform/web-project-feature'
 import { ReviewerUsernameReviewFeature } from '@deanslist-platform/web-review-feature'
 import { SettingsFeature } from '@deanslist-platform/web-settings-feature'
@@ -14,7 +14,7 @@ export const ManagerRoutes = lazy(() => import('./web-core-routes-manager'))
 const routes: RouteObject[] = [
   // User Dashboard Routes are added by the web-crud generator
   { path: '/dashboard', element: <Navigate to="/projects" replace /> },
-  { path: '/faq/*', element: <FaqFeature /> },
+  { path: '/faq/*', element: <UserFaqItemFeature /> },
   { path: '/manager/*', element: <ManagerRoutes /> },
   { path: '/projects/*', element: <ReviewerProjectFeature /> },
   { path: '/settings/*', element: <SettingsFeature /> },

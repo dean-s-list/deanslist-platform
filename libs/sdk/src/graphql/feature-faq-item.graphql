@@ -1,0 +1,42 @@
+fragment FaqItemDetails on FaqItem {
+  createdAt
+  id
+  question
+  answer
+  order
+  updatedAt
+}
+
+query adminFindManyFaqItem($input: FaqItemAdminFindManyInput!) {
+  items: adminFindManyFaqItem(input: $input) {
+    ...FaqItemDetails
+  }
+}
+
+query adminFindOneFaqItem($faqItemId: String!) {
+  item: adminFindOneFaqItem(faqItemId: $faqItemId) {
+    ...FaqItemDetails
+  }
+}
+
+mutation adminCreateFaqItem($input: FaqItemAdminCreateInput!) {
+  created: adminCreateFaqItem(input: $input) {
+    ...FaqItemDetails
+  }
+}
+
+mutation adminUpdateFaqItem($faqItemId: String!, $input: FaqItemAdminUpdateInput!) {
+  updated: adminUpdateFaqItem(faqItemId: $faqItemId, input: $input) {
+    ...FaqItemDetails
+  }
+}
+
+mutation adminDeleteFaqItem($faqItemId: String!) {
+  deleted: adminDeleteFaqItem(faqItemId: $faqItemId)
+}
+
+query userFindManyFaqItem($input: FaqItemUserFindManyInput!) {
+  items: userFindManyFaqItem(input: $input) {
+    ...FaqItemDetails
+  }
+}

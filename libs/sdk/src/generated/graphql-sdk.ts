@@ -232,6 +232,34 @@ export type DiscordServer = {
   projectCategoryId?: Maybe<Scalars['String']['output']>
 }
 
+export type FaqItem = {
+  __typename?: 'FaqItem'
+  answer: Scalars['String']['output']
+  createdAt?: Maybe<Scalars['DateTime']['output']>
+  id: Scalars['String']['output']
+  order?: Maybe<Scalars['Int']['output']>
+  question: Scalars['String']['output']
+  updatedAt?: Maybe<Scalars['DateTime']['output']>
+}
+
+export type FaqItemAdminCreateInput = {
+  question: Scalars['String']['input']
+}
+
+export type FaqItemAdminFindManyInput = {
+  search?: InputMaybe<Scalars['String']['input']>
+}
+
+export type FaqItemAdminUpdateInput = {
+  answer?: InputMaybe<Scalars['String']['input']>
+  order?: InputMaybe<Scalars['Int']['input']>
+  question?: InputMaybe<Scalars['String']['input']>
+}
+
+export type FaqItemUserFindManyInput = {
+  search?: InputMaybe<Scalars['String']['input']>
+}
+
 export type Identity = {
   __typename?: 'Identity'
   challenges?: Maybe<Array<IdentityChallenge>>
@@ -354,12 +382,14 @@ export type Mutation = {
   adminAddProjectReferral?: Maybe<Scalars['Boolean']['output']>
   adminAddProjectReviewer?: Maybe<Scalars['Boolean']['output']>
   adminCreateCommunityChannel: Scalars['Boolean']['output']
+  adminCreateFaqItem?: Maybe<FaqItem>
   adminCreateIdentity?: Maybe<Identity>
   adminCreateProjectChannel: Scalars['Boolean']['output']
   adminCreateUser?: Maybe<User>
   adminDeleteComment?: Maybe<Scalars['Boolean']['output']>
   adminDeleteCommunity?: Maybe<Scalars['Boolean']['output']>
   adminDeleteCommunityChannel: Scalars['Boolean']['output']
+  adminDeleteFaqItem?: Maybe<Scalars['Boolean']['output']>
   adminDeleteIdentity?: Maybe<Scalars['Boolean']['output']>
   adminDeleteProject?: Maybe<Scalars['Boolean']['output']>
   adminDeleteProjectChannel: Scalars['Boolean']['output']
@@ -376,6 +406,7 @@ export type Mutation = {
   adminUpdateComment?: Maybe<Comment>
   adminUpdateCommunity?: Maybe<Community>
   adminUpdateDiscordServer: Scalars['Boolean']['output']
+  adminUpdateFaqItem?: Maybe<FaqItem>
   adminUpdateProject?: Maybe<Project>
   adminUpdateRating?: Maybe<Rating>
   adminUpdateUser?: Maybe<User>
@@ -440,6 +471,10 @@ export type MutationAdminCreateCommunityChannelArgs = {
   serverId: Scalars['String']['input']
 }
 
+export type MutationAdminCreateFaqItemArgs = {
+  input: FaqItemAdminCreateInput
+}
+
 export type MutationAdminCreateIdentityArgs = {
   input: AdminCreateIdentityInput
 }
@@ -465,6 +500,10 @@ export type MutationAdminDeleteCommunityArgs = {
 export type MutationAdminDeleteCommunityChannelArgs = {
   channelId: Scalars['String']['input']
   communityId: Scalars['String']['input']
+}
+
+export type MutationAdminDeleteFaqItemArgs = {
+  faqItemId: Scalars['String']['input']
 }
 
 export type MutationAdminDeleteIdentityArgs = {
@@ -539,6 +578,11 @@ export type MutationAdminUpdateCommunityArgs = {
 export type MutationAdminUpdateDiscordServerArgs = {
   input: AdminUpdateDiscordServerInput
   serverId: Scalars['String']['input']
+}
+
+export type MutationAdminUpdateFaqItemArgs = {
+  faqItemId: Scalars['String']['input']
+  input: FaqItemAdminUpdateInput
 }
 
 export type MutationAdminUpdateProjectArgs = {
@@ -776,12 +820,14 @@ export type Query = {
   __typename?: 'Query'
   adminFindManyComment?: Maybe<Array<Comment>>
   adminFindManyCommunity: CommunityPaging
+  adminFindManyFaqItem: Array<FaqItem>
   adminFindManyIdentity?: Maybe<Array<Identity>>
   adminFindManyProject: ProjectPaging
   adminFindManyRating: Array<Rating>
   adminFindManyReview: ReviewPaging
   adminFindManyUser: UserPaging
   adminFindOneCommunity?: Maybe<Community>
+  adminFindOneFaqItem?: Maybe<FaqItem>
   adminFindOneProject?: Maybe<Project>
   adminFindOneReview?: Maybe<Review>
   adminFindOneUser?: Maybe<User>
@@ -812,6 +858,7 @@ export type Query = {
   reviewerFindUserProjectReview?: Maybe<Review>
   uptime: Scalars['Float']['output']
   userFindManyCommunity: CommunityPaging
+  userFindManyFaqItem: Array<FaqItem>
   userFindManyIdentity?: Maybe<Array<Identity>>
   userFindManyUser: UserPaging
   userFindOneCommunity?: Maybe<Community>
@@ -828,6 +875,10 @@ export type QueryAdminFindManyCommentArgs = {
 
 export type QueryAdminFindManyCommunityArgs = {
   input: AdminFindManyCommunityInput
+}
+
+export type QueryAdminFindManyFaqItemArgs = {
+  input: FaqItemAdminFindManyInput
 }
 
 export type QueryAdminFindManyIdentityArgs = {
@@ -852,6 +903,10 @@ export type QueryAdminFindManyUserArgs = {
 
 export type QueryAdminFindOneCommunityArgs = {
   communityId: Scalars['String']['input']
+}
+
+export type QueryAdminFindOneFaqItemArgs = {
+  faqItemId: Scalars['String']['input']
 }
 
 export type QueryAdminFindOneProjectArgs = {
@@ -952,6 +1007,10 @@ export type QueryReviewerFindUserProjectReviewArgs = {
 
 export type QueryUserFindManyCommunityArgs = {
   input: UserFindManyCommunityInput
+}
+
+export type QueryUserFindManyFaqItemArgs = {
+  input: FaqItemUserFindManyInput
 }
 
 export type QueryUserFindManyIdentityArgs = {
@@ -2607,6 +2666,108 @@ export type UserGetCommunityChannelsQuery = {
     type: string
     parentId?: string | null
     guildId?: string | null
+  }>
+}
+
+export type FaqItemDetailsFragment = {
+  __typename?: 'FaqItem'
+  createdAt?: Date | null
+  id: string
+  question: string
+  answer: string
+  order?: number | null
+  updatedAt?: Date | null
+}
+
+export type AdminFindManyFaqItemQueryVariables = Exact<{
+  input: FaqItemAdminFindManyInput
+}>
+
+export type AdminFindManyFaqItemQuery = {
+  __typename?: 'Query'
+  items: Array<{
+    __typename?: 'FaqItem'
+    createdAt?: Date | null
+    id: string
+    question: string
+    answer: string
+    order?: number | null
+    updatedAt?: Date | null
+  }>
+}
+
+export type AdminFindOneFaqItemQueryVariables = Exact<{
+  faqItemId: Scalars['String']['input']
+}>
+
+export type AdminFindOneFaqItemQuery = {
+  __typename?: 'Query'
+  item?: {
+    __typename?: 'FaqItem'
+    createdAt?: Date | null
+    id: string
+    question: string
+    answer: string
+    order?: number | null
+    updatedAt?: Date | null
+  } | null
+}
+
+export type AdminCreateFaqItemMutationVariables = Exact<{
+  input: FaqItemAdminCreateInput
+}>
+
+export type AdminCreateFaqItemMutation = {
+  __typename?: 'Mutation'
+  created?: {
+    __typename?: 'FaqItem'
+    createdAt?: Date | null
+    id: string
+    question: string
+    answer: string
+    order?: number | null
+    updatedAt?: Date | null
+  } | null
+}
+
+export type AdminUpdateFaqItemMutationVariables = Exact<{
+  faqItemId: Scalars['String']['input']
+  input: FaqItemAdminUpdateInput
+}>
+
+export type AdminUpdateFaqItemMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'FaqItem'
+    createdAt?: Date | null
+    id: string
+    question: string
+    answer: string
+    order?: number | null
+    updatedAt?: Date | null
+  } | null
+}
+
+export type AdminDeleteFaqItemMutationVariables = Exact<{
+  faqItemId: Scalars['String']['input']
+}>
+
+export type AdminDeleteFaqItemMutation = { __typename?: 'Mutation'; deleted?: boolean | null }
+
+export type UserFindManyFaqItemQueryVariables = Exact<{
+  input: FaqItemUserFindManyInput
+}>
+
+export type UserFindManyFaqItemQuery = {
+  __typename?: 'Query'
+  items: Array<{
+    __typename?: 'FaqItem'
+    createdAt?: Date | null
+    id: string
+    question: string
+    answer: string
+    order?: number | null
+    updatedAt?: Date | null
   }>
 }
 
@@ -5556,6 +5717,16 @@ export const DiscordChannelDetailsFragmentDoc = gql`
     guildId
   }
 `
+export const FaqItemDetailsFragmentDoc = gql`
+  fragment FaqItemDetails on FaqItem {
+    createdAt
+    id
+    question
+    answer
+    order
+    updatedAt
+  }
+`
 export const IdentityDetailsFragmentDoc = gql`
   fragment IdentityDetails on Identity {
     createdAt
@@ -6070,6 +6241,51 @@ export const UserGetCommunityChannelsDocument = gql`
     }
   }
   ${DiscordChannelDetailsFragmentDoc}
+`
+export const AdminFindManyFaqItemDocument = gql`
+  query adminFindManyFaqItem($input: FaqItemAdminFindManyInput!) {
+    items: adminFindManyFaqItem(input: $input) {
+      ...FaqItemDetails
+    }
+  }
+  ${FaqItemDetailsFragmentDoc}
+`
+export const AdminFindOneFaqItemDocument = gql`
+  query adminFindOneFaqItem($faqItemId: String!) {
+    item: adminFindOneFaqItem(faqItemId: $faqItemId) {
+      ...FaqItemDetails
+    }
+  }
+  ${FaqItemDetailsFragmentDoc}
+`
+export const AdminCreateFaqItemDocument = gql`
+  mutation adminCreateFaqItem($input: FaqItemAdminCreateInput!) {
+    created: adminCreateFaqItem(input: $input) {
+      ...FaqItemDetails
+    }
+  }
+  ${FaqItemDetailsFragmentDoc}
+`
+export const AdminUpdateFaqItemDocument = gql`
+  mutation adminUpdateFaqItem($faqItemId: String!, $input: FaqItemAdminUpdateInput!) {
+    updated: adminUpdateFaqItem(faqItemId: $faqItemId, input: $input) {
+      ...FaqItemDetails
+    }
+  }
+  ${FaqItemDetailsFragmentDoc}
+`
+export const AdminDeleteFaqItemDocument = gql`
+  mutation adminDeleteFaqItem($faqItemId: String!) {
+    deleted: adminDeleteFaqItem(faqItemId: $faqItemId)
+  }
+`
+export const UserFindManyFaqItemDocument = gql`
+  query userFindManyFaqItem($input: FaqItemUserFindManyInput!) {
+    items: userFindManyFaqItem(input: $input) {
+      ...FaqItemDetails
+    }
+  }
+  ${FaqItemDetailsFragmentDoc}
 `
 export const AdminFindManyIdentityDocument = gql`
   query adminFindManyIdentity($input: AdminFindManyIdentityInput!) {
@@ -6605,6 +6821,12 @@ const AdminLeaveDiscordServerDocumentString = print(AdminLeaveDiscordServerDocum
 const UserGetDiscordServersDocumentString = print(UserGetDiscordServersDocument)
 const UserGetProjectChannelsDocumentString = print(UserGetProjectChannelsDocument)
 const UserGetCommunityChannelsDocumentString = print(UserGetCommunityChannelsDocument)
+const AdminFindManyFaqItemDocumentString = print(AdminFindManyFaqItemDocument)
+const AdminFindOneFaqItemDocumentString = print(AdminFindOneFaqItemDocument)
+const AdminCreateFaqItemDocumentString = print(AdminCreateFaqItemDocument)
+const AdminUpdateFaqItemDocumentString = print(AdminUpdateFaqItemDocument)
+const AdminDeleteFaqItemDocumentString = print(AdminDeleteFaqItemDocument)
+const UserFindManyFaqItemDocumentString = print(UserFindManyFaqItemDocument)
 const AdminFindManyIdentityDocumentString = print(AdminFindManyIdentityDocument)
 const AdminCreateIdentityDocumentString = print(AdminCreateIdentityDocument)
 const AdminDeleteIdentityDocumentString = print(AdminDeleteIdentityDocument)
@@ -7680,6 +7902,132 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
             ...wrappedRequestHeaders,
           }),
         'userGetCommunityChannels',
+        'query',
+        variables,
+      )
+    },
+    adminFindManyFaqItem(
+      variables: AdminFindManyFaqItemQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminFindManyFaqItemQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminFindManyFaqItemQuery>(AdminFindManyFaqItemDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminFindManyFaqItem',
+        'query',
+        variables,
+      )
+    },
+    adminFindOneFaqItem(
+      variables: AdminFindOneFaqItemQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminFindOneFaqItemQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminFindOneFaqItemQuery>(AdminFindOneFaqItemDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminFindOneFaqItem',
+        'query',
+        variables,
+      )
+    },
+    adminCreateFaqItem(
+      variables: AdminCreateFaqItemMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminCreateFaqItemMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminCreateFaqItemMutation>(AdminCreateFaqItemDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminCreateFaqItem',
+        'mutation',
+        variables,
+      )
+    },
+    adminUpdateFaqItem(
+      variables: AdminUpdateFaqItemMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminUpdateFaqItemMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminUpdateFaqItemMutation>(AdminUpdateFaqItemDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminUpdateFaqItem',
+        'mutation',
+        variables,
+      )
+    },
+    adminDeleteFaqItem(
+      variables: AdminDeleteFaqItemMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: AdminDeleteFaqItemMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<AdminDeleteFaqItemMutation>(AdminDeleteFaqItemDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'adminDeleteFaqItem',
+        'mutation',
+        variables,
+      )
+    },
+    userFindManyFaqItem(
+      variables: UserFindManyFaqItemQueryVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: UserFindManyFaqItemQuery
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<UserFindManyFaqItemQuery>(UserFindManyFaqItemDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'userFindManyFaqItem',
         'query',
         variables,
       )
@@ -9088,6 +9436,32 @@ export function AdminUpdateUserInputSchema(): z.ZodObject<Properties<AdminUpdate
     role: UserRoleSchema.nullish(),
     status: UserStatusSchema.nullish(),
     username: z.string().nullish(),
+  })
+}
+
+export function FaqItemAdminCreateInputSchema(): z.ZodObject<Properties<FaqItemAdminCreateInput>> {
+  return z.object({
+    question: z.string(),
+  })
+}
+
+export function FaqItemAdminFindManyInputSchema(): z.ZodObject<Properties<FaqItemAdminFindManyInput>> {
+  return z.object({
+    search: z.string().nullish(),
+  })
+}
+
+export function FaqItemAdminUpdateInputSchema(): z.ZodObject<Properties<FaqItemAdminUpdateInput>> {
+  return z.object({
+    answer: z.string().nullish(),
+    order: z.number().nullish(),
+    question: z.string().nullish(),
+  })
+}
+
+export function FaqItemUserFindManyInputSchema(): z.ZodObject<Properties<FaqItemUserFindManyInput>> {
+  return z.object({
+    search: z.string().nullish(),
   })
 }
 

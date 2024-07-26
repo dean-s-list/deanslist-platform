@@ -87,6 +87,15 @@ model DiscordServer {
   communityCategoryId String?
 }
 
+model FaqItem {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  question  String   @unique
+  answer    String
+  order     Int      @default(0)
+}
+
 model Identity {
   id           String              @id @default(cuid())
   createdAt    DateTime            @default(now())
@@ -154,19 +163,6 @@ model Project {
   @@unique([communityId, slug])
 }
 
-model Review {
-  id         String    @id @default(cuid())
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  project    Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId  String
-  reviewer   User      @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
-  reviewerId String
-  comments   Comment[]
-
-  @@unique([projectId, reviewerId])
-}
-
 model Rating {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
@@ -179,6 +175,19 @@ model Rating {
   authorId  String
 
   @@unique([commentId, authorId])
+}
+
+model Review {
+  id         String    @id @default(cuid())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  project    Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId  String
+  reviewer   User      @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+  reviewerId String
+  comments   Comment[]
+
+  @@unique([projectId, reviewerId])
 }
 
 model User {

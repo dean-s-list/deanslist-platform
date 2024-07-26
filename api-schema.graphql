@@ -206,6 +206,33 @@ type DiscordServer {
   projectCategoryId: String
 }
 
+type FaqItem {
+  answer: String!
+  createdAt: DateTime
+  id: String!
+  order: Int
+  question: String!
+  updatedAt: DateTime
+}
+
+input FaqItemAdminCreateInput {
+  question: String!
+}
+
+input FaqItemAdminFindManyInput {
+  search: String
+}
+
+input FaqItemAdminUpdateInput {
+  answer: String
+  order: Int
+  question: String
+}
+
+input FaqItemUserFindManyInput {
+  search: String
+}
+
 type Identity {
   challenges: [IdentityChallenge!]
   createdAt: DateTime!
@@ -330,12 +357,14 @@ type Mutation {
   adminAddProjectReferral(projectId: String!, referralUserId: String!): Boolean
   adminAddProjectReviewer(projectId: String!, reviewerUserId: String!): Boolean
   adminCreateCommunityChannel(channelId: String!, communityId: String!, serverId: String!): Boolean!
+  adminCreateFaqItem(input: FaqItemAdminCreateInput!): FaqItem
   adminCreateIdentity(input: AdminCreateIdentityInput!): Identity
   adminCreateProjectChannel(channelId: String!, projectId: String!, serverId: String!): Boolean!
   adminCreateUser(input: AdminCreateUserInput!): User
   adminDeleteComment(commentId: String!): Boolean
   adminDeleteCommunity(communityId: String!): Boolean
   adminDeleteCommunityChannel(channelId: String!, communityId: String!): Boolean!
+  adminDeleteFaqItem(faqItemId: String!): Boolean
   adminDeleteIdentity(identityId: String!): Boolean
   adminDeleteProject(projectId: String!): Boolean
   adminDeleteProjectChannel(channelId: String!, projectId: String!): Boolean!
@@ -352,6 +381,7 @@ type Mutation {
   adminUpdateComment(commentId: String!, input: AdminUpdateCommentInput!): Comment
   adminUpdateCommunity(communityId: String!, input: AdminUpdateCommunityInput!): Community
   adminUpdateDiscordServer(input: AdminUpdateDiscordServerInput!, serverId: String!): Boolean!
+  adminUpdateFaqItem(faqItemId: String!, input: FaqItemAdminUpdateInput!): FaqItem
   adminUpdateProject(input: AdminUpdateProjectInput!, projectId: String!): Project
   adminUpdateRating(input: AdminUpdateRatingInput!, ratingId: String!): Rating
   adminUpdateUser(input: AdminUpdateUserInput!, userId: String!): User
@@ -463,12 +493,14 @@ enum ProjectStatus {
 type Query {
   adminFindManyComment(input: AdminFindManyCommentInput!): [Comment!]
   adminFindManyCommunity(input: AdminFindManyCommunityInput!): CommunityPaging!
+  adminFindManyFaqItem(input: FaqItemAdminFindManyInput!): [FaqItem!]!
   adminFindManyIdentity(input: AdminFindManyIdentityInput!): [Identity!]
   adminFindManyProject(input: AdminFindManyProjectInput!): ProjectPaging!
   adminFindManyRating(input: AdminFindManyRatingInput!): [Rating!]!
   adminFindManyReview(input: AdminFindManyReviewInput!): ReviewPaging!
   adminFindManyUser(input: AdminFindManyUserInput!): UserPaging!
   adminFindOneCommunity(communityId: String!): Community
+  adminFindOneFaqItem(faqItemId: String!): FaqItem
   adminFindOneProject(projectId: String!): Project
   adminFindOneReview(reviewId: String!): Review
   adminFindOneUser(userId: String!): User
@@ -499,6 +531,7 @@ type Query {
   reviewerFindUserProjectReview(projectId: String!): Review
   uptime: Float!
   userFindManyCommunity(input: UserFindManyCommunityInput!): CommunityPaging!
+  userFindManyFaqItem(input: FaqItemUserFindManyInput!): [FaqItem!]!
   userFindManyIdentity(input: UserFindManyIdentityInput!): [Identity!]
   userFindManyUser(input: UserFindManyUserInput!): UserPaging!
   userFindOneCommunity(communityId: String!): Community

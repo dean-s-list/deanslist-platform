@@ -2,12 +2,13 @@ import { AdminCommunityFeature } from '@deanslist-platform/web-community-feature
 import { CoreUiDashboardGrid, CoreUiDashboardItem, CoreUiNotFound } from '@deanslist-platform/web-core-ui'
 import { DevAdminRoutes } from '@deanslist-platform/web-dev-feature'
 import { AdminDiscordFeature } from '@deanslist-platform/web-discord-feature'
+import { AdminFaqItemFeature } from '@deanslist-platform/web-faq-item-feature'
 import { AdminProjectFeature } from '@deanslist-platform/web-project-feature'
 import { AdminRatingFeature } from '@deanslist-platform/web-rating-feature'
 import { AdminUserFeature } from '@deanslist-platform/web-user-feature'
 import { Box } from '@mantine/core'
 import { UiPage } from '@pubkey-ui/core'
-import { IconBrandDiscord, IconCube, IconShield, IconUsers, IconUsersGroup } from '@tabler/icons-react'
+import { IconBrandDiscord, IconCube, IconHelp, IconShield, IconUsers, IconUsersGroup } from '@tabler/icons-react'
 import { Navigate, RouteObject, useRoutes } from 'react-router-dom'
 
 const links: CoreUiDashboardItem[] = [
@@ -15,6 +16,7 @@ const links: CoreUiDashboardItem[] = [
   { label: 'Discord', icon: IconBrandDiscord, to: '/admin/discord' },
   { label: 'Projects', icon: IconCube, to: '/admin/projects' },
   { label: 'Communities', icon: IconUsersGroup, to: '/admin/communities' },
+  { label: 'FAQ Items', icon: IconHelp, to: '/admin/faq-items' },
   { label: 'Users', icon: IconUsers, to: '/admin/users' },
 ]
 
@@ -27,6 +29,7 @@ const routes: RouteObject[] = [
   { path: 'communities/*', element: <AdminCommunityFeature /> },
 
   { path: 'ratings/*', element: <AdminRatingFeature /> },
+  { path: '/faq-items/*', element: <AdminFaqItemFeature /> },
 ]
 
 export default function WebCoreRoutesAdmin() {
