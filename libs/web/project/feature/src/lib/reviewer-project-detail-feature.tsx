@@ -22,6 +22,7 @@ import { Button, Collapse, Group } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { UiContainer, UiError, UiGroup, UiLoader, UiStack } from '@pubkey-ui/core'
 import { IconArrowsMaximize, IconArrowsMinimize, IconChairDirector } from '@tabler/icons-react'
+import React from 'react'
 import { Navigate, useParams, useRoutes } from 'react-router-dom'
 
 export function ReviewerProjectDetailFeature() {
@@ -66,13 +67,12 @@ export function ReviewerProjectDetailFeature() {
           <UiStack>
             <UiGroup>
               <Group>
-                <ProjectUiItem project={item} />
+                <ProjectUiItem project={item}>
+                  <ProjectUiStatusBadge size="xs" status={item.status} />
+                </ProjectUiItem>
               </Group>
               <Group gap="xs">
                 <Group justify="center">
-                  <Group align="center">
-                    <ProjectUiStatusBadge status={item.status} />
-                  </Group>
                   <Button
                     variant="subtle"
                     radius="xl"
