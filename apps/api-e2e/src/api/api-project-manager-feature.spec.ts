@@ -61,7 +61,7 @@ describe('api-project-feature', () => {
         const createdRes = await sdk.managerCreateProject({ input: createInput }, { cookie: alice })
         const projectId = createdRes.data.created.id
 
-        const input: ManagerFindManyProjectInput = { limit: 10000 }
+        const input: ManagerFindManyProjectInput = { limit: 10000, status: ProjectStatus.Draft }
 
         const res = await sdk.managerFindManyProject({ input }, { cookie: alice })
 
@@ -81,6 +81,7 @@ describe('api-project-feature', () => {
 
         const input: ManagerFindManyProjectInput = {
           search: projectId,
+          status: ProjectStatus.Draft,
         }
 
         const res = await sdk.managerFindManyProject({ input }, { cookie: alice })

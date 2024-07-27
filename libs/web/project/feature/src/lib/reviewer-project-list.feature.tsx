@@ -78,7 +78,7 @@ export default function ReviewerProjectListFeature() {
   )
 }
 
-function OrderOptionLabel({ value }: { value: string | null }) {
+export function OrderOptionLabel({ value }: { value: string | null }) {
   const option = projectOrderByOptions.find((o) => o.value === value)
 
   if (!option) return null

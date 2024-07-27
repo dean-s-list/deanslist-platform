@@ -337,8 +337,11 @@ export type ManagerFindManyCommunityInput = {
 export type ManagerFindManyProjectInput = {
   communityId?: InputMaybe<Scalars['String']['input']>
   limit?: InputMaybe<Scalars['Int']['input']>
+  orderBy?: InputMaybe<ProjectOrderBy>
+  orderDirection?: InputMaybe<OrderDirection>
   page?: InputMaybe<Scalars['Int']['input']>
   search?: InputMaybe<Scalars['String']['input']>
+  status?: InputMaybe<ProjectStatus>
 }
 
 export type ManagerFindManyReviewByProjectInput = {
@@ -9521,8 +9524,11 @@ export function ManagerFindManyProjectInputSchema(): z.ZodObject<Properties<Mana
   return z.object({
     communityId: z.string().nullish(),
     limit: z.number().nullish(),
+    orderBy: ProjectOrderBySchema.nullish(),
+    orderDirection: OrderDirectionSchema.nullish(),
     page: z.number().nullish(),
     search: z.string().nullish(),
+    status: ProjectStatusSchema.nullish(),
   })
 }
 

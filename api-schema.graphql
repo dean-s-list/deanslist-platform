@@ -313,8 +313,11 @@ input ManagerFindManyCommunityInput {
 input ManagerFindManyProjectInput {
   communityId: String
   limit: Int = 10
+  orderBy: ProjectOrderBy
+  orderDirection: OrderDirection
   page: Int = 1
   search: String
+  status: ProjectStatus
 }
 
 input ManagerFindManyReviewByProjectInput {

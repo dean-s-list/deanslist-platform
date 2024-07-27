@@ -8,6 +8,7 @@ export function getAdminCommunityWhereInput(input: AdminFindManyCommunityInput):
     where.OR = [
       { id: { contains: input.search, mode: 'insensitive' } },
       { name: { contains: input.search, mode: 'insensitive' } },
+      { projects: { some: { name: { contains: input.search, mode: 'insensitive' } } } },
     ]
   }
 

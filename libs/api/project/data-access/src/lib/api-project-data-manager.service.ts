@@ -28,8 +28,9 @@ export class ApiProjectDataManagerService {
     return this.data.findManyProject({
       limit: input.limit ?? 10,
       page: input.page ?? 1,
-      orderBy: { createdAt: 'desc' },
+      orderBy: input.orderBy ? { [input.orderBy]: input.orderDirection ?? 'asc' } : { createdAt: 'desc' },
       where: getProjectWhereManagerInput(userId, input),
+      include: { reviews: { include: { comments: true } } },
     })
   }
 

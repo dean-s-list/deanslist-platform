@@ -1,4 +1,11 @@
-import { ManagerCreateProjectInput, ManagerFindManyProjectInput, Project } from '@deanslist-platform/sdk'
+import {
+  ManagerCreateProjectInput,
+  ManagerFindManyProjectInput,
+  OrderDirection,
+  Project,
+  ProjectOrderBy,
+  ProjectStatus,
+} from '@deanslist-platform/sdk'
 import { useSdk } from '@deanslist-platform/web-core-data-access'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
@@ -9,8 +16,18 @@ export function useManagerFindManyProject(props?: Partial<ManagerFindManyProject
   const [limit, setLimit] = useState(props?.limit ?? 24)
   const [page, setPage] = useState(props?.page ?? 1)
   const [search, setSearch] = useState<string>(props?.search ?? '')
-
-  const input: ManagerFindManyProjectInput = { page, limit, search, communityId: props?.communityId ?? undefined }
+  const [orderBy, setOrderBy] = useState<ProjectOrderBy>(ProjectOrderBy.EndDate)
+  const [orderDirection, setOrderDirection] = useState<OrderDirection>(OrderDirection.Asc)
+  const [status, setStatus] = useState<ProjectStatus>(props?.status ?? ProjectStatus.Active)
+  const input: ManagerFindManyProjectInput = {
+    page,
+    limit,
+    search,
+    status,
+    orderBy,
+    orderDirection,
+    communityId: props?.communityId ?? undefined,
+  }
   const query = useQuery({
     queryKey: ['manager', 'find-many-project', input],
     queryFn: () => sdk.managerFindManyProject({ input }).then((res) => res.data),
@@ -27,6 +44,16 @@ export function useManagerFindManyProject(props?: Partial<ManagerFindManyProject
       limit,
       setLimit,
       total,
+    },
+    status,
+    setStatus,
+    orderBy,
+    order: `${orderBy}-${orderDirection}`,
+    setOrder: (input: string | null) => {
+      if (!input) return
+      const [orderBy, orderDirection] = input.split('-') as [ProjectOrderBy, OrderDirection]
+      setOrderBy(orderBy)
+      setOrderDirection(orderDirection)
     },
     search,
     setSearch,
