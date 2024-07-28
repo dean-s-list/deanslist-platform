@@ -1,4 +1,6 @@
+import { User } from '@deanslist-platform/api-user-data-access'
 import { Injectable } from '@nestjs/common'
+import { UserRole } from '@prisma/client'
 import { ApiCommunityDataService } from './api-community-data.service'
 import { ManagerCreateCommunityInput } from './dto/manager-create-community.input'
 import { ManagerFindManyCommunityInput } from './dto/manager-find-many-community.input'
@@ -37,18 +39,18 @@ export class ApiCommunityDataManagerService {
     return this.data.getCommunityManager({ userId, communityId })
   }
 
-  async findManyCommunity(userId: string, input: ManagerFindManyCommunityInput): Promise<CommunityPaging> {
+  async findManyCommunity(user: User, input: ManagerFindManyCommunityInput): Promise<CommunityPaging> {
     return this.data.findManyCommunity({
       orderBy: { name: 'asc' },
-      where: getManagerCommunityWhereInput(userId, input),
+      where: getManagerCommunityWhereInput(user, input),
       limit: input.limit ?? 10,
       page: input.page ?? 1,
       include: { managers: true, projects: true },
     })
   }
 
-  async findOneCommunity(userId: string, communityId: string) {
-    return this.data.findOneCommunity(communityId, { userId })
+  async findOneCommunity({ id: userId, role }: User, communityId: string) {
+    return this.data.findOneCommunity(communityId, { userId: role === UserRole.Admin ? undefined : userId })
   }
 
   async updateCommunity(userId: string, communityId: string, input: ManagerUpdateCommunityInput) {

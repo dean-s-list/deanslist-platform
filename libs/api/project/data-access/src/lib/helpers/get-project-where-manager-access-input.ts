@@ -1,6 +1,10 @@
-import { Prisma } from '@prisma/client'
+import { User } from '@deanslist-platform/api-user-data-access'
+import { Prisma, UserRole } from '@prisma/client'
 
-export function getProjectWhereManagerAccessInput(userId: string): Prisma.ProjectWhereInput {
+export function getProjectWhereManagerAccessInput({ id: userId, role }: User): Prisma.ProjectWhereInput {
+  if (role === UserRole.Admin) {
+    return {}
+  }
   return {
     AND: {
       OR: [

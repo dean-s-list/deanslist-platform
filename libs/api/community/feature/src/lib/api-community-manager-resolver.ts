@@ -1,4 +1,4 @@
-import { ApiAuthGraphQLUserGuard, CtxUserId } from '@deanslist-platform/api-auth-data-access'
+import { ApiAuthGraphQLUserGuard, CtxUser, CtxUserId } from '@deanslist-platform/api-auth-data-access'
 import {
   ApiCommunityService,
   Community,
@@ -8,6 +8,7 @@ import {
   ManagerFindManyCommunityInput,
   ManagerUpdateCommunityInput,
 } from '@deanslist-platform/api-community-data-access'
+import { User } from '@deanslist-platform/api-user-data-access'
 import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 
@@ -46,13 +47,13 @@ export class ApiCommunityManagerResolver {
   }
 
   @Query(() => CommunityPaging)
-  managerFindManyCommunity(@CtxUserId() userId: string, @Args('input') input: ManagerFindManyCommunityInput) {
-    return this.service.manager.findManyCommunity(userId, input)
+  managerFindManyCommunity(@CtxUser() user: User, @Args('input') input: ManagerFindManyCommunityInput) {
+    return this.service.manager.findManyCommunity(user, input)
   }
 
   @Query(() => Community, { nullable: true })
-  managerFindOneCommunity(@CtxUserId() userId: string, @Args('communityId') communityId: string) {
-    return this.service.manager.findOneCommunity(userId, communityId)
+  managerFindOneCommunity(@CtxUser() user: User, @Args('communityId') communityId: string) {
+    return this.service.manager.findOneCommunity(user, communityId)
   }
 
   @Mutation(() => Boolean, { nullable: true })

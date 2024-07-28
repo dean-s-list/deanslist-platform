@@ -1,12 +1,13 @@
-import { Prisma } from '@prisma/client'
+import { User } from '@deanslist-platform/api-user-data-access'
+import { Prisma, UserRole } from '@prisma/client'
 import { ManagerFindManyCommunityInput } from '../dto/manager-find-many-community.input'
 
 export function getManagerCommunityWhereInput(
-  userId: string,
+  { id: userId, role }: User,
   input: ManagerFindManyCommunityInput,
 ): Prisma.CommunityWhereInput {
   const where: Prisma.CommunityWhereInput = {
-    managers: { some: { userId } },
+    managers: role === UserRole.Admin ? undefined : { some: { userId } },
   }
 
   if (input.search) {

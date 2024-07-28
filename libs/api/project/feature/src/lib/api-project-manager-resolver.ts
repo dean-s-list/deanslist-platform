@@ -1,4 +1,4 @@
-import { ApiAuthGraphQLUserGuard, CtxUserId } from '@deanslist-platform/api-auth-data-access'
+import { ApiAuthGraphQLUserGuard, CtxUser, CtxUserId } from '@deanslist-platform/api-auth-data-access'
 import {
   ApiProjectService,
   ManagerCreateProjectInput,
@@ -8,6 +8,7 @@ import {
   ProjectPaging,
   ProjectStatus,
 } from '@deanslist-platform/api-project-data-access'
+import { User } from '@deanslist-platform/api-user-data-access'
 import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 
@@ -54,13 +55,13 @@ export class ApiProjectManagerResolver {
   }
 
   @Query(() => ProjectPaging)
-  managerFindManyProject(@CtxUserId() userId: string, @Args('input') input: ManagerFindManyProjectInput) {
-    return this.service.manager.findManyProject(userId, input)
+  managerFindManyProject(@CtxUser() user: User, @Args('input') input: ManagerFindManyProjectInput) {
+    return this.service.manager.findManyProject(user, input)
   }
 
   @Query(() => Project, { nullable: true })
-  managerFindOneProject(@CtxUserId() userId: string, @Args('projectId') projectId: string) {
-    return this.service.manager.findOneProject(userId, projectId)
+  managerFindOneProject(@CtxUser() user: User, @Args('projectId') projectId: string) {
+    return this.service.manager.findOneProject(user, projectId)
   }
 
   @Mutation(() => Boolean, { nullable: true })

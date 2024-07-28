@@ -1,3 +1,4 @@
+import { User } from '@deanslist-platform/api-user-data-access'
 import { Injectable } from '@nestjs/common'
 import { ApiProjectDataService } from './api-project-data.service'
 import { ManagerCreateProjectInput } from './dto/manager-create-project.input'
@@ -24,20 +25,20 @@ export class ApiProjectDataManagerService {
     return this.data.deleteProject(userId, projectId)
   }
 
-  async findManyProject(userId: string, input: ManagerFindManyProjectInput): Promise<ProjectPaging> {
+  async findManyProject(user: User, input: ManagerFindManyProjectInput): Promise<ProjectPaging> {
     return this.data.findManyProject({
       limit: input.limit ?? 10,
       page: input.page ?? 1,
       orderBy: input.orderBy ? { [input.orderBy]: input.orderDirection ?? 'asc' } : { createdAt: 'desc' },
-      where: getProjectWhereManagerInput(userId, input),
+      where: getProjectWhereManagerInput(user, input),
       include: { reviews: { include: { comments: true } } },
     })
   }
 
-  async findOneProject(userId: string, projectId: string) {
+  async findOneProject(user: User, projectId: string) {
     return this.data.findOneProject(projectId, {
       include: { reviewers: true, referral: true },
-      where: getProjectWhereManagerAccessInput(userId),
+      where: getProjectWhereManagerAccessInput(user),
     })
   }
 

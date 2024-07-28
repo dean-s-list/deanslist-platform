@@ -1,5 +1,5 @@
 import { Identity } from '@deanslist-platform/api-identity-data-access'
-import { User } from '@deanslist-platform/api-user-data-access'
+import { User, UserRole } from '@deanslist-platform/api-user-data-access'
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql'
 
 @Resolver(() => User)
@@ -11,6 +11,9 @@ export class ApiUserResolver {
 
   @ResolveField(() => Boolean, { nullable: true })
   manager(@Parent() user: User) {
+    if (user.role === UserRole.Admin) {
+      return true
+    }
     return !!user.communities?.length || !!user.projectManagers?.length
   }
 
