@@ -1,4 +1,4 @@
-import { addDays, setDateToEndOfDay, setDateToStartOfDay } from '@deanslist-platform/api-core-data-access'
+import { addDays, setDateToStartOfDay } from '@deanslist-platform/api-core-data-access'
 import {
   ManagerCreateProjectInput,
   ManagerFindManyProjectInput,
@@ -145,7 +145,7 @@ describe('api-project-feature', () => {
 
         // ASSERT
         expect(new Date(updated.startDate).getTime()).toEqual(setDateToStartOfDay(date).getTime())
-        expect(new Date(updated.endDate).getTime()).toEqual(setDateToEndOfDay(endDate).getTime())
+        expect(new Date(updated.endDate).getTime()).toEqual(setDateToStartOfDay(endDate).getTime())
         expect(updated.durationDays).toEqual(days)
       })
 

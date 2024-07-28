@@ -1,4 +1,4 @@
-import { addDays, beforeToday, setDateToEndOfDay, setDateToStartOfDay } from '@deanslist-platform/api-core-data-access'
+import { addDays, beforeToday, setDateToStartOfDay } from '@deanslist-platform/api-core-data-access'
 import { Project } from '@prisma/client'
 
 export function calculateProjectDates({
@@ -39,7 +39,7 @@ export function calculateProjectDates({
 
   // Calculate the endDate based on the duration and startDate and update if it's different than the current endDate
   if (durationDays && startDate) {
-    const calculatedEndDate = setDateToEndOfDay(addDays({ date: startDate, days: durationDays }))
+    const calculatedEndDate = setDateToStartOfDay(addDays({ date: startDate, days: durationDays }))
 
     if (calculatedEndDate.getTime() !== found?.endDate?.getTime()) {
       endDate = calculatedEndDate
