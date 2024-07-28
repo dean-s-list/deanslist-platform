@@ -4,9 +4,9 @@ import {
   useReviewerFindManyReviewByProject,
   useUserFindUserProjectReview,
 } from '@deanslist-platform/web-review-data-access'
-import { ReviewerReviewProjectUiTable } from '@deanslist-platform/web-review-ui'
+import { ReviewerReviewProjectUiTable, ReviewUiEmptyState } from '@deanslist-platform/web-review-ui'
 import { Group } from '@mantine/core'
-import { UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
+import { UiLoader, UiStack } from '@pubkey-ui/core'
 
 export function ReviewerProjectReviewListFeature({ projectId }: { projectId: string }) {
   const { item } = useUserFindUserProjectReview({ projectId })
@@ -27,7 +27,7 @@ export function ReviewerProjectReviewListFeature({ projectId }: { projectId: str
       ) : items?.length ? (
         <ReviewerReviewProjectUiTable reviews={items} />
       ) : (
-        <UiInfo message="No reviews found" />
+        <ReviewUiEmptyState />
       )}
     </UiStack>
   )

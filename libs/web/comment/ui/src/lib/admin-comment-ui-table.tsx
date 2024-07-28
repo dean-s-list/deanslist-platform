@@ -1,9 +1,8 @@
 import { Comment } from '@deanslist-platform/sdk'
-import { CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
-import { ActionIcon, Anchor, Group, ScrollArea } from '@mantine/core'
+import { CoreUiContent, CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
+import { ActionIcon, Group, ScrollArea } from '@mantine/core'
 import { IconTrash } from '@tabler/icons-react'
 import { DataTable } from 'mantine-datatable'
-import { Link } from 'react-router-dom'
 
 export function AdminCommentUiTable({
   deleteComment,
@@ -21,11 +20,7 @@ export function AdminCommentUiTable({
         columns={[
           {
             accessor: 'content',
-            render: (item) => (
-              <Anchor component={Link} to={`./${item.id}`} size="sm" fw={500}>
-                {item.content}
-              </Anchor>
-            ),
+            render: (item) => <CoreUiContent content={item.content} />,
           },
           {
             accessor: 'actions',

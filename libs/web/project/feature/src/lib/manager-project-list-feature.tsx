@@ -17,7 +17,7 @@ import { ManagerProjectCreateFeature } from './manager-project-create-feature'
 import { OrderOptionLabel } from './reviewer-project-list.feature'
 
 export function ManagerProjectListFeature({ communityId }: { communityId?: string }) {
-  const { items: communities } = useManagerFindManyCommunity()
+  const { items: communities } = useManagerFindManyCommunity({ limit: 1000 })
   const { items, pagination, query, search, setSearch, status, setStatus, order, setOrder } = useManagerFindManyProject(
     {
       communityId,

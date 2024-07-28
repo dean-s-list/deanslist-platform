@@ -1,5 +1,5 @@
 import { Review } from '@deanslist-platform/sdk'
-import { ActionIcon, Anchor, Group, ScrollArea } from '@mantine/core'
+import { ActionIcon, Anchor, Group, Rating as MantineRating, ScrollArea } from '@mantine/core'
 import { IconPencil, IconTrash } from '@tabler/icons-react'
 import { DataTable, DataTableProps } from 'mantine-datatable'
 import { Link } from 'react-router-dom'
@@ -38,6 +38,11 @@ export function AdminReviewUiTable({
               </Anchor>
             ),
           },
+          {
+            accessor: 'ratingAverage',
+            render: (item) => <MantineRating fractions={2} size="sm" readOnly value={item.ratingAverage ?? 0} />,
+          },
+          { accessor: 'ratingProgress' },
           {
             accessor: 'actions',
             title: 'Actions',

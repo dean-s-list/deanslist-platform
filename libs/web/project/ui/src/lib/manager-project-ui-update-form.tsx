@@ -2,6 +2,7 @@ import { ManagerUpdateProjectInput, Project } from '@deanslist-platform/sdk'
 import {
   cardGradient,
   CoreUiButton,
+  CoreUiCurrencyInput,
   CoreUiDateInput,
   CoreUiDivider,
   CoreUiInput,
@@ -21,6 +22,9 @@ export function ManagerProjectUiUpdateForm({
 }) {
   const form = useForm<ManagerUpdateProjectInput>({
     initialValues: {
+      amountManagerUsd: project.amountManagerUsd ?? 0,
+      amountReferralUsd: project.amountReferralUsd ?? 0,
+      amountTotalUsd: project.amountTotalUsd ?? 0,
       avatarUrl: project.avatarUrl ?? '',
       durationDays: project.durationDays ?? 7,
       instructions: project.instructions ?? '',
@@ -132,6 +136,24 @@ export function ManagerProjectUiUpdateForm({
               type="number"
               placeholder="The duration of the project in days."
               {...form.getInputProps('durationDays')}
+            />
+          </FormGrid>
+          <CoreUiDivider />
+          <FormGrid>
+            <CoreUiCurrencyInput
+              label="Total Amount"
+              description="Total amount of USDC to be rewarded"
+              {...form.getInputProps('amountTotalUsd')}
+            />
+            <CoreUiCurrencyInput
+              label="Manager Amount"
+              description="Amount of USDC managers get"
+              {...form.getInputProps('amountManagerUsd')}
+            />
+            <CoreUiCurrencyInput
+              label="Referral Amount"
+              description="Amount of USDC the referral gets"
+              {...form.getInputProps('amountReferralUsd')}
             />
           </FormGrid>
           <CoreUiDivider />

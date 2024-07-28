@@ -25,7 +25,7 @@ export function ManagerProjectUiPayoutsForm({
         <UiStack>
           <CoreUiCurrencyInput
             label="Total Amount"
-            description="Total amount of USDC to be rewarded in this project"
+            description="Total amount of USDC to be rewarded"
             {...form.getInputProps('amountTotalUsd')}
           />
           <CoreUiCurrencyInput

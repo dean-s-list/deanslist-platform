@@ -26,7 +26,7 @@ import React from 'react'
 import { Navigate, useParams, useRoutes } from 'react-router-dom'
 
 export function ReviewerProjectDetailFeature() {
-  const { user } = useAuth()
+  const { user, isAdmin } = useAuth()
   const { projectId } = useParams<{ projectId: string }>() as { projectId: string }
   const { item, query } = useReviewerFindOneProject({ projectId })
   const [opened, { toggle }] = useDisclosure(true)
@@ -56,7 +56,7 @@ export function ReviewerProjectDetailFeature() {
             <CoreUiBackLink label="Back to overview" />
             <CoreUiDebugModal data={item} />
           </Group>
-          {isManager ? (
+          {isAdmin || isManager ? (
             <CoreUiButton variant="light" to={item.manageUrl} iconLeft={IconChairDirector}>
               Manage project
             </CoreUiButton>

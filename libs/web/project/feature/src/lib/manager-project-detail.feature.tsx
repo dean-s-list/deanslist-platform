@@ -1,3 +1,4 @@
+import { useAuth } from '@deanslist-platform/web-auth-data-access'
 import {
   CoreUiBackLink,
   CoreUiButton,
@@ -6,10 +7,15 @@ import {
   dividerColor,
 } from '@deanslist-platform/web-core-ui'
 import { useManagerFindOneProject } from '@deanslist-platform/web-project-data-access'
-import { ProjectUiItem, ProjectUiStatusBadge, ProjectUiStatusSelect } from '@deanslist-platform/web-project-ui'
+import {
+  ProjectUiDates,
+  ProjectUiItem,
+  ProjectUiStatusBadge,
+  ProjectUiStatusSelect,
+} from '@deanslist-platform/web-project-ui'
 import { Group } from '@mantine/core'
 import { UiContainer, UiError, UiGroup, UiLoader, UiStack, UiTabRoute, UiTabRoutes } from '@pubkey-ui/core'
-import { IconChairDirector } from '@tabler/icons-react'
+import { IconChairDirector, IconShield } from '@tabler/icons-react'
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import { ManagerProjectDetailPayoutsTab } from './manager-project-detail-payouts-tab'
@@ -18,6 +24,7 @@ import { ManagerProjectDetailSettingsTab } from './manager-project-detail-settin
 import { ManagerProjectDetailTeamTab } from './manager-project-detail-team-tab'
 
 export function ManagerProjectDetailFeature() {
+  const { isAdmin } = useAuth()
   const { projectId } = useParams<{ projectId: string }>() as { projectId: string }
   const { item, query, updateProjectStatus } = useManagerFindOneProject({ projectId })
 
@@ -48,16 +55,26 @@ export function ManagerProjectDetailFeature() {
             <CoreUiBackLink label="Back to overview" />
             <CoreUiDebugModal data={item} />
           </Group>
-          <CoreUiButton variant="light" to={item.viewUrl} iconLeft={IconChairDirector}>
-            View project
-          </CoreUiButton>
+          <Group>
+            {isAdmin ? (
+              <CoreUiButton variant="light" to={`/admin/projects/${item.id}`} iconLeft={IconShield}>
+                Project admin
+              </CoreUiButton>
+            ) : null}
+            <CoreUiButton variant="light" to={item.viewUrl} iconLeft={IconChairDirector}>
+              View project
+            </CoreUiButton>
+          </Group>
         </UiGroup>
 
         <CoreUiCard>
           <UiStack>
             <UiGroup>
               <ProjectUiItem project={item}>
-                <ProjectUiStatusBadge size="xs" status={item.status} />
+                <Group gap="xs">
+                  <ProjectUiStatusBadge size="xs" status={item.status} />
+                  <ProjectUiDates project={item} />
+                </Group>
               </ProjectUiItem>
               <Group>
                 <CoreUiDebugModal data={item} />

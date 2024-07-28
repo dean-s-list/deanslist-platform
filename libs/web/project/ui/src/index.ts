@@ -1,3 +1,4 @@
+export * from './lib/admin-project-ui-status-select'
 export * from './lib/admin-project-ui-table'
 export * from './lib/admin-project-ui-update-form'
 export * from './lib/manager-project-ui-create-form'
