@@ -1,26 +1,20 @@
-import { ManagerFindManyReviewByProjectInput, ProjectStatus } from '@deanslist-platform/sdk'
-import { getAliceCookie, sdk, uniqueId } from '../support'
+import { ManagerFindManyReviewByProjectInput } from '@deanslist-platform/sdk'
+import { adminUpdateProjectStatusActive, getAliceCookie, managerCreateCommunityWithProject, sdk } from '../support'
 
 describe('api-review-feature', () => {
   describe('api-review-user-resolver', () => {
-    let reviewId: string
-    let communityId: string
     let projectId: string
     let alice: string
 
     beforeAll(async () => {
       alice = await getAliceCookie()
-      communityId = await sdk
-        .managerCreateCommunity({ input: { name: uniqueId('community') } }, { cookie: alice })
-        .then((res) => res.data.created.id)
     })
 
     describe('authorized', () => {
       beforeEach(async () => {
-        projectId = await sdk
-          .managerCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
-          .then((res) => res.data.created.id)
-        await sdk.adminUpdateProject({ projectId, input: { status: ProjectStatus.Active } }, { cookie: alice })
+        const { project } = await managerCreateCommunityWithProject({ cookie: alice })
+        projectId = project.id
+        await adminUpdateProjectStatusActive({ cookie: alice, projectId })
       })
 
       it('should create a review', async () => {

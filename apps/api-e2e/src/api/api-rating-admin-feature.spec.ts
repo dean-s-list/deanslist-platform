@@ -1,5 +1,14 @@
-import { ProjectStatus } from '@deanslist-platform/sdk'
-import { getAliceCookie, getBobCookie, sdk, uniqueId } from '../support'
+import {
+  adminUpdateProjectStatusClosed,
+  getAliceCookie,
+  getBobCookie,
+  managerCreateActiveProject,
+  managerCreateCommunity,
+  reviewerCreateComment,
+  reviewerCreateReview,
+  sdk,
+  uniqueId,
+} from '../support'
 
 describe('api-rating-feature', () => {
   describe('api-rating-admin-resolver', () => {
@@ -13,17 +22,13 @@ describe('api-rating-feature', () => {
 
     beforeAll(async () => {
       alice = await getAliceCookie()
-      communityId = await sdk
-        .managerCreateCommunity({ input: { name: uniqueId('community') } }, { cookie: alice })
-        .then((res) => res.data.created.id)
-      projectId = await sdk
-        .managerCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
-        .then((res) => res.data.created.id)
-      await sdk.adminUpdateProject({ projectId, input: { status: ProjectStatus.Active } }, { cookie: alice })
-      reviewId = await sdk.reviewerCreateReview({ projectId }, { cookie: alice }).then((res) => res.data.created.id)
-      commentId = await sdk
-        .reviewerCreateComment({ input: { reviewId, content: uniqueId('comment') } }, { cookie: alice })
-        .then((res) => res.data.created.id)
+      communityId = await managerCreateCommunity({ cookie: alice }).then((community) => community.id)
+      projectId = await managerCreateActiveProject({ cookie: alice, communityId }).then((project) => project.id)
+      reviewId = await reviewerCreateReview({ cookie: alice, projectId }).then((review) => review.id)
+      commentId = await reviewerCreateComment({ cookie: alice, reviewId, content: uniqueId('comment') }).then(
+        (comment) => comment.id,
+      )
+      await adminUpdateProjectStatusClosed({ cookie: alice, projectId })
       ratingId = await sdk
         .managerCreateRating({ input: { commentId, content: uniqueId('rating'), rating: 1 } }, { cookie: alice })
         .then((res) => res.data.created.id)

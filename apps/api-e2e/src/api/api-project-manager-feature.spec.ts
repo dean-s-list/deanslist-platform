@@ -6,7 +6,7 @@ import {
   Project,
   ProjectStatus,
 } from '@deanslist-platform/sdk'
-import { getAliceCookie, sdk, uniqueId } from '../support'
+import { getAliceCookie, managerCreateCommunity, managerCreateProject, sdk, uniqueId } from '../support'
 
 describe('api-project-feature', () => {
   describe('api-project-manager-resolver', () => {
@@ -15,9 +15,7 @@ describe('api-project-feature', () => {
 
     beforeAll(async () => {
       alice = await getAliceCookie()
-      communityId = await sdk
-        .managerCreateCommunity({ input: { name: uniqueId('community') } }, { cookie: alice })
-        .then((res) => res.data.created.id)
+      communityId = await managerCreateCommunity({ cookie: alice }).then((community) => community.id)
     })
 
     describe('authorized', () => {
@@ -125,17 +123,7 @@ describe('api-project-feature', () => {
     describe('project dates', () => {
       it('should create a project and set startDate and duration', async () => {
         // ARRANGE
-        const projectId = await sdk
-          .managerCreateProject(
-            {
-              input: {
-                communityId,
-                name: uniqueId('project'),
-              },
-            },
-            { cookie: alice },
-          )
-          .then((res) => res.data.created.id)
+        const projectId = await managerCreateProject({ cookie: alice, communityId }).then((project) => project.id)
 
         const date = new Date()
         const days = 14
@@ -163,17 +151,7 @@ describe('api-project-feature', () => {
 
       it('should throw an error if durationDays is less than 1', async () => {
         // ARRANGE
-        const projectId = await sdk
-          .managerCreateProject(
-            {
-              input: {
-                communityId,
-                name: uniqueId('project'),
-              },
-            },
-            { cookie: alice },
-          )
-          .then((res) => res.data.created.id)
+        const projectId = await managerCreateProject({ cookie: alice, communityId }).then((project) => project.id)
 
         // ACT
         expect.assertions(1)
@@ -194,18 +172,7 @@ describe('api-project-feature', () => {
 
       it('should throw an error if startDate is in the past', async () => {
         // ARRANGE
-        const projectId = await sdk
-          .managerCreateProject(
-            {
-              input: {
-                communityId,
-                name: uniqueId('project'),
-              },
-            },
-            { cookie: alice },
-          )
-          .then((res) => res.data.created.id)
-
+        const projectId = await managerCreateProject({ cookie: alice, communityId }).then((project) => project.id)
         const date = new Date('2023-01-01T00:00:00.000Z')
         const days = 14
 
@@ -231,10 +198,7 @@ describe('api-project-feature', () => {
     describe('project statuses', () => {
       it('should not status to active: require amount total USD must be greater than 0', async () => {
         // ARRANGE
-        const projectId = await sdk
-          .managerCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
-          .then((res) => res.data.created.id)
-
+        const projectId = await managerCreateProject({ cookie: alice, communityId }).then((project) => project.id)
         expect.assertions(1)
         try {
           // ACT
@@ -247,9 +211,7 @@ describe('api-project-feature', () => {
 
       it('should not changing status to active: require Start date must be today or in the future', async () => {
         // ARRANGE
-        const projectId = await sdk
-          .managerCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
-          .then((res) => res.data.created.id)
+        const projectId = await managerCreateProject({ cookie: alice, communityId }).then((project) => project.id)
         const startDate = new Date(new Date().setDate(new Date().getDate() - 1))
         await sdk.adminUpdateProject({ projectId, input: { amountTotalUsd: 1, startDate } }, { cookie: alice })
 
@@ -265,9 +227,7 @@ describe('api-project-feature', () => {
 
       it('should set status to active if all conditions are met', async () => {
         // ARRANGE
-        const project = await sdk
-          .managerCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
-          .then((res) => res.data.created)
+        const project = await managerCreateProject({ cookie: alice, communityId })
         const projectId = project.id
         const startDate = new Date(new Date().setDate(new Date().getDate() + 1))
         await sdk.adminUpdateProject({ projectId, input: { amountTotalUsd: 1, startDate } }, { cookie: alice })

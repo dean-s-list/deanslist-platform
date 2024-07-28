@@ -1,6 +1,14 @@
 import { addDays } from '@deanslist-platform/api-core-data-access'
 import { OrderDirection, ProjectOrderBy, ProjectStatus, ReviewerFindManyProjectInput } from '@deanslist-platform/sdk'
-import { getAliceCookie, sdk, uniqueId } from '../support'
+import {
+  adminUpdateProject,
+  getAliceCookie,
+  managerCreateActiveProject,
+  managerCreateCommunity,
+  managerCreateProject,
+  sdk,
+  uniqueId,
+} from '../support'
 
 describe('api-project-feature', () => {
   describe('api-project-reviewer-resolver', () => {
@@ -11,36 +19,20 @@ describe('api-project-feature', () => {
 
     beforeAll(async () => {
       alice = await getAliceCookie()
-      communityId = await sdk
-        .managerCreateCommunity({ input: { name: uniqueId('community') } }, { cookie: alice })
-        .then((res) => res.data.created.id)
+      communityId = await managerCreateCommunity({ cookie: alice }).then((community) => community.id)
+      draftProjectId = await managerCreateProject({
+        cookie: alice,
+        communityId,
+        name: uniqueId('draft-project'),
+      }).then((project) => project.id)
 
-      draftProjectId = await sdk
-        .managerCreateProject({ input: { communityId, name: uniqueId('draft-project') } }, { cookie: alice })
-        .then((res) => res.data.created.id)
-
-      await sdk
-        .managerCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
-        .then((res) => res.data.created.id)
-        .then(async (projectId) => {
-          await sdk.adminUpdateProject(
-            {
-              projectId,
-              input: {
-                status: ProjectStatus.Active,
-                startDate: new Date(),
-                durationDays: 7,
-              },
-            },
-            { cookie: alice },
-          )
-        })
+      await managerCreateActiveProject({ cookie: alice, communityId })
+        .then((project) => project.id)
+        .then((projectId) => adminUpdateProject({ cookie: alice, projectId, startDate: new Date(), durationDays: 7 }))
     })
 
     beforeEach(async () => {
-      projectId = await sdk
-        .managerCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
-        .then((res) => res.data.created.id)
+      projectId = await managerCreateProject({ cookie: alice, communityId }).then((project) => project.id)
       await sdk.adminUpdateProject(
         {
           projectId,

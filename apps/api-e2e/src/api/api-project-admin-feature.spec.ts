@@ -1,20 +1,15 @@
 import { AdminFindManyProjectInput, AdminUpdateProjectInput, Project } from '@deanslist-platform/sdk'
-import { getAliceCookie, getBobCookie, sdk, uniqueId } from '../support'
+import { getAliceCookie, getBobCookie, managerCreateCommunityWithProject, sdk, uniqueId } from '../support'
 
 describe('api-project-feature', () => {
   describe('api-project-admin-resolver', () => {
-    let communityId: string
     let projectId: string
     let alice: string
 
     beforeAll(async () => {
       alice = await getAliceCookie()
-      communityId = await sdk
-        .managerCreateCommunity({ input: { name: uniqueId('community') } }, { cookie: alice })
-        .then((res) => res.data.created.id)
-      projectId = await sdk
-        .managerCreateProject({ input: { communityId, name: uniqueId('project') } }, { cookie: alice })
-        .then((res) => res.data.created.id)
+      const { project } = await managerCreateCommunityWithProject({ cookie: alice })
+      projectId = project.id
     })
 
     describe('authorized', () => {

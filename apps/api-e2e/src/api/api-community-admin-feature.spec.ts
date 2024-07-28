@@ -1,5 +1,5 @@
 import { AdminFindManyCommunityInput, AdminUpdateCommunityInput, Community } from '@deanslist-platform/sdk'
-import { getAliceCookie, getBobCookie, sdk, uniqueId } from '../support'
+import { getAliceCookie, getBobCookie, managerCreateCommunity, sdk, uniqueId } from '../support'
 
 describe('api-community-feature', () => {
   describe('api-community-admin-resolver', () => {
@@ -8,9 +8,7 @@ describe('api-community-feature', () => {
 
     beforeAll(async () => {
       alice = await getAliceCookie()
-      communityId = await sdk
-        .managerCreateCommunity({ input: { name: uniqueId('community') } }, { cookie: alice })
-        .then((res) => res.data.created.id)
+      communityId = await managerCreateCommunity({ cookie: alice }).then((community) => community.id)
     })
 
     describe('authorized', () => {
