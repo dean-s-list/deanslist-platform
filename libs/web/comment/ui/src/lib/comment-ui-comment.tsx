@@ -28,7 +28,7 @@ export function CommentUiComment({
             <UserUiAvatar size="sm" user={comment.author} />
             <Stack gap="xs">
               <Group gap="xs" align="center">
-                <UiAnchor display="flex" to={comment.author.profileUrl} underline="never">
+                <UiAnchor display="flex" to={to ? undefined : comment.author.profileUrl} underline="never">
                   <Text span fw={700}>
                     {comment.author.username}
                   </Text>

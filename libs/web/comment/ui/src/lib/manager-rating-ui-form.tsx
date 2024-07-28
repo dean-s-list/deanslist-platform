@@ -1,4 +1,5 @@
 import { User } from '@deanslist-platform/sdk'
+import { cardGradient } from '@deanslist-platform/web-core-ui'
 import { UserUiAvatar } from '@deanslist-platform/web-user-ui'
 import { ActionIcon, Flex, Rating as MantineRating, Textarea } from '@mantine/core'
 import { useForm } from '@mantine/form'
@@ -32,8 +33,8 @@ export function ManagerRatingUiForm({
     >
       <Flex align="center" gap="xs">
         {author ? <UserUiAvatar user={author} to={author.profileUrl} size="sm" /> : <div />}
-        <MantineRating size="xs" readOnly={disabled} {...form.getInputProps('rating')} />
         <Textarea
+          styles={{ input: { border: 'none', ...cardGradient } }}
           disabled={disabled}
           style={{ width: '100%' }}
           size="xs"
@@ -41,6 +42,7 @@ export function ManagerRatingUiForm({
           placeholder="Write a comment about the rating."
           {...form.getInputProps('content')}
         />
+        <MantineRating size="xs" readOnly={disabled} {...form.getInputProps('rating')} />
         {disabled ? null : (
           <ActionIcon type="submit" disabled={!form.isDirty()}>
             <IconCheck size={16} stroke={1.5} />

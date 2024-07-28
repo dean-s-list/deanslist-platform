@@ -36,7 +36,7 @@ export function ManagerProjectListFeature({ communityId }: { communityId?: strin
               if (!status) return
               setStatus(status as ProjectStatus)
             }}
-            data={getEnumOptions(ProjectStatus).filter((item) => item.value !== ProjectStatus.Draft)}
+            data={getEnumOptions(ProjectStatus)}
           />
           <CoreUiCustomSelect
             label="Order by"

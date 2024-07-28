@@ -3,7 +3,7 @@ import { ManagerCommentUiTimeline } from '@deanslist-platform/web-comment-ui'
 import { CoreUiDebugModal, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
 import { useManagerRating } from '@deanslist-platform/web-rating-data-access'
 import { Group } from '@mantine/core'
-import { UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
+import { UiGroup, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
 
 export function ManagerCommentListFeature({ projectId }: { projectId: string }) {
   const { items, query, setSearch } = useManagerFindManyComment({
@@ -14,10 +14,13 @@ export function ManagerCommentListFeature({ projectId }: { projectId: string }) 
 
   return (
     <UiStack>
-      <Group>
-        <CoreUiSearchField placeholder="Search comments" setSearch={setSearch} />
-        <CoreUiDebugModal data={items} />
-      </Group>
+      <UiGroup>
+        <div />
+        <Group>
+          <CoreUiSearchField size="sm" placeholder="Search comments" setSearch={setSearch} />
+          <CoreUiDebugModal data={items} />
+        </Group>
+      </UiGroup>
 
       {query.isLoading ? (
         <UiLoader />

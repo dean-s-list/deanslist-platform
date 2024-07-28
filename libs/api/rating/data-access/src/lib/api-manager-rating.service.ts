@@ -1,4 +1,5 @@
 import { ApiCoreService } from '@deanslist-platform/api-core-data-access'
+import { ProjectStatus } from '@deanslist-platform/sdk'
 import { Injectable } from '@nestjs/common'
 import { ManagerCreateRatingInput } from './dto/manager-create-rating.input'
 import { ManagerUpdateRatingInput } from './dto/manager-update-rating.input'
@@ -8,7 +9,15 @@ export class ApiManagerRatingService {
   constructor(private readonly core: ApiCoreService) {}
 
   async createRating(userId: string, input: ManagerCreateRatingInput) {
-    await this.ensureCommentProjectManager(userId, input.commentId)
+    const comment = await this.ensureCommentProjectManager(userId, input.commentId)
+
+    if (!comment) {
+      throw new Error(`Comment not found`)
+    }
+
+    if (comment.review.project.status !== ProjectStatus.Closed) {
+      throw new Error('You can only rate closed projects')
+    }
 
     return this.core.data.rating.create({ data: { ...input, authorId: userId } })
   }

@@ -1,5 +1,7 @@
 import { Comment, ManagerCreateRatingInput, ManagerUpdateRatingInput } from '@deanslist-platform/sdk'
+import { CoreUiDivider } from '@deanslist-platform/web-core-ui'
 import { UiStack } from '@pubkey-ui/core'
+import React from 'react'
 import { ManagerCommentUiTimelineItem } from './manager-comment-ui-timeline-item'
 
 export function ManagerCommentUiTimeline({
@@ -16,13 +18,16 @@ export function ManagerCommentUiTimeline({
   return (
     <UiStack>
       {comments.map((comment) => (
-        <ManagerCommentUiTimelineItem
-          key={comment.id}
-          comment={comment}
-          createRating={createRating}
-          deleteRating={deleteRating}
-          updateRating={updateRating}
-        />
+        <UiStack key={comment.id}>
+          <CoreUiDivider />
+          <ManagerCommentUiTimelineItem
+            key={comment.id}
+            comment={comment}
+            createRating={createRating}
+            deleteRating={deleteRating}
+            updateRating={updateRating}
+          />
+        </UiStack>
       ))}
     </UiStack>
   )
