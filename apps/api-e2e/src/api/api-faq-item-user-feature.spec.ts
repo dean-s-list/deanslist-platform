@@ -1,4 +1,4 @@
-import { FaqItemUserFindManyInput } from '@deanslist-platform/sdk'
+import { FaqItemGroup, FaqItemUserFindManyInput } from '@deanslist-platform/sdk'
 import { getAliceCookie, sdk, uniqueId } from '../support'
 
 describe('api-faq-item-feature', () => {
@@ -12,7 +12,10 @@ describe('api-faq-item-feature', () => {
     beforeAll(async () => {
       aliceCookie = await getAliceCookie()
       faqItemId = await sdk
-        .adminCreateFaqItem({ input: { question: faqItemQuestion } }, { cookie: aliceCookie })
+        .adminCreateFaqItem(
+          { input: { group: FaqItemGroup.Manager, question: faqItemQuestion } },
+          { cookie: aliceCookie },
+        )
         .then((res) => res.data.created.id)
       await sdk.adminUpdateFaqItem({ faqItemId, input: { answer: faqItemAnswer } }, { cookie: aliceCookie })
     })

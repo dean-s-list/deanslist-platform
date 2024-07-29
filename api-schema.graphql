@@ -209,6 +209,7 @@ type DiscordServer {
 type FaqItem {
   answer: String!
   createdAt: DateTime
+  group: FaqItemGroup!
   id: String!
   order: Int
   question: String!
@@ -216,6 +217,7 @@ type FaqItem {
 }
 
 input FaqItemAdminCreateInput {
+  group: FaqItemGroup!
   question: String!
 }
 
@@ -225,8 +227,14 @@ input FaqItemAdminFindManyInput {
 
 input FaqItemAdminUpdateInput {
   answer: String
+  group: FaqItemGroup
   order: Int
   question: String
+}
+
+enum FaqItemGroup {
+  Manager
+  Reviewer
 }
 
 input FaqItemUserFindManyInput {

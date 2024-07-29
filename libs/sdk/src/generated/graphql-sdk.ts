@@ -236,6 +236,7 @@ export type FaqItem = {
   __typename?: 'FaqItem'
   answer: Scalars['String']['output']
   createdAt?: Maybe<Scalars['DateTime']['output']>
+  group: FaqItemGroup
   id: Scalars['String']['output']
   order?: Maybe<Scalars['Int']['output']>
   question: Scalars['String']['output']
@@ -243,6 +244,7 @@ export type FaqItem = {
 }
 
 export type FaqItemAdminCreateInput = {
+  group: FaqItemGroup
   question: Scalars['String']['input']
 }
 
@@ -252,8 +254,14 @@ export type FaqItemAdminFindManyInput = {
 
 export type FaqItemAdminUpdateInput = {
   answer?: InputMaybe<Scalars['String']['input']>
+  group?: InputMaybe<FaqItemGroup>
   order?: InputMaybe<Scalars['Int']['input']>
   question?: InputMaybe<Scalars['String']['input']>
+}
+
+export enum FaqItemGroup {
+  Manager = 'Manager',
+  Reviewer = 'Reviewer',
 }
 
 export type FaqItemUserFindManyInput = {
@@ -2697,6 +2705,7 @@ export type FaqItemDetailsFragment = {
   __typename?: 'FaqItem'
   createdAt?: Date | null
   id: string
+  group: FaqItemGroup
   question: string
   answer: string
   order?: number | null
@@ -2713,6 +2722,7 @@ export type AdminFindManyFaqItemQuery = {
     __typename?: 'FaqItem'
     createdAt?: Date | null
     id: string
+    group: FaqItemGroup
     question: string
     answer: string
     order?: number | null
@@ -2730,6 +2740,7 @@ export type AdminFindOneFaqItemQuery = {
     __typename?: 'FaqItem'
     createdAt?: Date | null
     id: string
+    group: FaqItemGroup
     question: string
     answer: string
     order?: number | null
@@ -2747,6 +2758,7 @@ export type AdminCreateFaqItemMutation = {
     __typename?: 'FaqItem'
     createdAt?: Date | null
     id: string
+    group: FaqItemGroup
     question: string
     answer: string
     order?: number | null
@@ -2765,6 +2777,7 @@ export type AdminUpdateFaqItemMutation = {
     __typename?: 'FaqItem'
     createdAt?: Date | null
     id: string
+    group: FaqItemGroup
     question: string
     answer: string
     order?: number | null
@@ -2788,6 +2801,7 @@ export type UserFindManyFaqItemQuery = {
     __typename?: 'FaqItem'
     createdAt?: Date | null
     id: string
+    group: FaqItemGroup
     question: string
     answer: string
     order?: number | null
@@ -5887,6 +5901,7 @@ export const FaqItemDetailsFragmentDoc = gql`
   fragment FaqItemDetails on FaqItem {
     createdAt
     id
+    group
     question
     answer
     order
@@ -9519,6 +9534,8 @@ export const definedNonNullAnySchema = z.any().refine((v) => isDefinedNonNullAny
 
 export const CommentCategorySchema = z.nativeEnum(CommentCategory)
 
+export const FaqItemGroupSchema = z.nativeEnum(FaqItemGroup)
+
 export const IdentityProviderSchema = z.nativeEnum(IdentityProvider)
 
 export const OrderDirectionSchema = z.nativeEnum(OrderDirection)
@@ -9667,6 +9684,7 @@ export function AdminUpdateUserInputSchema(): z.ZodObject<Properties<AdminUpdate
 
 export function FaqItemAdminCreateInputSchema(): z.ZodObject<Properties<FaqItemAdminCreateInput>> {
   return z.object({
+    group: FaqItemGroupSchema,
     question: z.string(),
   })
 }
@@ -9680,6 +9698,7 @@ export function FaqItemAdminFindManyInputSchema(): z.ZodObject<Properties<FaqIte
 export function FaqItemAdminUpdateInputSchema(): z.ZodObject<Properties<FaqItemAdminUpdateInput>> {
   return z.object({
     answer: z.string().nullish(),
+    group: FaqItemGroupSchema.nullish(),
     order: z.number().nullish(),
     question: z.string().nullish(),
   })

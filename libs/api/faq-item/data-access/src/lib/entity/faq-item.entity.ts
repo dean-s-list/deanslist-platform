@@ -1,5 +1,5 @@
-import { PagingResponse } from '@deanslist-platform/api-core-data-access'
 import { Field, Int, ObjectType } from '@nestjs/graphql'
+import { FaqItemGroup } from './faq-item-group.enum'
 
 @ObjectType()
 export class FaqItem {
@@ -9,7 +9,8 @@ export class FaqItem {
   createdAt?: Date
   @Field({ nullable: true })
   updatedAt?: Date
-
+  @Field(() => FaqItemGroup)
+  group!: FaqItemGroup
   @Field()
   question!: string
   @Field()

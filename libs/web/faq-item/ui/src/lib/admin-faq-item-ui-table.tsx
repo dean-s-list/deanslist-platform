@@ -26,6 +26,7 @@ export function AdminFaqItemUiTable({
               </Anchor>
             ),
           },
+          { accessor: 'group' },
           {
             accessor: 'actions',
             title: 'Actions',

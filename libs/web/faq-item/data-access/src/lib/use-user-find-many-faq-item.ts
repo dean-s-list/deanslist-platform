@@ -1,6 +1,5 @@
-import { FaqItemUserFindManyInput } from '@deanslist-platform/sdk'
+import { FaqItemGroup, FaqItemUserFindManyInput } from '@deanslist-platform/sdk'
 import { useSdk } from '@deanslist-platform/web-core-data-access'
-import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
@@ -17,6 +16,10 @@ export function useUserFindManyFaqItem(props: Partial<FaqItemUserFindManyInput> 
 
   return {
     items,
+    grouped: [FaqItemGroup.Reviewer, FaqItemGroup.Manager].map((group) => ({
+      group,
+      items: items.filter((item) => item.group === group),
+    })),
     query,
     setSearch,
   }

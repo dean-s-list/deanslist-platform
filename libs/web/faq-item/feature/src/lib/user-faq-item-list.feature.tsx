@@ -1,12 +1,12 @@
 import { CoreUiPage, CoreUiSearchField } from '@deanslist-platform/web-core-ui'
 import { useUserFindManyFaqItem } from '@deanslist-platform/web-faq-item-data-access'
 import { FaqItemUiList } from '@deanslist-platform/web-faq-item-ui'
-import { Group } from '@mantine/core'
-import { UiInfo, UiLoader } from '@pubkey-ui/core'
+import { Group, Text } from '@mantine/core'
+import { UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
 import { IconHelp } from '@tabler/icons-react'
 
 export default function UserFaqItemListFeature() {
-  const { items, query, setSearch } = useUserFindManyFaqItem()
+  const { grouped, query, setSearch } = useUserFindManyFaqItem()
 
   return (
     <CoreUiPage title="Frequently Asked Questions" leftAction={<IconHelp size={28} />}>
@@ -16,10 +16,17 @@ export default function UserFaqItemListFeature() {
 
       {query.isLoading ? (
         <UiLoader />
-      ) : items?.length ? (
-        <FaqItemUiList items={items} />
+      ) : grouped?.length ? (
+        grouped.map((group) => (
+          <UiStack key={group.group}>
+            <Text fz="xl" fw={700}>
+              {group.group}
+            </Text>
+            {group.items.length ? <FaqItemUiList items={group.items} /> : <UiInfo message="No questions found" />}
+          </UiStack>
+        ))
       ) : (
-        <UiInfo message="No faqItems found" />
+        <UiInfo message="No questions found" />
       )}
     </CoreUiPage>
   )

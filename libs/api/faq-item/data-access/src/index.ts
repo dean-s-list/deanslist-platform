@@ -1,6 +1,7 @@
 export * from './lib/api-faq-item.data-access.module'
 export * from './lib/api-faq-item.service'
 export * from './lib/entity/faq-item.entity'
+export * from './lib/entity/faq-item-group.enum'
 export * from './lib/dto/faq-item-admin-create.input'
 export * from './lib/dto/faq-item-admin-find-many.input'
 export * from './lib/dto/faq-item-admin-update.input'

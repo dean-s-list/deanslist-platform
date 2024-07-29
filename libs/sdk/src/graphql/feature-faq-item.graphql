@@ -1,6 +1,7 @@
 fragment FaqItemDetails on FaqItem {
   createdAt
   id
+  group
   question
   answer
   order
