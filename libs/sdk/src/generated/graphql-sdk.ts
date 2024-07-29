@@ -378,6 +378,11 @@ export type ManagerUpdateRatingInput = {
   rating?: InputMaybe<Scalars['Float']['input']>
 }
 
+export type ManagerUpdateReviewInput = {
+  amount?: InputMaybe<Scalars['Int']['input']>
+  bonus?: InputMaybe<Scalars['Int']['input']>
+}
+
 export type Mutation = {
   __typename?: 'Mutation'
   adminAddCommunityManager?: Maybe<Scalars['Boolean']['output']>
@@ -430,11 +435,13 @@ export type Mutation = {
   managerRemoveProjectManager?: Maybe<Scalars['Boolean']['output']>
   managerRemoveProjectReferral?: Maybe<Scalars['Boolean']['output']>
   managerRemoveProjectReviewer?: Maybe<Scalars['Boolean']['output']>
+  managerSplitByRating?: Maybe<Scalars['Boolean']['output']>
   managerToggleCommunityAdmin?: Maybe<Scalars['Boolean']['output']>
   managerUpdateCommunity?: Maybe<Community>
   managerUpdateProject?: Maybe<Project>
   managerUpdateProjectStatus?: Maybe<Project>
   managerUpdateRating?: Maybe<Rating>
+  managerUpdateReview?: Maybe<Review>
   register?: Maybe<User>
   reviewerCreateComment?: Maybe<Comment>
   reviewerCreateReview?: Maybe<Review>
@@ -675,6 +682,10 @@ export type MutationManagerRemoveProjectReviewerArgs = {
   reviewerUserId: Scalars['String']['input']
 }
 
+export type MutationManagerSplitByRatingArgs = {
+  projectId: Scalars['String']['input']
+}
+
 export type MutationManagerToggleCommunityAdminArgs = {
   communityId: Scalars['String']['input']
   userId: Scalars['String']['input']
@@ -698,6 +709,11 @@ export type MutationManagerUpdateProjectStatusArgs = {
 export type MutationManagerUpdateRatingArgs = {
   input: ManagerUpdateRatingInput
   ratingId: Scalars['String']['input']
+}
+
+export type MutationManagerUpdateReviewArgs = {
+  input: ManagerUpdateReviewInput
+  reviewId: Scalars['String']['input']
 }
 
 export type MutationRegisterArgs = {
@@ -766,6 +782,7 @@ export type Project = {
   amountManagerUsd?: Maybe<Scalars['Int']['output']>
   amountReferralUsd?: Maybe<Scalars['Int']['output']>
   amountTotalUsd?: Maybe<Scalars['Int']['output']>
+  amountTotalUsdLeft?: Maybe<Scalars['Int']['output']>
   avatarUrl?: Maybe<Scalars['String']['output']>
   community?: Maybe<Community>
   communityId: Scalars['String']['output']
@@ -1068,6 +1085,8 @@ export type RequestIdentityChallengeInput = {
 
 export type Review = {
   __typename?: 'Review'
+  amount?: Maybe<Scalars['Int']['output']>
+  bonus?: Maybe<Scalars['Int']['output']>
   createdAt?: Maybe<Scalars['DateTime']['output']>
   id: Scalars['String']['output']
   name: Scalars['String']['output']
@@ -1610,6 +1629,8 @@ export type ManagerFindManyCommentQuery = {
       projectId: string
       reviewerId: string
       updatedAt?: Date | null
+      amount?: number | null
+      bonus?: number | null
       name: string
       ratingAverage?: number | null
       ratingProgress?: number | null
@@ -3765,6 +3786,7 @@ export type ManagerFindOneProjectQuery = {
   __typename?: 'Query'
   item?: {
     __typename?: 'Project'
+    amountTotalUsdLeft?: number | null
     amountManagerUsd?: number | null
     amountReferralUsd?: number | null
     amountTotalUsd?: number | null
@@ -3961,6 +3983,12 @@ export type ManagerCreateProjectMutation = {
     }> | null
   } | null
 }
+
+export type ManagerSplitByRatingMutationVariables = Exact<{
+  projectId: Scalars['String']['input']
+}>
+
+export type ManagerSplitByRatingMutation = { __typename?: 'Mutation'; split?: boolean | null }
 
 export type ManagerUpdateProjectMutationVariables = Exact<{
   projectId: Scalars['String']['input']
@@ -4365,6 +4393,8 @@ export type ReviewDetailsFragment = {
   projectId: string
   reviewerId: string
   updatedAt?: Date | null
+  amount?: number | null
+  bonus?: number | null
   name: string
   ratingAverage?: number | null
   ratingProgress?: number | null
@@ -4465,6 +4495,123 @@ export type ReviewDetailsFragment = {
   } | null
 }
 
+export type ManagerUpdateReviewMutationVariables = Exact<{
+  reviewId: Scalars['String']['input']
+  input: ManagerUpdateReviewInput
+}>
+
+export type ManagerUpdateReviewMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'Review'
+    createdAt?: Date | null
+    id: string
+    projectId: string
+    reviewerId: string
+    updatedAt?: Date | null
+    amount?: number | null
+    bonus?: number | null
+    name: string
+    ratingAverage?: number | null
+    ratingProgress?: number | null
+    viewUrl: string
+    project?: {
+      __typename?: 'Project'
+      amountManagerUsd?: number | null
+      amountReferralUsd?: number | null
+      amountTotalUsd?: number | null
+      avatarUrl?: string | null
+      communityId: string
+      createdAt?: Date | null
+      durationDays?: number | null
+      endDate?: Date | null
+      id: string
+      instructions?: string | null
+      linkDiscord?: string | null
+      linkGithub?: string | null
+      linkTelegram?: string | null
+      linkTwitter?: string | null
+      linkWebsite?: string | null
+      manageUrl: string
+      name: string
+      remainingDays?: number | null
+      reviewCount?: number | null
+      reviewsOpen?: boolean | null
+      slug: string
+      startDate?: Date | null
+      status?: ProjectStatus | null
+      updatedAt?: Date | null
+      viewUrl: string
+      community?: {
+        __typename?: 'Community'
+        activeProjectsCount?: number | null
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        homeServerId?: string | null
+        id: string
+        managerCount?: number | null
+        manageUrl: string
+        name: string
+        updatedAt?: Date | null
+        viewUrl: string
+        managers?: Array<{
+          __typename?: 'CommunityManager'
+          createdAt?: Date | null
+          id: string
+          userId: string
+          admin?: boolean | null
+          updatedAt?: Date | null
+          user?: {
+            __typename?: 'User'
+            avatarUrl?: string | null
+            createdAt?: Date | null
+            developer?: boolean | null
+            id: string
+            name?: string | null
+            manager?: boolean | null
+            profileUrl: string
+            role?: UserRole | null
+            status?: UserStatus | null
+            updatedAt?: Date | null
+            username?: string | null
+            walletAddress?: string | null
+          } | null
+        }> | null
+      } | null
+      managers?: Array<{
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      }> | null
+    } | null
+    reviewer?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      manager?: boolean | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+      walletAddress?: string | null
+    } | null
+  } | null
+}
+
 export type ManagerFindManyReviewByProjectQueryVariables = Exact<{
   input: ManagerFindManyReviewByProjectInput
 }>
@@ -4478,6 +4625,8 @@ export type ManagerFindManyReviewByProjectQuery = {
     projectId: string
     reviewerId: string
     updatedAt?: Date | null
+    amount?: number | null
+    bonus?: number | null
     name: string
     ratingAverage?: number | null
     ratingProgress?: number | null
@@ -4592,6 +4741,8 @@ export type ReviewerFindManyReviewByProjectQuery = {
     projectId: string
     reviewerId: string
     updatedAt?: Date | null
+    amount?: number | null
+    bonus?: number | null
     name: string
     ratingAverage?: number | null
     ratingProgress?: number | null
@@ -4706,6 +4857,8 @@ export type ReviewerFindManyReviewByUsernameQuery = {
     projectId: string
     reviewerId: string
     updatedAt?: Date | null
+    amount?: number | null
+    bonus?: number | null
     name: string
     ratingAverage?: number | null
     ratingProgress?: number | null
@@ -4820,6 +4973,8 @@ export type ReviewerFindUserProjectReviewQuery = {
     projectId: string
     reviewerId: string
     updatedAt?: Date | null
+    amount?: number | null
+    bonus?: number | null
     name: string
     ratingAverage?: number | null
     ratingProgress?: number | null
@@ -4934,6 +5089,8 @@ export type ReviewerFindOneReviewQuery = {
     projectId: string
     reviewerId: string
     updatedAt?: Date | null
+    amount?: number | null
+    bonus?: number | null
     name: string
     ratingAverage?: number | null
     ratingProgress?: number | null
@@ -5048,6 +5205,8 @@ export type ReviewerCreateReviewMutation = {
     projectId: string
     reviewerId: string
     updatedAt?: Date | null
+    amount?: number | null
+    bonus?: number | null
     name: string
     ratingAverage?: number | null
     ratingProgress?: number | null
@@ -5170,6 +5329,8 @@ export type AdminFindManyReviewQuery = {
       projectId: string
       reviewerId: string
       updatedAt?: Date | null
+      amount?: number | null
+      bonus?: number | null
       name: string
       ratingAverage?: number | null
       ratingProgress?: number | null
@@ -5295,6 +5456,8 @@ export type AdminFindOneReviewQuery = {
     projectId: string
     reviewerId: string
     updatedAt?: Date | null
+    amount?: number | null
+    bonus?: number | null
     name: string
     ratingAverage?: number | null
     ratingProgress?: number | null
@@ -5849,6 +6012,8 @@ export const ReviewDetailsFragmentDoc = gql`
     projectId
     reviewerId
     updatedAt
+    amount
+    bonus
     name
     ratingAverage
     ratingProgress
@@ -6492,6 +6657,7 @@ export const ManagerFindOneProjectDocument = gql`
   query managerFindOneProject($projectId: String!) {
     item: managerFindOneProject(projectId: $projectId) {
       ...ProjectDetails
+      amountTotalUsdLeft
       message {
         message
         nextStatus
@@ -6514,6 +6680,11 @@ export const ManagerCreateProjectDocument = gql`
     }
   }
   ${ProjectDetailsFragmentDoc}
+`
+export const ManagerSplitByRatingDocument = gql`
+  mutation managerSplitByRating($projectId: String!) {
+    split: managerSplitByRating(projectId: $projectId)
+  }
 `
 export const ManagerUpdateProjectDocument = gql`
   mutation managerUpdateProject($projectId: String!, $input: ManagerUpdateProjectInput!) {
@@ -6607,6 +6778,14 @@ export const AdminDeleteRatingDocument = gql`
   mutation adminDeleteRating($ratingId: String!) {
     deleted: adminDeleteRating(ratingId: $ratingId)
   }
+`
+export const ManagerUpdateReviewDocument = gql`
+  mutation managerUpdateReview($reviewId: String!, $input: ManagerUpdateReviewInput!) {
+    updated: managerUpdateReview(reviewId: $reviewId, input: $input) {
+      ...ReviewDetails
+    }
+  }
+  ${ReviewDetailsFragmentDoc}
 `
 export const ManagerFindManyReviewByProjectDocument = gql`
   query managerFindManyReviewByProject($input: ManagerFindManyReviewByProjectInput!) {
@@ -6856,6 +7035,7 @@ const AdminRemoveProjectReferralDocumentString = print(AdminRemoveProjectReferra
 const ManagerFindManyProjectDocumentString = print(ManagerFindManyProjectDocument)
 const ManagerFindOneProjectDocumentString = print(ManagerFindOneProjectDocument)
 const ManagerCreateProjectDocumentString = print(ManagerCreateProjectDocument)
+const ManagerSplitByRatingDocumentString = print(ManagerSplitByRatingDocument)
 const ManagerUpdateProjectDocumentString = print(ManagerUpdateProjectDocument)
 const ManagerUpdateProjectStatusDocumentString = print(ManagerUpdateProjectStatusDocument)
 const ManagerDeleteProjectDocumentString = print(ManagerDeleteProjectDocument)
@@ -6871,6 +7051,7 @@ const ManagerDeleteRatingDocumentString = print(ManagerDeleteRatingDocument)
 const AdminFindManyRatingDocumentString = print(AdminFindManyRatingDocument)
 const AdminUpdateRatingDocumentString = print(AdminUpdateRatingDocument)
 const AdminDeleteRatingDocumentString = print(AdminDeleteRatingDocument)
+const ManagerUpdateReviewDocumentString = print(ManagerUpdateReviewDocument)
 const ManagerFindManyReviewByProjectDocumentString = print(ManagerFindManyReviewByProjectDocument)
 const ReviewerFindManyReviewByProjectDocumentString = print(ReviewerFindManyReviewByProjectDocument)
 const ReviewerFindManyReviewByUsernameDocumentString = print(ReviewerFindManyReviewByUsernameDocument)
@@ -8581,6 +8762,27 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
+    managerSplitByRating(
+      variables: ManagerSplitByRatingMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: ManagerSplitByRatingMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<ManagerSplitByRatingMutation>(ManagerSplitByRatingDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'managerSplitByRating',
+        'mutation',
+        variables,
+      )
+    },
     managerUpdateProject(
       variables: ManagerUpdateProjectMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
@@ -8894,6 +9096,27 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
             ...wrappedRequestHeaders,
           }),
         'adminDeleteRating',
+        'mutation',
+        variables,
+      )
+    },
+    managerUpdateReview(
+      variables: ManagerUpdateReviewMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: ManagerUpdateReviewMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<ManagerUpdateReviewMutation>(ManagerUpdateReviewDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'managerUpdateReview',
         'mutation',
         variables,
       )
@@ -9573,6 +9796,13 @@ export function ManagerUpdateRatingInputSchema(): z.ZodObject<Properties<Manager
   return z.object({
     content: z.string().nullish(),
     rating: z.number().nullish(),
+  })
+}
+
+export function ManagerUpdateReviewInputSchema(): z.ZodObject<Properties<ManagerUpdateReviewInput>> {
+  return z.object({
+    amount: z.number().nullish(),
+    bonus: z.number().nullish(),
   })
 }
 

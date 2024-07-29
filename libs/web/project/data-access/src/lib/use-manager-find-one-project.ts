@@ -1,12 +1,16 @@
 import { ManagerUpdateProjectInput, ProjectStatus } from '@deanslist-platform/sdk'
 import { useSdk } from '@deanslist-platform/web-core-data-access'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 export function useManagerFindOneProject({ projectId }: { projectId: string }) {
   const sdk = useSdk()
+  const client = useQueryClient()
+
+  const queryKey = ['manager', 'find-one-project', projectId]
+
   const query = useQuery({
-    queryKey: ['manager', 'find-one-project', projectId],
+    queryKey,
     queryFn: () => sdk.managerFindOneProject({ projectId }).then((res) => res.data),
     retry: 0,
   })
@@ -15,6 +19,7 @@ export function useManagerFindOneProject({ projectId }: { projectId: string }) {
   return {
     item,
     query,
+    invalidate: () => client.invalidateQueries({ queryKey }),
     addProjectManager: (managerUserId: string) =>
       sdk
         .managerAddProjectManager({ projectId, managerUserId })
@@ -31,6 +36,23 @@ export function useManagerFindOneProject({ projectId }: { projectId: string }) {
         .catch((err) => {
           toastError(err.message)
           return null
+        }),
+    splitByRating: () =>
+      sdk
+        .managerSplitByRating({ projectId })
+        .then((res) => res.data)
+        .then(async (res) => {
+          if (res) {
+            toastSuccess('Project split')
+            await query.refetch()
+            return !!res.split
+          }
+          toastError('Project not split')
+          return false
+        })
+        .catch((err) => {
+          toastError(err.message)
+          return false
         }),
     removeProjectManager: (managerUserId: string) =>
       sdk

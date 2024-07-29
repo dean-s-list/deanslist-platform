@@ -5,11 +5,17 @@ import {
   ProjectMessage,
 } from '@deanslist-platform/api-project-data-access'
 import { Int, Parent, ResolveField, Resolver } from '@nestjs/graphql'
-import { Project as PrismaProject } from '@prisma/client'
+import { Project as PrismaProject, Review as PrismaReview } from '@prisma/client'
+
+import { getProjectAmountTotalUsdLeft } from '@deanslist-platform/api-project-data-access'
 
 @Resolver(() => Project)
 export class ApiProjectResolver {
   constructor(private readonly service: ApiProjectService) {}
+  @ResolveField(() => Int, { nullable: true })
+  amountTotalUsdLeft(@Parent() project: Project) {
+    return getProjectAmountTotalUsdLeft(project as PrismaProject, project.reviews as PrismaReview[])
+  }
 
   @ResolveField(() => ProjectMessage, { nullable: true })
   message(@Parent() project: Project) {

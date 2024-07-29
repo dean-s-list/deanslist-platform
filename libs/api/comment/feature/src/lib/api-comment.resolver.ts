@@ -1,5 +1,5 @@
 import { ApiCommentService, Comment } from '@deanslist-platform/api-comment-data-access'
-import { calculateAverage } from '@deanslist-platform/api-review-data-access'
+import { calculateProjectRatings } from '@deanslist-platform/api-project-data-access'
 import { Float, Parent, ResolveField, Resolver } from '@nestjs/graphql'
 
 @Resolver(() => Comment)
@@ -8,6 +8,6 @@ export class ApiCommentResolver {
 
   @ResolveField(() => Float, { nullable: true })
   ratingAverage(@Parent() comment: Comment) {
-    return calculateAverage(comment.ratings ?? [])
+    return calculateProjectRatings(comment.ratings ?? [])
   }
 }

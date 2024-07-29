@@ -1,6 +1,6 @@
 import { Comment, ManagerCreateRatingInput, ManagerUpdateRatingInput } from '@deanslist-platform/sdk'
-import { CoreUiDivider } from '@deanslist-platform/web-core-ui'
-import { ActionIcon, Button, Group, Rating as MantineRating } from '@mantine/core'
+import { CoreUiDivider, CoreUiRating } from '@deanslist-platform/web-core-ui'
+import { ActionIcon, Button, Group } from '@mantine/core'
 import { UiStack } from '@pubkey-ui/core'
 import { IconArrowsMaximize, IconArrowsMinimize, IconExternalLink } from '@tabler/icons-react'
 import React, { useState } from 'react'
@@ -29,7 +29,7 @@ export function ManagerCommentUiTimelineItem({
           comment={comment}
           action={
             <Group>
-              <MantineRating fractions={2} size="sm" readOnly value={comment.ratingAverage ?? 0} />
+              <CoreUiRating readOnly value={comment.ratingAverage} />
               {comment?.review?.viewUrl ? (
                 <ActionIcon variant="light" size="sm" component={Link} to={comment.review.viewUrl}>
                   <IconExternalLink size={16} />

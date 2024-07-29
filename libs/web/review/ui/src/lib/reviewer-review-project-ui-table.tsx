@@ -1,6 +1,7 @@
 import { Review } from '@deanslist-platform/sdk'
+import { CoreUiRating } from '@deanslist-platform/web-core-ui'
 import { UserUiItem } from '@deanslist-platform/web-user-ui'
-import { ActionIcon, Group, Progress, Rating as MantineRating, ScrollArea, Tooltip } from '@mantine/core'
+import { ActionIcon, Group, Progress, ScrollArea, Tooltip } from '@mantine/core'
 import { UiTime } from '@pubkey-ui/core'
 import { IconMaximize } from '@tabler/icons-react'
 import { DataTable } from 'mantine-datatable'
@@ -33,11 +34,11 @@ export function ReviewerReviewProjectUiTable({ reviews = [] }: { reviews: Review
             width: '15%',
             accessor: 'ratingAverage',
             render: (item) => (
-              <Group>
-                <Tooltip label={`Rating average: ${item.ratingAverage ?? 0}`} withArrow position="top">
-                  <MantineRating fractions={2} size="sm" readOnly value={item.ratingAverage ?? 0} />
-                </Tooltip>
-              </Group>
+              <CoreUiRating
+                readOnly
+                value={item.ratingAverage}
+                tooltip={`Rating average: ${item.ratingAverage ?? 0}`}
+              />
             ),
           },
           {

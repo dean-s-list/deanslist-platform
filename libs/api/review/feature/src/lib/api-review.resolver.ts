@@ -1,5 +1,6 @@
+import { calculateProjectRatings } from '@deanslist-platform/api-project-data-access'
 import { Rating } from '@deanslist-platform/api-rating-data-access'
-import { ApiReviewService, calculateAverage, Review } from '@deanslist-platform/api-review-data-access'
+import { ApiReviewService, Review } from '@deanslist-platform/api-review-data-access'
 import { Float, Parent, ResolveField, Resolver } from '@nestjs/graphql'
 
 @Resolver(() => Review)
@@ -15,7 +16,7 @@ export class ApiReviewResolver {
   ratingAverage(@Parent() review: Review) {
     const ratings: Rating[] = (review.comments?.map((comment) => comment.ratings).flat() ?? []) as Rating[]
 
-    return calculateAverage(ratings)
+    return calculateProjectRatings(ratings)
   }
 
   @ResolveField(() => Float, { nullable: true })

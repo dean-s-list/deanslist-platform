@@ -1,6 +1,6 @@
 import { ApiCommunityService } from '@deanslist-platform/api-community-data-access'
 import { addDays, ApiCoreService, setDateToStartOfDay, slugifyId } from '@deanslist-platform/api-core-data-access'
-import { Injectable } from '@nestjs/common'
+import { Injectable, Logger } from '@nestjs/common'
 import { Prisma, Project } from '@prisma/client'
 import { ApiProjectEventService } from './api-project-event.service'
 import { ProjectMessage } from './entity/project-message.entity'
@@ -8,9 +8,12 @@ import { ProjectPaging } from './entity/project-paging.entity'
 import { ProjectStatus } from './entity/project-status.enum'
 import { ProjectCreatedEvent } from './event/project-created.event'
 import { calculateProjectDates } from './helpers/calculate-project-dates'
+import { calculateProjectRatings, getCommentRatings } from './helpers/calculate-project-ratings'
+import { getProjectAmountUsd } from './helpers/get-project-amount-total-usd-left'
 
 @Injectable()
 export class ApiProjectDataService {
+  private readonly logger = new Logger(ApiProjectDataService.name)
   constructor(
     private readonly core: ApiCoreService,
     private readonly event: ApiProjectEventService,
@@ -226,6 +229,46 @@ export class ApiProjectDataService {
     })
     // TODO: Emit events, announce in Discord.
     return !!removed
+  }
+
+  async splitByRating(projectId: string) {
+    const project = await this.core.data.project.findUnique({
+      where: { id: projectId },
+      include: {
+        reviews: {
+          include: {
+            comments: {
+              include: { ratings: true },
+            },
+          },
+        },
+      },
+    })
+    if (!project) {
+      throw new Error('Project not found')
+    }
+    const reviews = project.reviews ?? []
+
+    // Get the amount of USDC available for reviews
+    const available = getProjectAmountUsd(project)
+
+    this.logger.verbose(`Available USDC: ${available}`)
+    const ratingMap: Record<string, number> = {}
+
+    for (const review of reviews) {
+      ratingMap[review.id] = calculateProjectRatings(getCommentRatings(review.comments)) ?? 0
+    }
+
+    const totalRatingAmount = Object.values(ratingMap).reduce((acc, rating) => acc + rating, 0)
+
+    const unit = 5
+    const amountPerRating = Math.floor(available / totalRatingAmount / unit) * unit
+
+    for (const [reviewId, rating] of Object.entries(ratingMap)) {
+      const amount = Math.floor(amountPerRating * rating)
+      await this.core.data.review.update({ where: { id: reviewId }, data: { amount, bonus: 0 } })
+      this.logger.verbose(`Updating review ${reviewId} with amount ${amount}`)
+    }
   }
 }
 

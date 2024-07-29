@@ -4,6 +4,8 @@ fragment ReviewDetails on Review {
   projectId
   reviewerId
   updatedAt
+  amount
+  bonus
   name
   ratingAverage
   ratingProgress
@@ -14,6 +16,11 @@ fragment ReviewDetails on Review {
     ...UserDetails
   }
   viewUrl
+}
+mutation managerUpdateReview($reviewId: String!, $input: ManagerUpdateReviewInput!) {
+  updated: managerUpdateReview(reviewId: $reviewId, input: $input) {
+    ...ReviewDetails
+  }
 }
 
 query managerFindManyReviewByProject($input: ManagerFindManyReviewByProjectInput!) {

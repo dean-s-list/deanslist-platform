@@ -1,48 +1,80 @@
-import { ManagerUpdateProjectInput, Project } from '@deanslist-platform/sdk'
-import { CoreUiCurrencyInput } from '@deanslist-platform/web-core-ui'
-import { Button, Group } from '@mantine/core'
-import { useForm } from '@mantine/form'
-import { UiStack } from '@pubkey-ui/core'
+import { ManagerUpdateReviewInput, Project, Review, User } from '@deanslist-platform/sdk'
+import { CoreUiButton, CoreUiDivider, CoreUiProgress } from '@deanslist-platform/web-core-ui'
+import { Group, Text } from '@mantine/core'
+import { UiGroup, UiStack } from '@pubkey-ui/core'
+import { ManagerProjectUiPayoutItemForm } from './manager-project-ui-payout-item-form'
 
 export function ManagerProjectUiPayoutsForm({
-  submit,
+  updateReview,
   project,
+  reviews,
+  splitByRating,
 }: {
-  submit: (res: ManagerUpdateProjectInput) => Promise<boolean>
+  splitByRating: () => Promise<boolean>
+  updateReview: (reviewId: string, input: ManagerUpdateReviewInput) => Promise<boolean>
   project: Project
+  reviews: Review[]
 }) {
-  const form = useForm<ManagerUpdateProjectInput>({
-    initialValues: {
-      amountManagerUsd: project.amountManagerUsd ?? 0,
-      amountReferralUsd: project.amountReferralUsd ?? 0,
-      amountTotalUsd: project.amountTotalUsd ?? 0,
-    },
-  })
+  const managers = project.managers ?? []
+  const referral = project.referral ?? undefined
+  const percentageLeft = ((project.amountTotalUsdLeft ?? 0) / (project.amountTotalUsd ?? 0)) * 100
 
   return (
-    <form onSubmit={form.onSubmit((values) => submit(values))}>
-      <UiStack>
-        <UiStack>
-          <CoreUiCurrencyInput
-            label="Total Amount"
-            description="Total amount of USDC to be rewarded"
-            {...form.getInputProps('amountTotalUsd')}
-          />
-          <CoreUiCurrencyInput
-            label="Manager Amount"
-            description="Amount of USDC managers get"
-            {...form.getInputProps('amountManagerUsd')}
-          />
-          <CoreUiCurrencyInput
-            label="Referral Amount"
-            description="Amount of USDC the referral gets"
-            {...form.getInputProps('amountReferralUsd')}
-          />
-        </UiStack>
-        <Group justify="flex-end" mt="md">
-          <Button type="submit">Save</Button>
+    <UiStack>
+      <UiGroup>
+        <Group gap="xl">
+          <Text size="lg" fw={700}>
+            Total: {project.amountTotalUsd} USDC
+          </Text>
+          <Group gap="xs">
+            <Text size="sm">{project.amountTotalUsdLeft} left</Text>
+            <CoreUiProgress w={200} h={12} value={percentageLeft} tooltip={`${percentageLeft}% left`} />
+          </Group>
         </Group>
-      </UiStack>
-    </form>
+        <CoreUiButton outline onClick={() => splitByRating()}>
+          Split by rating
+        </CoreUiButton>
+      </UiGroup>
+      {reviews.map((review) => (
+        <UiStack key={review.id}>
+          <ManagerProjectUiPayoutItemForm
+            key={review.id}
+            updateReview={(input) => updateReview(review.id, input)}
+            item={review}
+            user={review.reviewer as User}
+          />
+          <CoreUiDivider />
+        </UiStack>
+      ))}
+      {managers.length ? (
+        <UiStack>
+          <Text size="lg" fw={700}>
+            Managers
+          </Text>
+          {managers.map((manager) => (
+            <UiStack key={manager.id}>
+              <ManagerProjectUiPayoutItemForm
+                key={manager.id}
+                item={{ amount: project.amountManagerUsd, bonus: 0 }}
+                user={manager}
+              />
+              <CoreUiDivider />
+            </UiStack>
+          ))}
+        </UiStack>
+      ) : null}
+      {referral ? (
+        <UiStack>
+          <Text size="lg" fw={700}>
+            Referral
+          </Text>
+          <ManagerProjectUiPayoutItemForm item={{ amount: project.amountReferralUsd, bonus: 0 }} user={referral} />
+        </UiStack>
+      ) : (
+        <Text size="lg" fw={700}>
+          No referral
+        </Text>
+      )}
+    </UiStack>
   )
 }

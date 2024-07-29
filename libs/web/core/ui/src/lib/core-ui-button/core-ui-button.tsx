@@ -26,6 +26,10 @@ export function CoreUiButton({
     rightSection: IconRight ? <IconRight size={16} /> : undefined,
     radius: props.radius ?? 'xl',
     variant: outline ? 'outline' : undefined,
+    style: {
+      color: outline ? 'white' : undefined,
+      ...props.style,
+    },
   }
 
   return (

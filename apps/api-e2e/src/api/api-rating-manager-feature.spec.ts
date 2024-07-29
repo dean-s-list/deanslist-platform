@@ -1,5 +1,6 @@
 import { Comment, ManagerCreateRatingInput, ManagerUpdateRatingInput, Project, Rating } from '@deanslist-platform/sdk'
 import {
+  adminUpdateProject,
   adminUpdateProjectStatusClosed,
   alice,
   getAliceCookie,
@@ -173,10 +174,6 @@ describe('api-rating-feature', () => {
           reviewBobId = await reviewerCreateReview({ projectId: e2eProjectId, ...cookies.bob }).then(
             (review) => review.id,
           )
-        })
-
-        it('should dummy', async () => {
-          // ARRANGE
 
           // Create some comments
           for (const content of ['comment-alice-1', 'comment-alice-2']) {
@@ -185,6 +182,13 @@ describe('api-rating-feature', () => {
           for (const content of ['comment-bob-1', 'comment-bob-2']) {
             comments.push(await reviewerCreateComment({ ...cookies.bob, reviewId: reviewBobId, content }))
           }
+          await adminUpdateProject({
+            ...cookies.alice,
+            projectId: e2eProjectId,
+            amountTotalUsd: 1000,
+            amountManagerUsd: 200,
+            amountReferralUsd: 50,
+          })
           await adminUpdateProjectStatusClosed({ ...cookies.alice, projectId: e2eProjectId })
 
           for (const comment of comments) {
@@ -192,6 +196,10 @@ describe('api-rating-feature', () => {
             const content = uniqueId('my-rating')
             await sdk.managerCreateRating({ input: { commentId: comment.id, content, rating } }, cookies.alice)
           }
+        })
+
+        it('should create comments and ratings', async () => {
+          // ARRANGE
 
           // ACT
           const ratedComments = await sdk
@@ -214,6 +222,27 @@ describe('api-rating-feature', () => {
           const ratedReviewBob = ratedReviews.find((review) => review.id === reviewBobId)
           expect(ratedReviewBob?.ratingAverage).toBe(1)
           expect(ratedReviewBob?.ratingProgress).toBe(100)
+        })
+
+        it('should split by rating', async () => {
+          // ACT
+          await sdk.managerSplitByRating({ projectId: e2eProjectId }, cookies.alice)
+          const ratedReviews = await sdk
+            .managerFindManyReviewByProject({ input: { projectId: e2eProjectId } }, cookies.alice)
+            .then((res) => res.data.items)
+
+          // ASSERT
+          expect(ratedReviews.length).toBe(2)
+
+          // alice should have an amount of 625
+          const ratedReviewAlice = ratedReviews.find((review) => review.id === reviewAliceId)
+          expect(ratedReviewAlice?.amount).toBe(625)
+          expect(ratedReviewAlice?.bonus).toBe(0)
+
+          // bob should have an amount of 125
+          const ratedReviewBob = ratedReviews.find((review) => review.id === reviewBobId)
+          expect(ratedReviewBob?.amount).toBe(125)
+          expect(ratedReviewBob?.bonus).toBe(0)
         })
       })
     })

@@ -120,6 +120,7 @@ query managerFindManyProject($input: ManagerFindManyProjectInput!) {
 query managerFindOneProject($projectId: String!) {
   item: managerFindOneProject(projectId: $projectId) {
     ...ProjectDetails
+    amountTotalUsdLeft
     message {
       message
       nextStatus
@@ -137,6 +138,10 @@ mutation managerCreateProject($input: ManagerCreateProjectInput!) {
   created: managerCreateProject(input: $input) {
     ...ProjectDetails
   }
+}
+
+mutation managerSplitByRating($projectId: String!) {
+  split: managerSplitByRating(projectId: $projectId)
 }
 
 mutation managerUpdateProject($projectId: String!, $input: ManagerUpdateProjectInput!) {

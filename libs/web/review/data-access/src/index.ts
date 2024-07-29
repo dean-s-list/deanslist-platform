@@ -1,5 +1,7 @@
 export * from './lib/use-admin-find-many-review'
 export * from './lib/use-admin-find-one-review'
+export * from './lib/use-manager-find-one-review'
+export * from './lib/use-manager-update-review'
 export * from './lib/use-reviewer-find-many-review-by-project'
 export * from './lib/use-reviewer-find-many-review-by-username'
 export * from './lib/use-reviewer-find-one-review'

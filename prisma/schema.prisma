@@ -181,6 +181,8 @@ model Review {
   id         String    @id @default(cuid())
   createdAt  DateTime  @default(now())
   updatedAt  DateTime  @updatedAt
+  amount     Int       @default(0)
+  bonus      Int       @default(0)
   project    Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
   projectId  String
   reviewer   User      @relation(fields: [reviewerId], references: [id], onDelete: Cascade)

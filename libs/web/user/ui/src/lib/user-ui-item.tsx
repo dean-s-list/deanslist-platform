@@ -1,5 +1,5 @@
 import { User } from '@deanslist-platform/sdk'
-import { AvatarProps, Group, type GroupProps, Stack, Text } from '@mantine/core'
+import { AvatarProps, Group, type GroupProps, Stack, Text, TextProps } from '@mantine/core'
 import { UiAnchor, type UiAnchorProps } from '@pubkey-ui/core'
 import { ReactNode } from 'react'
 import { UserUiAvatar } from './user-ui-avatar'
@@ -8,6 +8,7 @@ export function UserUiItem({
   anchorProps,
   avatarProps,
   groupProps,
+  textProps,
   user,
   to,
   label,
@@ -15,6 +16,7 @@ export function UserUiItem({
   anchorProps?: UiAnchorProps
   avatarProps?: Omit<AvatarProps, 'src'>
   groupProps?: GroupProps
+  textProps?: TextProps
   user?: User
   to?: string | null
   label?: ReactNode
@@ -23,10 +25,10 @@ export function UserUiItem({
 
   return (
     <UiAnchor to={to ?? undefined} underline="never" {...anchorProps}>
-      <Group gap="sm" {...groupProps}>
+      <Group gap="sm" wrap="nowrap" {...groupProps}>
         <UserUiAvatar user={user} {...avatarProps} />
         <Stack gap={1}>
-          <Text size="sm" fw={500}>
+          <Text fw={500} {...textProps}>
             {user?.username}
           </Text>
           {label ? (

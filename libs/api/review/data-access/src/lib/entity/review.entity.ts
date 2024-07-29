@@ -1,6 +1,6 @@
 import { Project } from '@deanslist-platform/api-project-data-access'
 import { User } from '@deanslist-platform/api-user-data-access'
-import { Field, HideField, ObjectType } from '@nestjs/graphql'
+import { Field, HideField, Int, ObjectType } from '@nestjs/graphql'
 import { Comment, Rating } from '@prisma/client'
 
 @ObjectType()
@@ -11,6 +11,10 @@ export class Review {
   createdAt?: Date
   @Field({ nullable: true })
   updatedAt?: Date
+  @Field(() => Int, { nullable: true })
+  amount?: number | null
+  @Field(() => Int, { nullable: true })
+  bonus?: number | null
   @Field(() => Project, { nullable: true })
   project?: Project
   @Field()

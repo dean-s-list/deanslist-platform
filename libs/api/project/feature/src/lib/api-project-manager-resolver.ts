@@ -91,6 +91,11 @@ export class ApiProjectManagerResolver {
     return this.service.manager.removeProjectReferral(userId, projectId, referralUserId)
   }
 
+  @Mutation(() => Boolean, { nullable: true })
+  managerSplitByRating(@CtxUserId() userId: string, @Args('projectId') projectId: string) {
+    return this.service.manager.splitByRating(userId, projectId)
+  }
+
   @Mutation(() => Project, { nullable: true })
   managerUpdateProject(
     @CtxUserId() userId: string,

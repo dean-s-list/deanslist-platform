@@ -1,5 +1,6 @@
 import { Review } from '@deanslist-platform/sdk'
-import { ActionIcon, Anchor, Group, Rating as MantineRating, ScrollArea } from '@mantine/core'
+import { CoreUiRating } from '@deanslist-platform/web-core-ui'
+import { ActionIcon, Anchor, Group, ScrollArea } from '@mantine/core'
 import { IconPencil, IconTrash } from '@tabler/icons-react'
 import { DataTable, DataTableProps } from 'mantine-datatable'
 import { Link } from 'react-router-dom'
@@ -40,7 +41,7 @@ export function AdminReviewUiTable({
           },
           {
             accessor: 'ratingAverage',
-            render: (item) => <MantineRating fractions={2} size="sm" readOnly value={item.ratingAverage ?? 0} />,
+            render: (item) => <CoreUiRating readOnly value={item.ratingAverage} />,
           },
           { accessor: 'ratingProgress' },
           {

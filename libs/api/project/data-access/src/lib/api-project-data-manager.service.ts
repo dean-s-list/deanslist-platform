@@ -37,7 +37,7 @@ export class ApiProjectDataManagerService {
 
   async findOneProject(user: User, projectId: string) {
     return this.data.findOneProject(projectId, {
-      include: { reviewers: true, referral: true },
+      include: { reviews: true, reviewers: true, referral: true },
       where: getProjectWhereManagerAccessInput(user),
     })
   }
@@ -88,5 +88,11 @@ export class ApiProjectDataManagerService {
     await this.data.ensureProjectManager({ projectId, userId })
 
     return this.data.removeProjectReferral(userId, projectId, referralUserId)
+  }
+
+  async splitByRating(userId: string, projectId: string) {
+    await this.data.ensureProjectManager({ projectId, userId })
+
+    return this.data.splitByRating(projectId)
   }
 }
