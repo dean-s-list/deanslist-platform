@@ -31,11 +31,6 @@ export default function ReviewerProjectListFeature() {
     >
       <Group justify="space-between">
         <Group>
-          <Switch
-            label="Show my projects only"
-            checked={mineOnly}
-            onChange={(e) => setMineOnly(e.currentTarget.checked)}
-          />
           <CoreUiCustomSelect
             label="State"
             smIcon={<IconFilter />}
@@ -55,6 +50,11 @@ export default function ReviewerProjectListFeature() {
             data={projectOrderByOptions}
           />
         </Group>
+        <Switch
+          label="Show my projects only"
+          checked={mineOnly}
+          onChange={(e) => setMineOnly(e.currentTarget.checked)}
+        />
       </Group>
 
       {query.isLoading ? (

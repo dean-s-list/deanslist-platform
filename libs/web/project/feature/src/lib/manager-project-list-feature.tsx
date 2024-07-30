@@ -23,6 +23,15 @@ export function ManagerProjectListFeature({ communityId }: { communityId?: strin
       communityId,
     },
   )
+  const searchField = (
+    <CoreUiSearchField
+      miw={300}
+      maw={500}
+      size="md"
+      placeholder="Search by project or community"
+      setSearch={setSearch}
+    />
+  )
 
   const page = (
     <>
@@ -48,7 +57,7 @@ export function ManagerProjectListFeature({ communityId }: { communityId?: strin
           />
         </Group>
         <Group>
-          <CoreUiSearchField placeholder="Search project" setSearch={setSearch} />
+          {communityId ? searchField : null}
           <CoreUiDebugModal data={items} />
           <Button
             radius="xl"
@@ -100,7 +109,16 @@ export function ManagerProjectListFeature({ communityId }: { communityId?: strin
   return communityId ? (
     page
   ) : (
-    <UiPage title="Manage Projects" leftAction={<IconChairDirector size={28} />}>
+    <UiPage
+      title="Manage Projects"
+      leftAction={<IconChairDirector size={28} />}
+      rightAction={
+        <Group>
+          <CoreUiDebugModal data={items} />
+          {searchField}
+        </Group>
+      }
+    >
       {page}
     </UiPage>
   )
