@@ -21,11 +21,6 @@ const defaultTheme = createTheme({
         dropdown: { border: 'none', ...dropdownBackground },
       },
     },
-    Paper: {
-      styles: {
-        root: { background: 'transparent' },
-      },
-    },
     Select: {
       styles: {
         input: { border: 'none', ...cardGradient },
