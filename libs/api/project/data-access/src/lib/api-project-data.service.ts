@@ -149,15 +149,26 @@ export class ApiProjectDataService {
 
   async updateProject(projectId: string, input: Prisma.ProjectUpdateInput, allowStartDateInPast = false) {
     const found = await this.findOneProject(projectId)
-    const { durationDays, endDate, startDate } = calculateProjectDates({
-      found,
-      input: { durationDays: input.durationDays as number | null, startDate: input.startDate as Date | string | null },
-      allowStartDateInPast,
-    })
+
+    const projectDates =
+      found.status === ProjectStatus.Draft || allowStartDateInPast
+        ? calculateProjectDates({
+            allowStartDateInPast,
+            found,
+            input: {
+              durationDays: input.durationDays as number | null,
+              startDate: input.startDate as Date | string | null,
+            },
+          })
+        : {
+            durationDays: found.durationDays,
+            endDate: found.endDate,
+            startDate: found.startDate,
+          }
 
     return this.core.data.project.update({
       where: { id: found.id },
-      data: { ...input, durationDays, endDate, startDate },
+      data: { ...input, ...projectDates },
     })
   }
 

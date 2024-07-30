@@ -9,6 +9,7 @@ import {
 import { useReviewerFindOneProject } from '@deanslist-platform/web-project-data-access'
 import {
   ProjectUiAmount,
+  ProjectUiDates,
   ProjectUiDeadline,
   ProjectUiInstructions,
   ProjectUiItem,
@@ -68,7 +69,10 @@ export function ReviewerProjectDetailFeature() {
             <UiGroup>
               <Group>
                 <ProjectUiItem project={item}>
-                  <ProjectUiStatusBadge size="xs" status={item.status} />
+                  <Group gap="xs">
+                    <ProjectUiStatusBadge size="xs" status={item.status} />
+                    <ProjectUiDates project={item} />
+                  </Group>
                 </ProjectUiItem>
               </Group>
               <Group gap="xs">

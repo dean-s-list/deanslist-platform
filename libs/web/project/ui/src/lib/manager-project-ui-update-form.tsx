@@ -1,4 +1,4 @@
-import { ManagerUpdateProjectInput, Project } from '@deanslist-platform/sdk'
+import { ManagerUpdateProjectInput, Project, ProjectStatus } from '@deanslist-platform/sdk'
 import {
   cardGradient,
   CoreUiButton,
@@ -20,6 +20,7 @@ export function ManagerProjectUiUpdateForm({
   submit: (res: ManagerUpdateProjectInput) => Promise<boolean>
   project: Project
 }) {
+  const isDraft = project.status === ProjectStatus.Draft
   const form = useForm<ManagerUpdateProjectInput>({
     initialValues: {
       amountManagerUsd: project.amountManagerUsd ?? 0,
@@ -63,7 +64,7 @@ export function ManagerProjectUiUpdateForm({
         }
       },
       startDate: (value) => {
-        if (value && new Date(value ?? new Date()).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)) {
+        if (isDraft && value && new Date(value ?? new Date()).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0)) {
           return 'Start date must be in the future.'
         }
       },
@@ -99,7 +100,10 @@ export function ManagerProjectUiUpdateForm({
     <UiStack>
       <form
         onSubmit={form.onSubmit((values) =>
-          submit({ ...values, durationDays: parseInt(values.durationDays?.toString() ?? '2') }),
+          submit({
+            ...values,
+            durationDays: parseInt(values.durationDays?.toString() ?? '2'),
+          }),
         )}
       >
         <UiStack>
@@ -126,12 +130,14 @@ export function ManagerProjectUiUpdateForm({
           <CoreUiDivider />
           <FormGrid>
             <CoreUiDateInput
+              disabled={!isDraft}
               label="Start Date"
               placeholder="The start date of the project."
               minDate={new Date()}
               {...form.getInputProps('startDate')}
             />
             <CoreUiInput
+              disabled={!isDraft}
               label="Duration (days)"
               type="number"
               placeholder="The duration of the project in days."
