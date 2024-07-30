@@ -26,7 +26,7 @@ export function UserUiItem({
   return (
     <UiAnchor to={to ?? undefined} underline="never" {...anchorProps}>
       <Group gap="sm" wrap="nowrap" {...groupProps}>
-        <UserUiAvatar variant="filled" user={user} {...avatarProps} />
+        <UserUiAvatar user={user} {...avatarProps} />
         <Stack gap={1}>
           <Text fw={500} {...textProps}>
             {user?.username}

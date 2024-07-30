@@ -6,5 +6,5 @@ export type UserUiAvatarProps = UiAvatarProps & {
 }
 
 export function UserUiAvatar({ user, ...props }: UserUiAvatarProps) {
-  return <UiAvatar url={user?.avatarUrl} name={user?.username ?? undefined} {...props} />
+  return <UiAvatar variant="filled" url={user?.avatarUrl} name={user?.username ?? undefined} {...props} />
 }

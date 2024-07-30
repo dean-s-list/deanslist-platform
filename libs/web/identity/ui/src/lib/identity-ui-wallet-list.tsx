@@ -1,8 +1,9 @@
 import { ellipsify, Identity } from '@deanslist-platform/sdk'
 import { CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
-import { ActionIcon, Badge, Box, Group, Image, Menu, Paper, Text } from '@mantine/core'
+import { ActionIcon, Badge, Group, Menu, Paper, Text } from '@mantine/core'
 import { UiGroup, UiStack } from '@pubkey-ui/core'
 import { IconDotsVertical, IconExternalLink, IconStarFilled, IconTrash } from '@tabler/icons-react'
+import { IdentityUiAvatar } from './identity-ui-avatar'
 import { IdentityUiSolanaVerifyButton } from './identity-ui-solana-verify-button'
 import { IdentityUiVerified } from './identity-ui-verified'
 
@@ -23,12 +24,7 @@ export function IdentityUiWalletList({
         <Paper withBorder key={item.id} bg="transparent" radius="md" p="sm">
           <Group justify="space-between">
             <Group>
-              <Box
-                style={{ border: '1px solid black', backgroundColor: 'black', borderRadius: '50%', overflow: 'hidden' }}
-                p="xs"
-              >
-                <Image h={18} bg="black" src="/assets/solana-logo-mark.png" />
-              </Box>
+              <IdentityUiAvatar item={item} />
 
               <UiGroup gap="xs" align="center">
                 {item.profile?.username ? (

@@ -1,4 +1,3 @@
-import { CoreUiGrid } from '@deanslist-platform/web-core-ui'
 import { useUserProfile } from '@deanslist-platform/web-user-data-access'
 import { UserUiProfile, UserUiToggleDeveloperMode } from '@deanslist-platform/web-user-ui'
 import { Button, Text } from '@mantine/core'
@@ -18,20 +17,17 @@ export default function SettingsFeature() {
   }
 
   return (
-    <UiContainer>
-      <CoreUiGrid
-        sidebar={
-          <UserUiProfile
-            user={user}
-            action={
-              <Button size="xs" variant="light" component={Link} to={user.profileUrl}>
-                View profile
-              </Button>
-            }
-          />
-        }
-      >
-        <UiStack gap="xl">
+    <UiContainer size="sm">
+      <UiStack gap="xl">
+        <UserUiProfile
+          user={user}
+          action={
+            <Button size="xs" variant="light" component={Link} to={user.profileUrl}>
+              View profile
+            </Button>
+          }
+        />
+        <UiStack>
           <SettingsWalletsFeature />
           <UiStack>
             <Text fz="xl" fw={500}>
@@ -40,7 +36,7 @@ export default function SettingsFeature() {
             <UserUiToggleDeveloperMode user={user} updateUser={updateUser} />
           </UiStack>
         </UiStack>
-      </CoreUiGrid>
+      </UiStack>
     </UiContainer>
   )
 }

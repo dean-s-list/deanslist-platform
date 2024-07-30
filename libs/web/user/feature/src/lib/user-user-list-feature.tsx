@@ -1,7 +1,6 @@
 import { CoreUiSearchField } from '@deanslist-platform/web-core-ui'
 import { useUserFindManyUser } from '@deanslist-platform/web-user-data-access'
 import { UserUiGrid } from '@deanslist-platform/web-user-ui'
-import { Group } from '@mantine/core'
 import { UiInfo, UiLoader, UiPage } from '@pubkey-ui/core'
 import { IconUsers, IconUserSearch } from '@tabler/icons-react'
 
@@ -11,10 +10,20 @@ export function UserUserListFeature() {
   })
 
   return (
-    <UiPage title="Users" leftAction={<IconUsers size={28} />}>
-      <Group>
-        <CoreUiSearchField size="lg" leftSection={<IconUserSearch />} placeholder="Search user" setSearch={setSearch} />
-      </Group>
+    <UiPage
+      title="Users"
+      leftAction={<IconUsers size={28} />}
+      rightAction={
+        <CoreUiSearchField
+          leftSection={<IconUserSearch />}
+          miw={300}
+          maw={500}
+          size="md"
+          placeholder="Search user"
+          setSearch={setSearch}
+        />
+      }
+    >
       {query.isLoading ? (
         <UiLoader />
       ) : items?.length ? (
