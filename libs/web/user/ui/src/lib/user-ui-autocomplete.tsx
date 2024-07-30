@@ -1,5 +1,5 @@
-import { Autocomplete, type AutocompleteProps, CloseIcon, Loader } from '@mantine/core'
 import type { User } from '@deanslist-platform/sdk'
+import { Autocomplete, type AutocompleteProps, CloseIcon, Loader } from '@mantine/core'
 import { IconUserSearch } from '@tabler/icons-react'
 
 import { useRef, useState } from 'react'
@@ -29,6 +29,7 @@ export function UserUiAutocomplete({ isLoading, items, select, setSearch, ...pro
         select(user)
         setUser(user)
       }
+      setValue('')
     })
   }
 

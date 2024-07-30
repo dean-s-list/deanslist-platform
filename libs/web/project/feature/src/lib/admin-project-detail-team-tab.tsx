@@ -1,6 +1,7 @@
 import { useAdminFindOneProject } from '@deanslist-platform/web-project-data-access'
 import { UiCard, UiError, UiLoader } from '@pubkey-ui/core'
-import { ProjectUiTeamManager } from './manager-project-detail-team-tab'
+
+import { ProjectUiTeamManager } from './project-ui-team-manager'
 
 export function AdminProjectDetailTeamTab({ projectId }: { projectId: string }) {
   const {

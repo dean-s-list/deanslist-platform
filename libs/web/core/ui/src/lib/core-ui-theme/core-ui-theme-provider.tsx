@@ -15,6 +15,17 @@ const defaultTheme = createTheme({
   fontFamily: `Poppins, sans-serif`,
   headings: { fontFamily: 'Poppins, sans-serif' },
   components: {
+    Autocomplete: {
+      styles: {
+        input: { border: 'none', ...cardGradient },
+        dropdown: { border: 'none', ...dropdownBackground },
+      },
+    },
+    Paper: {
+      styles: {
+        root: { background: 'transparent' },
+      },
+    },
     Select: {
       styles: {
         input: { border: 'none', ...cardGradient },

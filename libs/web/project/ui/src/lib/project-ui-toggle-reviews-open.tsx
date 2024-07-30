@@ -11,8 +11,9 @@ export function ProjectUiToggleReviewsOpen({
 }) {
   return (
     <Switch
-      label="Open Reviews"
-      description="Open Reviews allows any user to create a review for this project."
+      label="Public"
+      description="All users with access to the platform can review the project. To restrict access to specific users, toggle off 'public'.
+Be aware that all the projects are visible to everyone."
       checked={project?.reviewsOpen ?? false}
       onChange={(e) =>
         update({ reviewsOpen: e.target.checked }).then(() => {
