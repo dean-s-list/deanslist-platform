@@ -7,10 +7,10 @@ import { CommunityUiItem } from '@deanslist-platform/web-community-ui'
 import { CoreUiButton, CoreUiDebugModal } from '@deanslist-platform/web-core-ui'
 import { ManagerProjectFeature } from '@deanslist-platform/web-project-feature'
 import { Group } from '@mantine/core'
-import { UiContainer, UiError, UiGroup, UiLoader, UiStack } from '@pubkey-ui/core'
-import { IconSettings, IconShield, IconUsers } from '@tabler/icons-react'
-import { useMemo } from 'react'
-import { Navigate, RouteObject, useLocation, useParams, useRoutes } from 'react-router-dom'
+import { UiContainer, UiError, UiGroup, UiLoader, UiStack, UiTabRoute, UiTabRoutes } from '@pubkey-ui/core'
+import { IconShield } from '@tabler/icons-react'
+import React, { useMemo } from 'react'
+import { useParams } from 'react-router-dom'
 import { ManagerCommunityDetailManagersTab } from './manager-community-detail-managers-tab'
 import { ManagerCommunitySettingsGeneralTab } from './manager-community-settings-general.tab'
 
@@ -19,31 +19,32 @@ export function ManagerCommunityDetailFeature() {
   const { item, query } = useManagerFindOneCommunity({ communityId })
   const { isCommunityAdmin } = useManagerGetCommunityManager({ communityId })
   const { isAdmin } = useAuth()
-  const { pathname } = useLocation()
 
-  const routes: RouteObject[] = useMemo(
-    () => [
-      {
-        index: true,
-        element: <Navigate to="projects" replace />,
-      },
-      {
-        path: 'projects/*',
-        element: <ManagerProjectFeature communityId={communityId} />,
-      },
-      {
-        path: 'managers',
-        element: isCommunityAdmin ? <ManagerCommunityDetailManagersTab communityId={communityId} /> : null,
-      },
-      {
-        path: 'settings',
-        element: isCommunityAdmin ? <ManagerCommunitySettingsGeneralTab communityId={communityId} /> : null,
-      },
-    ],
+  const tabs: UiTabRoute[] = useMemo(
+    () =>
+      [
+        {
+          path: 'projects',
+          label: 'Projects',
+          element: <ManagerProjectFeature communityId={communityId} />,
+        },
+        isCommunityAdmin
+          ? {
+              path: 'managers',
+              label: 'Managers',
+              element: isCommunityAdmin ? <ManagerCommunityDetailManagersTab communityId={communityId} /> : null,
+            }
+          : null,
+        isCommunityAdmin
+          ? {
+              path: 'settings',
+              label: 'Settings',
+              element: isCommunityAdmin ? <ManagerCommunitySettingsGeneralTab communityId={communityId} /> : null,
+            }
+          : null,
+      ].filter(Boolean) as UiTabRoute[],
     [isCommunityAdmin, communityId],
   )
-
-  const router = useRoutes(routes)
 
   if (query.isLoading) {
     return <UiLoader />
@@ -57,34 +58,16 @@ export function ManagerCommunityDetailFeature() {
       <UiStack>
         <UiGroup>
           <CommunityUiItem community={item} to={item.manageUrl} />
-          {isCommunityAdmin ? (
-            <Group>
-              <CoreUiDebugModal data={item} />
-              <CoreUiButton
-                to={`${item.manageUrl}/managers`}
-                variant={pathname.startsWith(`${item.manageUrl}/managers`) ? 'primary' : 'light'}
-                size="xs"
-                iconLeft={IconUsers}
-              >
-                Managers
+          <Group>
+            <CoreUiDebugModal data={item} />
+            {isAdmin ? (
+              <CoreUiButton to={`/admin/communities/${communityId}`} variant="light" size="xs" iconLeft={IconShield}>
+                Admin
               </CoreUiButton>
-              <CoreUiButton
-                to={`${item.manageUrl}/settings`}
-                variant={pathname.startsWith(`${item.manageUrl}/settings`) ? 'primary' : 'light'}
-                size="xs"
-                iconLeft={IconSettings}
-              >
-                Settings
-              </CoreUiButton>
-              {isAdmin ? (
-                <CoreUiButton to={`/admin/communities/${communityId}`} variant="light" size="xs" iconLeft={IconShield}>
-                  Admin
-                </CoreUiButton>
-              ) : null}
-            </Group>
-          ) : null}
+            ) : null}
+          </Group>
         </UiGroup>
-        {router}
+        <UiTabRoutes variant="pills" radius="xl" tabs={tabs} />
       </UiStack>
     </UiContainer>
   )

@@ -7,16 +7,18 @@ import { useState } from 'react'
 
 export function ManagerProjectUiCreateForm({
   communities,
+  communityId,
   submit,
 }: {
   communities: Community[]
+  communityId?: string | null | undefined
   submit: (res: ManagerCreateProjectInput, addMore?: boolean) => Promise<boolean>
 }) {
   const [addMore, setAddMore] = useState(false)
   const form = useForm<ManagerCreateProjectInput>({
     initialValues: {
       name: '',
-      communityId: communities[0]?.id ?? '',
+      communityId: communityId ?? communities[0]?.id ?? '',
     },
     validate: {
       name: (value) => {
@@ -42,13 +44,15 @@ export function ManagerProjectUiCreateForm({
     >
       <UiStack>
         <UiStack>
-          <Select
-            data={communities?.map((item) => ({ value: item.id, label: item.name }))}
-            label="Community"
-            placeholder="Select community"
-            description="The community where the project will be created."
-            {...form.getInputProps('communityId')}
-          />
+          {communityId ? null : (
+            <Select
+              data={communities?.map((item) => ({ value: item.id, label: item.name }))}
+              label="Community"
+              placeholder="Select community"
+              description="The community where the project will be created."
+              {...form.getInputProps('communityId')}
+            />
+          )}
           <TextInput
             withAsterisk
             label="Name"

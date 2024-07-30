@@ -6,10 +6,12 @@ import { useNavigate } from 'react-router-dom'
 
 export function ManagerProjectCreateFeature({
   communities,
+  communityId,
   close,
   refresh,
 }: {
   communities: Community[]
+  communityId?: string | null | undefined
   close: () => void
   refresh: () => Promise<void>
 }) {
@@ -34,5 +36,5 @@ export function ManagerProjectCreateFeature({
       })
   }
 
-  return <ManagerProjectUiCreateForm communities={communities} submit={submit} />
+  return <ManagerProjectUiCreateForm communities={communities} communityId={communityId} submit={submit} />
 }

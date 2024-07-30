@@ -19,6 +19,7 @@ export function AdminCommunityDetailManagersTab({ communityId }: { communityId: 
 
   return (
     <CommunityUiSettingsManagers
+      allowSelfToggle
       items={items}
       isLoading={query.isLoading}
       remove={(userId) => removeCommunityManager.mutateAsync(userId).then(refresh)}

@@ -5,12 +5,14 @@ import { CommunityUiAddManagerForm } from './community-ui-add-manager-form'
 import { CommunityUiManagerListItem } from './community-ui-manager-list-item'
 
 export function CommunityUiSettingsManagers({
+  allowSelfToggle = false,
   isLoading,
   items,
   remove,
   toggle,
   add,
 }: {
+  allowSelfToggle?: boolean
   isLoading: boolean
   items: CommunityManager[]
   remove: (id: string) => Promise<void>
@@ -29,6 +31,7 @@ export function CommunityUiSettingsManagers({
           {items.map((item) => (
             <CommunityUiManagerListItem
               key={item.id}
+              allowSelfToggle={allowSelfToggle}
               item={item}
               remove={() => remove(item.userId)}
               toggle={() => toggle(item.userId)}

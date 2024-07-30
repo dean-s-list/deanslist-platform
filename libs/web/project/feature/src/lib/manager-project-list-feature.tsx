@@ -11,7 +11,7 @@ import { useManagerFindManyProject } from '@deanslist-platform/web-project-data-
 import { ProjectUiEmptyState, ProjectUiGrid } from '@deanslist-platform/web-project-ui'
 import { Button, Group } from '@mantine/core'
 import { modals } from '@mantine/modals'
-import { UiError, UiGroup, UiLoader, UiPage } from '@pubkey-ui/core'
+import { UiError, UiGroup, UiLoader, UiPage, UiStack } from '@pubkey-ui/core'
 import { IconArrowsUpDown, IconChairDirector, IconFilter, IconPlus } from '@tabler/icons-react'
 import { ManagerProjectCreateFeature } from './manager-project-create-feature'
 import { OrderOptionLabel } from './reviewer-project-list.feature'
@@ -71,6 +71,7 @@ export function ManagerProjectListFeature({ communityId }: { communityId?: strin
                 styles: { ...modalStyles },
                 children: (
                   <ManagerProjectCreateFeature
+                    communityId={communityId}
                     communities={communities}
                     refresh={async () => {
                       await query.refetch()
@@ -107,7 +108,7 @@ export function ManagerProjectListFeature({ communityId }: { communityId?: strin
   )
 
   return communityId ? (
-    page
+    <UiStack>{page}</UiStack>
   ) : (
     <UiPage
       title="Manage Projects"

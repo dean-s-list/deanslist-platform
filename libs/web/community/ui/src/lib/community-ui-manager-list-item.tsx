@@ -8,15 +8,18 @@ import { UiGroup, UiStack } from '@pubkey-ui/core'
 import { IconTrash } from '@tabler/icons-react'
 
 export function CommunityUiManagerListItem({
+  allowSelfToggle = false,
   item,
   toggle,
   remove,
 }: {
+  allowSelfToggle?: boolean
   item: CommunityManager
   toggle: () => Promise<void>
   remove: () => Promise<void>
 }) {
   const { user } = useAuth()
+  const isSelf = user?.id === item.userId
   return (
     <CoreUiCard key={item.id}>
       <UiStack>
@@ -25,7 +28,7 @@ export function CommunityUiManagerListItem({
 
           <Group>
             <Switch
-              disabled={user?.id === item.userId}
+              disabled={isSelf && !allowSelfToggle}
               label={item.admin ? 'Admin' : 'Manager'}
               checked={item.admin ?? false}
               onChange={toggle}
