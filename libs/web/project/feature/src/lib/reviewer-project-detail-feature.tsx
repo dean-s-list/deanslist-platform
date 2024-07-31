@@ -40,7 +40,7 @@ export function ReviewerProjectDetailFeature() {
     },
   ])
 
-  const isManager = item?.managers?.some((manager) => manager.id === user?.id)
+  const isManager = item?.managers?.some((manager) => manager.userId === user?.id)
 
   if (query.isLoading) {
     return <UiLoader />

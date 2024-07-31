@@ -154,14 +154,26 @@ model Project {
   avatarUrl         String?
   status            ProjectStatus    @default(Draft)
   channels          DiscordChannel[]
-  reviews           Review[]
-  managers          User[]           @relation(name: "ProjectManagers")
-  reviewers         User[]           @relation(name: "ProjectReviews")
-  referral          User?            @relation(name: "ProjectReferral", fields: [referralId], references: [id])
-  referralId        String?
+  members           ProjectMember[]
 
   @@unique([communityId, name])
   @@unique([communityId, slug])
+}
+
+model ProjectMember {
+  id        String      @id @default(cuid())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  role      ProjectRole
+  amount    Int         @default(0)
+  bonus     Int         @default(0)
+  project   Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  reviews   Review[]
+
+  @@unique([projectId, userId])
 }
 
 model Rating {
@@ -179,40 +191,33 @@ model Rating {
 }
 
 model Review {
-  id         String    @id @default(cuid())
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  amount     Int       @default(0)
-  bonus      Int       @default(0)
-  project    Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId  String
-  reviewer   User      @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
-  reviewerId String
-  comments   Comment[]
-
-  @@unique([projectId, reviewerId])
+  id              String        @id @default(cuid())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  amount          Int           @default(0)
+  bonus           Int           @default(0)
+  projectMember   ProjectMember @relation(fields: [projectMemberId], references: [id], onDelete: Cascade)
+  projectMemberId String        @unique
+  comments        Comment[]
 }
 
 model User {
-  id              String             @id @default(cuid())
-  createdAt       DateTime           @default(now())
-  updatedAt       DateTime           @updatedAt
-  avatarUrl       String?
-  developer       Boolean            @default(false)
-  name            String?
-  password        String?
-  walletAddress   String?
-  role            UserRole           @default(User)
-  status          UserStatus         @default(Created)
-  username        String             @unique
-  identities      Identity[]
-  communities     CommunityManager[]
-  reviews         Review[]
-  projectManagers Project[]          @relation(name: "ProjectManagers")
-  projectReviewes Project[]          @relation(name: "ProjectReviews")
-  projectReferral Project[]          @relation(name: "ProjectReferral")
-  comments        Comment[]
-  ratings         Rating[]
+  id             String             @id @default(cuid())
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  avatarUrl      String?
+  developer      Boolean            @default(false)
+  name           String?
+  password       String?
+  walletAddress  String?
+  role           UserRole           @default(User)
+  status         UserStatus         @default(Created)
+  username       String             @unique
+  identities     Identity[]
+  communities    CommunityManager[]
+  projectMembers ProjectMember[]
+  comments       Comment[]
+  ratings        Rating[]
 }
 
 enum CommentCategory {
@@ -229,6 +234,12 @@ enum FaqItemGroup {
 enum IdentityProvider {
   Discord
   Solana
+}
+
+enum ProjectRole {
+  Manager
+  Referral
+  Reviewer
 }
 
 enum ProjectStatus {

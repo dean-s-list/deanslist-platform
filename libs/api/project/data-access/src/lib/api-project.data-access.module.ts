@@ -6,6 +6,7 @@ import { ApiProjectDataManagerService } from './api-project-data-manager.service
 import { ApiProjectDataReviewerService } from './api-project-data-reviewer.service'
 import { ApiProjectDataService } from './api-project-data.service'
 import { ApiProjectEventService } from './api-project-event.service'
+import { ApiProjectMemberDataService } from './api-project-member-data.service'
 import { ApiProjectProvisionService } from './api-project-provision.service'
 import { ApiProjectService } from './api-project.service'
 
@@ -17,6 +18,7 @@ import { ApiProjectService } from './api-project.service'
     ApiProjectDataReviewerService,
     ApiProjectDataService,
     ApiProjectEventService,
+    ApiProjectMemberDataService,
     ApiProjectProvisionService,
     ApiProjectService,
   ],

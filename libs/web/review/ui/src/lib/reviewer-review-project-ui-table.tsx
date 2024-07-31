@@ -22,9 +22,9 @@ export function ReviewerReviewProjectUiTable({ reviews = [] }: { reviews: Review
           {
             accessor: 'reviewer',
             render: (item) =>
-              item.reviewer ? (
+              item.projectMember?.user ? (
                 <UserUiItem
-                  user={item.reviewer}
+                  user={item.projectMember?.user}
                   to={item.viewUrl}
                   label={<UiTime size="xs" c="dimmed" date={new Date(item.createdAt ?? '0')} />}
                 />

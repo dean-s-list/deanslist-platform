@@ -1,4 +1,4 @@
-import { Rating } from '@deanslist-platform/api-rating-data-access'
+import { Rating } from '@prisma/client'
 
 export function calculateProjectRatings(ratings: Rating[]) {
   if (!ratings.length) {

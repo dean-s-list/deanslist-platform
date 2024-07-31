@@ -29,7 +29,6 @@ export function UserUiAutocomplete({ isLoading, items, select, setSearch, ...pro
         select(user)
         setUser(user)
       }
-      setValue('')
     })
   }
 
@@ -38,7 +37,7 @@ export function UserUiAutocomplete({ isLoading, items, select, setSearch, ...pro
       label="Search"
       placeholder="Search for a user"
       value={value}
-      data={items?.map((item) => item.username + '')}
+      data={items?.map((item) => `${item.username}`)}
       onChange={handleChange}
       leftSection={user ? <UserUiAvatar user={user} size="sm" /> : <IconUserSearch />}
       rightSection={

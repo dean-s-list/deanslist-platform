@@ -1,6 +1,7 @@
 import { Identity } from '@deanslist-platform/api-identity-data-access'
 import { User, UserRole } from '@deanslist-platform/api-user-data-access'
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql'
+import { ProjectMember, ProjectRole } from '@prisma/client'
 
 @Resolver(() => User)
 export class ApiUserResolver {
@@ -14,7 +15,10 @@ export class ApiUserResolver {
     if (user.role === UserRole.Admin) {
       return true
     }
-    return !!user.communities?.length || !!user.projectManagers?.length
+    const projectManager =
+      ((user.projectMembers ?? []) as ProjectMember[]).filter((i) => i.role === ProjectRole.Manager) ?? []
+
+    return !!user.communities?.length || !!projectManager.length
   }
 
   @ResolveField(() => String)

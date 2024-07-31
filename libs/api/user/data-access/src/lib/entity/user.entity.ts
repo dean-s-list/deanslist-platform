@@ -27,7 +27,7 @@ export class User {
   @HideField()
   identities?: unknown[] | null
   @HideField()
-  projectManagers?: unknown[] | null
+  projectMembers?: unknown[] | null
   @HideField()
   communities?: unknown[] | null
 }

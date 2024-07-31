@@ -4,32 +4,24 @@ import { UserUiItem, UserUiSearch } from '@deanslist-platform/web-user-ui'
 import { UiGroup, UiStack } from '@pubkey-ui/core'
 import { IconPlus } from '@tabler/icons-react'
 import { useState } from 'react'
-import { ProjectUiMemberTable } from './project-ui-member-table'
 
-export function ProjectUiMemberManager({
+export function ProjectUiAddMember({
   members,
   addUser,
-  removeUser,
-  max,
   placeholder,
 }: {
-  max?: number
   placeholder?: string
   members: ProjectMember[]
-  addUser: (managerUserId: string) => Promise<boolean | null | undefined>
-  removeUser: (managerUserId: string) => Promise<boolean | null | undefined>
+  addUser: (userId: string) => Promise<boolean | null | undefined>
 }) {
-  const addMore = max ? members.length < max : true
   const [user, setUser] = useState<User | undefined>(undefined)
   const users = (members.map((m) => m.user) ?? []).filter(Boolean) as User[]
 
   return (
     <UiStack>
-      {addMore ? (
-        <UiStack>
-          <UserUiSearch users={users} label={null} select={setUser} placeholder={placeholder} />
-        </UiStack>
-      ) : null}
+      <UiStack>
+        <UserUiSearch users={users} label={null} select={setUser} placeholder={placeholder} />
+      </UiStack>
       {user ? (
         <UiStack key={user.id}>
           <UiGroup px="xs">
@@ -41,7 +33,6 @@ export function ProjectUiMemberManager({
           <CoreUiDivider />
         </UiStack>
       ) : null}
-      <ProjectUiMemberTable users={users} delete={removeUser} />
     </UiStack>
   )
 }

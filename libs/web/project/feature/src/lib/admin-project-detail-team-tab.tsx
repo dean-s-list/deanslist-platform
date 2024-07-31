@@ -1,40 +1,31 @@
+import { CoreUiCard } from '@deanslist-platform/web-core-ui'
 import { useAdminFindOneProject } from '@deanslist-platform/web-project-data-access'
-import { UiCard, UiError, UiLoader } from '@pubkey-ui/core'
-
-import { ProjectUiTeamManager } from './project-ui-team-manager'
+import { AdminProjectMemberUiTable, ProjectUiAddMember } from '@deanslist-platform/web-project-ui'
+import { UiError, UiLoader, UiStack } from '@pubkey-ui/core'
 
 export function AdminProjectDetailTeamTab({ projectId }: { projectId: string }) {
-  const {
-    item,
-    query,
-    addProjectManager,
-    addProjectReviewer,
-    addProjectReferral,
-    removeProjectManager,
-    removeProjectReviewer,
-    removeProjectReferral,
-    updateProject,
-  } = useAdminFindOneProject({ projectId })
+  const { item, query, addProjectManager, removeProjectMember, updateProjectMemberRole } = useAdminFindOneProject({
+    projectId,
+  })
 
-  if (query.isLoading) {
+  if (query.isLoading || query.isFetching) {
     return <UiLoader />
   }
   if (!item) {
     return <UiError message="Project not found." />
   }
+  const members = item.members ?? []
 
   return (
-    <UiCard>
-      <ProjectUiTeamManager
-        project={item}
-        addProjectManager={addProjectManager}
-        addProjectReferral={addProjectReferral}
-        addProjectReviewer={addProjectReviewer}
-        removeProjectManager={removeProjectManager}
-        removeProjectReferral={removeProjectReferral}
-        removeProjectReviewer={removeProjectReviewer}
-        updateProject={(input) => updateProject(input, false).then(() => true)}
-      />
-    </UiCard>
+    <CoreUiCard>
+      <UiStack>
+        <ProjectUiAddMember members={members} addUser={addProjectManager} />
+        <AdminProjectMemberUiTable
+          projectMembers={members}
+          updateProjectMemberRole={updateProjectMemberRole}
+          removeProjectMember={removeProjectMember}
+        />
+      </UiStack>
+    </CoreUiCard>
   )
 }

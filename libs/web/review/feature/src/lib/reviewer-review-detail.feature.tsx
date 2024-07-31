@@ -15,7 +15,7 @@ export function ReviewerReviewDetailFeature() {
   if (!item) {
     return <UiError message="Review not found." />
   }
-  if (!item.reviewer) {
+  if (!item.projectMember?.user) {
     return <UiError message="Reviewer not found." />
   }
 

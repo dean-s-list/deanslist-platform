@@ -1,19 +1,15 @@
 fragment ReviewDetails on Review {
   createdAt
   id
-  projectId
-  reviewerId
   updatedAt
   amount
   bonus
   name
   ratingAverage
   ratingProgress
-  project {
-    ...ProjectDetails
-  }
-  reviewer {
-    ...UserDetails
+  projectMemberId
+  projectMember {
+    ...ProjectMemberDetails
   }
   viewUrl
 }

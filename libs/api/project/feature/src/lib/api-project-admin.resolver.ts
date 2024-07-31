@@ -5,6 +5,7 @@ import {
   ApiProjectService,
   Project,
   ProjectPaging,
+  ProjectRole,
 } from '@deanslist-platform/api-project-data-access'
 import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
@@ -24,24 +25,6 @@ export class ApiProjectAdminResolver {
   }
 
   @Mutation(() => Boolean, { nullable: true })
-  adminAddProjectReviewer(
-    @CtxUserId() userId: string,
-    @Args('projectId') projectId: string,
-    @Args('reviewerUserId') reviewerUserId: string,
-  ) {
-    return this.service.admin.addProjectReviewer(userId, projectId, reviewerUserId)
-  }
-
-  @Mutation(() => Boolean, { nullable: true })
-  adminAddProjectReferral(
-    @CtxUserId() userId: string,
-    @Args('projectId') projectId: string,
-    @Args('referralUserId') referralUserId: string,
-  ) {
-    return this.service.admin.addProjectReferral(userId, projectId, referralUserId)
-  }
-
-  @Mutation(() => Boolean, { nullable: true })
   adminDeleteProject(@CtxUserId() userId: string, @Args('projectId') projectId: string) {
     return this.service.admin.deleteProject(userId, projectId)
   }
@@ -57,30 +40,8 @@ export class ApiProjectAdminResolver {
   }
 
   @Mutation(() => Boolean, { nullable: true })
-  adminRemoveProjectManager(
-    @CtxUserId() userId: string,
-    @Args('projectId') projectId: string,
-    @Args('managerUserId') managerUserId: string,
-  ) {
-    return this.service.admin.removeProjectManager(userId, projectId, managerUserId)
-  }
-
-  @Mutation(() => Boolean, { nullable: true })
-  adminRemoveProjectReviewer(
-    @CtxUserId() userId: string,
-    @Args('projectId') projectId: string,
-    @Args('reviewerUserId') reviewerUserId: string,
-  ) {
-    return this.service.admin.removeProjectReviewer(userId, projectId, reviewerUserId)
-  }
-
-  @Mutation(() => Boolean, { nullable: true })
-  adminRemoveProjectReferral(
-    @CtxUserId() userId: string,
-    @Args('projectId') projectId: string,
-    @Args('referralUserId') referralUserId: string,
-  ) {
-    return this.service.admin.removeProjectReferral(userId, projectId, referralUserId)
+  adminRemoveProjectMember(@CtxUserId() userId: string, @Args('projectMemberId') projectMemberId: string) {
+    return this.service.admin.removeProjectMember(userId, projectMemberId)
   }
 
   @Mutation(() => Project, { nullable: true })
@@ -90,5 +51,14 @@ export class ApiProjectAdminResolver {
     @Args('input') input: AdminUpdateProjectInput,
   ) {
     return this.service.admin.updateProject(userId, projectId, input)
+  }
+
+  @Mutation(() => Boolean, { nullable: true })
+  adminUpdateProjectMemberRole(
+    @CtxUserId() userId: string,
+    @Args('projectMemberId') projectMemberId: string,
+    @Args({ name: 'role', type: () => ProjectRole }) role: ProjectRole,
+  ) {
+    return this.service.admin.updateProjectMemberRole(userId, projectMemberId, role)
   }
 }

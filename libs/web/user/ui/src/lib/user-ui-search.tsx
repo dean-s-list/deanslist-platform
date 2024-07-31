@@ -7,17 +7,15 @@ export interface UserUiSearchProps extends Omit<UserUiAutocompleteProps, 'items'
 }
 
 export function UserUiSearch({ select, users = [], placeholder = 'Search for a user', ...props }: UserUiSearchProps) {
-  const { items, query, setSearch } = useUserFindManyUser({ limit: 5 })
-  const userIds = users.map((user) => user.id)
-  const filtered = items.filter((user) => !userIds.includes(user.id))
+  const filterIds = (users ?? []).filter(Boolean).map((user) => user?.id)
+  const { items, query, setSearch } = useUserFindManyUser({ limit: 5, filterIds })
 
   return (
     <UserUiAutocomplete
       placeholder={placeholder}
-      disabled={!filtered.length}
       isLoading={query.isLoading}
       select={select}
-      items={filtered}
+      items={items}
       setSearch={setSearch}
       {...props}
     />

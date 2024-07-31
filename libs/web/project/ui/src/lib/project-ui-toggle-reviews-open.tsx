@@ -7,7 +7,7 @@ export function ProjectUiToggleReviewsOpen({
   update,
 }: {
   project: Project
-  update: (input: ManagerUpdateProjectInput) => Promise<boolean>
+  update: (input: ManagerUpdateProjectInput) => Promise<Project | null>
 }) {
   return (
     <Switch
@@ -16,8 +16,10 @@ export function ProjectUiToggleReviewsOpen({
 Be aware that all the projects are visible to everyone."
       checked={project?.reviewsOpen ?? false}
       onChange={(e) =>
-        update({ reviewsOpen: e.target.checked }).then(() => {
-          toastInfo(`Open reviews ${e.target.checked ? 'disabled' : 'enabled'}`)
+        update({ reviewsOpen: e.target.checked }).then((updated) => {
+          if (updated) {
+            toastInfo(`Open reviews ${updated.reviewsOpen ? 'enabled' : 'disabled'}`)
+          }
         })
       }
     />

@@ -12,7 +12,7 @@ export function ReviewerCommentListFeature({ review, leftAction }: { review: Rev
   const { createComment, deleteComment, items, query, setSearch } = useReviewerFindManyComment({
     reviewId: review.id,
   })
-  const owned = user?.id === review.reviewerId
+  const owned = user?.id === review.projectMember?.userId
 
   return (
     <UiStack>

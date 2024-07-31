@@ -1,5 +1,4 @@
-import { Project } from '@deanslist-platform/api-project-data-access'
-import { User } from '@deanslist-platform/api-user-data-access'
+import { ProjectMember } from '@deanslist-platform/api-project-data-access'
 import { Field, HideField, Int, ObjectType } from '@nestjs/graphql'
 import { Comment, Rating } from '@prisma/client'
 
@@ -15,14 +14,10 @@ export class Review {
   amount?: number | null
   @Field(() => Int, { nullable: true })
   bonus?: number | null
-  @Field(() => Project, { nullable: true })
-  project?: Project
+  @Field(() => ProjectMember, { nullable: true })
+  projectMember?: ProjectMember
   @Field()
-  projectId!: string
-  @Field(() => User, { nullable: true })
-  reviewer?: User
-  @Field()
-  reviewerId!: string
+  projectMemberId!: string
   @HideField()
   comments?: Comment & { ratings?: Rating[] }[]
 }

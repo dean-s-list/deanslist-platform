@@ -24,8 +24,8 @@ export function ReviewerReviewUsernameUiTable({ reviews = [] }: { reviews: Revie
           {
             accessor: 'name',
             render: (item) =>
-              item.project ? (
-                <ProjectUiItem project={item.project} to={item.viewUrl}>
+              item.projectMember?.project ? (
+                <ProjectUiItem project={item.projectMember?.project} to={item.viewUrl}>
                   <UiTime size="xs" c="dimmed" date={new Date(item.createdAt ?? '0')} />
                 </ProjectUiItem>
               ) : null,
@@ -33,7 +33,7 @@ export function ReviewerReviewUsernameUiTable({ reviews = [] }: { reviews: Revie
           {
             width: '15%',
             accessor: 'status',
-            render: (item) => <ProjectUiStatusBadge status={item.project?.status} />,
+            render: (item) => <ProjectUiStatusBadge status={item.projectMember?.project?.status} />,
           },
           {
             width: '15%',

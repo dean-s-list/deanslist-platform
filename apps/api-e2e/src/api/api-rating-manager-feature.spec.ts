@@ -156,6 +156,7 @@ describe('api-rating-feature', () => {
 
       describe('rating e2e', () => {
         const comments: Comment[] = []
+        let e2eProject: Project | null
         let e2eProjectId: string
         let reviewAliceId: string
         let reviewBobId: string
@@ -163,9 +164,8 @@ describe('api-rating-feature', () => {
         // TODO: Add e2e tests for ratings
         beforeAll(async () => {
           // Create an active project
-          e2eProjectId = await managerCreateActiveProject({ ...cookies.alice, communityId }).then(
-            (project) => project.id,
-          )
+          e2eProject = await managerCreateActiveProject({ ...cookies.alice, communityId })
+          e2eProjectId = e2eProject.id
 
           // Create the reviews for Alice and Bob
           reviewAliceId = await reviewerCreateReview({ projectId: e2eProjectId, ...cookies.alice }).then(

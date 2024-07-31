@@ -6,6 +6,7 @@ export function getUserUserWhereInput(input: UserFindManyUserInput): Prisma.User
     status: {
       in: [UserStatus.Active],
     },
+    id: input.filterIds?.length ? { notIn: input.filterIds } : undefined,
   }
 
   if (input.search) {

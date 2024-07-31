@@ -20,7 +20,7 @@ describe('api-review-feature', () => {
       it('should create a review', async () => {
         const createdRes = await sdk.reviewerCreateReview({ projectId }, { cookie: alice })
         const item = createdRes.data.created
-        expect(item.projectId).toBe(projectId)
+        expect(item.projectMember?.projectId).toBe(projectId)
         expect(item.id).toBeDefined()
         expect(item.createdAt).toBeDefined()
         expect(item.updatedAt).toBeDefined()

@@ -1,12 +1,13 @@
 import { ApiCoreService } from '@deanslist-platform/api-core-data-access'
-import { ProjectStatus } from '@deanslist-platform/sdk'
+import { ApiProjectService } from '@deanslist-platform/api-project-data-access'
 import { Injectable } from '@nestjs/common'
+import { ProjectStatus } from '@prisma/client'
 import { ManagerCreateRatingInput } from './dto/manager-create-rating.input'
 import { ManagerUpdateRatingInput } from './dto/manager-update-rating.input'
 
 @Injectable()
 export class ApiManagerRatingService {
-  constructor(private readonly core: ApiCoreService) {}
+  constructor(private readonly core: ApiCoreService, private readonly project: ApiProjectService) {}
 
   async createRating(userId: string, input: ManagerCreateRatingInput) {
     const comment = await this.ensureCommentProjectManager(userId, input.commentId)
@@ -15,7 +16,7 @@ export class ApiManagerRatingService {
       throw new Error(`Comment not found`)
     }
 
-    if (comment.review.project.status !== ProjectStatus.Closed) {
+    if (comment.review.projectMember.project.status !== ProjectStatus.Closed) {
       throw new Error('You can only rate closed projects')
     }
 
@@ -52,15 +53,14 @@ export class ApiManagerRatingService {
   private async ensureCommentProjectManager(userId: string, commentId: string) {
     const comment = await this.core.data.comment.findUnique({
       where: { id: commentId },
-      include: { review: { include: { project: { include: { managers: true } } } } },
+      include: { review: { include: { projectMember: { include: { project: true } } } } },
     })
     if (!comment) {
       throw new Error(`Comment not found`)
     }
-    const manager = comment.review.project.managers.find((m) => m.id === userId)
-    if (!manager) {
-      throw new Error(`You are not a manager of this project`)
-    }
+    const projectMember = comment.review.projectMember
+    await this.project.member.ensureProjectManager({ userId, projectId: projectMember.projectId })
+
     return comment
   }
 }

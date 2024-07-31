@@ -1,7 +1,6 @@
-import { ApiCommunityService } from '@deanslist-platform/api-community-data-access'
 import { addDays, ApiCoreService, setDateToStartOfDay, slugifyId } from '@deanslist-platform/api-core-data-access'
 import { Injectable, Logger } from '@nestjs/common'
-import { Prisma, Project } from '@prisma/client'
+import { Prisma, Project, ProjectRole } from '@prisma/client'
 import { ApiProjectEventService } from './api-project-event.service'
 import { ProjectMessage } from './entity/project-message.entity'
 import { ProjectPaging } from './entity/project-paging.entity'
@@ -14,36 +13,7 @@ import { getProjectAmountUsd } from './helpers/get-project-amount-total-usd-left
 @Injectable()
 export class ApiProjectDataService {
   private readonly logger = new Logger(ApiProjectDataService.name)
-  constructor(
-    private readonly core: ApiCoreService,
-    private readonly event: ApiProjectEventService,
-    private readonly community: ApiCommunityService,
-  ) {}
-
-  async ensureProjectAdmin({ projectId, userId }: { projectId: string; userId: string }) {
-    const found = await this.findOneProject(projectId)
-    await this.ensureCommunityAdmin({ communityId: found.communityId, userId })
-    return found
-  }
-
-  async ensureProjectManager({ projectId, userId }: { projectId: string; userId: string }) {
-    const found = await this.findOneProject(projectId)
-
-    const isCommunityAdmin = !!found.community.managers?.find((p) => (p.userId = userId))?.admin
-    const isManager = found.managers.some((p) => p.id === userId)
-    if (!isCommunityAdmin && !isManager) {
-      throw new Error(`You are not a project manager`)
-    }
-    return found
-  }
-
-  async ensureCommunityAdmin({ communityId, userId }: { communityId: string; userId: string }) {
-    return this.community.data.ensureCommunityAdmin({ communityId, userId })
-  }
-
-  async ensureCommunityManager({ communityId, userId }: { communityId: string; userId: string }) {
-    return this.community.data.ensureCommunityManager({ communityId, userId })
-  }
+  constructor(private readonly core: ApiCoreService, private readonly event: ApiProjectEventService) {}
 
   async createProject(
     userId: string,
@@ -85,7 +55,7 @@ export class ApiProjectDataService {
       slug,
       instructions,
       community: { connect: { id: communityId } },
-      managers: { connect: { id: userId } },
+      members: { create: { userId, role: ProjectRole.Manager } },
     }
 
     const project = await this.core.data.project.create({ data, include: { community: true } })
@@ -131,7 +101,11 @@ export class ApiProjectDataService {
   ) {
     const found = await this.core.data.project.findUnique({
       where: { id: projectId, ...where },
-      include: { ...include, community: { include: { managers: true } }, managers: true },
+      include: {
+        ...include,
+        members: include?.members ? include.members : { include: { user: true } },
+        community: { include: { managers: true } },
+      },
     })
     if (!found) {
       throw new Error('Project not found')
@@ -183,82 +157,18 @@ export class ApiProjectDataService {
     })
   }
 
-  async addProjectManager(userId: string, projectId: string, managerUserId: string) {
-    const added = await this.core.data.project.update({
-      where: { id: projectId },
-      data: { managers: { connect: { id: managerUserId } } },
-    })
-    // TODO: Emit events, announce in Discord.
-    return !!added
-  }
-
-  async removeProjectManager(userId: string, projectId: string, managerUserId: string) {
-    const project = await this.findOneProject(projectId)
-    const managerCount = project.managers?.length ?? 0
-    if (managerCount === 1) {
-      throw new Error('Cannot remove last project manager')
-    }
-    const removed = await this.core.data.project.update({
-      where: { id: projectId },
-      data: { managers: { disconnect: { id: managerUserId } } },
-    })
-    // TODO: Emit events, announce in Discord.
-    return !!removed
-  }
-
-  async addProjectReviewer(userId: string, projectId: string, reviewerUserId: string) {
-    const added = await this.core.data.project.update({
-      where: { id: projectId },
-      data: { reviewers: { connect: { id: reviewerUserId } } },
-    })
-    // TODO: Emit events, announce in Discord.
-    return !!added
-  }
-
-  async removeProjectReviewer(userId: string, projectId: string, reviewerUserId: string) {
-    const removed = await this.core.data.project.update({
-      where: { id: projectId },
-      data: { reviewers: { disconnect: { id: reviewerUserId } } },
-    })
-    // TODO: Emit events, announce in Discord.
-    return !!removed
-  }
-
-  async addProjectReferral(userId: string, projectId: string, referralUserId: string) {
-    const added = await this.core.data.project.update({
-      where: { id: projectId },
-      data: { referral: { connect: { id: referralUserId } } },
-    })
-    // TODO: Emit events, announce in Discord.
-    return !!added
-  }
-
-  async removeProjectReferral(userId: string, projectId: string, referralUserId: string) {
-    const removed = await this.core.data.project.update({
-      where: { id: projectId },
-      data: { referral: { disconnect: { id: referralUserId } } },
-    })
-    // TODO: Emit events, announce in Discord.
-    return !!removed
-  }
-
   async splitByRating(projectId: string) {
     const project = await this.core.data.project.findUnique({
       where: { id: projectId },
-      include: {
-        reviews: {
-          include: {
-            comments: {
-              include: { ratings: true },
-            },
-          },
-        },
-      },
+      include: { members: true },
     })
     if (!project) {
       throw new Error('Project not found')
     }
-    const reviews = project.reviews ?? []
+    const reviews = await this.core.data.review.findMany({
+      where: { projectMember: { projectId } },
+      include: { comments: { include: { ratings: true } } },
+    })
 
     // Get the amount of USDC available for reviews
     const available = getProjectAmountUsd(project)
@@ -267,7 +177,7 @@ export class ApiProjectDataService {
     const ratingMap: Record<string, number> = {}
 
     for (const review of reviews) {
-      ratingMap[review.id] = calculateProjectRatings(getCommentRatings(review.comments)) ?? 0
+      ratingMap[review.id] = calculateProjectRatings(getCommentRatings(review.comments ?? [])) ?? 0
     }
 
     const totalRatingAmount = Object.values(ratingMap).reduce((acc, rating) => acc + rating, 0)

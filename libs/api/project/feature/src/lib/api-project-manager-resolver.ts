@@ -17,33 +17,6 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 export class ApiProjectManagerResolver {
   constructor(private readonly service: ApiProjectService) {}
 
-  @Mutation(() => Boolean, { nullable: true })
-  managerAddProjectManager(
-    @CtxUserId() userId: string,
-    @Args('projectId') projectId: string,
-    @Args('managerUserId') managerUserId: string,
-  ) {
-    return this.service.manager.addProjectManager(userId, projectId, managerUserId)
-  }
-
-  @Mutation(() => Boolean, { nullable: true })
-  managerAddProjectReviewer(
-    @CtxUserId() userId: string,
-    @Args('projectId') projectId: string,
-    @Args('reviewerUserId') reviewerUserId: string,
-  ) {
-    return this.service.manager.addProjectReviewer(userId, projectId, reviewerUserId)
-  }
-
-  @Mutation(() => Boolean, { nullable: true })
-  managerAddProjectReferral(
-    @CtxUserId() userId: string,
-    @Args('projectId') projectId: string,
-    @Args('referralUserId') referralUserId: string,
-  ) {
-    return this.service.manager.addProjectReferral(userId, projectId, referralUserId)
-  }
-
   @Mutation(() => Project, { nullable: true })
   managerCreateProject(@CtxUserId() userId: string, @Args('input') input: ManagerCreateProjectInput) {
     return this.service.manager.createProject(userId, input)
@@ -62,33 +35,6 @@ export class ApiProjectManagerResolver {
   @Query(() => Project, { nullable: true })
   managerFindOneProject(@CtxUser() user: User, @Args('projectId') projectId: string) {
     return this.service.manager.findOneProject(user, projectId)
-  }
-
-  @Mutation(() => Boolean, { nullable: true })
-  managerRemoveProjectManager(
-    @CtxUserId() userId: string,
-    @Args('projectId') projectId: string,
-    @Args('managerUserId') managerUserId: string,
-  ) {
-    return this.service.manager.removeProjectManager(userId, projectId, managerUserId)
-  }
-
-  @Mutation(() => Boolean, { nullable: true })
-  managerRemoveProjectReviewer(
-    @CtxUserId() userId: string,
-    @Args('projectId') projectId: string,
-    @Args('reviewerUserId') reviewerUserId: string,
-  ) {
-    return this.service.manager.removeProjectReviewer(userId, projectId, reviewerUserId)
-  }
-
-  @Mutation(() => Boolean, { nullable: true })
-  managerRemoveProjectReferral(
-    @CtxUserId() userId: string,
-    @Args('projectId') projectId: string,
-    @Args('referralUserId') referralUserId: string,
-  ) {
-    return this.service.manager.removeProjectReferral(userId, projectId, referralUserId)
   }
 
   @Mutation(() => Boolean, { nullable: true })

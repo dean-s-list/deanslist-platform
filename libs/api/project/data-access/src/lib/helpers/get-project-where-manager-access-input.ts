@@ -9,7 +9,7 @@ export function getProjectWhereManagerAccessInput({ id: userId, role }: User): P
     AND: {
       OR: [
         // You are a manager of the project
-        { managers: { some: { id: userId } } },
+        { members: { some: { userId } } },
         // Or you are a manager of the community
         { community: { managers: { some: { userId } } } },
       ],

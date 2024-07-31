@@ -1,20 +1,37 @@
 import {
   ApiProjectService,
+  getProjectAmountTotalUsdLeft,
   getRemainingDays,
   Project,
+  ProjectMember,
   ProjectMessage,
+  ProjectRole,
 } from '@deanslist-platform/api-project-data-access'
 import { Int, Parent, ResolveField, Resolver } from '@nestjs/graphql'
 import { Project as PrismaProject, Review as PrismaReview } from '@prisma/client'
-
-import { getProjectAmountTotalUsdLeft } from '@deanslist-platform/api-project-data-access'
 
 @Resolver(() => Project)
 export class ApiProjectResolver {
   constructor(private readonly service: ApiProjectService) {}
   @ResolveField(() => Int, { nullable: true })
   amountTotalUsdLeft(@Parent() project: Project) {
-    return getProjectAmountTotalUsdLeft(project as PrismaProject, project.reviews as PrismaReview[])
+    const reviews = (project.members?.map((r) => r.reviews).flat() ?? []) as PrismaReview[]
+    return getProjectAmountTotalUsdLeft(project as PrismaProject, reviews)
+  }
+
+  @ResolveField(() => [ProjectMember], { nullable: true })
+  managers(@Parent() project: Project) {
+    return project.members?.filter((i) => i.role === ProjectRole.Manager)
+  }
+
+  @ResolveField(() => [ProjectMember], { nullable: true })
+  reviewers(@Parent() project: Project) {
+    return project.members?.filter((i) => i.role === ProjectRole.Reviewer)
+  }
+
+  @ResolveField(() => ProjectMember, { nullable: true })
+  referral(@Parent() project: Project) {
+    return project.members?.find((i) => i.role === ProjectRole.Referral)
   }
 
   @ResolveField(() => ProjectMessage, { nullable: true })
@@ -29,7 +46,8 @@ export class ApiProjectResolver {
 
   @ResolveField(() => Int, { nullable: true })
   reviewCount(@Parent() project: Project) {
-    const filtered = project.reviews?.filter((r) => r.comments?.length ?? 0 > 0)
+    const reviews = project.members?.map((x) => x.reviews).flat() ?? []
+    const filtered = reviews.filter((r) => r?.comments?.length ?? 0 > 0)
 
     return filtered?.length ?? 0
   }

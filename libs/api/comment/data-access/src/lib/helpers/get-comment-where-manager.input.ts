@@ -3,7 +3,7 @@ import { ManagerFindManyCommentInput } from '../dto/manager-find-many-comment.in
 
 export function getCommentWhereManagerInput(input: ManagerFindManyCommentInput): Prisma.CommentWhereInput {
   const where: Prisma.CommentWhereInput = {
-    review: { projectId: input.projectId },
+    review: { projectMember: { projectId: input.projectId } },
     parentId: null,
   }
 

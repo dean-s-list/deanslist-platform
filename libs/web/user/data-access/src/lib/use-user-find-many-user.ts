@@ -9,7 +9,7 @@ export function useUserFindManyUser(props?: UserFindManyUserInput) {
   const [page, setPage] = useState(props?.page ?? 1)
   const [search, setSearch] = useState<string>('')
 
-  const input: UserFindManyUserInput = { limit, page, search }
+  const input: UserFindManyUserInput = { limit, page, search, filterIds: props?.filterIds ?? [] }
   const query = useQuery({
     queryKey: ['user', 'find-many-user', input],
     queryFn: () => sdk.userFindManyUser({ input }).then((res) => res.data),

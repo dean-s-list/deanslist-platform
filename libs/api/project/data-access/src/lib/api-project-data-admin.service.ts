@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common'
+import { ProjectRole } from '@prisma/client'
 import { ApiProjectDataService } from './api-project-data.service'
+import { ApiProjectMemberDataService } from './api-project-member-data.service'
 import { AdminFindManyProjectInput } from './dto/admin-find-many-project.input'
 import { AdminUpdateProjectInput } from './dto/admin-update-project.input'
 import { ProjectPaging } from './entity/project-paging.entity'
@@ -7,7 +9,7 @@ import { getProjectWhereAdminInput } from './helpers/get-project-where-admin.inp
 
 @Injectable()
 export class ApiProjectDataAdminService {
-  constructor(private readonly data: ApiProjectDataService) {}
+  constructor(private readonly data: ApiProjectDataService, private readonly member: ApiProjectMemberDataService) {}
 
   async deleteProject(userId: string, projectId: string) {
     return this.data.deleteProject(userId, projectId)
@@ -24,7 +26,18 @@ export class ApiProjectDataAdminService {
   }
 
   async findOneProject(projectId: string) {
-    return this.data.findOneProject(projectId, { include: { reviewers: true, referral: true } })
+    return this.data.findOneProject(projectId, {
+      include: {
+        members: {
+          include: {
+            reviews: {
+              include: { comments: true },
+            },
+            user: true,
+          },
+        },
+      },
+    })
   }
 
   async updateProject(userId: string, projectId: string, input: AdminUpdateProjectInput) {
@@ -32,26 +45,28 @@ export class ApiProjectDataAdminService {
   }
 
   async addProjectManager(userId: string, projectId: string, managerUserId: string) {
-    return this.data.addProjectManager(userId, projectId, managerUserId)
+    const added = await this.member.addProjectMember({ projectId, userId: managerUserId, role: ProjectRole.Manager })
+
+    return !!added
   }
 
-  async removeProjectManager(userId: string, projectId: string, managerUserId: string) {
-    return this.data.removeProjectManager(userId, projectId, managerUserId)
+  async removeProjectMember(userId: string, projectMemberId: string) {
+    const found = await this.member.getProjectMemberById({ projectMemberId })
+    if (!found) {
+      throw new Error(`Project member not found`)
+    }
+    const deleted = await this.member.deleteProjectMemberById({ projectMemberId })
+
+    return !!deleted
   }
 
-  async addProjectReviewer(userId: string, projectId: string, reviewerUserId: string) {
-    return this.data.addProjectReviewer(userId, projectId, reviewerUserId)
-  }
+  async updateProjectMemberRole(userId: string, projectMemberId: string, role: ProjectRole) {
+    const found = await this.member.getProjectMemberById({ projectMemberId })
+    if (!found) {
+      throw new Error(`Project member not found`)
+    }
+    const updated = await this.member.updateProjectMemberRole({ projectMemberId, role })
 
-  async removeProjectReviewer(userId: string, projectId: string, reviewerUserId: string) {
-    return this.data.removeProjectReviewer(userId, projectId, reviewerUserId)
-  }
-
-  async addProjectReferral(userId: string, projectId: string, referralUserId: string) {
-    return this.data.addProjectReferral(userId, projectId, referralUserId)
-  }
-
-  async removeProjectReferral(userId: string, projectId: string, referralUserId: string) {
-    return this.data.removeProjectReferral(userId, projectId, referralUserId)
+    return !!updated
   }
 }

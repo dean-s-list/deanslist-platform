@@ -370,8 +370,6 @@ input ManagerUpdateReviewInput {
 type Mutation {
   adminAddCommunityManager(communityId: String!, userId: String!): Boolean
   adminAddProjectManager(managerUserId: String!, projectId: String!): Boolean
-  adminAddProjectReferral(projectId: String!, referralUserId: String!): Boolean
-  adminAddProjectReviewer(projectId: String!, reviewerUserId: String!): Boolean
   adminCreateCommunityChannel(channelId: String!, communityId: String!, serverId: String!): Boolean!
   adminCreateFaqItem(input: FaqItemAdminCreateInput!): FaqItem
   adminCreateIdentity(input: AdminCreateIdentityInput!): Identity
@@ -390,15 +388,14 @@ type Mutation {
   adminLeaveDiscordServer(serverId: String!): Boolean!
   adminPingDiscordChannel(channelId: String!, serverId: String!): Boolean!
   adminRemoveCommunityManager(communityId: String!, userId: String!): Boolean
-  adminRemoveProjectManager(managerUserId: String!, projectId: String!): Boolean
-  adminRemoveProjectReferral(projectId: String!, referralUserId: String!): Boolean
-  adminRemoveProjectReviewer(projectId: String!, reviewerUserId: String!): Boolean
+  adminRemoveProjectMember(projectMemberId: String!): Boolean
   adminToggleCommunityAdmin(communityId: String!, userId: String!): Boolean
   adminUpdateComment(commentId: String!, input: AdminUpdateCommentInput!): Comment
   adminUpdateCommunity(communityId: String!, input: AdminUpdateCommunityInput!): Community
   adminUpdateDiscordServer(input: AdminUpdateDiscordServerInput!, serverId: String!): Boolean!
   adminUpdateFaqItem(faqItemId: String!, input: FaqItemAdminUpdateInput!): FaqItem
   adminUpdateProject(input: AdminUpdateProjectInput!, projectId: String!): Project
+  adminUpdateProjectMemberRole(projectMemberId: String!, role: ProjectRole!): Boolean
   adminUpdateRating(input: AdminUpdateRatingInput!, ratingId: String!): Rating
   adminUpdateUser(input: AdminUpdateUserInput!, userId: String!): User
   anonVerifyIdentityChallenge(input: VerifyIdentityChallengeInput!): IdentityChallenge
@@ -472,19 +469,34 @@ type Project {
   linkTwitter: String
   linkWebsite: String
   manageUrl: String!
-  managers: [User!]
+  managers: [ProjectMember!]
+  members: [ProjectMember!]
   message: ProjectMessage
   name: String!
-  referral: User
+  referral: ProjectMember
   remainingDays: Int
   reviewCount: Int
-  reviewers: [User!]
+  reviewers: [ProjectMember!]
   reviewsOpen: Boolean
   slug: String!
   startDate: DateTime
   status: ProjectStatus
   updatedAt: DateTime
   viewUrl: String!
+}
+
+type ProjectMember {
+  amount: Int
+  bonus: Int
+  createdAt: DateTime
+  id: String!
+  project: Project
+  projectId: String
+  referral: Boolean
+  role: ProjectRole
+  updatedAt: DateTime
+  user: User
+  userId: String
 }
 
 type ProjectMessage {
@@ -501,6 +513,12 @@ enum ProjectOrderBy {
 type ProjectPaging {
   data: [Project!]!
   meta: PagingMeta!
+}
+
+enum ProjectRole {
+  Manager
+  Referral
+  Reviewer
 }
 
 enum ProjectStatus {
@@ -588,12 +606,10 @@ type Review {
   createdAt: DateTime
   id: String!
   name: String!
-  project: Project
-  projectId: String!
+  projectMember: ProjectMember
+  projectMemberId: String!
   ratingAverage: Float
   ratingProgress: Float
-  reviewer: User
-  reviewerId: String!
   updatedAt: DateTime
   viewUrl: String!
 }
@@ -668,6 +684,7 @@ input UserFindManyIdentityInput {
 }
 
 input UserFindManyUserInput {
+  filterIds: [String!]
   limit: Int = 10
   page: Int = 1
   search: String

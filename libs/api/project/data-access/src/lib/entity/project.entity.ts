@@ -1,6 +1,6 @@
 import { Community } from '@deanslist-platform/api-community-data-access'
-import { User } from '@deanslist-platform/api-user-data-access'
-import { Field, HideField, Int, ObjectType } from '@nestjs/graphql'
+import { Field, Int, ObjectType } from '@nestjs/graphql'
+import { ProjectMember } from './project-member.entity'
 import { ProjectStatus } from './project-status.enum'
 
 @ObjectType()
@@ -13,12 +13,6 @@ export class Project {
   updatedAt?: Date
   @Field(() => Community, { nullable: true })
   community?: Community
-  @Field(() => [User], { nullable: true })
-  managers?: User[]
-  @Field(() => [User], { nullable: true })
-  reviewers?: User[]
-  @Field(() => User, { nullable: true })
-  referral?: User | null
   @Field()
   communityId!: string
   @Field()
@@ -55,6 +49,6 @@ export class Project {
   endDate?: Date | null
   @Field({ nullable: true })
   avatarUrl?: string | null
-  @HideField()
-  reviews?: { comments?: unknown[] }[] | null
+  @Field(() => [ProjectMember], { nullable: true })
+  members?: ProjectMember[]
 }

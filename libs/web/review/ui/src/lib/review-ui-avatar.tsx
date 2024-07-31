@@ -6,5 +6,5 @@ export type ReviewUiAvatarProps = UiAvatarProps & {
 }
 
 export function ReviewUiAvatar({ review, ...props }: ReviewUiAvatarProps) {
-  return <UiAvatar url={review?.reviewer?.avatarUrl} name={review?.name} {...props} />
+  return <UiAvatar url={review?.projectMember?.user?.avatarUrl} name={review?.name} {...props} />
 }

@@ -19,7 +19,7 @@ export class ApiCommentResolveManagerService {
       include: {
         author: true,
         review: {
-          include: { project: true, reviewer: true },
+          include: { projectMember: { include: { user: true } } },
         },
         children: {
           orderBy: { createdAt: 'asc' },

@@ -19,18 +19,19 @@ export class ApiProjectDataReviewerService {
       page: input.page ?? 1,
       orderBy: input.orderBy ? { [input.orderBy]: input.orderDirection ?? 'asc' } : { createdAt: 'desc' },
       where: getProjectWhereReviewerInput(userId, input),
-      include: { reviews: { include: { comments: true } } },
+      include: { members: { include: { reviews: { include: { comments: true } }, user: true } } },
     })
   }
 
   async findOneProject(projectId: string) {
     return this.data.findOneProject(projectId, {
       include: {
-        reviewers: true,
-        reviews: {
+        members: {
           include: {
-            comments: true,
-            reviewer: true,
+            reviews: {
+              include: { comments: true },
+            },
+            user: true,
           },
         },
       },

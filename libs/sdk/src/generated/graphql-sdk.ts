@@ -395,8 +395,6 @@ export type Mutation = {
   __typename?: 'Mutation'
   adminAddCommunityManager?: Maybe<Scalars['Boolean']['output']>
   adminAddProjectManager?: Maybe<Scalars['Boolean']['output']>
-  adminAddProjectReferral?: Maybe<Scalars['Boolean']['output']>
-  adminAddProjectReviewer?: Maybe<Scalars['Boolean']['output']>
   adminCreateCommunityChannel: Scalars['Boolean']['output']
   adminCreateFaqItem?: Maybe<FaqItem>
   adminCreateIdentity?: Maybe<Identity>
@@ -415,15 +413,14 @@ export type Mutation = {
   adminLeaveDiscordServer: Scalars['Boolean']['output']
   adminPingDiscordChannel: Scalars['Boolean']['output']
   adminRemoveCommunityManager?: Maybe<Scalars['Boolean']['output']>
-  adminRemoveProjectManager?: Maybe<Scalars['Boolean']['output']>
-  adminRemoveProjectReferral?: Maybe<Scalars['Boolean']['output']>
-  adminRemoveProjectReviewer?: Maybe<Scalars['Boolean']['output']>
+  adminRemoveProjectMember?: Maybe<Scalars['Boolean']['output']>
   adminToggleCommunityAdmin?: Maybe<Scalars['Boolean']['output']>
   adminUpdateComment?: Maybe<Comment>
   adminUpdateCommunity?: Maybe<Community>
   adminUpdateDiscordServer: Scalars['Boolean']['output']
   adminUpdateFaqItem?: Maybe<FaqItem>
   adminUpdateProject?: Maybe<Project>
+  adminUpdateProjectMemberRole?: Maybe<Scalars['Boolean']['output']>
   adminUpdateRating?: Maybe<Rating>
   adminUpdateUser?: Maybe<User>
   anonVerifyIdentityChallenge?: Maybe<IdentityChallenge>
@@ -471,16 +468,6 @@ export type MutationAdminAddCommunityManagerArgs = {
 export type MutationAdminAddProjectManagerArgs = {
   managerUserId: Scalars['String']['input']
   projectId: Scalars['String']['input']
-}
-
-export type MutationAdminAddProjectReferralArgs = {
-  projectId: Scalars['String']['input']
-  referralUserId: Scalars['String']['input']
-}
-
-export type MutationAdminAddProjectReviewerArgs = {
-  projectId: Scalars['String']['input']
-  reviewerUserId: Scalars['String']['input']
 }
 
 export type MutationAdminCreateCommunityChannelArgs = {
@@ -563,19 +550,8 @@ export type MutationAdminRemoveCommunityManagerArgs = {
   userId: Scalars['String']['input']
 }
 
-export type MutationAdminRemoveProjectManagerArgs = {
-  managerUserId: Scalars['String']['input']
-  projectId: Scalars['String']['input']
-}
-
-export type MutationAdminRemoveProjectReferralArgs = {
-  projectId: Scalars['String']['input']
-  referralUserId: Scalars['String']['input']
-}
-
-export type MutationAdminRemoveProjectReviewerArgs = {
-  projectId: Scalars['String']['input']
-  reviewerUserId: Scalars['String']['input']
+export type MutationAdminRemoveProjectMemberArgs = {
+  projectMemberId: Scalars['String']['input']
 }
 
 export type MutationAdminToggleCommunityAdminArgs = {
@@ -606,6 +582,11 @@ export type MutationAdminUpdateFaqItemArgs = {
 export type MutationAdminUpdateProjectArgs = {
   input: AdminUpdateProjectInput
   projectId: Scalars['String']['input']
+}
+
+export type MutationAdminUpdateProjectMemberRoleArgs = {
+  projectMemberId: Scalars['String']['input']
+  role: ProjectRole
 }
 
 export type MutationAdminUpdateRatingArgs = {
@@ -805,19 +786,35 @@ export type Project = {
   linkTwitter?: Maybe<Scalars['String']['output']>
   linkWebsite?: Maybe<Scalars['String']['output']>
   manageUrl: Scalars['String']['output']
-  managers?: Maybe<Array<User>>
+  managers?: Maybe<Array<ProjectMember>>
+  members?: Maybe<Array<ProjectMember>>
   message?: Maybe<ProjectMessage>
   name: Scalars['String']['output']
-  referral?: Maybe<User>
+  referral?: Maybe<ProjectMember>
   remainingDays?: Maybe<Scalars['Int']['output']>
   reviewCount?: Maybe<Scalars['Int']['output']>
-  reviewers?: Maybe<Array<User>>
+  reviewers?: Maybe<Array<ProjectMember>>
   reviewsOpen?: Maybe<Scalars['Boolean']['output']>
   slug: Scalars['String']['output']
   startDate?: Maybe<Scalars['DateTime']['output']>
   status?: Maybe<ProjectStatus>
   updatedAt?: Maybe<Scalars['DateTime']['output']>
   viewUrl: Scalars['String']['output']
+}
+
+export type ProjectMember = {
+  __typename?: 'ProjectMember'
+  amount?: Maybe<Scalars['Int']['output']>
+  bonus?: Maybe<Scalars['Int']['output']>
+  createdAt?: Maybe<Scalars['DateTime']['output']>
+  id: Scalars['String']['output']
+  project?: Maybe<Project>
+  projectId?: Maybe<Scalars['String']['output']>
+  referral?: Maybe<Scalars['Boolean']['output']>
+  role?: Maybe<ProjectRole>
+  updatedAt?: Maybe<Scalars['DateTime']['output']>
+  user?: Maybe<User>
+  userId?: Maybe<Scalars['String']['output']>
 }
 
 export type ProjectMessage = {
@@ -836,6 +833,12 @@ export type ProjectPaging = {
   __typename?: 'ProjectPaging'
   data: Array<Project>
   meta: PagingMeta
+}
+
+export enum ProjectRole {
+  Manager = 'Manager',
+  Referral = 'Referral',
+  Reviewer = 'Reviewer',
 }
 
 export enum ProjectStatus {
@@ -1098,12 +1101,10 @@ export type Review = {
   createdAt?: Maybe<Scalars['DateTime']['output']>
   id: Scalars['String']['output']
   name: Scalars['String']['output']
-  project?: Maybe<Project>
-  projectId: Scalars['String']['output']
+  projectMember?: Maybe<ProjectMember>
+  projectMemberId: Scalars['String']['output']
   ratingAverage?: Maybe<Scalars['Float']['output']>
   ratingProgress?: Maybe<Scalars['Float']['output']>
-  reviewer?: Maybe<User>
-  reviewerId: Scalars['String']['output']
   updatedAt?: Maybe<Scalars['DateTime']['output']>
   viewUrl: Scalars['String']['output']
 }
@@ -1180,6 +1181,7 @@ export type UserFindManyIdentityInput = {
 }
 
 export type UserFindManyUserInput = {
+  filterIds?: InputMaybe<Array<Scalars['String']['input']>>
   limit?: InputMaybe<Scalars['Int']['input']>
   page?: InputMaybe<Scalars['Int']['input']>
   search?: InputMaybe<Scalars['String']['input']>
@@ -1634,79 +1636,25 @@ export type ManagerFindManyCommentQuery = {
       __typename?: 'Review'
       createdAt?: Date | null
       id: string
-      projectId: string
-      reviewerId: string
       updatedAt?: Date | null
       amount?: number | null
       bonus?: number | null
       name: string
       ratingAverage?: number | null
       ratingProgress?: number | null
+      projectMemberId: string
       viewUrl: string
-      project?: {
-        __typename?: 'Project'
-        amountManagerUsd?: number | null
-        amountReferralUsd?: number | null
-        amountTotalUsd?: number | null
-        avatarUrl?: string | null
-        communityId: string
-        createdAt?: Date | null
-        durationDays?: number | null
-        endDate?: Date | null
+      projectMember?: {
+        __typename?: 'ProjectMember'
         id: string
-        instructions?: string | null
-        linkDiscord?: string | null
-        linkGithub?: string | null
-        linkTelegram?: string | null
-        linkTwitter?: string | null
-        linkWebsite?: string | null
-        manageUrl: string
-        name: string
-        remainingDays?: number | null
-        reviewCount?: number | null
-        reviewsOpen?: boolean | null
-        slug: string
-        startDate?: Date | null
-        status?: ProjectStatus | null
+        createdAt?: Date | null
         updatedAt?: Date | null
-        viewUrl: string
-        community?: {
-          __typename?: 'Community'
-          activeProjectsCount?: number | null
-          avatarUrl?: string | null
-          createdAt?: Date | null
-          homeServerId?: string | null
-          id: string
-          managerCount?: number | null
-          manageUrl: string
-          name: string
-          updatedAt?: Date | null
-          viewUrl: string
-          managers?: Array<{
-            __typename?: 'CommunityManager'
-            createdAt?: Date | null
-            id: string
-            userId: string
-            admin?: boolean | null
-            updatedAt?: Date | null
-            user?: {
-              __typename?: 'User'
-              avatarUrl?: string | null
-              createdAt?: Date | null
-              developer?: boolean | null
-              id: string
-              name?: string | null
-              manager?: boolean | null
-              profileUrl: string
-              role?: UserRole | null
-              status?: UserStatus | null
-              updatedAt?: Date | null
-              username?: string | null
-              walletAddress?: string | null
-            } | null
-          }> | null
-        } | null
-        managers?: Array<{
+        amount?: number | null
+        bonus?: number | null
+        projectId?: string | null
+        role?: ProjectRole | null
+        userId?: string | null
+        user?: {
           __typename?: 'User'
           avatarUrl?: string | null
           createdAt?: Date | null
@@ -1720,22 +1668,7 @@ export type ManagerFindManyCommentQuery = {
           updatedAt?: Date | null
           username?: string | null
           walletAddress?: string | null
-        }> | null
-      } | null
-      reviewer?: {
-        __typename?: 'User'
-        avatarUrl?: string | null
-        createdAt?: Date | null
-        developer?: boolean | null
-        id: string
-        name?: string | null
-        manager?: boolean | null
-        profileUrl: string
-        role?: UserRole | null
-        status?: UserStatus | null
-        updatedAt?: Date | null
-        username?: string | null
-        walletAddress?: string | null
+        } | null
       } | null
     } | null
     children?: Array<{
@@ -3072,6 +3005,33 @@ export type UserSetPrimaryIdentityMutation = {
   } | null
 }
 
+export type ProjectMemberDetailsFragment = {
+  __typename?: 'ProjectMember'
+  id: string
+  createdAt?: Date | null
+  updatedAt?: Date | null
+  amount?: number | null
+  bonus?: number | null
+  projectId?: string | null
+  role?: ProjectRole | null
+  userId?: string | null
+  user?: {
+    __typename?: 'User'
+    avatarUrl?: string | null
+    createdAt?: Date | null
+    developer?: boolean | null
+    id: string
+    name?: string | null
+    manager?: boolean | null
+    profileUrl: string
+    role?: UserRole | null
+    status?: UserStatus | null
+    updatedAt?: Date | null
+    username?: string | null
+    walletAddress?: string | null
+  } | null
+}
+
 export type ProjectDetailsFragment = {
   __typename?: 'Project'
   amountManagerUsd?: number | null
@@ -3136,19 +3096,30 @@ export type ProjectDetailsFragment = {
     }> | null
   } | null
   managers?: Array<{
-    __typename?: 'User'
-    avatarUrl?: string | null
-    createdAt?: Date | null
-    developer?: boolean | null
+    __typename?: 'ProjectMember'
     id: string
-    name?: string | null
-    manager?: boolean | null
-    profileUrl: string
-    role?: UserRole | null
-    status?: UserStatus | null
+    createdAt?: Date | null
     updatedAt?: Date | null
-    username?: string | null
-    walletAddress?: string | null
+    amount?: number | null
+    bonus?: number | null
+    projectId?: string | null
+    role?: ProjectRole | null
+    userId?: string | null
+    user?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      manager?: boolean | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+      walletAddress?: string | null
+    } | null
   }> | null
 }
 
@@ -3224,19 +3195,30 @@ export type ReviewerFindManyProjectQuery = {
         }> | null
       } | null
       managers?: Array<{
-        __typename?: 'User'
-        avatarUrl?: string | null
-        createdAt?: Date | null
-        developer?: boolean | null
+        __typename?: 'ProjectMember'
         id: string
-        name?: string | null
-        manager?: boolean | null
-        profileUrl: string
-        role?: UserRole | null
-        status?: UserStatus | null
+        createdAt?: Date | null
         updatedAt?: Date | null
-        username?: string | null
-        walletAddress?: string | null
+        amount?: number | null
+        bonus?: number | null
+        projectId?: string | null
+        role?: ProjectRole | null
+        userId?: string | null
+        user?: {
+          __typename?: 'User'
+          avatarUrl?: string | null
+          createdAt?: Date | null
+          developer?: boolean | null
+          id: string
+          name?: string | null
+          manager?: boolean | null
+          profileUrl: string
+          role?: UserRole | null
+          status?: UserStatus | null
+          updatedAt?: Date | null
+          username?: string | null
+          walletAddress?: string | null
+        } | null
       }> | null
     }>
     meta: {
@@ -3322,19 +3304,30 @@ export type ReviewerFindOneProjectQuery = {
       }> | null
     } | null
     managers?: Array<{
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
+      __typename?: 'ProjectMember'
       id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
+      createdAt?: Date | null
       updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
+      amount?: number | null
+      bonus?: number | null
+      projectId?: string | null
+      role?: ProjectRole | null
+      userId?: string | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      } | null
     }> | null
   } | null
 }
@@ -3411,19 +3404,30 @@ export type AdminFindManyProjectQuery = {
         }> | null
       } | null
       managers?: Array<{
-        __typename?: 'User'
-        avatarUrl?: string | null
-        createdAt?: Date | null
-        developer?: boolean | null
+        __typename?: 'ProjectMember'
         id: string
-        name?: string | null
-        manager?: boolean | null
-        profileUrl: string
-        role?: UserRole | null
-        status?: UserStatus | null
+        createdAt?: Date | null
         updatedAt?: Date | null
-        username?: string | null
-        walletAddress?: string | null
+        amount?: number | null
+        bonus?: number | null
+        projectId?: string | null
+        role?: ProjectRole | null
+        userId?: string | null
+        user?: {
+          __typename?: 'User'
+          avatarUrl?: string | null
+          createdAt?: Date | null
+          developer?: boolean | null
+          id: string
+          name?: string | null
+          manager?: boolean | null
+          profileUrl: string
+          role?: UserRole | null
+          status?: UserStatus | null
+          updatedAt?: Date | null
+          username?: string | null
+          walletAddress?: string | null
+        } | null
       }> | null
     }>
     meta: {
@@ -3472,35 +3476,83 @@ export type AdminFindOneProjectQuery = {
     status?: ProjectStatus | null
     updatedAt?: Date | null
     viewUrl: string
-    referral?: {
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
+    members?: Array<{
+      __typename?: 'ProjectMember'
       id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
+      createdAt?: Date | null
       updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
+      amount?: number | null
+      bonus?: number | null
+      projectId?: string | null
+      role?: ProjectRole | null
+      userId?: string | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      } | null
+    }> | null
+    referral?: {
+      __typename?: 'ProjectMember'
+      id: string
+      createdAt?: Date | null
+      updatedAt?: Date | null
+      amount?: number | null
+      bonus?: number | null
+      projectId?: string | null
+      role?: ProjectRole | null
+      userId?: string | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      } | null
     } | null
     reviewers?: Array<{
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
+      __typename?: 'ProjectMember'
       id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
+      createdAt?: Date | null
       updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
+      amount?: number | null
+      bonus?: number | null
+      projectId?: string | null
+      role?: ProjectRole | null
+      userId?: string | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      } | null
     }> | null
     community?: {
       __typename?: 'Community'
@@ -3539,19 +3591,30 @@ export type AdminFindOneProjectQuery = {
       }> | null
     } | null
     managers?: Array<{
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
+      __typename?: 'ProjectMember'
       id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
+      createdAt?: Date | null
       updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
+      amount?: number | null
+      bonus?: number | null
+      projectId?: string | null
+      role?: ProjectRole | null
+      userId?: string | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      } | null
     }> | null
   } | null
 }
@@ -3627,19 +3690,30 @@ export type AdminUpdateProjectMutation = {
       }> | null
     } | null
     managers?: Array<{
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
+      __typename?: 'ProjectMember'
       id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
+      createdAt?: Date | null
       updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
+      amount?: number | null
+      bonus?: number | null
+      projectId?: string | null
+      role?: ProjectRole | null
+      userId?: string | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      } | null
     }> | null
   } | null
 }
@@ -3657,40 +3731,18 @@ export type AdminAddProjectManagerMutationVariables = Exact<{
 
 export type AdminAddProjectManagerMutation = { __typename?: 'Mutation'; added?: boolean | null }
 
-export type AdminRemoveProjectManagerMutationVariables = Exact<{
-  projectId: Scalars['String']['input']
-  managerUserId: Scalars['String']['input']
+export type AdminRemoveProjectMemberMutationVariables = Exact<{
+  projectMemberId: Scalars['String']['input']
 }>
 
-export type AdminRemoveProjectManagerMutation = { __typename?: 'Mutation'; removed?: boolean | null }
+export type AdminRemoveProjectMemberMutation = { __typename?: 'Mutation'; removed?: boolean | null }
 
-export type AdminAddProjectReviewerMutationVariables = Exact<{
-  projectId: Scalars['String']['input']
-  reviewerUserId: Scalars['String']['input']
+export type AdminUpdateProjectMemberRoleMutationVariables = Exact<{
+  projectMemberId: Scalars['String']['input']
+  role: ProjectRole
 }>
 
-export type AdminAddProjectReviewerMutation = { __typename?: 'Mutation'; added?: boolean | null }
-
-export type AdminRemoveProjectReviewerMutationVariables = Exact<{
-  projectId: Scalars['String']['input']
-  reviewerUserId: Scalars['String']['input']
-}>
-
-export type AdminRemoveProjectReviewerMutation = { __typename?: 'Mutation'; removed?: boolean | null }
-
-export type AdminAddProjectReferralMutationVariables = Exact<{
-  projectId: Scalars['String']['input']
-  referralUserId: Scalars['String']['input']
-}>
-
-export type AdminAddProjectReferralMutation = { __typename?: 'Mutation'; added?: boolean | null }
-
-export type AdminRemoveProjectReferralMutationVariables = Exact<{
-  projectId: Scalars['String']['input']
-  referralUserId: Scalars['String']['input']
-}>
-
-export type AdminRemoveProjectReferralMutation = { __typename?: 'Mutation'; removed?: boolean | null }
+export type AdminUpdateProjectMemberRoleMutation = { __typename?: 'Mutation'; updated?: boolean | null }
 
 export type ManagerFindManyProjectQueryVariables = Exact<{
   input: ManagerFindManyProjectInput
@@ -3764,19 +3816,30 @@ export type ManagerFindManyProjectQuery = {
         }> | null
       } | null
       managers?: Array<{
-        __typename?: 'User'
-        avatarUrl?: string | null
-        createdAt?: Date | null
-        developer?: boolean | null
+        __typename?: 'ProjectMember'
         id: string
-        name?: string | null
-        manager?: boolean | null
-        profileUrl: string
-        role?: UserRole | null
-        status?: UserStatus | null
+        createdAt?: Date | null
         updatedAt?: Date | null
-        username?: string | null
-        walletAddress?: string | null
+        amount?: number | null
+        bonus?: number | null
+        projectId?: string | null
+        role?: ProjectRole | null
+        userId?: string | null
+        user?: {
+          __typename?: 'User'
+          avatarUrl?: string | null
+          createdAt?: Date | null
+          developer?: boolean | null
+          id: string
+          name?: string | null
+          manager?: boolean | null
+          profileUrl: string
+          role?: UserRole | null
+          status?: UserStatus | null
+          updatedAt?: Date | null
+          username?: string | null
+          walletAddress?: string | null
+        } | null
       }> | null
     }>
     meta: {
@@ -3828,34 +3891,56 @@ export type ManagerFindOneProjectQuery = {
     viewUrl: string
     message?: { __typename?: 'ProjectMessage'; message?: string | null; nextStatus?: ProjectStatus | null } | null
     referral?: {
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
+      __typename?: 'ProjectMember'
       id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
+      createdAt?: Date | null
       updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
+      amount?: number | null
+      bonus?: number | null
+      projectId?: string | null
+      role?: ProjectRole | null
+      userId?: string | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      } | null
     } | null
     reviewers?: Array<{
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
+      __typename?: 'ProjectMember'
       id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
+      createdAt?: Date | null
       updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
+      amount?: number | null
+      bonus?: number | null
+      projectId?: string | null
+      role?: ProjectRole | null
+      userId?: string | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      } | null
     }> | null
     community?: {
       __typename?: 'Community'
@@ -3894,19 +3979,30 @@ export type ManagerFindOneProjectQuery = {
       }> | null
     } | null
     managers?: Array<{
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
+      __typename?: 'ProjectMember'
       id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
+      createdAt?: Date | null
       updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
+      amount?: number | null
+      bonus?: number | null
+      projectId?: string | null
+      role?: ProjectRole | null
+      userId?: string | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      } | null
     }> | null
   } | null
 }
@@ -3981,19 +4077,30 @@ export type ManagerCreateProjectMutation = {
       }> | null
     } | null
     managers?: Array<{
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
+      __typename?: 'ProjectMember'
       id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
+      createdAt?: Date | null
       updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
+      amount?: number | null
+      bonus?: number | null
+      projectId?: string | null
+      role?: ProjectRole | null
+      userId?: string | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      } | null
     }> | null
   } | null
 }
@@ -4075,19 +4182,30 @@ export type ManagerUpdateProjectMutation = {
       }> | null
     } | null
     managers?: Array<{
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
+      __typename?: 'ProjectMember'
       id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
+      createdAt?: Date | null
       updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
+      amount?: number | null
+      bonus?: number | null
+      projectId?: string | null
+      role?: ProjectRole | null
+      userId?: string | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      } | null
     }> | null
   } | null
 }
@@ -4163,19 +4281,30 @@ export type ManagerUpdateProjectStatusMutation = {
       }> | null
     } | null
     managers?: Array<{
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
+      __typename?: 'ProjectMember'
       id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
+      createdAt?: Date | null
       updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
+      amount?: number | null
+      bonus?: number | null
+      projectId?: string | null
+      role?: ProjectRole | null
+      userId?: string | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      } | null
     }> | null
   } | null
 }
@@ -4404,79 +4533,25 @@ export type ReviewDetailsFragment = {
   __typename?: 'Review'
   createdAt?: Date | null
   id: string
-  projectId: string
-  reviewerId: string
   updatedAt?: Date | null
   amount?: number | null
   bonus?: number | null
   name: string
   ratingAverage?: number | null
   ratingProgress?: number | null
+  projectMemberId: string
   viewUrl: string
-  project?: {
-    __typename?: 'Project'
-    amountManagerUsd?: number | null
-    amountReferralUsd?: number | null
-    amountTotalUsd?: number | null
-    avatarUrl?: string | null
-    communityId: string
-    createdAt?: Date | null
-    durationDays?: number | null
-    endDate?: Date | null
+  projectMember?: {
+    __typename?: 'ProjectMember'
     id: string
-    instructions?: string | null
-    linkDiscord?: string | null
-    linkGithub?: string | null
-    linkTelegram?: string | null
-    linkTwitter?: string | null
-    linkWebsite?: string | null
-    manageUrl: string
-    name: string
-    remainingDays?: number | null
-    reviewCount?: number | null
-    reviewsOpen?: boolean | null
-    slug: string
-    startDate?: Date | null
-    status?: ProjectStatus | null
+    createdAt?: Date | null
     updatedAt?: Date | null
-    viewUrl: string
-    community?: {
-      __typename?: 'Community'
-      activeProjectsCount?: number | null
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      homeServerId?: string | null
-      id: string
-      managerCount?: number | null
-      manageUrl: string
-      name: string
-      updatedAt?: Date | null
-      viewUrl: string
-      managers?: Array<{
-        __typename?: 'CommunityManager'
-        createdAt?: Date | null
-        id: string
-        userId: string
-        admin?: boolean | null
-        updatedAt?: Date | null
-        user?: {
-          __typename?: 'User'
-          avatarUrl?: string | null
-          createdAt?: Date | null
-          developer?: boolean | null
-          id: string
-          name?: string | null
-          manager?: boolean | null
-          profileUrl: string
-          role?: UserRole | null
-          status?: UserStatus | null
-          updatedAt?: Date | null
-          username?: string | null
-          walletAddress?: string | null
-        } | null
-      }> | null
-    } | null
-    managers?: Array<{
+    amount?: number | null
+    bonus?: number | null
+    projectId?: string | null
+    role?: ProjectRole | null
+    userId?: string | null
+    user?: {
       __typename?: 'User'
       avatarUrl?: string | null
       createdAt?: Date | null
@@ -4490,22 +4565,7 @@ export type ReviewDetailsFragment = {
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
-    }> | null
-  } | null
-  reviewer?: {
-    __typename?: 'User'
-    avatarUrl?: string | null
-    createdAt?: Date | null
-    developer?: boolean | null
-    id: string
-    name?: string | null
-    manager?: boolean | null
-    profileUrl: string
-    role?: UserRole | null
-    status?: UserStatus | null
-    updatedAt?: Date | null
-    username?: string | null
-    walletAddress?: string | null
+    } | null
   } | null
 }
 
@@ -4520,79 +4580,25 @@ export type ManagerUpdateReviewMutation = {
     __typename?: 'Review'
     createdAt?: Date | null
     id: string
-    projectId: string
-    reviewerId: string
     updatedAt?: Date | null
     amount?: number | null
     bonus?: number | null
     name: string
     ratingAverage?: number | null
     ratingProgress?: number | null
+    projectMemberId: string
     viewUrl: string
-    project?: {
-      __typename?: 'Project'
-      amountManagerUsd?: number | null
-      amountReferralUsd?: number | null
-      amountTotalUsd?: number | null
-      avatarUrl?: string | null
-      communityId: string
-      createdAt?: Date | null
-      durationDays?: number | null
-      endDate?: Date | null
+    projectMember?: {
+      __typename?: 'ProjectMember'
       id: string
-      instructions?: string | null
-      linkDiscord?: string | null
-      linkGithub?: string | null
-      linkTelegram?: string | null
-      linkTwitter?: string | null
-      linkWebsite?: string | null
-      manageUrl: string
-      name: string
-      remainingDays?: number | null
-      reviewCount?: number | null
-      reviewsOpen?: boolean | null
-      slug: string
-      startDate?: Date | null
-      status?: ProjectStatus | null
+      createdAt?: Date | null
       updatedAt?: Date | null
-      viewUrl: string
-      community?: {
-        __typename?: 'Community'
-        activeProjectsCount?: number | null
-        avatarUrl?: string | null
-        createdAt?: Date | null
-        homeServerId?: string | null
-        id: string
-        managerCount?: number | null
-        manageUrl: string
-        name: string
-        updatedAt?: Date | null
-        viewUrl: string
-        managers?: Array<{
-          __typename?: 'CommunityManager'
-          createdAt?: Date | null
-          id: string
-          userId: string
-          admin?: boolean | null
-          updatedAt?: Date | null
-          user?: {
-            __typename?: 'User'
-            avatarUrl?: string | null
-            createdAt?: Date | null
-            developer?: boolean | null
-            id: string
-            name?: string | null
-            manager?: boolean | null
-            profileUrl: string
-            role?: UserRole | null
-            status?: UserStatus | null
-            updatedAt?: Date | null
-            username?: string | null
-            walletAddress?: string | null
-          } | null
-        }> | null
-      } | null
-      managers?: Array<{
+      amount?: number | null
+      bonus?: number | null
+      projectId?: string | null
+      role?: ProjectRole | null
+      userId?: string | null
+      user?: {
         __typename?: 'User'
         avatarUrl?: string | null
         createdAt?: Date | null
@@ -4606,22 +4612,7 @@ export type ManagerUpdateReviewMutation = {
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
-      }> | null
-    } | null
-    reviewer?: {
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
-      id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
-      updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
+      } | null
     } | null
   } | null
 }
@@ -4636,79 +4627,25 @@ export type ManagerFindManyReviewByProjectQuery = {
     __typename?: 'Review'
     createdAt?: Date | null
     id: string
-    projectId: string
-    reviewerId: string
     updatedAt?: Date | null
     amount?: number | null
     bonus?: number | null
     name: string
     ratingAverage?: number | null
     ratingProgress?: number | null
+    projectMemberId: string
     viewUrl: string
-    project?: {
-      __typename?: 'Project'
-      amountManagerUsd?: number | null
-      amountReferralUsd?: number | null
-      amountTotalUsd?: number | null
-      avatarUrl?: string | null
-      communityId: string
-      createdAt?: Date | null
-      durationDays?: number | null
-      endDate?: Date | null
+    projectMember?: {
+      __typename?: 'ProjectMember'
       id: string
-      instructions?: string | null
-      linkDiscord?: string | null
-      linkGithub?: string | null
-      linkTelegram?: string | null
-      linkTwitter?: string | null
-      linkWebsite?: string | null
-      manageUrl: string
-      name: string
-      remainingDays?: number | null
-      reviewCount?: number | null
-      reviewsOpen?: boolean | null
-      slug: string
-      startDate?: Date | null
-      status?: ProjectStatus | null
+      createdAt?: Date | null
       updatedAt?: Date | null
-      viewUrl: string
-      community?: {
-        __typename?: 'Community'
-        activeProjectsCount?: number | null
-        avatarUrl?: string | null
-        createdAt?: Date | null
-        homeServerId?: string | null
-        id: string
-        managerCount?: number | null
-        manageUrl: string
-        name: string
-        updatedAt?: Date | null
-        viewUrl: string
-        managers?: Array<{
-          __typename?: 'CommunityManager'
-          createdAt?: Date | null
-          id: string
-          userId: string
-          admin?: boolean | null
-          updatedAt?: Date | null
-          user?: {
-            __typename?: 'User'
-            avatarUrl?: string | null
-            createdAt?: Date | null
-            developer?: boolean | null
-            id: string
-            name?: string | null
-            manager?: boolean | null
-            profileUrl: string
-            role?: UserRole | null
-            status?: UserStatus | null
-            updatedAt?: Date | null
-            username?: string | null
-            walletAddress?: string | null
-          } | null
-        }> | null
-      } | null
-      managers?: Array<{
+      amount?: number | null
+      bonus?: number | null
+      projectId?: string | null
+      role?: ProjectRole | null
+      userId?: string | null
+      user?: {
         __typename?: 'User'
         avatarUrl?: string | null
         createdAt?: Date | null
@@ -4722,22 +4659,7 @@ export type ManagerFindManyReviewByProjectQuery = {
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
-      }> | null
-    } | null
-    reviewer?: {
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
-      id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
-      updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
+      } | null
     } | null
   }> | null
 }
@@ -4752,79 +4674,25 @@ export type ReviewerFindManyReviewByProjectQuery = {
     __typename?: 'Review'
     createdAt?: Date | null
     id: string
-    projectId: string
-    reviewerId: string
     updatedAt?: Date | null
     amount?: number | null
     bonus?: number | null
     name: string
     ratingAverage?: number | null
     ratingProgress?: number | null
+    projectMemberId: string
     viewUrl: string
-    project?: {
-      __typename?: 'Project'
-      amountManagerUsd?: number | null
-      amountReferralUsd?: number | null
-      amountTotalUsd?: number | null
-      avatarUrl?: string | null
-      communityId: string
-      createdAt?: Date | null
-      durationDays?: number | null
-      endDate?: Date | null
+    projectMember?: {
+      __typename?: 'ProjectMember'
       id: string
-      instructions?: string | null
-      linkDiscord?: string | null
-      linkGithub?: string | null
-      linkTelegram?: string | null
-      linkTwitter?: string | null
-      linkWebsite?: string | null
-      manageUrl: string
-      name: string
-      remainingDays?: number | null
-      reviewCount?: number | null
-      reviewsOpen?: boolean | null
-      slug: string
-      startDate?: Date | null
-      status?: ProjectStatus | null
+      createdAt?: Date | null
       updatedAt?: Date | null
-      viewUrl: string
-      community?: {
-        __typename?: 'Community'
-        activeProjectsCount?: number | null
-        avatarUrl?: string | null
-        createdAt?: Date | null
-        homeServerId?: string | null
-        id: string
-        managerCount?: number | null
-        manageUrl: string
-        name: string
-        updatedAt?: Date | null
-        viewUrl: string
-        managers?: Array<{
-          __typename?: 'CommunityManager'
-          createdAt?: Date | null
-          id: string
-          userId: string
-          admin?: boolean | null
-          updatedAt?: Date | null
-          user?: {
-            __typename?: 'User'
-            avatarUrl?: string | null
-            createdAt?: Date | null
-            developer?: boolean | null
-            id: string
-            name?: string | null
-            manager?: boolean | null
-            profileUrl: string
-            role?: UserRole | null
-            status?: UserStatus | null
-            updatedAt?: Date | null
-            username?: string | null
-            walletAddress?: string | null
-          } | null
-        }> | null
-      } | null
-      managers?: Array<{
+      amount?: number | null
+      bonus?: number | null
+      projectId?: string | null
+      role?: ProjectRole | null
+      userId?: string | null
+      user?: {
         __typename?: 'User'
         avatarUrl?: string | null
         createdAt?: Date | null
@@ -4838,22 +4706,7 @@ export type ReviewerFindManyReviewByProjectQuery = {
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
-      }> | null
-    } | null
-    reviewer?: {
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
-      id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
-      updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
+      } | null
     } | null
   }> | null
 }
@@ -4868,79 +4721,25 @@ export type ReviewerFindManyReviewByUsernameQuery = {
     __typename?: 'Review'
     createdAt?: Date | null
     id: string
-    projectId: string
-    reviewerId: string
     updatedAt?: Date | null
     amount?: number | null
     bonus?: number | null
     name: string
     ratingAverage?: number | null
     ratingProgress?: number | null
+    projectMemberId: string
     viewUrl: string
-    project?: {
-      __typename?: 'Project'
-      amountManagerUsd?: number | null
-      amountReferralUsd?: number | null
-      amountTotalUsd?: number | null
-      avatarUrl?: string | null
-      communityId: string
-      createdAt?: Date | null
-      durationDays?: number | null
-      endDate?: Date | null
+    projectMember?: {
+      __typename?: 'ProjectMember'
       id: string
-      instructions?: string | null
-      linkDiscord?: string | null
-      linkGithub?: string | null
-      linkTelegram?: string | null
-      linkTwitter?: string | null
-      linkWebsite?: string | null
-      manageUrl: string
-      name: string
-      remainingDays?: number | null
-      reviewCount?: number | null
-      reviewsOpen?: boolean | null
-      slug: string
-      startDate?: Date | null
-      status?: ProjectStatus | null
+      createdAt?: Date | null
       updatedAt?: Date | null
-      viewUrl: string
-      community?: {
-        __typename?: 'Community'
-        activeProjectsCount?: number | null
-        avatarUrl?: string | null
-        createdAt?: Date | null
-        homeServerId?: string | null
-        id: string
-        managerCount?: number | null
-        manageUrl: string
-        name: string
-        updatedAt?: Date | null
-        viewUrl: string
-        managers?: Array<{
-          __typename?: 'CommunityManager'
-          createdAt?: Date | null
-          id: string
-          userId: string
-          admin?: boolean | null
-          updatedAt?: Date | null
-          user?: {
-            __typename?: 'User'
-            avatarUrl?: string | null
-            createdAt?: Date | null
-            developer?: boolean | null
-            id: string
-            name?: string | null
-            manager?: boolean | null
-            profileUrl: string
-            role?: UserRole | null
-            status?: UserStatus | null
-            updatedAt?: Date | null
-            username?: string | null
-            walletAddress?: string | null
-          } | null
-        }> | null
-      } | null
-      managers?: Array<{
+      amount?: number | null
+      bonus?: number | null
+      projectId?: string | null
+      role?: ProjectRole | null
+      userId?: string | null
+      user?: {
         __typename?: 'User'
         avatarUrl?: string | null
         createdAt?: Date | null
@@ -4954,22 +4753,7 @@ export type ReviewerFindManyReviewByUsernameQuery = {
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
-      }> | null
-    } | null
-    reviewer?: {
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
-      id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
-      updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
+      } | null
     } | null
   }> | null
 }
@@ -4984,79 +4768,25 @@ export type ReviewerFindUserProjectReviewQuery = {
     __typename?: 'Review'
     createdAt?: Date | null
     id: string
-    projectId: string
-    reviewerId: string
     updatedAt?: Date | null
     amount?: number | null
     bonus?: number | null
     name: string
     ratingAverage?: number | null
     ratingProgress?: number | null
+    projectMemberId: string
     viewUrl: string
-    project?: {
-      __typename?: 'Project'
-      amountManagerUsd?: number | null
-      amountReferralUsd?: number | null
-      amountTotalUsd?: number | null
-      avatarUrl?: string | null
-      communityId: string
-      createdAt?: Date | null
-      durationDays?: number | null
-      endDate?: Date | null
+    projectMember?: {
+      __typename?: 'ProjectMember'
       id: string
-      instructions?: string | null
-      linkDiscord?: string | null
-      linkGithub?: string | null
-      linkTelegram?: string | null
-      linkTwitter?: string | null
-      linkWebsite?: string | null
-      manageUrl: string
-      name: string
-      remainingDays?: number | null
-      reviewCount?: number | null
-      reviewsOpen?: boolean | null
-      slug: string
-      startDate?: Date | null
-      status?: ProjectStatus | null
+      createdAt?: Date | null
       updatedAt?: Date | null
-      viewUrl: string
-      community?: {
-        __typename?: 'Community'
-        activeProjectsCount?: number | null
-        avatarUrl?: string | null
-        createdAt?: Date | null
-        homeServerId?: string | null
-        id: string
-        managerCount?: number | null
-        manageUrl: string
-        name: string
-        updatedAt?: Date | null
-        viewUrl: string
-        managers?: Array<{
-          __typename?: 'CommunityManager'
-          createdAt?: Date | null
-          id: string
-          userId: string
-          admin?: boolean | null
-          updatedAt?: Date | null
-          user?: {
-            __typename?: 'User'
-            avatarUrl?: string | null
-            createdAt?: Date | null
-            developer?: boolean | null
-            id: string
-            name?: string | null
-            manager?: boolean | null
-            profileUrl: string
-            role?: UserRole | null
-            status?: UserStatus | null
-            updatedAt?: Date | null
-            username?: string | null
-            walletAddress?: string | null
-          } | null
-        }> | null
-      } | null
-      managers?: Array<{
+      amount?: number | null
+      bonus?: number | null
+      projectId?: string | null
+      role?: ProjectRole | null
+      userId?: string | null
+      user?: {
         __typename?: 'User'
         avatarUrl?: string | null
         createdAt?: Date | null
@@ -5070,22 +4800,7 @@ export type ReviewerFindUserProjectReviewQuery = {
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
-      }> | null
-    } | null
-    reviewer?: {
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
-      id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
-      updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
+      } | null
     } | null
   } | null
 }
@@ -5100,79 +4815,25 @@ export type ReviewerFindOneReviewQuery = {
     __typename?: 'Review'
     createdAt?: Date | null
     id: string
-    projectId: string
-    reviewerId: string
     updatedAt?: Date | null
     amount?: number | null
     bonus?: number | null
     name: string
     ratingAverage?: number | null
     ratingProgress?: number | null
+    projectMemberId: string
     viewUrl: string
-    project?: {
-      __typename?: 'Project'
-      amountManagerUsd?: number | null
-      amountReferralUsd?: number | null
-      amountTotalUsd?: number | null
-      avatarUrl?: string | null
-      communityId: string
-      createdAt?: Date | null
-      durationDays?: number | null
-      endDate?: Date | null
+    projectMember?: {
+      __typename?: 'ProjectMember'
       id: string
-      instructions?: string | null
-      linkDiscord?: string | null
-      linkGithub?: string | null
-      linkTelegram?: string | null
-      linkTwitter?: string | null
-      linkWebsite?: string | null
-      manageUrl: string
-      name: string
-      remainingDays?: number | null
-      reviewCount?: number | null
-      reviewsOpen?: boolean | null
-      slug: string
-      startDate?: Date | null
-      status?: ProjectStatus | null
+      createdAt?: Date | null
       updatedAt?: Date | null
-      viewUrl: string
-      community?: {
-        __typename?: 'Community'
-        activeProjectsCount?: number | null
-        avatarUrl?: string | null
-        createdAt?: Date | null
-        homeServerId?: string | null
-        id: string
-        managerCount?: number | null
-        manageUrl: string
-        name: string
-        updatedAt?: Date | null
-        viewUrl: string
-        managers?: Array<{
-          __typename?: 'CommunityManager'
-          createdAt?: Date | null
-          id: string
-          userId: string
-          admin?: boolean | null
-          updatedAt?: Date | null
-          user?: {
-            __typename?: 'User'
-            avatarUrl?: string | null
-            createdAt?: Date | null
-            developer?: boolean | null
-            id: string
-            name?: string | null
-            manager?: boolean | null
-            profileUrl: string
-            role?: UserRole | null
-            status?: UserStatus | null
-            updatedAt?: Date | null
-            username?: string | null
-            walletAddress?: string | null
-          } | null
-        }> | null
-      } | null
-      managers?: Array<{
+      amount?: number | null
+      bonus?: number | null
+      projectId?: string | null
+      role?: ProjectRole | null
+      userId?: string | null
+      user?: {
         __typename?: 'User'
         avatarUrl?: string | null
         createdAt?: Date | null
@@ -5186,22 +4847,7 @@ export type ReviewerFindOneReviewQuery = {
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
-      }> | null
-    } | null
-    reviewer?: {
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
-      id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
-      updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
+      } | null
     } | null
   } | null
 }
@@ -5216,79 +4862,25 @@ export type ReviewerCreateReviewMutation = {
     __typename?: 'Review'
     createdAt?: Date | null
     id: string
-    projectId: string
-    reviewerId: string
     updatedAt?: Date | null
     amount?: number | null
     bonus?: number | null
     name: string
     ratingAverage?: number | null
     ratingProgress?: number | null
+    projectMemberId: string
     viewUrl: string
-    project?: {
-      __typename?: 'Project'
-      amountManagerUsd?: number | null
-      amountReferralUsd?: number | null
-      amountTotalUsd?: number | null
-      avatarUrl?: string | null
-      communityId: string
-      createdAt?: Date | null
-      durationDays?: number | null
-      endDate?: Date | null
+    projectMember?: {
+      __typename?: 'ProjectMember'
       id: string
-      instructions?: string | null
-      linkDiscord?: string | null
-      linkGithub?: string | null
-      linkTelegram?: string | null
-      linkTwitter?: string | null
-      linkWebsite?: string | null
-      manageUrl: string
-      name: string
-      remainingDays?: number | null
-      reviewCount?: number | null
-      reviewsOpen?: boolean | null
-      slug: string
-      startDate?: Date | null
-      status?: ProjectStatus | null
+      createdAt?: Date | null
       updatedAt?: Date | null
-      viewUrl: string
-      community?: {
-        __typename?: 'Community'
-        activeProjectsCount?: number | null
-        avatarUrl?: string | null
-        createdAt?: Date | null
-        homeServerId?: string | null
-        id: string
-        managerCount?: number | null
-        manageUrl: string
-        name: string
-        updatedAt?: Date | null
-        viewUrl: string
-        managers?: Array<{
-          __typename?: 'CommunityManager'
-          createdAt?: Date | null
-          id: string
-          userId: string
-          admin?: boolean | null
-          updatedAt?: Date | null
-          user?: {
-            __typename?: 'User'
-            avatarUrl?: string | null
-            createdAt?: Date | null
-            developer?: boolean | null
-            id: string
-            name?: string | null
-            manager?: boolean | null
-            profileUrl: string
-            role?: UserRole | null
-            status?: UserStatus | null
-            updatedAt?: Date | null
-            username?: string | null
-            walletAddress?: string | null
-          } | null
-        }> | null
-      } | null
-      managers?: Array<{
+      amount?: number | null
+      bonus?: number | null
+      projectId?: string | null
+      role?: ProjectRole | null
+      userId?: string | null
+      user?: {
         __typename?: 'User'
         avatarUrl?: string | null
         createdAt?: Date | null
@@ -5302,22 +4894,7 @@ export type ReviewerCreateReviewMutation = {
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
-      }> | null
-    } | null
-    reviewer?: {
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
-      id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
-      updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
+      } | null
     } | null
   } | null
 }
@@ -5340,79 +4917,25 @@ export type AdminFindManyReviewQuery = {
       __typename?: 'Review'
       createdAt?: Date | null
       id: string
-      projectId: string
-      reviewerId: string
       updatedAt?: Date | null
       amount?: number | null
       bonus?: number | null
       name: string
       ratingAverage?: number | null
       ratingProgress?: number | null
+      projectMemberId: string
       viewUrl: string
-      project?: {
-        __typename?: 'Project'
-        amountManagerUsd?: number | null
-        amountReferralUsd?: number | null
-        amountTotalUsd?: number | null
-        avatarUrl?: string | null
-        communityId: string
-        createdAt?: Date | null
-        durationDays?: number | null
-        endDate?: Date | null
+      projectMember?: {
+        __typename?: 'ProjectMember'
         id: string
-        instructions?: string | null
-        linkDiscord?: string | null
-        linkGithub?: string | null
-        linkTelegram?: string | null
-        linkTwitter?: string | null
-        linkWebsite?: string | null
-        manageUrl: string
-        name: string
-        remainingDays?: number | null
-        reviewCount?: number | null
-        reviewsOpen?: boolean | null
-        slug: string
-        startDate?: Date | null
-        status?: ProjectStatus | null
+        createdAt?: Date | null
         updatedAt?: Date | null
-        viewUrl: string
-        community?: {
-          __typename?: 'Community'
-          activeProjectsCount?: number | null
-          avatarUrl?: string | null
-          createdAt?: Date | null
-          homeServerId?: string | null
-          id: string
-          managerCount?: number | null
-          manageUrl: string
-          name: string
-          updatedAt?: Date | null
-          viewUrl: string
-          managers?: Array<{
-            __typename?: 'CommunityManager'
-            createdAt?: Date | null
-            id: string
-            userId: string
-            admin?: boolean | null
-            updatedAt?: Date | null
-            user?: {
-              __typename?: 'User'
-              avatarUrl?: string | null
-              createdAt?: Date | null
-              developer?: boolean | null
-              id: string
-              name?: string | null
-              manager?: boolean | null
-              profileUrl: string
-              role?: UserRole | null
-              status?: UserStatus | null
-              updatedAt?: Date | null
-              username?: string | null
-              walletAddress?: string | null
-            } | null
-          }> | null
-        } | null
-        managers?: Array<{
+        amount?: number | null
+        bonus?: number | null
+        projectId?: string | null
+        role?: ProjectRole | null
+        userId?: string | null
+        user?: {
           __typename?: 'User'
           avatarUrl?: string | null
           createdAt?: Date | null
@@ -5426,22 +4949,7 @@ export type AdminFindManyReviewQuery = {
           updatedAt?: Date | null
           username?: string | null
           walletAddress?: string | null
-        }> | null
-      } | null
-      reviewer?: {
-        __typename?: 'User'
-        avatarUrl?: string | null
-        createdAt?: Date | null
-        developer?: boolean | null
-        id: string
-        name?: string | null
-        manager?: boolean | null
-        profileUrl: string
-        role?: UserRole | null
-        status?: UserStatus | null
-        updatedAt?: Date | null
-        username?: string | null
-        walletAddress?: string | null
+        } | null
       } | null
     }>
     meta: {
@@ -5467,79 +4975,25 @@ export type AdminFindOneReviewQuery = {
     __typename?: 'Review'
     createdAt?: Date | null
     id: string
-    projectId: string
-    reviewerId: string
     updatedAt?: Date | null
     amount?: number | null
     bonus?: number | null
     name: string
     ratingAverage?: number | null
     ratingProgress?: number | null
+    projectMemberId: string
     viewUrl: string
-    project?: {
-      __typename?: 'Project'
-      amountManagerUsd?: number | null
-      amountReferralUsd?: number | null
-      amountTotalUsd?: number | null
-      avatarUrl?: string | null
-      communityId: string
-      createdAt?: Date | null
-      durationDays?: number | null
-      endDate?: Date | null
+    projectMember?: {
+      __typename?: 'ProjectMember'
       id: string
-      instructions?: string | null
-      linkDiscord?: string | null
-      linkGithub?: string | null
-      linkTelegram?: string | null
-      linkTwitter?: string | null
-      linkWebsite?: string | null
-      manageUrl: string
-      name: string
-      remainingDays?: number | null
-      reviewCount?: number | null
-      reviewsOpen?: boolean | null
-      slug: string
-      startDate?: Date | null
-      status?: ProjectStatus | null
+      createdAt?: Date | null
       updatedAt?: Date | null
-      viewUrl: string
-      community?: {
-        __typename?: 'Community'
-        activeProjectsCount?: number | null
-        avatarUrl?: string | null
-        createdAt?: Date | null
-        homeServerId?: string | null
-        id: string
-        managerCount?: number | null
-        manageUrl: string
-        name: string
-        updatedAt?: Date | null
-        viewUrl: string
-        managers?: Array<{
-          __typename?: 'CommunityManager'
-          createdAt?: Date | null
-          id: string
-          userId: string
-          admin?: boolean | null
-          updatedAt?: Date | null
-          user?: {
-            __typename?: 'User'
-            avatarUrl?: string | null
-            createdAt?: Date | null
-            developer?: boolean | null
-            id: string
-            name?: string | null
-            manager?: boolean | null
-            profileUrl: string
-            role?: UserRole | null
-            status?: UserStatus | null
-            updatedAt?: Date | null
-            username?: string | null
-            walletAddress?: string | null
-          } | null
-        }> | null
-      } | null
-      managers?: Array<{
+      amount?: number | null
+      bonus?: number | null
+      projectId?: string | null
+      role?: ProjectRole | null
+      userId?: string | null
+      user?: {
         __typename?: 'User'
         avatarUrl?: string | null
         createdAt?: Date | null
@@ -5553,22 +5007,7 @@ export type AdminFindOneReviewQuery = {
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
-      }> | null
-    } | null
-    reviewer?: {
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
-      id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
-      updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
+      } | null
     } | null
   } | null
 }
@@ -5937,21 +5376,6 @@ export const IdentityChallengeDetailsFragmentDoc = gql`
     verified
   }
 `
-export const RatingDetailsFragmentDoc = gql`
-  fragment RatingDetails on Rating {
-    createdAt
-    id
-    content
-    commentId
-    authorId
-    author {
-      ...UserDetails
-    }
-    rating
-    updatedAt
-  }
-  ${UserDetailsFragmentDoc}
-`
 export const CommunityManagerDetailsFragmentDoc = gql`
   fragment CommunityManagerDetails on CommunityManager {
     createdAt
@@ -5983,6 +5407,22 @@ export const CommunityDetailsFragmentDoc = gql`
   }
   ${CommunityManagerDetailsFragmentDoc}
 `
+export const ProjectMemberDetailsFragmentDoc = gql`
+  fragment ProjectMemberDetails on ProjectMember {
+    id
+    createdAt
+    updatedAt
+    amount
+    bonus
+    projectId
+    role
+    userId
+    user {
+      ...UserDetails
+    }
+  }
+  ${UserDetailsFragmentDoc}
+`
 export const ProjectDetailsFragmentDoc = gql`
   fragment ProjectDetails on Project {
     amountManagerUsd
@@ -6004,7 +5444,7 @@ export const ProjectDetailsFragmentDoc = gql`
     linkTwitter
     linkWebsite
     managers {
-      ...UserDetails
+      ...ProjectMemberDetails
     }
     manageUrl
     name
@@ -6018,30 +5458,40 @@ export const ProjectDetailsFragmentDoc = gql`
     viewUrl
   }
   ${CommunityDetailsFragmentDoc}
+  ${ProjectMemberDetailsFragmentDoc}
+`
+export const RatingDetailsFragmentDoc = gql`
+  fragment RatingDetails on Rating {
+    createdAt
+    id
+    content
+    commentId
+    authorId
+    author {
+      ...UserDetails
+    }
+    rating
+    updatedAt
+  }
   ${UserDetailsFragmentDoc}
 `
 export const ReviewDetailsFragmentDoc = gql`
   fragment ReviewDetails on Review {
     createdAt
     id
-    projectId
-    reviewerId
     updatedAt
     amount
     bonus
     name
     ratingAverage
     ratingProgress
-    project {
-      ...ProjectDetails
-    }
-    reviewer {
-      ...UserDetails
+    projectMemberId
+    projectMember {
+      ...ProjectMemberDetails
     }
     viewUrl
   }
-  ${ProjectDetailsFragmentDoc}
-  ${UserDetailsFragmentDoc}
+  ${ProjectMemberDetailsFragmentDoc}
 `
 export const LoginDocument = gql`
   mutation login($input: LoginInput!) {
@@ -6600,16 +6050,19 @@ export const AdminFindOneProjectDocument = gql`
   query adminFindOneProject($projectId: String!) {
     item: adminFindOneProject(projectId: $projectId) {
       ...ProjectDetails
+      members {
+        ...ProjectMemberDetails
+      }
       referral {
-        ...UserDetails
+        ...ProjectMemberDetails
       }
       reviewers {
-        ...UserDetails
+        ...ProjectMemberDetails
       }
     }
   }
   ${ProjectDetailsFragmentDoc}
-  ${UserDetailsFragmentDoc}
+  ${ProjectMemberDetailsFragmentDoc}
 `
 export const AdminUpdateProjectDocument = gql`
   mutation adminUpdateProject($projectId: String!, $input: AdminUpdateProjectInput!) {
@@ -6629,29 +6082,14 @@ export const AdminAddProjectManagerDocument = gql`
     added: adminAddProjectManager(projectId: $projectId, managerUserId: $managerUserId)
   }
 `
-export const AdminRemoveProjectManagerDocument = gql`
-  mutation adminRemoveProjectManager($projectId: String!, $managerUserId: String!) {
-    removed: adminRemoveProjectManager(projectId: $projectId, managerUserId: $managerUserId)
+export const AdminRemoveProjectMemberDocument = gql`
+  mutation adminRemoveProjectMember($projectMemberId: String!) {
+    removed: adminRemoveProjectMember(projectMemberId: $projectMemberId)
   }
 `
-export const AdminAddProjectReviewerDocument = gql`
-  mutation adminAddProjectReviewer($projectId: String!, $reviewerUserId: String!) {
-    added: adminAddProjectReviewer(projectId: $projectId, reviewerUserId: $reviewerUserId)
-  }
-`
-export const AdminRemoveProjectReviewerDocument = gql`
-  mutation adminRemoveProjectReviewer($projectId: String!, $reviewerUserId: String!) {
-    removed: adminRemoveProjectReviewer(projectId: $projectId, reviewerUserId: $reviewerUserId)
-  }
-`
-export const AdminAddProjectReferralDocument = gql`
-  mutation adminAddProjectReferral($projectId: String!, $referralUserId: String!) {
-    added: adminAddProjectReferral(projectId: $projectId, referralUserId: $referralUserId)
-  }
-`
-export const AdminRemoveProjectReferralDocument = gql`
-  mutation adminRemoveProjectReferral($projectId: String!, $referralUserId: String!) {
-    removed: adminRemoveProjectReferral(projectId: $projectId, referralUserId: $referralUserId)
+export const AdminUpdateProjectMemberRoleDocument = gql`
+  mutation adminUpdateProjectMemberRole($projectMemberId: String!, $role: ProjectRole!) {
+    updated: adminUpdateProjectMemberRole(projectMemberId: $projectMemberId, role: $role)
   }
 `
 export const ManagerFindManyProjectDocument = gql`
@@ -6678,15 +6116,15 @@ export const ManagerFindOneProjectDocument = gql`
         nextStatus
       }
       referral {
-        ...UserDetails
+        ...ProjectMemberDetails
       }
       reviewers {
-        ...UserDetails
+        ...ProjectMemberDetails
       }
     }
   }
   ${ProjectDetailsFragmentDoc}
-  ${UserDetailsFragmentDoc}
+  ${ProjectMemberDetailsFragmentDoc}
 `
 export const ManagerCreateProjectDocument = gql`
   mutation managerCreateProject($input: ManagerCreateProjectInput!) {
@@ -7042,11 +6480,8 @@ const AdminFindOneProjectDocumentString = print(AdminFindOneProjectDocument)
 const AdminUpdateProjectDocumentString = print(AdminUpdateProjectDocument)
 const AdminDeleteProjectDocumentString = print(AdminDeleteProjectDocument)
 const AdminAddProjectManagerDocumentString = print(AdminAddProjectManagerDocument)
-const AdminRemoveProjectManagerDocumentString = print(AdminRemoveProjectManagerDocument)
-const AdminAddProjectReviewerDocumentString = print(AdminAddProjectReviewerDocument)
-const AdminRemoveProjectReviewerDocumentString = print(AdminRemoveProjectReviewerDocument)
-const AdminAddProjectReferralDocumentString = print(AdminAddProjectReferralDocument)
-const AdminRemoveProjectReferralDocumentString = print(AdminRemoveProjectReferralDocument)
+const AdminRemoveProjectMemberDocumentString = print(AdminRemoveProjectMemberDocument)
+const AdminUpdateProjectMemberRoleDocumentString = print(AdminUpdateProjectMemberRoleDocument)
 const ManagerFindManyProjectDocumentString = print(ManagerFindManyProjectDocument)
 const ManagerFindOneProjectDocumentString = print(ManagerFindOneProjectDocument)
 const ManagerCreateProjectDocumentString = print(ManagerCreateProjectDocument)
@@ -8609,11 +8044,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
-    adminRemoveProjectManager(
-      variables: AdminRemoveProjectManagerMutationVariables,
+    adminRemoveProjectMember(
+      variables: AdminRemoveProjectMemberMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: AdminRemoveProjectManagerMutation
+      data: AdminRemoveProjectMemberMutation
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -8621,20 +8056,20 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<AdminRemoveProjectManagerMutation>(AdminRemoveProjectManagerDocumentString, variables, {
+          client.rawRequest<AdminRemoveProjectMemberMutation>(AdminRemoveProjectMemberDocumentString, variables, {
             ...requestHeaders,
             ...wrappedRequestHeaders,
           }),
-        'adminRemoveProjectManager',
+        'adminRemoveProjectMember',
         'mutation',
         variables,
       )
     },
-    adminAddProjectReviewer(
-      variables: AdminAddProjectReviewerMutationVariables,
+    adminUpdateProjectMemberRole(
+      variables: AdminUpdateProjectMemberRoleMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
     ): Promise<{
-      data: AdminAddProjectReviewerMutation
+      data: AdminUpdateProjectMemberRoleMutation
       errors?: GraphQLError[]
       extensions?: any
       headers: Headers
@@ -8642,74 +8077,12 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     }> {
       return withWrapper(
         (wrappedRequestHeaders) =>
-          client.rawRequest<AdminAddProjectReviewerMutation>(AdminAddProjectReviewerDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'adminAddProjectReviewer',
-        'mutation',
-        variables,
-      )
-    },
-    adminRemoveProjectReviewer(
-      variables: AdminRemoveProjectReviewerMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: AdminRemoveProjectReviewerMutation
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<AdminRemoveProjectReviewerMutation>(AdminRemoveProjectReviewerDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'adminRemoveProjectReviewer',
-        'mutation',
-        variables,
-      )
-    },
-    adminAddProjectReferral(
-      variables: AdminAddProjectReferralMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: AdminAddProjectReferralMutation
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<AdminAddProjectReferralMutation>(AdminAddProjectReferralDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'adminAddProjectReferral',
-        'mutation',
-        variables,
-      )
-    },
-    adminRemoveProjectReferral(
-      variables: AdminRemoveProjectReferralMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: AdminRemoveProjectReferralMutation
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<AdminRemoveProjectReferralMutation>(AdminRemoveProjectReferralDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'adminRemoveProjectReferral',
+          client.rawRequest<AdminUpdateProjectMemberRoleMutation>(
+            AdminUpdateProjectMemberRoleDocumentString,
+            variables,
+            { ...requestHeaders, ...wrappedRequestHeaders },
+          ),
+        'adminUpdateProjectMemberRole',
         'mutation',
         variables,
       )
@@ -9542,6 +8915,8 @@ export const OrderDirectionSchema = z.nativeEnum(OrderDirection)
 
 export const ProjectOrderBySchema = z.nativeEnum(ProjectOrderBy)
 
+export const ProjectRoleSchema = z.nativeEnum(ProjectRole)
+
 export const ProjectStatusSchema = z.nativeEnum(ProjectStatus)
 
 export const UserRoleSchema = z.nativeEnum(UserRole)
@@ -9909,6 +9284,7 @@ export function UserFindManyIdentityInputSchema(): z.ZodObject<Properties<UserFi
 
 export function UserFindManyUserInputSchema(): z.ZodObject<Properties<UserFindManyUserInput>> {
   return z.object({
+    filterIds: z.array(z.string()).nullish(),
     limit: z.number().nullish(),
     page: z.number().nullish(),
     search: z.string().nullish(),

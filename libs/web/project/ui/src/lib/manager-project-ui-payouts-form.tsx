@@ -41,7 +41,7 @@ export function ManagerProjectUiPayoutsForm({
             key={review.id}
             updateReview={(input) => updateReview(review.id, input)}
             item={review}
-            user={review.reviewer as User}
+            user={review.projectMember?.user as User}
           />
           <CoreUiDivider />
         </UiStack>
@@ -53,11 +53,13 @@ export function ManagerProjectUiPayoutsForm({
           </Text>
           {managers.map((manager) => (
             <UiStack key={manager.id}>
-              <ManagerProjectUiPayoutItemForm
-                key={manager.id}
-                item={{ amount: project.amountManagerUsd, bonus: 0 }}
-                user={manager}
-              />
+              {manager.user ? (
+                <ManagerProjectUiPayoutItemForm
+                  key={manager.id}
+                  item={{ amount: project.amountManagerUsd, bonus: 0 }}
+                  user={manager.user}
+                />
+              ) : null}
               <CoreUiDivider />
             </UiStack>
           ))}
@@ -68,7 +70,12 @@ export function ManagerProjectUiPayoutsForm({
           <Text size="lg" fw={700}>
             Referral
           </Text>
-          <ManagerProjectUiPayoutItemForm item={{ amount: project.amountReferralUsd, bonus: 0 }} user={referral} />
+          {referral.user ? (
+            <ManagerProjectUiPayoutItemForm
+              item={{ amount: project.amountReferralUsd, bonus: 0 }}
+              user={referral.user}
+            />
+          ) : null}
         </UiStack>
       ) : (
         <Text size="lg" fw={700}>

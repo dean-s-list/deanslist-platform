@@ -20,7 +20,7 @@ export function ProjectUiTeamManager({
   removeProjectManager: (managerUserId: string) => Promise<boolean | null | undefined>
   removeProjectReferral: (referralUserId: string) => Promise<boolean | null | undefined>
   removeProjectReviewer: (reviewerUserId: string) => Promise<boolean | null | undefined>
-  updateProject: (input: AdminUpdateProjectInput | ManagerUpdateProjectInput) => Promise<boolean>
+  updateProject: (input: AdminUpdateProjectInput | ManagerUpdateProjectInput) => Promise<Project | null>
 }) {
   return (
     <SimpleGrid cols={{ base: 1, md: 2 }}>
@@ -31,7 +31,7 @@ export function ProjectUiTeamManager({
           </Text>
           <ProjectUiMemberManager
             placeholder="Add a manager"
-            users={project.managers ?? []}
+            members={project.managers ?? []}
             addUser={addProjectManager}
             removeUser={removeProjectManager}
           />
@@ -43,7 +43,7 @@ export function ProjectUiTeamManager({
           <ProjectUiMemberManager
             placeholder="Add a referral"
             max={1}
-            users={project.referral ? [project.referral] : []}
+            members={project.referral ? [project.referral] : []}
             addUser={addProjectReferral}
             removeUser={removeProjectReferral}
           />
@@ -53,13 +53,13 @@ export function ProjectUiTeamManager({
             Reviewers
           </Text>
           <UiStack px="xs">
-            <ProjectUiToggleReviewsOpen project={project} update={(input) => updateProject(input)} />
+            <ProjectUiToggleReviewsOpen project={project} update={updateProject} />
           </UiStack>
         </UiStack>
         {!project.reviewsOpen || project.reviewers?.length ? (
           <ProjectUiMemberManager
             placeholder="Add a reviewer"
-            users={project.reviewers ?? []}
+            members={project.reviewers ?? []}
             addUser={addProjectReviewer}
             removeUser={removeProjectReviewer}
           />

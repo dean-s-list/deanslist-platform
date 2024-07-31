@@ -16,11 +16,42 @@ export function getProjectWhereManagerInput(user: User, input: ManagerFindManyPr
       { id: { contains: input.search, mode: 'insensitive' } },
       { name: { contains: input.search, mode: 'insensitive' } },
       { slug: { contains: input.search, mode: 'insensitive' } },
-      { managers: { some: { username: { contains: input.search, mode: 'insensitive' } } } },
-      { community: { id: { contains: input.search, mode: 'insensitive' } } },
-      { community: { name: { contains: input.search, mode: 'insensitive' } } },
-      { reviews: { some: { id: { contains: input.search, mode: 'insensitive' } } } },
-      { reviews: { some: { comments: { some: { content: { contains: input.search, mode: 'insensitive' } } } } } },
+      {
+        community: {
+          OR: [
+            { id: { contains: input.search, mode: 'insensitive' } },
+            { name: { contains: input.search, mode: 'insensitive' } },
+          ],
+        },
+      },
+      {
+        members: {
+          some: {
+            OR: [
+              { userId: { contains: input.search, mode: 'insensitive' } },
+              {
+                reviews: {
+                  some: {
+                    OR: [
+                      { id: { contains: input.search, mode: 'insensitive' } },
+                      {
+                        comments: {
+                          some: {
+                            OR: [
+                              { id: { contains: input.search, mode: 'insensitive' } },
+                              { content: { contains: input.search, mode: 'insensitive' } },
+                            ],
+                          },
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
     ]
   }
 

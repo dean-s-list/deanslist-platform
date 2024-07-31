@@ -144,19 +144,19 @@ export function useManagerFindOneProject({ projectId }: { projectId: string }) {
         .managerUpdateProject({ projectId, input })
         .then((res) => res.data)
         .then(async (res) => {
-          if (res) {
+          if (res.updated) {
             if (toast) {
               toastSuccess('Project updated')
             }
             await query.refetch()
-            return true
+            return res.updated
           }
           toastError('Project not updated')
-          return false
+          return null
         })
         .catch((err) => {
           toastError(err.message)
-          return false
+          return null
         }),
     updateProjectStatus: (status: ProjectStatus) =>
       sdk

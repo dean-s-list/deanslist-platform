@@ -1,4 +1,4 @@
-import { Prisma, ProjectStatus } from '@prisma/client'
+import { Prisma, ProjectRole, ProjectStatus } from '@prisma/client'
 
 export type ProjectProvisionInput = Omit<Prisma.ProjectCreateWithoutCommunityInput, 'slug'> & {
   communityId: string
@@ -8,7 +8,7 @@ export const provisionProjects: ProjectProvisionInput[] = [
   {
     communityId: 'pubkey',
     name: 'PubKey Link',
-    managers: { connect: [{ id: 'beeman.dev' }] },
+    members: { create: [{ userId: 'beeman.dev', role: ProjectRole.Manager }] },
     amountTotalUsd: 750,
     amountManagerUsd: 300,
     amountReferralUsd: 0,
@@ -24,7 +24,7 @@ export const provisionProjects: ProjectProvisionInput[] = [
     communityId: 'pubkey',
     name: 'TokenGator',
     avatarUrl: 'https://pbs.twimg.com/profile_images/1765234913895190528/tmK-fd4K_400x400.jpg',
-    managers: { connect: [{ id: 'beeman.dev' }] },
+    members: { create: [{ userId: 'beeman.dev', role: ProjectRole.Manager }] },
     amountTotalUsd: 750,
     amountManagerUsd: 300,
     amountReferralUsd: 0,
@@ -39,7 +39,7 @@ export const provisionProjects: ProjectProvisionInput[] = [
   {
     communityId: 'deans-list',
     name: 'Dashboard v2',
-    managers: { connect: [{ id: 'beeman.dev' }] },
+    members: { create: [{ userId: 'beeman.dev', role: ProjectRole.Manager }] },
     amountTotalUsd: 500,
     amountManagerUsd: 0,
     amountReferralUsd: 0,
@@ -51,7 +51,7 @@ export const provisionProjects: ProjectProvisionInput[] = [
     communityId: 'deans-list',
     avatarUrl: 'https://pbs.twimg.com/profile_images/1764858894701015040/6lI5MAwe_400x400.jpg',
     name: 'Triad',
-    managers: { connect: [{ id: 'beeman.dev' }] },
+    members: { create: [{ userId: 'beeman.dev', role: ProjectRole.Manager }] },
     amountTotalUsd: 1500,
     amountManagerUsd: 500,
     amountReferralUsd: 100,
@@ -70,7 +70,7 @@ export const provisionProjects: ProjectProvisionInput[] = [
   {
     communityId: 'gib-work',
     name: 'FoSho',
-    managers: { connect: [{ id: 'beeman.dev' }] },
+    members: { create: [{ userId: 'beeman.dev', role: ProjectRole.Manager }] },
     amountTotalUsd: 1500,
     amountManagerUsd: 500,
     amountReferralUsd: 100,

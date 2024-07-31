@@ -5,21 +5,38 @@ export function getReviewerReviewByUsernameWhereInput(
   input: ReviewerFindManyReviewByUsernameInput,
 ): Prisma.ReviewWhereInput {
   const where: Prisma.ReviewWhereInput = {
-    reviewer: { username: input.username },
+    projectMember: { user: { username: input.username } },
   }
 
   if (input.search) {
     where.OR = [
       { id: { contains: input.search, mode: 'insensitive' } },
-      { project: { name: { contains: input.search, mode: 'insensitive' } } },
-      { project: { id: { contains: input.search, mode: 'insensitive' } } },
+      { comments: { some: { content: { contains: input.search, mode: 'insensitive' } } } },
       {
-        project: {
-          managers: { some: { username: { contains: input.search, mode: 'insensitive' } } },
+        projectMember: {
+          OR: [
+            {
+              project: {
+                OR: [
+                  { name: { contains: input.search, mode: 'insensitive' } },
+                  { id: { contains: input.search, mode: 'insensitive' } },
+                  {
+                    members: { some: { user: { username: { contains: input.search, mode: 'insensitive' } } } },
+                  },
+                ],
+              },
+            },
+            {
+              user: {
+                OR: [
+                  { name: { contains: input.search, mode: 'insensitive' } },
+                  { username: { contains: input.search, mode: 'insensitive' } },
+                  { id: { contains: input.search, mode: 'insensitive' } },
+                ],
+              },
+            },
+          ],
         },
-      },
-      {
-        comments: { some: { content: { contains: input.search, mode: 'insensitive' } } },
       },
     ]
   }

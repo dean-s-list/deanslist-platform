@@ -17,7 +17,7 @@ export function ManagerProjectUiUpdateForm({
   submit,
   project,
 }: {
-  submit: (res: ManagerUpdateProjectInput) => Promise<boolean>
+  submit: (res: ManagerUpdateProjectInput) => Promise<Project | null>
   project: Project
 }) {
   const isDraft = project.status === ProjectStatus.Draft

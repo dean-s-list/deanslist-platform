@@ -18,13 +18,16 @@ export class ApiReviewResolveAdminService {
       .paginate({
         orderBy: { createdAt: 'desc' },
         where: getAdminReviewWhereInput(input),
-        include: { reviewer: true, project: true },
+        include: { projectMember: { include: { project: true, user: true } } },
       })
       .withPages({ limit: input.limit, page: input.page })
       .then(([data, meta]) => ({ data, meta }))
   }
 
   async findOneReview(reviewId: string) {
-    return this.core.data.review.findUnique({ where: { id: reviewId }, include: { project: true, reviewer: true } })
+    return this.core.data.review.findUnique({
+      where: { id: reviewId },
+      include: { projectMember: { include: { project: true, user: true } } },
+    })
   }
 }

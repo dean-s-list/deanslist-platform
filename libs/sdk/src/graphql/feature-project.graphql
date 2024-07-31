@@ -1,3 +1,16 @@
+fragment ProjectMemberDetails on ProjectMember {
+  id
+  createdAt
+  updatedAt
+  amount
+  bonus
+  projectId
+  role
+  userId
+  user {
+    ...UserDetails
+  }
+}
 fragment ProjectDetails on Project {
   amountManagerUsd
   amountReferralUsd
@@ -18,7 +31,7 @@ fragment ProjectDetails on Project {
   linkTwitter
   linkWebsite
   managers {
-    ...UserDetails
+    ...ProjectMemberDetails
   }
   manageUrl
   name
@@ -63,11 +76,14 @@ query adminFindManyProject($input: AdminFindManyProjectInput!) {
 query adminFindOneProject($projectId: String!) {
   item: adminFindOneProject(projectId: $projectId) {
     ...ProjectDetails
+    members {
+      ...ProjectMemberDetails
+    }
     referral {
-      ...UserDetails
+      ...ProjectMemberDetails
     }
     reviewers {
-      ...UserDetails
+      ...ProjectMemberDetails
     }
   }
 }
@@ -86,24 +102,12 @@ mutation adminAddProjectManager($projectId: String!, $managerUserId: String!) {
   added: adminAddProjectManager(projectId: $projectId, managerUserId: $managerUserId)
 }
 
-mutation adminRemoveProjectManager($projectId: String!, $managerUserId: String!) {
-  removed: adminRemoveProjectManager(projectId: $projectId, managerUserId: $managerUserId)
+mutation adminRemoveProjectMember($projectMemberId: String!) {
+  removed: adminRemoveProjectMember(projectMemberId: $projectMemberId)
 }
 
-mutation adminAddProjectReviewer($projectId: String!, $reviewerUserId: String!) {
-  added: adminAddProjectReviewer(projectId: $projectId, reviewerUserId: $reviewerUserId)
-}
-
-mutation adminRemoveProjectReviewer($projectId: String!, $reviewerUserId: String!) {
-  removed: adminRemoveProjectReviewer(projectId: $projectId, reviewerUserId: $reviewerUserId)
-}
-
-mutation adminAddProjectReferral($projectId: String!, $referralUserId: String!) {
-  added: adminAddProjectReferral(projectId: $projectId, referralUserId: $referralUserId)
-}
-
-mutation adminRemoveProjectReferral($projectId: String!, $referralUserId: String!) {
-  removed: adminRemoveProjectReferral(projectId: $projectId, referralUserId: $referralUserId)
+mutation adminUpdateProjectMemberRole($projectMemberId: String!, $role: ProjectRole!) {
+  updated: adminUpdateProjectMemberRole(projectMemberId: $projectMemberId, role: $role)
 }
 
 query managerFindManyProject($input: ManagerFindManyProjectInput!) {
@@ -126,10 +130,10 @@ query managerFindOneProject($projectId: String!) {
       nextStatus
     }
     referral {
-      ...UserDetails
+      ...ProjectMemberDetails
     }
     reviewers {
-      ...UserDetails
+      ...ProjectMemberDetails
     }
   }
 }

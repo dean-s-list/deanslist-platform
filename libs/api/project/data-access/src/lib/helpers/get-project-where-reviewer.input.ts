@@ -11,19 +11,7 @@ export function getProjectWhereReviewerInput(
   }
 
   if (input.mineOnly) {
-    where.OR = [
-      ...(where.OR ?? []),
-      { managers: { some: { id: userId } } },
-      { reviewers: { some: { id: userId } } },
-      { referral: { id: userId } },
-      {
-        reviews: {
-          some: {
-            AND: [{ reviewerId: userId }, { comments: { some: { authorId: userId } } }],
-          },
-        },
-      },
-    ]
+    where.OR = [...(where.OR ?? []), { members: { some: { userId } } }]
   }
 
   if (input.search) {
