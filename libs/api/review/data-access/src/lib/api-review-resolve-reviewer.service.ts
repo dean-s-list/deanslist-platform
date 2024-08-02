@@ -90,14 +90,26 @@ export class ApiReviewResolveReviewerService {
   async findOneReview(reviewId: string) {
     return this.core.data.review.findUnique({
       where: { id: reviewId },
-      include: { projectMember: { include: { project: true, user: true } } },
+      include: {
+        projectMember: { include: { project: true, user: true } },
+        comments: {
+          where: { parentId: null },
+          include: { ratings: true },
+        },
+      },
     })
   }
 
   async findUserProjectReview(userId: string, projectId: string) {
     return this.core.data.review.findFirst({
       where: { projectMember: { projectId, userId } },
-      include: { projectMember: { include: { project: true, user: true } } },
+      include: {
+        projectMember: { include: { project: true, user: true } },
+        comments: {
+          where: { parentId: null },
+          include: { ratings: true },
+        },
+      },
     })
   }
 }

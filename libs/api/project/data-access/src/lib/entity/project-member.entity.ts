@@ -29,5 +29,5 @@ export class ProjectMember {
   @Field(() => String, { nullable: true })
   userId?: string
   @HideField()
-  reviews?: Review & { comments?: Comment[] }[]
+  review?: Review & { comments?: Comment[] }[]
 }

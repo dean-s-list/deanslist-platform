@@ -30,22 +30,20 @@ export function getProjectWhereManagerInput(user: User, input: ManagerFindManyPr
             OR: [
               { userId: { contains: input.search, mode: 'insensitive' } },
               {
-                reviews: {
-                  some: {
-                    OR: [
-                      { id: { contains: input.search, mode: 'insensitive' } },
-                      {
-                        comments: {
-                          some: {
-                            OR: [
-                              { id: { contains: input.search, mode: 'insensitive' } },
-                              { content: { contains: input.search, mode: 'insensitive' } },
-                            ],
-                          },
+                review: {
+                  OR: [
+                    { id: { contains: input.search, mode: 'insensitive' } },
+                    {
+                      comments: {
+                        some: {
+                          OR: [
+                            { id: { contains: input.search, mode: 'insensitive' } },
+                            { content: { contains: input.search, mode: 'insensitive' } },
+                          ],
                         },
                       },
-                    ],
-                  },
+                    },
+                  ],
                 },
               },
             ],

@@ -1,10 +1,10 @@
-import { Project, Review } from '@prisma/client'
+import { Comment, Project, ProjectMember, Rating } from '@prisma/client'
 
 import { getProjectFees } from './get-project-fees'
 
 // Total amount of USDC minus manager and referral and reviews
-export function getProjectAmountTotalUsdLeft(project: Project, reviews: Review[] = []) {
-  if (project.amountTotalUsd < 1 || !reviews.length) {
+export function getProjectAmountTotalUsdLeft(project: Project, members: ProjectMember[] = []) {
+  if (project.amountTotalUsd < 1 || !members.length) {
     return 0
   }
   const left = getProjectAmountUsd(project)
@@ -13,7 +13,7 @@ export function getProjectAmountTotalUsdLeft(project: Project, reviews: Review[]
     return 0
   }
 
-  return left - getProjectReviewTotalUsdLeft(reviews)
+  return left - getProjectReviewTotalUsdLeft(members)
 }
 
 // Total amount of USDC minus manager and referral
@@ -28,14 +28,18 @@ export function getProjectAmountUsd(project: Project) {
 }
 
 // Total of all the review amounts and bonuses
-export function getProjectReviewTotalUsdLeft(reviews: Review[] = []) {
-  if (!reviews.length) {
+export function getProjectReviewTotalUsdLeft(members: ProjectMember[] = []) {
+  if (!members.length) {
     return 0
   }
 
-  const reviewAmounts = reviews.map((review) => review.amount)
-  const bonusAmounts = reviews.map((review) => review.bonus)
+  const reviewAmounts = members.map((member) => member.amount)
+  const bonusAmounts = members.map((member) => member.bonus)
   const totalAmounts = reviewAmounts.map((amount, index) => amount + bonusAmounts[index])
 
   return totalAmounts.reduce((acc, amount) => acc + amount, 0)
+}
+
+export function getRatingsFromReview(review: { comments?: Comment & { ratings?: Rating[] }[] }): Rating[] {
+  return ((review.comments?.map((comment) => comment.ratings).flat() ?? []) as Rating[]).filter(Boolean)
 }

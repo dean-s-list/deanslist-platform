@@ -7,8 +7,9 @@ import { ProjectPaging } from './entity/project-paging.entity'
 import { ProjectStatus } from './entity/project-status.enum'
 import { ProjectCreatedEvent } from './event/project-created.event'
 import { calculateProjectDates } from './helpers/calculate-project-dates'
-import { calculateProjectRatings, getCommentRatings } from './helpers/calculate-project-ratings'
 import { getProjectAmountUsd } from './helpers/get-project-amount-total-usd-left'
+import { getRatingAverage } from './helpers/get-rating-average'
+import { getRatingsFromComments } from './helpers/get-ratings-from-comments'
 
 @Injectable()
 export class ApiProjectDataService {
@@ -113,6 +114,17 @@ export class ApiProjectDataService {
     return found
   }
 
+  async findOneProjectMember(projectMemberId: string) {
+    const found = await this.core.data.projectMember.findUnique({
+      where: { id: projectMemberId },
+      include: { project: true },
+    })
+    if (!found) {
+      throw new Error('Project member not found')
+    }
+    return found
+  }
+
   getProjectMessage(project: Project): ProjectMessage | undefined {
     const nextStatus = getNextStatus(project?.status)
     if (nextStatus) {
@@ -146,6 +158,10 @@ export class ApiProjectDataService {
     })
   }
 
+  async updateProjectMember(projectMemberId: string, input: Prisma.ProjectMemberUpdateInput) {
+    return this.core.data.projectMember.update({ where: { id: projectMemberId }, data: { ...input } })
+  }
+
   async updateProjectStatus(projectId: string, nextStatus: ProjectStatus) {
     const found = await this.findOneProject(projectId)
 
@@ -177,18 +193,21 @@ export class ApiProjectDataService {
     const ratingMap: Record<string, number> = {}
 
     for (const review of reviews) {
-      ratingMap[review.id] = calculateProjectRatings(getCommentRatings(review.comments ?? [])) ?? 0
+      ratingMap[review.projectMemberId] = getRatingAverage(getRatingsFromComments(review.comments ?? [])) ?? 0
     }
 
     const totalRatingAmount = Object.values(ratingMap).reduce((acc, rating) => acc + rating, 0)
+    if (!totalRatingAmount || totalRatingAmount < 1) {
+      return
+    }
 
     const unit = 5
-    const amountPerRating = Math.floor(available / totalRatingAmount / unit) * unit
+    const amountPerRating = Math.floor(available / totalRatingAmount / unit) * unit ?? 0
 
-    for (const [reviewId, rating] of Object.entries(ratingMap)) {
-      const amount = Math.floor(amountPerRating * rating)
-      await this.core.data.review.update({ where: { id: reviewId }, data: { amount, bonus: 0 } })
-      this.logger.verbose(`Updating review ${reviewId} with amount ${amount}`)
+    for (const [projectMemberId, rating] of Object.entries(ratingMap)) {
+      const amount = Math.floor(amountPerRating * rating) ?? 0
+      await this.core.data.projectMember.update({ where: { id: projectMemberId }, data: { amount, bonus: 0 } })
+      this.logger.verbose(`Updating review from member ${projectMemberId} with amount ${amount}`)
     }
   }
 }

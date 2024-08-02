@@ -27,7 +27,7 @@ export function AdminFaqItemUiUpdateForm({
   })
 
   return (
-    <form onSubmit={form.onSubmit((values) => submit(faqItem.id, values))}>
+    <form onSubmit={form.onSubmit((values) => submit(faqItem.id, { ...values, order: parseInt(`${values.order}`) }))}>
       <UiStack>
         <Select label="Group" clearable={false} data={getEnumOptions(FaqItemGroup)} {...form.getInputProps('group')} />
         <CoreUiInput name="question" label="Question" {...form.getInputProps('question')} />

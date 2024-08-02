@@ -8,15 +8,16 @@ import {
   ProjectRole,
 } from '@deanslist-platform/api-project-data-access'
 import { Int, Parent, ResolveField, Resolver } from '@nestjs/graphql'
-import { Project as PrismaProject, Review as PrismaReview } from '@prisma/client'
+import { Project as PrismaProject, ProjectMember as PrismaProjectMember } from '@prisma/client'
 
 @Resolver(() => Project)
 export class ApiProjectResolver {
   constructor(private readonly service: ApiProjectService) {}
   @ResolveField(() => Int, { nullable: true })
   amountTotalUsdLeft(@Parent() project: Project) {
-    const reviews = (project.members?.map((r) => r.reviews).flat() ?? []) as PrismaReview[]
-    return getProjectAmountTotalUsdLeft(project as PrismaProject, reviews)
+    const members = (project.members ?? []) as PrismaProjectMember[]
+
+    return getProjectAmountTotalUsdLeft(project as PrismaProject, members)
   }
 
   @ResolveField(() => [ProjectMember], { nullable: true })
@@ -46,7 +47,7 @@ export class ApiProjectResolver {
 
   @ResolveField(() => Int, { nullable: true })
   reviewCount(@Parent() project: Project) {
-    const reviews = project.members?.map((x) => x.reviews).flat() ?? []
+    const reviews = project.members?.map((x) => x.review).flat() ?? []
     const filtered = reviews.filter((r) => r?.comments?.length ?? 0 > 0)
 
     return filtered?.length ?? 0

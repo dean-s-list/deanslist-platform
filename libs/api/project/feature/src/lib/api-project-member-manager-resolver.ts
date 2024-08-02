@@ -1,5 +1,9 @@
 import { ApiAuthGraphQLUserGuard, CtxUserId } from '@deanslist-platform/api-auth-data-access'
-import { ApiProjectService } from '@deanslist-platform/api-project-data-access'
+import {
+  ApiProjectService,
+  ManagerUpdateProjectMemberInput,
+  ProjectMember,
+} from '@deanslist-platform/api-project-data-access'
 import { UseGuards } from '@nestjs/common'
 import { Args, Mutation, Resolver } from '@nestjs/graphql'
 
@@ -60,5 +64,14 @@ export class ApiProjectMemberManagerResolver {
     @Args('referralUserId') referralUserId: string,
   ) {
     return this.service.member.removeProjectReferral(userId, projectId, referralUserId)
+  }
+
+  @Mutation(() => ProjectMember, { nullable: true })
+  managerUpdateProjectMember(
+    @CtxUserId() userId: string,
+    @Args('projectMemberId') projectMemberId: string,
+    @Args('input') input: ManagerUpdateProjectMemberInput,
+  ) {
+    return this.service.manager.updateProjectMember(userId, projectMemberId, input)
   }
 }

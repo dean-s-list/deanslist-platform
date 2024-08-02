@@ -33,3 +33,11 @@ export class ManagerUpdateProjectInput {
   @Field({ nullable: true })
   referralId?: string
 }
+
+@InputType()
+export class ManagerUpdateProjectMemberInput {
+  @Field(() => Int, { nullable: true })
+  amount?: number
+  @Field(() => Int, { nullable: true })
+  bonus?: number
+}

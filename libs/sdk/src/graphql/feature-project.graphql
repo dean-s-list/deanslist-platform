@@ -10,6 +10,9 @@ fragment ProjectMemberDetails on ProjectMember {
   user {
     ...UserDetails
   }
+  review {
+    ...ReviewDetails
+  }
 }
 fragment ProjectDetails on Project {
   amountManagerUsd
@@ -129,6 +132,9 @@ query managerFindOneProject($projectId: String!) {
       message
       nextStatus
     }
+    members {
+      ...ProjectMemberDetails
+    }
     referral {
       ...ProjectMemberDetails
     }
@@ -151,6 +157,11 @@ mutation managerSplitByRating($projectId: String!) {
 mutation managerUpdateProject($projectId: String!, $input: ManagerUpdateProjectInput!) {
   updated: managerUpdateProject(projectId: $projectId, input: $input) {
     ...ProjectDetails
+  }
+}
+mutation managerUpdateProjectMember($projectMemberId: String!, $input: ManagerUpdateProjectMemberInput!) {
+  updated: managerUpdateProjectMember(projectMemberId: $projectMemberId, input: $input) {
+    ...ProjectMemberDetails
   }
 }
 

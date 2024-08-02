@@ -7,7 +7,13 @@ export const provisionUsers: Prisma.UserCreateInput[] = [
     role: UserRole.Admin,
     developer: true,
     identities: {
-      create: [{ provider: IdentityProvider.Solana, providerId: 'ALiC98dw6j47Skrxje3zBN4jTA11w67JRjQRBeZH3BRG' }],
+      create: [
+        {
+          provider: IdentityProvider.Solana,
+          providerId: 'ALiC98dw6j47Skrxje3zBN4jTA11w67JRjQRBeZH3BRG',
+          verified: true,
+        },
+      ],
     },
   },
   {
@@ -36,7 +42,11 @@ export const provisionUsers: Prisma.UserCreateInput[] = [
     identities: {
       create: [
         { provider: IdentityProvider.Discord, providerId: '386584531353862154' },
-        { provider: IdentityProvider.Solana, providerId: 'BEEMANPx2jdmfR7jpn1hRdMuM2Vj4E3azBLb6RUBrCDY' },
+        {
+          provider: IdentityProvider.Solana,
+          providerId: 'BEEMANPx2jdmfR7jpn1hRdMuM2Vj4E3azBLb6RUBrCDY',
+          verified: true,
+        },
       ],
     },
   },

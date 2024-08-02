@@ -50,7 +50,7 @@ export function ProjectUiStatusSelect({
       position="top"
     >
       <Group align="center">
-        <form onSubmit={form.onSubmit((values) => submit(values.status))} ref={formRef}>
+        <form onSubmit={form.onSubmit((values) => submit(projectMessage?.nextStatus ?? values.status))} ref={formRef}>
           <Select
             w={100}
             radius="md"

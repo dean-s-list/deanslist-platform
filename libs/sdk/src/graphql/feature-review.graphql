@@ -2,56 +2,68 @@ fragment ReviewDetails on Review {
   createdAt
   id
   updatedAt
-  amount
-  bonus
   name
-  ratingAverage
-  ratingProgress
+  commentCount
   projectMemberId
-  projectMember {
-    ...ProjectMemberDetails
-  }
+  ratingAverage
+  ratingCount
   viewUrl
-}
-mutation managerUpdateReview($reviewId: String!, $input: ManagerUpdateReviewInput!) {
-  updated: managerUpdateReview(reviewId: $reviewId, input: $input) {
-    ...ReviewDetails
-  }
 }
 
 query managerFindManyReviewByProject($input: ManagerFindManyReviewByProjectInput!) {
   items: managerFindManyReviewByProject(input: $input) {
     ...ReviewDetails
+    projectMember {
+      ...ProjectMemberDetails
+    }
   }
 }
 
 query reviewerFindManyReviewByProject($input: ReviewerFindManyReviewByProjectInput!) {
   items: reviewerFindManyReviewByProject(input: $input) {
     ...ReviewDetails
+    projectMember {
+      ...ProjectMemberDetails
+    }
   }
 }
 
 query reviewerFindManyReviewByUsername($input: ReviewerFindManyReviewByUsernameInput!) {
   items: reviewerFindManyReviewByUsername(input: $input) {
     ...ReviewDetails
+    projectMember {
+      ...ProjectMemberDetails
+      project {
+        ...ProjectDetails
+      }
+    }
   }
 }
 
 query reviewerFindUserProjectReview($projectId: String!) {
   item: reviewerFindUserProjectReview(projectId: $projectId) {
     ...ReviewDetails
+    projectMember {
+      ...ProjectMemberDetails
+    }
   }
 }
 
 query reviewerFindOneReview($reviewId: String!) {
   item: reviewerFindOneReview(reviewId: $reviewId) {
     ...ReviewDetails
+    projectMember {
+      ...ProjectMemberDetails
+    }
   }
 }
 
 mutation reviewerCreateReview($projectId: String!) {
   created: reviewerCreateReview(projectId: $projectId) {
     ...ReviewDetails
+    projectMember {
+      ...ProjectMemberDetails
+    }
   }
 }
 
@@ -63,6 +75,9 @@ query adminFindManyReview($input: AdminFindManyReviewInput!) {
   paging: adminFindManyReview(input: $input) {
     data {
       ...ReviewDetails
+      projectMember {
+        ...ProjectMemberDetails
+      }
     }
     meta {
       ...PagingMetaDetails
@@ -73,6 +88,9 @@ query adminFindManyReview($input: AdminFindManyReviewInput!) {
 query adminFindOneReview($reviewId: String!) {
   item: adminFindOneReview(reviewId: $reviewId) {
     ...ReviewDetails
+    projectMember {
+      ...ProjectMemberDetails
+    }
   }
 }
 

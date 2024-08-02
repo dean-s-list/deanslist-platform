@@ -4,7 +4,7 @@ import { ApiProjectDataService } from './api-project-data.service'
 import { ApiProjectMemberDataService } from './api-project-member-data.service'
 import { ManagerCreateProjectInput } from './dto/manager-create-project.input'
 import { ManagerFindManyProjectInput } from './dto/manager-find-many-project.input'
-import { ManagerUpdateProjectInput } from './dto/manager-update-project.input'
+import { ManagerUpdateProjectInput, ManagerUpdateProjectMemberInput } from './dto/manager-update-project.input'
 import { ProjectPaging } from './entity/project-paging.entity'
 import { ProjectStatus } from './entity/project-status.enum'
 import { getProjectWhereManagerAccessInput } from './helpers/get-project-where-manager-access-input'
@@ -32,13 +32,17 @@ export class ApiProjectDataManagerService {
       page: input.page ?? 1,
       orderBy: input.orderBy ? { [input.orderBy]: input.orderDirection ?? 'asc' } : { createdAt: 'desc' },
       where: getProjectWhereManagerInput(user, input),
-      include: { members: { include: { reviews: { include: { comments: true } }, user: true } } },
+      include: {
+        members: { include: { review: { include: { comments: { include: { ratings: true } } } }, user: true } },
+      },
     })
   }
 
   async findOneProject(user: User, projectId: string) {
     return this.data.findOneProject(projectId, {
-      include: { members: { include: { reviews: true, user: true } } },
+      include: {
+        members: { include: { review: { include: { comments: { include: { ratings: true } } } }, user: true } },
+      },
       where: getProjectWhereManagerAccessInput(user),
     })
   }
@@ -59,5 +63,16 @@ export class ApiProjectDataManagerService {
     await this.member.ensureProjectManager({ projectId, userId })
 
     return this.data.splitByRating(projectId)
+  }
+
+  async updateProjectMember(userId: string, projectMemberId: string, input: ManagerUpdateProjectMemberInput) {
+    const projectMember = await this.data.findOneProjectMember(projectMemberId)
+    await this.member.ensureProjectManager({ projectId: projectMember.projectId, userId })
+
+    if (projectMember?.project?.status !== ProjectStatus.Closed) {
+      throw new Error('You can only update when the project is closed')
+    }
+
+    return this.data.updateProjectMember(projectMemberId, input)
   }
 }

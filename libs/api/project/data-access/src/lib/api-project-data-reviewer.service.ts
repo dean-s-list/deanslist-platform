@@ -19,7 +19,7 @@ export class ApiProjectDataReviewerService {
       page: input.page ?? 1,
       orderBy: input.orderBy ? { [input.orderBy]: input.orderDirection ?? 'asc' } : { createdAt: 'desc' },
       where: getProjectWhereReviewerInput(userId, input),
-      include: { members: { include: { reviews: { include: { comments: true } }, user: true } } },
+      include: { members: { include: { review: { include: { comments: true } }, user: true } } },
     })
   }
 
@@ -28,8 +28,8 @@ export class ApiProjectDataReviewerService {
       include: {
         members: {
           include: {
-            reviews: {
-              include: { comments: true },
+            review: {
+              include: { comments: { include: { ratings: true } } },
             },
             user: true,
           },

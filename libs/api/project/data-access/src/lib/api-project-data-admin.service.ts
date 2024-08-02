@@ -30,8 +30,8 @@ export class ApiProjectDataAdminService {
       include: {
         members: {
           include: {
-            reviews: {
-              include: { comments: true },
+            review: {
+              include: { comments: { include: { ratings: true } } },
             },
             user: true,
           },

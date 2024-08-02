@@ -171,7 +171,7 @@ model ProjectMember {
   projectId String
   user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
-  reviews   Review[]
+  review    Review?
 
   @@unique([projectId, userId])
 }
@@ -194,11 +194,10 @@ model Review {
   id              String        @id @default(cuid())
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
-  amount          Int           @default(0)
-  bonus           Int           @default(0)
   projectMember   ProjectMember @relation(fields: [projectMemberId], references: [id], onDelete: Cascade)
   projectMemberId String        @unique
-  comments        Comment[]
+
+  comments Comment[]
 }
 
 model User {

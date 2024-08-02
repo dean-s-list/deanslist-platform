@@ -1,8 +1,8 @@
 import { Review } from '@deanslist-platform/sdk'
 import { CoreUiRating } from '@deanslist-platform/web-core-ui'
 import { UserUiItem } from '@deanslist-platform/web-user-ui'
-import { ActionIcon, Group, Progress, ScrollArea, Tooltip } from '@mantine/core'
-import { UiTime } from '@pubkey-ui/core'
+import { ActionIcon, Group, ScrollArea, Text } from '@mantine/core'
+import { UiStack, UiTime } from '@pubkey-ui/core'
 import { IconMaximize } from '@tabler/icons-react'
 import { DataTable } from 'mantine-datatable'
 import { Link } from 'react-router-dom'
@@ -34,20 +34,16 @@ export function ReviewerReviewProjectUiTable({ reviews = [] }: { reviews: Review
             width: '15%',
             accessor: 'ratingAverage',
             render: (item) => (
-              <CoreUiRating
-                readOnly
-                value={item.ratingAverage}
-                tooltip={`Rating average: ${item.ratingAverage ?? 0}`}
-              />
-            ),
-          },
-          {
-            width: '15%',
-            accessor: 'ratingProgress',
-            render: (item) => (
-              <Tooltip label={`Rating progress: ${item.ratingProgress ?? 0}`} withArrow position="top">
-                <Progress value={item.ratingProgress ?? 0} size="lg" radius="xl" color="brand" />
-              </Tooltip>
+              <UiStack gap={2} align="center">
+                <Text size="xs">{item.commentCount} comments</Text>
+                {item?.projectMember?.project?.status === 'Closed' ? (
+                  <CoreUiRating
+                    readOnly
+                    value={item.ratingAverage}
+                    tooltip={`Rating average: ${item.ratingAverage ?? 0}`}
+                  />
+                ) : null}
+              </UiStack>
             ),
           },
           {

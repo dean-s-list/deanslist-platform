@@ -381,14 +381,14 @@ export type ManagerUpdateProjectInput = {
   startDate?: InputMaybe<Scalars['DateTime']['input']>
 }
 
+export type ManagerUpdateProjectMemberInput = {
+  amount?: InputMaybe<Scalars['Int']['input']>
+  bonus?: InputMaybe<Scalars['Int']['input']>
+}
+
 export type ManagerUpdateRatingInput = {
   content?: InputMaybe<Scalars['String']['input']>
   rating?: InputMaybe<Scalars['Float']['input']>
-}
-
-export type ManagerUpdateReviewInput = {
-  amount?: InputMaybe<Scalars['Int']['input']>
-  bonus?: InputMaybe<Scalars['Int']['input']>
 }
 
 export type Mutation = {
@@ -444,9 +444,9 @@ export type Mutation = {
   managerToggleCommunityAdmin?: Maybe<Scalars['Boolean']['output']>
   managerUpdateCommunity?: Maybe<Community>
   managerUpdateProject?: Maybe<Project>
+  managerUpdateProjectMember?: Maybe<ProjectMember>
   managerUpdateProjectStatus?: Maybe<Project>
   managerUpdateRating?: Maybe<Rating>
-  managerUpdateReview?: Maybe<Review>
   register?: Maybe<User>
   reviewerCreateComment?: Maybe<Comment>
   reviewerCreateReview?: Maybe<Review>
@@ -690,6 +690,11 @@ export type MutationManagerUpdateProjectArgs = {
   projectId: Scalars['String']['input']
 }
 
+export type MutationManagerUpdateProjectMemberArgs = {
+  input: ManagerUpdateProjectMemberInput
+  projectMemberId: Scalars['String']['input']
+}
+
 export type MutationManagerUpdateProjectStatusArgs = {
   projectId: Scalars['String']['input']
   status: ProjectStatus
@@ -698,11 +703,6 @@ export type MutationManagerUpdateProjectStatusArgs = {
 export type MutationManagerUpdateRatingArgs = {
   input: ManagerUpdateRatingInput
   ratingId: Scalars['String']['input']
-}
-
-export type MutationManagerUpdateReviewArgs = {
-  input: ManagerUpdateReviewInput
-  reviewId: Scalars['String']['input']
 }
 
 export type MutationRegisterArgs = {
@@ -811,6 +811,7 @@ export type ProjectMember = {
   project?: Maybe<Project>
   projectId?: Maybe<Scalars['String']['output']>
   referral?: Maybe<Scalars['Boolean']['output']>
+  review?: Maybe<Review>
   role?: Maybe<ProjectRole>
   updatedAt?: Maybe<Scalars['DateTime']['output']>
   user?: Maybe<User>
@@ -1096,15 +1097,14 @@ export type RequestIdentityChallengeInput = {
 
 export type Review = {
   __typename?: 'Review'
-  amount?: Maybe<Scalars['Int']['output']>
-  bonus?: Maybe<Scalars['Int']['output']>
+  commentCount?: Maybe<Scalars['Int']['output']>
   createdAt?: Maybe<Scalars['DateTime']['output']>
   id: Scalars['String']['output']
   name: Scalars['String']['output']
   projectMember?: Maybe<ProjectMember>
   projectMemberId: Scalars['String']['output']
   ratingAverage?: Maybe<Scalars['Float']['output']>
-  ratingProgress?: Maybe<Scalars['Float']['output']>
+  ratingCount?: Maybe<Scalars['Int']['output']>
   updatedAt?: Maybe<Scalars['DateTime']['output']>
   viewUrl: Scalars['String']['output']
 }
@@ -1637,39 +1637,12 @@ export type ManagerFindManyCommentQuery = {
       createdAt?: Date | null
       id: string
       updatedAt?: Date | null
-      amount?: number | null
-      bonus?: number | null
       name: string
-      ratingAverage?: number | null
-      ratingProgress?: number | null
+      commentCount?: number | null
       projectMemberId: string
+      ratingAverage?: number | null
+      ratingCount?: number | null
       viewUrl: string
-      projectMember?: {
-        __typename?: 'ProjectMember'
-        id: string
-        createdAt?: Date | null
-        updatedAt?: Date | null
-        amount?: number | null
-        bonus?: number | null
-        projectId?: string | null
-        role?: ProjectRole | null
-        userId?: string | null
-        user?: {
-          __typename?: 'User'
-          avatarUrl?: string | null
-          createdAt?: Date | null
-          developer?: boolean | null
-          id: string
-          name?: string | null
-          manager?: boolean | null
-          profileUrl: string
-          role?: UserRole | null
-          status?: UserStatus | null
-          updatedAt?: Date | null
-          username?: string | null
-          walletAddress?: string | null
-        } | null
-      } | null
     } | null
     children?: Array<{
       __typename?: 'Comment'
@@ -3030,6 +3003,18 @@ export type ProjectMemberDetailsFragment = {
     username?: string | null
     walletAddress?: string | null
   } | null
+  review?: {
+    __typename?: 'Review'
+    createdAt?: Date | null
+    id: string
+    updatedAt?: Date | null
+    name: string
+    commentCount?: number | null
+    projectMemberId: string
+    ratingAverage?: number | null
+    ratingCount?: number | null
+    viewUrl: string
+  } | null
 }
 
 export type ProjectDetailsFragment = {
@@ -3119,6 +3104,18 @@ export type ProjectDetailsFragment = {
       updatedAt?: Date | null
       username?: string | null
       walletAddress?: string | null
+    } | null
+    review?: {
+      __typename?: 'Review'
+      createdAt?: Date | null
+      id: string
+      updatedAt?: Date | null
+      name: string
+      commentCount?: number | null
+      projectMemberId: string
+      ratingAverage?: number | null
+      ratingCount?: number | null
+      viewUrl: string
     } | null
   }> | null
 }
@@ -3218,6 +3215,18 @@ export type ReviewerFindManyProjectQuery = {
           updatedAt?: Date | null
           username?: string | null
           walletAddress?: string | null
+        } | null
+        review?: {
+          __typename?: 'Review'
+          createdAt?: Date | null
+          id: string
+          updatedAt?: Date | null
+          name: string
+          commentCount?: number | null
+          projectMemberId: string
+          ratingAverage?: number | null
+          ratingCount?: number | null
+          viewUrl: string
         } | null
       }> | null
     }>
@@ -3328,6 +3337,18 @@ export type ReviewerFindOneProjectQuery = {
         username?: string | null
         walletAddress?: string | null
       } | null
+      review?: {
+        __typename?: 'Review'
+        createdAt?: Date | null
+        id: string
+        updatedAt?: Date | null
+        name: string
+        commentCount?: number | null
+        projectMemberId: string
+        ratingAverage?: number | null
+        ratingCount?: number | null
+        viewUrl: string
+      } | null
     }> | null
   } | null
 }
@@ -3428,6 +3449,18 @@ export type AdminFindManyProjectQuery = {
           username?: string | null
           walletAddress?: string | null
         } | null
+        review?: {
+          __typename?: 'Review'
+          createdAt?: Date | null
+          id: string
+          updatedAt?: Date | null
+          name: string
+          commentCount?: number | null
+          projectMemberId: string
+          ratingAverage?: number | null
+          ratingCount?: number | null
+          viewUrl: string
+        } | null
       }> | null
     }>
     meta: {
@@ -3501,6 +3534,18 @@ export type AdminFindOneProjectQuery = {
         username?: string | null
         walletAddress?: string | null
       } | null
+      review?: {
+        __typename?: 'Review'
+        createdAt?: Date | null
+        id: string
+        updatedAt?: Date | null
+        name: string
+        commentCount?: number | null
+        projectMemberId: string
+        ratingAverage?: number | null
+        ratingCount?: number | null
+        viewUrl: string
+      } | null
     }> | null
     referral?: {
       __typename?: 'ProjectMember'
@@ -3527,6 +3572,18 @@ export type AdminFindOneProjectQuery = {
         username?: string | null
         walletAddress?: string | null
       } | null
+      review?: {
+        __typename?: 'Review'
+        createdAt?: Date | null
+        id: string
+        updatedAt?: Date | null
+        name: string
+        commentCount?: number | null
+        projectMemberId: string
+        ratingAverage?: number | null
+        ratingCount?: number | null
+        viewUrl: string
+      } | null
     } | null
     reviewers?: Array<{
       __typename?: 'ProjectMember'
@@ -3552,6 +3609,18 @@ export type AdminFindOneProjectQuery = {
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
+      } | null
+      review?: {
+        __typename?: 'Review'
+        createdAt?: Date | null
+        id: string
+        updatedAt?: Date | null
+        name: string
+        commentCount?: number | null
+        projectMemberId: string
+        ratingAverage?: number | null
+        ratingCount?: number | null
+        viewUrl: string
       } | null
     }> | null
     community?: {
@@ -3614,6 +3683,18 @@ export type AdminFindOneProjectQuery = {
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
+      } | null
+      review?: {
+        __typename?: 'Review'
+        createdAt?: Date | null
+        id: string
+        updatedAt?: Date | null
+        name: string
+        commentCount?: number | null
+        projectMemberId: string
+        ratingAverage?: number | null
+        ratingCount?: number | null
+        viewUrl: string
       } | null
     }> | null
   } | null
@@ -3713,6 +3794,18 @@ export type AdminUpdateProjectMutation = {
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
+      } | null
+      review?: {
+        __typename?: 'Review'
+        createdAt?: Date | null
+        id: string
+        updatedAt?: Date | null
+        name: string
+        commentCount?: number | null
+        projectMemberId: string
+        ratingAverage?: number | null
+        ratingCount?: number | null
+        viewUrl: string
       } | null
     }> | null
   } | null
@@ -3840,6 +3933,18 @@ export type ManagerFindManyProjectQuery = {
           username?: string | null
           walletAddress?: string | null
         } | null
+        review?: {
+          __typename?: 'Review'
+          createdAt?: Date | null
+          id: string
+          updatedAt?: Date | null
+          name: string
+          commentCount?: number | null
+          projectMemberId: string
+          ratingAverage?: number | null
+          ratingCount?: number | null
+          viewUrl: string
+        } | null
       }> | null
     }>
     meta: {
@@ -3890,6 +3995,44 @@ export type ManagerFindOneProjectQuery = {
     updatedAt?: Date | null
     viewUrl: string
     message?: { __typename?: 'ProjectMessage'; message?: string | null; nextStatus?: ProjectStatus | null } | null
+    members?: Array<{
+      __typename?: 'ProjectMember'
+      id: string
+      createdAt?: Date | null
+      updatedAt?: Date | null
+      amount?: number | null
+      bonus?: number | null
+      projectId?: string | null
+      role?: ProjectRole | null
+      userId?: string | null
+      user?: {
+        __typename?: 'User'
+        avatarUrl?: string | null
+        createdAt?: Date | null
+        developer?: boolean | null
+        id: string
+        name?: string | null
+        manager?: boolean | null
+        profileUrl: string
+        role?: UserRole | null
+        status?: UserStatus | null
+        updatedAt?: Date | null
+        username?: string | null
+        walletAddress?: string | null
+      } | null
+      review?: {
+        __typename?: 'Review'
+        createdAt?: Date | null
+        id: string
+        updatedAt?: Date | null
+        name: string
+        commentCount?: number | null
+        projectMemberId: string
+        ratingAverage?: number | null
+        ratingCount?: number | null
+        viewUrl: string
+      } | null
+    }> | null
     referral?: {
       __typename?: 'ProjectMember'
       id: string
@@ -3914,6 +4057,18 @@ export type ManagerFindOneProjectQuery = {
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
+      } | null
+      review?: {
+        __typename?: 'Review'
+        createdAt?: Date | null
+        id: string
+        updatedAt?: Date | null
+        name: string
+        commentCount?: number | null
+        projectMemberId: string
+        ratingAverage?: number | null
+        ratingCount?: number | null
+        viewUrl: string
       } | null
     } | null
     reviewers?: Array<{
@@ -3940,6 +4095,18 @@ export type ManagerFindOneProjectQuery = {
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
+      } | null
+      review?: {
+        __typename?: 'Review'
+        createdAt?: Date | null
+        id: string
+        updatedAt?: Date | null
+        name: string
+        commentCount?: number | null
+        projectMemberId: string
+        ratingAverage?: number | null
+        ratingCount?: number | null
+        viewUrl: string
       } | null
     }> | null
     community?: {
@@ -4002,6 +4169,18 @@ export type ManagerFindOneProjectQuery = {
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
+      } | null
+      review?: {
+        __typename?: 'Review'
+        createdAt?: Date | null
+        id: string
+        updatedAt?: Date | null
+        name: string
+        commentCount?: number | null
+        projectMemberId: string
+        ratingAverage?: number | null
+        ratingCount?: number | null
+        viewUrl: string
       } | null
     }> | null
   } | null
@@ -4100,6 +4279,18 @@ export type ManagerCreateProjectMutation = {
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
+      } | null
+      review?: {
+        __typename?: 'Review'
+        createdAt?: Date | null
+        id: string
+        updatedAt?: Date | null
+        name: string
+        commentCount?: number | null
+        projectMemberId: string
+        ratingAverage?: number | null
+        ratingCount?: number | null
+        viewUrl: string
       } | null
     }> | null
   } | null
@@ -4206,7 +4397,66 @@ export type ManagerUpdateProjectMutation = {
         username?: string | null
         walletAddress?: string | null
       } | null
+      review?: {
+        __typename?: 'Review'
+        createdAt?: Date | null
+        id: string
+        updatedAt?: Date | null
+        name: string
+        commentCount?: number | null
+        projectMemberId: string
+        ratingAverage?: number | null
+        ratingCount?: number | null
+        viewUrl: string
+      } | null
     }> | null
+  } | null
+}
+
+export type ManagerUpdateProjectMemberMutationVariables = Exact<{
+  projectMemberId: Scalars['String']['input']
+  input: ManagerUpdateProjectMemberInput
+}>
+
+export type ManagerUpdateProjectMemberMutation = {
+  __typename?: 'Mutation'
+  updated?: {
+    __typename?: 'ProjectMember'
+    id: string
+    createdAt?: Date | null
+    updatedAt?: Date | null
+    amount?: number | null
+    bonus?: number | null
+    projectId?: string | null
+    role?: ProjectRole | null
+    userId?: string | null
+    user?: {
+      __typename?: 'User'
+      avatarUrl?: string | null
+      createdAt?: Date | null
+      developer?: boolean | null
+      id: string
+      name?: string | null
+      manager?: boolean | null
+      profileUrl: string
+      role?: UserRole | null
+      status?: UserStatus | null
+      updatedAt?: Date | null
+      username?: string | null
+      walletAddress?: string | null
+    } | null
+    review?: {
+      __typename?: 'Review'
+      createdAt?: Date | null
+      id: string
+      updatedAt?: Date | null
+      name: string
+      commentCount?: number | null
+      projectMemberId: string
+      ratingAverage?: number | null
+      ratingCount?: number | null
+      viewUrl: string
+    } | null
   } | null
 }
 
@@ -4304,6 +4554,18 @@ export type ManagerUpdateProjectStatusMutation = {
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
+      } | null
+      review?: {
+        __typename?: 'Review'
+        createdAt?: Date | null
+        id: string
+        updatedAt?: Date | null
+        name: string
+        commentCount?: number | null
+        projectMemberId: string
+        ratingAverage?: number | null
+        ratingCount?: number | null
+        viewUrl: string
       } | null
     }> | null
   } | null
@@ -4534,59 +4796,30 @@ export type ReviewDetailsFragment = {
   createdAt?: Date | null
   id: string
   updatedAt?: Date | null
-  amount?: number | null
-  bonus?: number | null
   name: string
-  ratingAverage?: number | null
-  ratingProgress?: number | null
+  commentCount?: number | null
   projectMemberId: string
+  ratingAverage?: number | null
+  ratingCount?: number | null
   viewUrl: string
-  projectMember?: {
-    __typename?: 'ProjectMember'
-    id: string
-    createdAt?: Date | null
-    updatedAt?: Date | null
-    amount?: number | null
-    bonus?: number | null
-    projectId?: string | null
-    role?: ProjectRole | null
-    userId?: string | null
-    user?: {
-      __typename?: 'User'
-      avatarUrl?: string | null
-      createdAt?: Date | null
-      developer?: boolean | null
-      id: string
-      name?: string | null
-      manager?: boolean | null
-      profileUrl: string
-      role?: UserRole | null
-      status?: UserStatus | null
-      updatedAt?: Date | null
-      username?: string | null
-      walletAddress?: string | null
-    } | null
-  } | null
 }
 
-export type ManagerUpdateReviewMutationVariables = Exact<{
-  reviewId: Scalars['String']['input']
-  input: ManagerUpdateReviewInput
+export type ManagerFindManyReviewByProjectQueryVariables = Exact<{
+  input: ManagerFindManyReviewByProjectInput
 }>
 
-export type ManagerUpdateReviewMutation = {
-  __typename?: 'Mutation'
-  updated?: {
+export type ManagerFindManyReviewByProjectQuery = {
+  __typename?: 'Query'
+  items?: Array<{
     __typename?: 'Review'
     createdAt?: Date | null
     id: string
     updatedAt?: Date | null
-    amount?: number | null
-    bonus?: number | null
     name: string
-    ratingAverage?: number | null
-    ratingProgress?: number | null
+    commentCount?: number | null
     projectMemberId: string
+    ratingAverage?: number | null
+    ratingCount?: number | null
     viewUrl: string
     projectMember?: {
       __typename?: 'ProjectMember'
@@ -4613,52 +4846,17 @@ export type ManagerUpdateReviewMutation = {
         username?: string | null
         walletAddress?: string | null
       } | null
-    } | null
-  } | null
-}
-
-export type ManagerFindManyReviewByProjectQueryVariables = Exact<{
-  input: ManagerFindManyReviewByProjectInput
-}>
-
-export type ManagerFindManyReviewByProjectQuery = {
-  __typename?: 'Query'
-  items?: Array<{
-    __typename?: 'Review'
-    createdAt?: Date | null
-    id: string
-    updatedAt?: Date | null
-    amount?: number | null
-    bonus?: number | null
-    name: string
-    ratingAverage?: number | null
-    ratingProgress?: number | null
-    projectMemberId: string
-    viewUrl: string
-    projectMember?: {
-      __typename?: 'ProjectMember'
-      id: string
-      createdAt?: Date | null
-      updatedAt?: Date | null
-      amount?: number | null
-      bonus?: number | null
-      projectId?: string | null
-      role?: ProjectRole | null
-      userId?: string | null
-      user?: {
-        __typename?: 'User'
-        avatarUrl?: string | null
+      review?: {
+        __typename?: 'Review'
         createdAt?: Date | null
-        developer?: boolean | null
         id: string
-        name?: string | null
-        manager?: boolean | null
-        profileUrl: string
-        role?: UserRole | null
-        status?: UserStatus | null
         updatedAt?: Date | null
-        username?: string | null
-        walletAddress?: string | null
+        name: string
+        commentCount?: number | null
+        projectMemberId: string
+        ratingAverage?: number | null
+        ratingCount?: number | null
+        viewUrl: string
       } | null
     } | null
   }> | null
@@ -4675,12 +4873,11 @@ export type ReviewerFindManyReviewByProjectQuery = {
     createdAt?: Date | null
     id: string
     updatedAt?: Date | null
-    amount?: number | null
-    bonus?: number | null
     name: string
-    ratingAverage?: number | null
-    ratingProgress?: number | null
+    commentCount?: number | null
     projectMemberId: string
+    ratingAverage?: number | null
+    ratingCount?: number | null
     viewUrl: string
     projectMember?: {
       __typename?: 'ProjectMember'
@@ -4706,6 +4903,18 @@ export type ReviewerFindManyReviewByProjectQuery = {
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
+      } | null
+      review?: {
+        __typename?: 'Review'
+        createdAt?: Date | null
+        id: string
+        updatedAt?: Date | null
+        name: string
+        commentCount?: number | null
+        projectMemberId: string
+        ratingAverage?: number | null
+        ratingCount?: number | null
+        viewUrl: string
       } | null
     } | null
   }> | null
@@ -4722,12 +4931,11 @@ export type ReviewerFindManyReviewByUsernameQuery = {
     createdAt?: Date | null
     id: string
     updatedAt?: Date | null
-    amount?: number | null
-    bonus?: number | null
     name: string
-    ratingAverage?: number | null
-    ratingProgress?: number | null
+    commentCount?: number | null
     projectMemberId: string
+    ratingAverage?: number | null
+    ratingCount?: number | null
     viewUrl: string
     projectMember?: {
       __typename?: 'ProjectMember'
@@ -4739,6 +4947,108 @@ export type ReviewerFindManyReviewByUsernameQuery = {
       projectId?: string | null
       role?: ProjectRole | null
       userId?: string | null
+      project?: {
+        __typename?: 'Project'
+        amountManagerUsd?: number | null
+        amountReferralUsd?: number | null
+        amountTotalUsd?: number | null
+        avatarUrl?: string | null
+        communityId: string
+        createdAt?: Date | null
+        durationDays?: number | null
+        endDate?: Date | null
+        id: string
+        instructions?: string | null
+        linkDiscord?: string | null
+        linkGithub?: string | null
+        linkTelegram?: string | null
+        linkTwitter?: string | null
+        linkWebsite?: string | null
+        manageUrl: string
+        name: string
+        remainingDays?: number | null
+        reviewCount?: number | null
+        reviewsOpen?: boolean | null
+        slug: string
+        startDate?: Date | null
+        status?: ProjectStatus | null
+        updatedAt?: Date | null
+        viewUrl: string
+        community?: {
+          __typename?: 'Community'
+          activeProjectsCount?: number | null
+          avatarUrl?: string | null
+          createdAt?: Date | null
+          homeServerId?: string | null
+          id: string
+          managerCount?: number | null
+          manageUrl: string
+          name: string
+          updatedAt?: Date | null
+          viewUrl: string
+          managers?: Array<{
+            __typename?: 'CommunityManager'
+            createdAt?: Date | null
+            id: string
+            userId: string
+            admin?: boolean | null
+            updatedAt?: Date | null
+            user?: {
+              __typename?: 'User'
+              avatarUrl?: string | null
+              createdAt?: Date | null
+              developer?: boolean | null
+              id: string
+              name?: string | null
+              manager?: boolean | null
+              profileUrl: string
+              role?: UserRole | null
+              status?: UserStatus | null
+              updatedAt?: Date | null
+              username?: string | null
+              walletAddress?: string | null
+            } | null
+          }> | null
+        } | null
+        managers?: Array<{
+          __typename?: 'ProjectMember'
+          id: string
+          createdAt?: Date | null
+          updatedAt?: Date | null
+          amount?: number | null
+          bonus?: number | null
+          projectId?: string | null
+          role?: ProjectRole | null
+          userId?: string | null
+          user?: {
+            __typename?: 'User'
+            avatarUrl?: string | null
+            createdAt?: Date | null
+            developer?: boolean | null
+            id: string
+            name?: string | null
+            manager?: boolean | null
+            profileUrl: string
+            role?: UserRole | null
+            status?: UserStatus | null
+            updatedAt?: Date | null
+            username?: string | null
+            walletAddress?: string | null
+          } | null
+          review?: {
+            __typename?: 'Review'
+            createdAt?: Date | null
+            id: string
+            updatedAt?: Date | null
+            name: string
+            commentCount?: number | null
+            projectMemberId: string
+            ratingAverage?: number | null
+            ratingCount?: number | null
+            viewUrl: string
+          } | null
+        }> | null
+      } | null
       user?: {
         __typename?: 'User'
         avatarUrl?: string | null
@@ -4753,6 +5063,18 @@ export type ReviewerFindManyReviewByUsernameQuery = {
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
+      } | null
+      review?: {
+        __typename?: 'Review'
+        createdAt?: Date | null
+        id: string
+        updatedAt?: Date | null
+        name: string
+        commentCount?: number | null
+        projectMemberId: string
+        ratingAverage?: number | null
+        ratingCount?: number | null
+        viewUrl: string
       } | null
     } | null
   }> | null
@@ -4769,12 +5091,11 @@ export type ReviewerFindUserProjectReviewQuery = {
     createdAt?: Date | null
     id: string
     updatedAt?: Date | null
-    amount?: number | null
-    bonus?: number | null
     name: string
-    ratingAverage?: number | null
-    ratingProgress?: number | null
+    commentCount?: number | null
     projectMemberId: string
+    ratingAverage?: number | null
+    ratingCount?: number | null
     viewUrl: string
     projectMember?: {
       __typename?: 'ProjectMember'
@@ -4800,6 +5121,18 @@ export type ReviewerFindUserProjectReviewQuery = {
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
+      } | null
+      review?: {
+        __typename?: 'Review'
+        createdAt?: Date | null
+        id: string
+        updatedAt?: Date | null
+        name: string
+        commentCount?: number | null
+        projectMemberId: string
+        ratingAverage?: number | null
+        ratingCount?: number | null
+        viewUrl: string
       } | null
     } | null
   } | null
@@ -4816,12 +5149,11 @@ export type ReviewerFindOneReviewQuery = {
     createdAt?: Date | null
     id: string
     updatedAt?: Date | null
-    amount?: number | null
-    bonus?: number | null
     name: string
-    ratingAverage?: number | null
-    ratingProgress?: number | null
+    commentCount?: number | null
     projectMemberId: string
+    ratingAverage?: number | null
+    ratingCount?: number | null
     viewUrl: string
     projectMember?: {
       __typename?: 'ProjectMember'
@@ -4848,6 +5180,18 @@ export type ReviewerFindOneReviewQuery = {
         username?: string | null
         walletAddress?: string | null
       } | null
+      review?: {
+        __typename?: 'Review'
+        createdAt?: Date | null
+        id: string
+        updatedAt?: Date | null
+        name: string
+        commentCount?: number | null
+        projectMemberId: string
+        ratingAverage?: number | null
+        ratingCount?: number | null
+        viewUrl: string
+      } | null
     } | null
   } | null
 }
@@ -4863,12 +5207,11 @@ export type ReviewerCreateReviewMutation = {
     createdAt?: Date | null
     id: string
     updatedAt?: Date | null
-    amount?: number | null
-    bonus?: number | null
     name: string
-    ratingAverage?: number | null
-    ratingProgress?: number | null
+    commentCount?: number | null
     projectMemberId: string
+    ratingAverage?: number | null
+    ratingCount?: number | null
     viewUrl: string
     projectMember?: {
       __typename?: 'ProjectMember'
@@ -4894,6 +5237,18 @@ export type ReviewerCreateReviewMutation = {
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
+      } | null
+      review?: {
+        __typename?: 'Review'
+        createdAt?: Date | null
+        id: string
+        updatedAt?: Date | null
+        name: string
+        commentCount?: number | null
+        projectMemberId: string
+        ratingAverage?: number | null
+        ratingCount?: number | null
+        viewUrl: string
       } | null
     } | null
   } | null
@@ -4918,12 +5273,11 @@ export type AdminFindManyReviewQuery = {
       createdAt?: Date | null
       id: string
       updatedAt?: Date | null
-      amount?: number | null
-      bonus?: number | null
       name: string
-      ratingAverage?: number | null
-      ratingProgress?: number | null
+      commentCount?: number | null
       projectMemberId: string
+      ratingAverage?: number | null
+      ratingCount?: number | null
       viewUrl: string
       projectMember?: {
         __typename?: 'ProjectMember'
@@ -4949,6 +5303,18 @@ export type AdminFindManyReviewQuery = {
           updatedAt?: Date | null
           username?: string | null
           walletAddress?: string | null
+        } | null
+        review?: {
+          __typename?: 'Review'
+          createdAt?: Date | null
+          id: string
+          updatedAt?: Date | null
+          name: string
+          commentCount?: number | null
+          projectMemberId: string
+          ratingAverage?: number | null
+          ratingCount?: number | null
+          viewUrl: string
         } | null
       } | null
     }>
@@ -4976,12 +5342,11 @@ export type AdminFindOneReviewQuery = {
     createdAt?: Date | null
     id: string
     updatedAt?: Date | null
-    amount?: number | null
-    bonus?: number | null
     name: string
-    ratingAverage?: number | null
-    ratingProgress?: number | null
+    commentCount?: number | null
     projectMemberId: string
+    ratingAverage?: number | null
+    ratingCount?: number | null
     viewUrl: string
     projectMember?: {
       __typename?: 'ProjectMember'
@@ -5007,6 +5372,18 @@ export type AdminFindOneReviewQuery = {
         updatedAt?: Date | null
         username?: string | null
         walletAddress?: string | null
+      } | null
+      review?: {
+        __typename?: 'Review'
+        createdAt?: Date | null
+        id: string
+        updatedAt?: Date | null
+        name: string
+        commentCount?: number | null
+        projectMemberId: string
+        ratingAverage?: number | null
+        ratingCount?: number | null
+        viewUrl: string
       } | null
     } | null
   } | null
@@ -5407,6 +5784,19 @@ export const CommunityDetailsFragmentDoc = gql`
   }
   ${CommunityManagerDetailsFragmentDoc}
 `
+export const ReviewDetailsFragmentDoc = gql`
+  fragment ReviewDetails on Review {
+    createdAt
+    id
+    updatedAt
+    name
+    commentCount
+    projectMemberId
+    ratingAverage
+    ratingCount
+    viewUrl
+  }
+`
 export const ProjectMemberDetailsFragmentDoc = gql`
   fragment ProjectMemberDetails on ProjectMember {
     id
@@ -5420,8 +5810,12 @@ export const ProjectMemberDetailsFragmentDoc = gql`
     user {
       ...UserDetails
     }
+    review {
+      ...ReviewDetails
+    }
   }
   ${UserDetailsFragmentDoc}
+  ${ReviewDetailsFragmentDoc}
 `
 export const ProjectDetailsFragmentDoc = gql`
   fragment ProjectDetails on Project {
@@ -5474,24 +5868,6 @@ export const RatingDetailsFragmentDoc = gql`
     updatedAt
   }
   ${UserDetailsFragmentDoc}
-`
-export const ReviewDetailsFragmentDoc = gql`
-  fragment ReviewDetails on Review {
-    createdAt
-    id
-    updatedAt
-    amount
-    bonus
-    name
-    ratingAverage
-    ratingProgress
-    projectMemberId
-    projectMember {
-      ...ProjectMemberDetails
-    }
-    viewUrl
-  }
-  ${ProjectMemberDetailsFragmentDoc}
 `
 export const LoginDocument = gql`
   mutation login($input: LoginInput!) {
@@ -6115,6 +6491,9 @@ export const ManagerFindOneProjectDocument = gql`
         message
         nextStatus
       }
+      members {
+        ...ProjectMemberDetails
+      }
       referral {
         ...ProjectMemberDetails
       }
@@ -6146,6 +6525,14 @@ export const ManagerUpdateProjectDocument = gql`
     }
   }
   ${ProjectDetailsFragmentDoc}
+`
+export const ManagerUpdateProjectMemberDocument = gql`
+  mutation managerUpdateProjectMember($projectMemberId: String!, $input: ManagerUpdateProjectMemberInput!) {
+    updated: managerUpdateProjectMember(projectMemberId: $projectMemberId, input: $input) {
+      ...ProjectMemberDetails
+    }
+  }
+  ${ProjectMemberDetailsFragmentDoc}
 `
 export const ManagerUpdateProjectStatusDocument = gql`
   mutation managerUpdateProjectStatus($projectId: String!, $status: ProjectStatus!) {
@@ -6232,61 +6619,81 @@ export const AdminDeleteRatingDocument = gql`
     deleted: adminDeleteRating(ratingId: $ratingId)
   }
 `
-export const ManagerUpdateReviewDocument = gql`
-  mutation managerUpdateReview($reviewId: String!, $input: ManagerUpdateReviewInput!) {
-    updated: managerUpdateReview(reviewId: $reviewId, input: $input) {
-      ...ReviewDetails
-    }
-  }
-  ${ReviewDetailsFragmentDoc}
-`
 export const ManagerFindManyReviewByProjectDocument = gql`
   query managerFindManyReviewByProject($input: ManagerFindManyReviewByProjectInput!) {
     items: managerFindManyReviewByProject(input: $input) {
       ...ReviewDetails
+      projectMember {
+        ...ProjectMemberDetails
+      }
     }
   }
   ${ReviewDetailsFragmentDoc}
+  ${ProjectMemberDetailsFragmentDoc}
 `
 export const ReviewerFindManyReviewByProjectDocument = gql`
   query reviewerFindManyReviewByProject($input: ReviewerFindManyReviewByProjectInput!) {
     items: reviewerFindManyReviewByProject(input: $input) {
       ...ReviewDetails
+      projectMember {
+        ...ProjectMemberDetails
+      }
     }
   }
   ${ReviewDetailsFragmentDoc}
+  ${ProjectMemberDetailsFragmentDoc}
 `
 export const ReviewerFindManyReviewByUsernameDocument = gql`
   query reviewerFindManyReviewByUsername($input: ReviewerFindManyReviewByUsernameInput!) {
     items: reviewerFindManyReviewByUsername(input: $input) {
       ...ReviewDetails
+      projectMember {
+        ...ProjectMemberDetails
+        project {
+          ...ProjectDetails
+        }
+      }
     }
   }
   ${ReviewDetailsFragmentDoc}
+  ${ProjectMemberDetailsFragmentDoc}
+  ${ProjectDetailsFragmentDoc}
 `
 export const ReviewerFindUserProjectReviewDocument = gql`
   query reviewerFindUserProjectReview($projectId: String!) {
     item: reviewerFindUserProjectReview(projectId: $projectId) {
       ...ReviewDetails
+      projectMember {
+        ...ProjectMemberDetails
+      }
     }
   }
   ${ReviewDetailsFragmentDoc}
+  ${ProjectMemberDetailsFragmentDoc}
 `
 export const ReviewerFindOneReviewDocument = gql`
   query reviewerFindOneReview($reviewId: String!) {
     item: reviewerFindOneReview(reviewId: $reviewId) {
       ...ReviewDetails
+      projectMember {
+        ...ProjectMemberDetails
+      }
     }
   }
   ${ReviewDetailsFragmentDoc}
+  ${ProjectMemberDetailsFragmentDoc}
 `
 export const ReviewerCreateReviewDocument = gql`
   mutation reviewerCreateReview($projectId: String!) {
     created: reviewerCreateReview(projectId: $projectId) {
       ...ReviewDetails
+      projectMember {
+        ...ProjectMemberDetails
+      }
     }
   }
   ${ReviewDetailsFragmentDoc}
+  ${ProjectMemberDetailsFragmentDoc}
 `
 export const ReviewerDeleteReviewDocument = gql`
   mutation reviewerDeleteReview($reviewId: String!) {
@@ -6298,6 +6705,9 @@ export const AdminFindManyReviewDocument = gql`
     paging: adminFindManyReview(input: $input) {
       data {
         ...ReviewDetails
+        projectMember {
+          ...ProjectMemberDetails
+        }
       }
       meta {
         ...PagingMetaDetails
@@ -6305,15 +6715,20 @@ export const AdminFindManyReviewDocument = gql`
     }
   }
   ${ReviewDetailsFragmentDoc}
+  ${ProjectMemberDetailsFragmentDoc}
   ${PagingMetaDetailsFragmentDoc}
 `
 export const AdminFindOneReviewDocument = gql`
   query adminFindOneReview($reviewId: String!) {
     item: adminFindOneReview(reviewId: $reviewId) {
       ...ReviewDetails
+      projectMember {
+        ...ProjectMemberDetails
+      }
     }
   }
   ${ReviewDetailsFragmentDoc}
+  ${ProjectMemberDetailsFragmentDoc}
 `
 export const AdminDeleteReviewDocument = gql`
   mutation adminDeleteReview($reviewId: String!) {
@@ -6487,6 +6902,7 @@ const ManagerFindOneProjectDocumentString = print(ManagerFindOneProjectDocument)
 const ManagerCreateProjectDocumentString = print(ManagerCreateProjectDocument)
 const ManagerSplitByRatingDocumentString = print(ManagerSplitByRatingDocument)
 const ManagerUpdateProjectDocumentString = print(ManagerUpdateProjectDocument)
+const ManagerUpdateProjectMemberDocumentString = print(ManagerUpdateProjectMemberDocument)
 const ManagerUpdateProjectStatusDocumentString = print(ManagerUpdateProjectStatusDocument)
 const ManagerDeleteProjectDocumentString = print(ManagerDeleteProjectDocument)
 const ManagerAddProjectManagerDocumentString = print(ManagerAddProjectManagerDocument)
@@ -6501,7 +6917,6 @@ const ManagerDeleteRatingDocumentString = print(ManagerDeleteRatingDocument)
 const AdminFindManyRatingDocumentString = print(AdminFindManyRatingDocument)
 const AdminUpdateRatingDocumentString = print(AdminUpdateRatingDocument)
 const AdminDeleteRatingDocumentString = print(AdminDeleteRatingDocument)
-const ManagerUpdateReviewDocumentString = print(ManagerUpdateReviewDocument)
 const ManagerFindManyReviewByProjectDocumentString = print(ManagerFindManyReviewByProjectDocument)
 const ReviewerFindManyReviewByProjectDocumentString = print(ReviewerFindManyReviewByProjectDocument)
 const ReviewerFindManyReviewByUsernameDocumentString = print(ReviewerFindManyReviewByUsernameDocument)
@@ -8192,6 +8607,27 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
         variables,
       )
     },
+    managerUpdateProjectMember(
+      variables: ManagerUpdateProjectMemberMutationVariables,
+      requestHeaders?: GraphQLClientRequestHeaders,
+    ): Promise<{
+      data: ManagerUpdateProjectMemberMutation
+      errors?: GraphQLError[]
+      extensions?: any
+      headers: Headers
+      status: number
+    }> {
+      return withWrapper(
+        (wrappedRequestHeaders) =>
+          client.rawRequest<ManagerUpdateProjectMemberMutation>(ManagerUpdateProjectMemberDocumentString, variables, {
+            ...requestHeaders,
+            ...wrappedRequestHeaders,
+          }),
+        'managerUpdateProjectMember',
+        'mutation',
+        variables,
+      )
+    },
     managerUpdateProjectStatus(
       variables: ManagerUpdateProjectStatusMutationVariables,
       requestHeaders?: GraphQLClientRequestHeaders,
@@ -8484,27 +8920,6 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
             ...wrappedRequestHeaders,
           }),
         'adminDeleteRating',
-        'mutation',
-        variables,
-      )
-    },
-    managerUpdateReview(
-      variables: ManagerUpdateReviewMutationVariables,
-      requestHeaders?: GraphQLClientRequestHeaders,
-    ): Promise<{
-      data: ManagerUpdateReviewMutation
-      errors?: GraphQLError[]
-      extensions?: any
-      headers: Headers
-      status: number
-    }> {
-      return withWrapper(
-        (wrappedRequestHeaders) =>
-          client.rawRequest<ManagerUpdateReviewMutation>(ManagerUpdateReviewDocumentString, variables, {
-            ...requestHeaders,
-            ...wrappedRequestHeaders,
-          }),
-        'managerUpdateReview',
         'mutation',
         variables,
       )
@@ -9186,17 +9601,17 @@ export function ManagerUpdateProjectInputSchema(): z.ZodObject<Properties<Manage
   })
 }
 
+export function ManagerUpdateProjectMemberInputSchema(): z.ZodObject<Properties<ManagerUpdateProjectMemberInput>> {
+  return z.object({
+    amount: z.number().nullish(),
+    bonus: z.number().nullish(),
+  })
+}
+
 export function ManagerUpdateRatingInputSchema(): z.ZodObject<Properties<ManagerUpdateRatingInput>> {
   return z.object({
     content: z.string().nullish(),
     rating: z.number().nullish(),
-  })
-}
-
-export function ManagerUpdateReviewInputSchema(): z.ZodObject<Properties<ManagerUpdateReviewInput>> {
-  return z.object({
-    amount: z.number().nullish(),
-    bonus: z.number().nullish(),
   })
 }
 

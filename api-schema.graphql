@@ -357,14 +357,14 @@ input ManagerUpdateProjectInput {
   startDate: DateTime
 }
 
+input ManagerUpdateProjectMemberInput {
+  amount: Int
+  bonus: Int
+}
+
 input ManagerUpdateRatingInput {
   content: String
   rating: Float
-}
-
-input ManagerUpdateReviewInput {
-  amount: Int
-  bonus: Int
 }
 
 type Mutation {
@@ -419,9 +419,9 @@ type Mutation {
   managerToggleCommunityAdmin(communityId: String!, userId: String!): Boolean
   managerUpdateCommunity(communityId: String!, input: ManagerUpdateCommunityInput!): Community
   managerUpdateProject(input: ManagerUpdateProjectInput!, projectId: String!): Project
+  managerUpdateProjectMember(input: ManagerUpdateProjectMemberInput!, projectMemberId: String!): ProjectMember
   managerUpdateProjectStatus(projectId: String!, status: ProjectStatus!): Project
   managerUpdateRating(input: ManagerUpdateRatingInput!, ratingId: String!): Rating
-  managerUpdateReview(input: ManagerUpdateReviewInput!, reviewId: String!): Review
   register(input: RegisterInput!): User
   reviewerCreateComment(input: ReviewerCreateCommentInput!): Comment
   reviewerCreateReview(projectId: String!): Review
@@ -493,6 +493,7 @@ type ProjectMember {
   project: Project
   projectId: String
   referral: Boolean
+  review: Review
   role: ProjectRole
   updatedAt: DateTime
   user: User
@@ -601,15 +602,14 @@ input RequestIdentityChallengeInput {
 }
 
 type Review {
-  amount: Int
-  bonus: Int
+  commentCount: Int
   createdAt: DateTime
   id: String!
   name: String!
   projectMember: ProjectMember
   projectMemberId: String!
   ratingAverage: Float
-  ratingProgress: Float
+  ratingCount: Int
   updatedAt: DateTime
   viewUrl: String!
 }

@@ -18,7 +18,7 @@ export function ReviewerProjectReviewListFeature({ projectId }: { projectId: str
     <UiStack>
       <Group>
         <CoreUiSearchField size="sm" placeholder="Search review" setSearch={setSearch} />
-        <CoreUiDebugModal data={items} />
+        <CoreUiDebugModal data={{ item, items }} />
         <ProjectUiUserReviewButton create={createReview} review={item} />
       </Group>
 

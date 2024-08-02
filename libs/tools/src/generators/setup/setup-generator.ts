@@ -21,7 +21,6 @@ export async function setupGenerator(tree: Tree) {
   // Docker validation
   const docker = await ensureDockerIsRunning()
   if (!docker) {
-    console.log('THIS IS THE PROBLEM')
     console.log(`❌ Docker is not running. Make sure Docker is running and try again.`)
     return
   }

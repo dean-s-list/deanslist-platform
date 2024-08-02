@@ -216,12 +216,10 @@ describe('api-rating-feature', () => {
           // alice should have a ratingAverage of 5
           const ratedReviewAlice = ratedReviews.find((review) => review.id === reviewAliceId)
           expect(ratedReviewAlice?.ratingAverage).toBe(5)
-          expect(ratedReviewAlice?.ratingProgress).toBe(100)
 
           // bob should have a ratingAverage of 1
           const ratedReviewBob = ratedReviews.find((review) => review.id === reviewBobId)
           expect(ratedReviewBob?.ratingAverage).toBe(1)
-          expect(ratedReviewBob?.ratingProgress).toBe(100)
         })
 
         it('should split by rating', async () => {
@@ -236,13 +234,13 @@ describe('api-rating-feature', () => {
 
           // alice should have an amount of 625
           const ratedReviewAlice = ratedReviews.find((review) => review.id === reviewAliceId)
-          expect(ratedReviewAlice?.amount).toBe(625)
-          expect(ratedReviewAlice?.bonus).toBe(0)
+          expect(ratedReviewAlice?.projectMember?.amount).toBe(625)
+          expect(ratedReviewAlice?.projectMember?.bonus).toBe(0)
 
           // bob should have an amount of 125
           const ratedReviewBob = ratedReviews.find((review) => review.id === reviewBobId)
-          expect(ratedReviewBob?.amount).toBe(125)
-          expect(ratedReviewBob?.bonus).toBe(0)
+          expect(ratedReviewBob?.projectMember?.amount).toBe(125)
+          expect(ratedReviewBob?.projectMember?.bonus).toBe(0)
         })
       })
     })

@@ -1,6 +1,6 @@
 import { ReviewerCreateCommentInput } from '@deanslist-platform/sdk'
 import { CoreUiButton, CoreUiEditor, pinkGradient, useCoreUiEditor } from '@deanslist-platform/web-core-ui'
-import { Button, Group } from '@mantine/core'
+import { Button, Group, Text } from '@mantine/core'
 import { toastError, UiStack } from '@pubkey-ui/core'
 import { IconMessageCircle2Filled } from '@tabler/icons-react'
 import { useState } from 'react'
@@ -9,10 +9,12 @@ export function ReviewerCommentUiForm({
   cancel,
   createComment,
   placeholder,
+  description,
 }: {
   cancel?: () => void
   createComment: (res: ReviewerCreateCommentInput) => Promise<boolean>
   placeholder: string
+  description?: string
 }) {
   const [loading, setLoading] = useState(false)
   const { editor } = useCoreUiEditor({ content: '', placeholder })
@@ -20,6 +22,11 @@ export function ReviewerCommentUiForm({
   return (
     <UiStack>
       <CoreUiEditor editor={editor} />
+      {description ? (
+        <Text size="sm" c="dimmed" ta="end">
+          {description}
+        </Text>
+      ) : null}
       <Group justify="flex-end" wrap="nowrap">
         <CoreUiButton
           loading={loading}
