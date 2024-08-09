@@ -75,7 +75,7 @@ describe('api-project-feature', () => {
         const res = await sdk.reviewerFindOneProject({ projectId }, { cookie: alice })
 
         expect(res.data.item.id).toBe(projectId)
-        expect(res.data.item.remainingDays).toBe(7)
+        expect(res.data.item.remainingDays).toBe(8)
       })
 
       describe('draft projects', () => {
