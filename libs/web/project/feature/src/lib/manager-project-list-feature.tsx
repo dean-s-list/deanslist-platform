@@ -95,7 +95,7 @@ export function ManagerProjectListFeature({ communityId }: { communityId?: strin
         <ProjectUiGrid
           projects={items}
           page={pagination.page}
-          totalPages={pagination.total / pagination.limit}
+          totalPages={Math.ceil(pagination.total / pagination.limit)}
           onPageChange={pagination.setPage}
           limit={pagination.limit}
           setLimit={pagination.setLimit}
