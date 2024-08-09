@@ -34,7 +34,7 @@ export function ProjectUiStatusSelect({
 
   const form = useForm<{ status: ProjectStatus }>({
     initialValues: {
-      status: projectMessage?.nextStatus ?? project.status ?? ProjectStatus.Draft,
+      status: project.status ?? ProjectStatus.Draft,
     },
     validate: {},
   })
