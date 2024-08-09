@@ -1,4 +1,4 @@
-import { addDays, ApiCoreService, setDateToStartOfDay, slugifyId } from '@deanslist-platform/api-core-data-access'
+import { ApiCoreService, setDateToStartOfDay, slugifyId } from '@deanslist-platform/api-core-data-access'
 import { Injectable, Logger } from '@nestjs/common'
 import { Prisma, Project, ProjectRole } from '@prisma/client'
 import { ApiProjectEventService } from './api-project-event.service'
@@ -52,7 +52,7 @@ export class ApiProjectDataService {
       ...input,
       durationDays,
       endDate,
-      startDate: startDate ?? addDays({ date: new Date(), days: durationDays ?? 7 }),
+      startDate: startDate ?? setDateToStartOfDay(new Date()),
       slug,
       instructions,
       community: { connect: { id: communityId } },
