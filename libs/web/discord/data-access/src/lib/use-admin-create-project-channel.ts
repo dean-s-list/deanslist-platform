@@ -1,10 +1,8 @@
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { sdk } from '@deanslist-platform/sdk'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useMutation } from '@tanstack/react-query'
 
 export function useAdminCreateProjectChannel({ projectId }: { projectId: string }) {
-  const sdk = useSdk()
-
   const mutation = useMutation({
     mutationKey: ['adminCreateProjectChannel', { projectId }],
     mutationFn: ({ channelId, serverId }: { channelId: string; serverId: string }) =>
@@ -29,8 +27,6 @@ export function useAdminCreateProjectChannel({ projectId }: { projectId: string 
 }
 
 export function useAdminCreateCommunityChannel({ communityId }: { communityId: string }) {
-  const sdk = useSdk()
-
   const mutation = useMutation({
     mutationKey: ['adminCreateCommunityChannel', { communityId }],
     mutationFn: ({ channelId, serverId }: { channelId: string; serverId: string }) =>

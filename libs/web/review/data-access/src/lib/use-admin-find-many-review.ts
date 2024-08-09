@@ -1,11 +1,9 @@
-import { AdminFindManyReviewInput } from '@deanslist-platform/sdk'
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { AdminFindManyReviewInput, sdk } from '@deanslist-platform/sdk'
 import { toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
 export function useAdminFindManyReview(props: Partial<AdminFindManyReviewInput> & { projectId: string }) {
-  const sdk = useSdk()
   const [limit, setLimit] = useState(props?.limit ?? 10)
   const [page, setPage] = useState(props?.page ?? 1)
   const [search, setSearch] = useState<string>(props?.search ?? '')

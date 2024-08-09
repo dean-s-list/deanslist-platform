@@ -1,7 +1,7 @@
-import { Sdk } from '@deanslist-platform/sdk'
+import { sdk } from '@deanslist-platform/sdk'
 import { useQuery } from '@tanstack/react-query'
 
-export function useMe(sdk: Sdk) {
+export function useMe() {
   return useQuery({
     queryKey: ['me'],
     queryFn: async () => {

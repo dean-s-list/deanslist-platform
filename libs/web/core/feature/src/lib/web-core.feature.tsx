@@ -1,5 +1,4 @@
 import { AuthProvider } from '@deanslist-platform/web-auth-data-access'
-import { SdkProvider } from '@deanslist-platform/web-core-data-access'
 import { CoreUiThemeProvider } from '@deanslist-platform/web-core-ui'
 import { SolanaClusterProvider } from '@deanslist-platform/web-solana-data-access'
 import { toastError } from '@pubkey-ui/core'
@@ -30,15 +29,13 @@ export function WebCoreFeature() {
   return (
     <BrowserRouter>
       <QueryClientProvider client={client}>
-        <SdkProvider>
-          <AuthProvider>
-            <CoreUiThemeProvider>
-              <SolanaClusterProvider autoConnect={true}>
-                <WebCoreRoutes />
-              </SolanaClusterProvider>
-            </CoreUiThemeProvider>
-          </AuthProvider>
-        </SdkProvider>
+        <AuthProvider>
+          <CoreUiThemeProvider>
+            <SolanaClusterProvider autoConnect={true}>
+              <WebCoreRoutes />
+            </SolanaClusterProvider>
+          </CoreUiThemeProvider>
+        </AuthProvider>
       </QueryClientProvider>
     </BrowserRouter>
   )

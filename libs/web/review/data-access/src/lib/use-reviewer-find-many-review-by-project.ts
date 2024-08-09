@@ -2,8 +2,8 @@ import {
   ManagerFindManyReviewByProjectInput,
   Review,
   ReviewerFindManyReviewByProjectInput,
+  sdk,
 } from '@deanslist-platform/sdk'
-import { useSdk } from '@deanslist-platform/web-core-data-access'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
@@ -11,7 +11,6 @@ import { useState } from 'react'
 export function useReviewerFindManyReviewByProject(
   props: Partial<ReviewerFindManyReviewByProjectInput> & { projectId: string },
 ) {
-  const sdk = useSdk()
   const [search, setSearch] = useState<string>(props?.search ?? '')
 
   const input: ReviewerFindManyReviewByProjectInput = { search, projectId: props.projectId }
@@ -51,7 +50,6 @@ export function useReviewerFindManyReviewByProject(
 export function useManagerFindManyReviewByProject(
   props: Partial<ManagerFindManyReviewByProjectInput> & { projectId: string },
 ) {
-  const sdk = useSdk()
   const [search, setSearch] = useState<string>(props?.search ?? '')
 
   const input: ManagerFindManyReviewByProjectInput = { search, projectId: props.projectId }

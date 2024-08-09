@@ -1,10 +1,8 @@
-import { ManagerUpdateCommunityInput } from '@deanslist-platform/sdk'
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { ManagerUpdateCommunityInput, sdk } from '@deanslist-platform/sdk'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 
 export function useManagerFindOneCommunity({ communityId }: { communityId: string }) {
-  const sdk = useSdk()
   const query = useQuery({
     queryKey: ['manager', 'find-one-community', communityId],
     queryFn: () => sdk.managerFindOneCommunity({ communityId }).then((res) => res.data),

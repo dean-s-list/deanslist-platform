@@ -1,11 +1,8 @@
-import { AdminUpdateDiscordServerInput } from '@deanslist-platform/sdk'
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { AdminUpdateDiscordServerInput, sdk } from '@deanslist-platform/sdk'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useMutation } from '@tanstack/react-query'
 
 export function useAdminUpdateDiscordServer({ serverId }: { serverId: string }) {
-  const sdk = useSdk()
-
   const mutation = useMutation({
     mutationKey: ['adminUpdateDiscordServer', { serverId }],
     mutationFn: (input: AdminUpdateDiscordServerInput) =>

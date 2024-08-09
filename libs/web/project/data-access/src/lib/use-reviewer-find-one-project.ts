@@ -1,8 +1,7 @@
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { sdk } from '@deanslist-platform/sdk'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 export function useReviewerFindOneProject({ projectId }: { projectId: string }) {
-  const sdk = useSdk()
   const client = useQueryClient()
 
   const queryKey = ['reviewer', 'find-one-project', projectId]

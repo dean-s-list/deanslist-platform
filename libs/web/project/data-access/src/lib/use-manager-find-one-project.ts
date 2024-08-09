@@ -1,10 +1,8 @@
-import { ManagerUpdateProjectInput, ProjectStatus } from '@deanslist-platform/sdk'
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { ManagerUpdateProjectInput, ProjectStatus, sdk } from '@deanslist-platform/sdk'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 export function useManagerFindOneProject({ projectId }: { projectId: string }) {
-  const sdk = useSdk()
   const client = useQueryClient()
 
   const queryKey = ['manager', 'find-one-project', projectId]

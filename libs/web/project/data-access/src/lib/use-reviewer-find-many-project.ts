@@ -1,10 +1,14 @@
-import { OrderDirection, ProjectOrderBy, ProjectStatus, ReviewerFindManyProjectInput } from '@deanslist-platform/sdk'
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import {
+  OrderDirection,
+  ProjectOrderBy,
+  ProjectStatus,
+  ReviewerFindManyProjectInput,
+  sdk,
+} from '@deanslist-platform/sdk'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
 export function useReviewerFindManyProject(props: Partial<ReviewerFindManyProjectInput> & { communityId?: string }) {
-  const sdk = useSdk()
   const [limit, setLimit] = useState(props?.limit ?? 10)
   const [page, setPage] = useState(props?.page ?? 1)
   const [mineOnly, setMineOnly] = useState(props?.mineOnly ?? false)

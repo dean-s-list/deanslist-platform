@@ -1,11 +1,9 @@
-import { AdminCreateUserInput, AdminFindManyUserInput, UserRole, UserStatus } from '@deanslist-platform/sdk'
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { AdminCreateUserInput, AdminFindManyUserInput, sdk, UserRole, UserStatus } from '@deanslist-platform/sdk'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
 export function useAdminFindManyUser(props?: AdminFindManyUserInput) {
-  const sdk = useSdk()
   const [role, setRole] = useState<UserRole | undefined>(undefined)
   const [status, setStatus] = useState<UserStatus | undefined>(undefined)
   const [limit, setLimit] = useState(props?.limit ?? 10)

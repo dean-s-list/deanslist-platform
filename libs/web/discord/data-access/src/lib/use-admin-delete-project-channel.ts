@@ -1,10 +1,8 @@
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { sdk } from '@deanslist-platform/sdk'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useMutation } from '@tanstack/react-query'
 
 export function useAdminDeleteProjectChannel({ channelId, projectId }: { channelId: string; projectId: string }) {
-  const sdk = useSdk()
-
   const mutation = useMutation({
     mutationKey: ['adminDeleteProjectChannel', { projectId }],
     mutationFn: () =>
@@ -29,8 +27,6 @@ export function useAdminDeleteProjectChannel({ channelId, projectId }: { channel
 }
 
 export function useAdminDeleteCommunityChannel({ channelId, communityId }: { channelId: string; communityId: string }) {
-  const sdk = useSdk()
-
   const mutation = useMutation({
     mutationKey: ['adminDeleteCommunityChannel', { communityId }],
     mutationFn: () =>

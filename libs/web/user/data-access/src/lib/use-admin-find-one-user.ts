@@ -1,10 +1,8 @@
-import { AdminUpdateUserInput } from '@deanslist-platform/sdk'
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { AdminUpdateUserInput, sdk } from '@deanslist-platform/sdk'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 
 export function useAdminFindOneUser({ userId }: { userId: string }) {
-  const sdk = useSdk()
   const query = useQuery({
     queryKey: ['admin', 'find-one-user', userId],
     queryFn: () => sdk.adminFindOneUser({ userId }).then((res) => res.data),

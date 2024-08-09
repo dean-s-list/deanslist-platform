@@ -1,5 +1,4 @@
-import { IdentityProvider } from '@deanslist-platform/sdk'
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { IdentityProvider, sdk } from '@deanslist-platform/sdk'
 import { toastError } from '@pubkey-ui/core'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { createContext, ReactNode, useContext } from 'react'
@@ -17,7 +16,6 @@ export interface IdentityProviderSolanaContext {
 const Context = createContext<IdentityProviderSolanaContext>({} as IdentityProviderSolanaContext)
 
 export function IdentityProviderSolanaLink({ children, refresh }: { children: ReactNode; refresh: () => void }) {
-  const sdk = useSdk()
   const { signMessage } = useWallet()
   const createSignature = useCreateSignature()
 

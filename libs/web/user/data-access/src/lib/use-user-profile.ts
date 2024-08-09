@@ -1,20 +1,18 @@
-import { UserUpdateUserInput } from '@deanslist-platform/sdk'
+import { sdk, UserUpdateUserInput } from '@deanslist-platform/sdk'
 import { useAuth, useMe } from '@deanslist-platform/web-auth-data-access'
-import { useSdk } from '@deanslist-platform/web-core-data-access'
 import { toastError } from '@pubkey-ui/core'
 import { useUserFineOneUser } from './use-user-fine-one-user'
 
 export function useUserProfile() {
-  const sdk = useSdk()
-  const me = useMe(sdk)
+  const me = useMe()
   const { user } = useAuth()
   const { query } = useUserFineOneUser({ username: user?.username as string })
 
   return {
     user: query.data?.item,
     query,
-    updateUser: async (input: UserUpdateUserInput) => {
-      return sdk
+    updateUser: async (input: UserUpdateUserInput) =>
+      sdk
         .userUpdateUser({
           input,
         })
@@ -25,7 +23,6 @@ export function useUserProfile() {
         .catch((err) => {
           toastError(err.message)
           return false
-        })
-    },
+        }),
   }
 }

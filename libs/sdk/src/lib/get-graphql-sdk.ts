@@ -4,3 +4,5 @@ import { getGraphQLClient } from './get-graphql-client'
 export function getGraphQLSdk(url: string): Sdk {
   return getSdk(getGraphQLClient(url))
 }
+
+export const sdk: Sdk = getGraphQLSdk('/graphql')

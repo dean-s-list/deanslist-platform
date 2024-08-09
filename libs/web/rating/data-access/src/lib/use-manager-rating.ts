@@ -1,10 +1,7 @@
-import { ManagerCreateRatingInput, ManagerUpdateRatingInput } from '@deanslist-platform/sdk'
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { ManagerCreateRatingInput, ManagerUpdateRatingInput, sdk } from '@deanslist-platform/sdk'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 
 export function useManagerRating() {
-  const sdk = useSdk()
-
   return {
     createRating: (input: ManagerCreateRatingInput) =>
       sdk

@@ -1,10 +1,8 @@
-import { FaqItemAdminUpdateInput } from '@deanslist-platform/sdk'
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { FaqItemAdminUpdateInput, sdk } from '@deanslist-platform/sdk'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 
 export function useAdminFindOneFaqItem({ faqItemId }: { faqItemId: string }) {
-  const sdk = useSdk()
   const query = useQuery({
     queryKey: ['admin', 'find-one-faq-item', faqItemId],
     queryFn: () => sdk.adminFindOneFaqItem({ faqItemId }).then((res) => res.data),

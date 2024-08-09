@@ -1,8 +1,7 @@
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { sdk } from '@deanslist-platform/sdk'
 import { useQuery } from '@tanstack/react-query'
 
 export function useAdminFindOneReview({ reviewId }: { reviewId: string }) {
-  const sdk = useSdk()
   const query = useQuery({
     queryKey: ['admin', 'find-one-review', reviewId],
     queryFn: () => sdk.adminFindOneReview({ reviewId }).then((res) => res.data),

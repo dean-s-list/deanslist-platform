@@ -1,12 +1,10 @@
-import { Review, ReviewerFindManyReviewByUsernameInput } from '@deanslist-platform/sdk'
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { Review, ReviewerFindManyReviewByUsernameInput, sdk } from '@deanslist-platform/sdk'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
 export function useReviewerFindManyReviewByUsername(
   props: Partial<ReviewerFindManyReviewByUsernameInput> & { username: string },
 ) {
-  const sdk = useSdk()
   const [search, setSearch] = useState<string>(props?.search ?? '')
 
   const input: ReviewerFindManyReviewByUsernameInput = { search, username: props.username }

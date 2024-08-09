@@ -1,8 +1,7 @@
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { sdk } from '@deanslist-platform/sdk'
 import { useQuery } from '@tanstack/react-query'
 
 export function useAdminGetDiscordBot() {
-  const sdk = useSdk()
   const query = useQuery({
     queryKey: ['adminGetDiscordBot'],
     queryFn: () => sdk.adminGetDiscordBot().then((res) => res.data),

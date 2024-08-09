@@ -1,5 +1,5 @@
-import { ReviewerCreateCommentInput, ReviewerFindManyCommentInput } from '@deanslist-platform/sdk'
-import { useBrowserVersion, useSdk } from '@deanslist-platform/web-core-data-access'
+import { ReviewerCreateCommentInput, ReviewerFindManyCommentInput, sdk } from '@deanslist-platform/sdk'
+import { useBrowserVersion } from '@deanslist-platform/web-core-data-access'
 import { useReviewerFindOneProject } from '@deanslist-platform/web-project-data-access'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
@@ -7,7 +7,6 @@ import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 
 export function useReviewerFindManyComment(props: Partial<ReviewerFindManyCommentInput> & { reviewId: string }) {
-  const sdk = useSdk()
   const { browser: versionBrowser, os: versionOs } = useBrowserVersion()
   const { projectId } = useParams<{ projectId: string }>() as { projectId: string }
   const { invalidate: invalidateProjectParticipants } = useReviewerFindOneProject({ projectId })

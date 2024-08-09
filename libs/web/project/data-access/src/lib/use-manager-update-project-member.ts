@@ -1,9 +1,6 @@
-import { ManagerUpdateProjectMemberInput } from '@deanslist-platform/sdk'
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { ManagerUpdateProjectMemberInput, sdk } from '@deanslist-platform/sdk'
 
 export function useManagerUpdateProjectMember() {
-  const sdk = useSdk()
-
   return async (projectMemberId: string, input: ManagerUpdateProjectMemberInput) =>
     sdk
       .managerUpdateProjectMember({ projectMemberId, input })

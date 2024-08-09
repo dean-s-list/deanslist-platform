@@ -1,10 +1,8 @@
-import { UserFindManyCommunityInput } from '@deanslist-platform/sdk'
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { sdk, UserFindManyCommunityInput } from '@deanslist-platform/sdk'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
 export function useUserFindManyCommunity(props?: Partial<UserFindManyCommunityInput>) {
-  const sdk = useSdk()
   const [limit, setLimit] = useState(props?.limit ?? 10)
   const [page, setPage] = useState(props?.page ?? 1)
   const [search, setSearch] = useState<string>(props?.search ?? '')

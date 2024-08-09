@@ -1,10 +1,8 @@
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { sdk } from '@deanslist-platform/sdk'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useMutation } from '@tanstack/react-query'
 
 export function useManagerToggleCommunityAdmin({ communityId }: { communityId: string }) {
-  const sdk = useSdk()
-
   const mutation = useMutation({
     mutationKey: ['manager', 'managerToggleCommunityAdmin', { communityId }],
     mutationFn: (userId: string) =>

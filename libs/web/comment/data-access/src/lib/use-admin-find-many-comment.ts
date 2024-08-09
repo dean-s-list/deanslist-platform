@@ -1,11 +1,9 @@
-import { AdminFindManyCommentInput } from '@deanslist-platform/sdk'
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { AdminFindManyCommentInput, sdk } from '@deanslist-platform/sdk'
 import { toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
 export function useAdminFindManyComment(props: Partial<AdminFindManyCommentInput> & { reviewId: string }) {
-  const sdk = useSdk()
   const [search, setSearch] = useState<string>(props?.search ?? '')
 
   const input: AdminFindManyCommentInput = { search, reviewId: props.reviewId }

@@ -1,11 +1,9 @@
-import { FaqItemAdminCreateInput, FaqItemAdminFindManyInput } from '@deanslist-platform/sdk'
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { FaqItemAdminCreateInput, FaqItemAdminFindManyInput, sdk } from '@deanslist-platform/sdk'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
 export function useAdminFindManyFaqItem(props: Partial<FaqItemAdminFindManyInput> = {}) {
-  const sdk = useSdk()
   const [search, setSearch] = useState<string>(props?.search ?? '')
 
   const input: FaqItemAdminFindManyInput = { search }

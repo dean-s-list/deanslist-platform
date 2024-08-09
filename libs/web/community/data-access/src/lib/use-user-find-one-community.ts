@@ -1,8 +1,7 @@
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { sdk } from '@deanslist-platform/sdk'
 import { useQuery } from '@tanstack/react-query'
 
 export function useUserFindOneCommunity({ communityId }: { communityId: string }) {
-  const sdk = useSdk()
   const query = useQuery({
     queryKey: ['user', 'find-one-community', communityId],
     queryFn: () => sdk.userFindOneCommunity({ communityId }).then((res) => res.data),

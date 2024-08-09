@@ -1,5 +1,4 @@
-import { AppConfig, IdentityProvider, LoginInput, RegisterInput, User, UserRole } from '@deanslist-platform/sdk'
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { AppConfig, IdentityProvider, LoginInput, RegisterInput, sdk, User, UserRole } from '@deanslist-platform/sdk'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
 import { useQuery } from '@tanstack/react-query'
 import { createContext, ReactNode, useContext, useEffect, useMemo, useReducer } from 'react'
@@ -72,8 +71,6 @@ function authReducer(state: AuthState, { type, payload }: AuthAction): AuthState
 }
 
 export function useAppConfig() {
-  const sdk = useSdk()
-
   return useQuery({
     queryKey: ['app-config'],
     queryFn: () => sdk.appConfig().then((res) => res.data),
@@ -81,8 +78,7 @@ export function useAppConfig() {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const sdk = useSdk()
-  const me = useMe(sdk)
+  const me = useMe()
   const configQuery = useAppConfig()
 
   const [state, dispatch] = useReducer(authReducer, { status: 'loading' })

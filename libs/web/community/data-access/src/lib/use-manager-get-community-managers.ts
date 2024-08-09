@@ -1,9 +1,7 @@
-import { useSdk } from '@deanslist-platform/web-core-data-access'
+import { sdk } from '@deanslist-platform/sdk'
 import { useQuery } from '@tanstack/react-query'
 
 export function useManagerGetCommunityManagers({ communityId }: { communityId: string }) {
-  const sdk = useSdk()
-
   const query = useQuery({
     queryKey: ['manager', 'get-community-managers', { communityId }],
     queryFn: () => sdk.managerGetCommunityManagers({ communityId }).then((res) => res.data),
