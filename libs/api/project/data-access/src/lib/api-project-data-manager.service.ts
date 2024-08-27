@@ -4,7 +4,8 @@ import { ApiProjectDataService } from './api-project-data.service'
 import { ApiProjectMemberDataService } from './api-project-member-data.service'
 import { ManagerCreateProjectInput } from './dto/manager-create-project.input'
 import { ManagerFindManyProjectInput } from './dto/manager-find-many-project.input'
-import { ManagerUpdateProjectInput, ManagerUpdateProjectMemberInput } from './dto/manager-update-project.input'
+import { ManagerUpdateProjectMemberInput } from './dto/manager-update-project-member-input'
+import { ManagerUpdateProjectInput } from './dto/manager-update-project.input'
 import { ProjectPaging } from './entity/project-paging.entity'
 import { ProjectStatus } from './entity/project-status.enum'
 import { getProjectWhereManagerAccessInput } from './helpers/get-project-where-manager-access-input'
@@ -71,6 +72,14 @@ export class ApiProjectDataManagerService {
 
     if (projectMember?.project?.status !== ProjectStatus.Closed) {
       throw new Error('You can only update when the project is closed')
+    }
+
+    if (input.amount && input.amount < 0) {
+      throw new Error('Amount must be greater than 0')
+    }
+
+    if (input.bonus && input.bonus < 0) {
+      throw new Error('Bonus must be greater than 0')
     }
 
     return this.data.updateProjectMember(projectMemberId, input)
