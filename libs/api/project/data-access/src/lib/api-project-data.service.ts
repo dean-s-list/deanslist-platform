@@ -7,6 +7,7 @@ import { ProjectPaging } from './entity/project-paging.entity'
 import { ProjectStatus } from './entity/project-status.enum'
 import { ProjectCreatedEvent } from './event/project-created.event'
 import { calculateProjectDates } from './helpers/calculate-project-dates'
+import { ensureSufficientFunds } from './helpers/ensure-sufficient-funds'
 import { getProjectAmountUsd } from './helpers/get-project-amount-total-usd-left'
 import { getRatingAverage } from './helpers/get-rating-average'
 import { getRatingsFromComments } from './helpers/get-ratings-from-comments'
@@ -39,6 +40,8 @@ export class ApiProjectDataService {
     if (!community) {
       throw new Error('Community ${communityId} not found')
     }
+
+    ensureSufficientFunds(input)
     const instructions = `
 1. Go to [the app](#) to get started.
 2. Connect your wallet.
@@ -135,6 +138,7 @@ export class ApiProjectDataService {
 
   async updateProject(projectId: string, input: Prisma.ProjectUpdateInput, allowStartDateInPast = false) {
     const found = await this.findOneProject(projectId)
+    ensureSufficientFunds(input)
 
     const projectDates =
       found.status === ProjectStatus.Draft || allowStartDateInPast
