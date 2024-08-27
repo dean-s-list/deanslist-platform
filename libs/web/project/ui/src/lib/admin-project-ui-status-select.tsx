@@ -22,19 +22,15 @@ export function AdminProjectUiStatusSelect({
     initialValues: {
       status: project.status ?? ProjectStatus.Draft,
     },
+    onValuesChange: async (values) => {
+      await submit(values.status)
+    },
   })
 
   return (
     <Group align="center">
-      <form onSubmit={form.onSubmit((values) => submit(values.status))} ref={formRef}>
-        <Select
-          w={100}
-          radius="md"
-          allowDeselect={false}
-          data={[...options]}
-          {...form.getInputProps('status')}
-          onChange={() => formRef.current?.dispatchEvent(new Event('submit', { bubbles: true }))}
-        />
+      <form ref={formRef}>
+        <Select w={100} radius="md" allowDeselect={false} data={[...options]} {...form.getInputProps('status')} />
       </form>
     </Group>
   )

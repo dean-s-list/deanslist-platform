@@ -1,11 +1,14 @@
-import { ApiCoreService, setDateToStartOfDay, slugifyId } from '@deanslist-platform/api-core-data-access'
+import { ApiCoreService, beforeToday, setDateToStartOfDay, slugifyId } from '@deanslist-platform/api-core-data-access'
 import { Injectable, Logger } from '@nestjs/common'
+import { OnEvent } from '@nestjs/event-emitter'
+import { Cron, CronExpression } from '@nestjs/schedule'
 import { Prisma, Project, ProjectRole } from '@prisma/client'
 import { ApiProjectEventService } from './api-project-event.service'
 import { ProjectMessage } from './entity/project-message.entity'
 import { ProjectPaging } from './entity/project-paging.entity'
 import { ProjectStatus } from './entity/project-status.enum'
 import { ProjectCreatedEvent } from './event/project-created.event'
+import { ProjectsProvisionedEvent } from './event/projects-provisioned-event'
 import { calculateProjectDates } from './helpers/calculate-project-dates'
 import { ensureSufficientFunds } from './helpers/ensure-sufficient-funds'
 import { getProjectAmountUsd } from './helpers/get-project-amount-total-usd-left'
@@ -16,6 +19,40 @@ import { getRatingsFromComments } from './helpers/get-ratings-from-comments'
 export class ApiProjectDataService {
   private readonly logger = new Logger(ApiProjectDataService.name)
   constructor(private readonly core: ApiCoreService, private readonly event: ApiProjectEventService) {}
+
+  @OnEvent(ProjectsProvisionedEvent.event)
+  @Cron(CronExpression.EVERY_5_MINUTES)
+  async closeProjects() {
+    const projects = await this.core.data.project.findMany({
+      where: { status: ProjectStatus.Active, endDate: { lt: new Date() } },
+      orderBy: { createdAt: 'desc' },
+    })
+    for (const project of projects) {
+      await this.closeProject(project)
+    }
+  }
+
+  async closeProject(project: Project) {
+    if (project.status !== ProjectStatus.Active) {
+      throw new Error(`Project ${project.name} is not active`)
+    }
+
+    if (!project.endDate) {
+      throw new Error(`Project ${project.name} does not have an end date`)
+    }
+
+    if (!beforeToday(project.endDate)) {
+      throw new Error(`Project {project.name} end date is not in the past`)
+    }
+
+    const updated = await this.updateProjectStatus(project.id, ProjectStatus.Closed)
+
+    this.logger.verbose(`[${updated.community.name}] Project ${project.name} closed`)
+
+    this.event.emitProjectClosed({ project: updated })
+
+    return !!updated
+  }
 
   async createProject(
     userId: string,
@@ -174,6 +211,7 @@ export class ApiProjectDataService {
     return this.core.data.project.update({
       where: { id: found.id },
       data: { status: nextStatus },
+      include: { community: true },
     })
   }
 
@@ -275,9 +313,9 @@ function getStatusMessage({ project, nextStatus }: { project: Project; nextStatu
         message: `Cannot transition to Closed from ${project.status.toString()}`,
       }
     }
-    // Project endDate must be in the future
+    // Fail if the endDate is in the future
     if (endDate && endDate > today) {
-      return { nextStatus, message: `End date must be in the future` }
+      return { nextStatus, message: `End date must be in the past` }
     }
     // If all the checks pass, return the next status
     return { nextStatus }

@@ -15,7 +15,7 @@ export class ApiFaqItemProvisionService {
   async onApplicationStarted() {
     if (this.core.config.databaseProvision) {
       await Promise.all(provisionItems.map((project) => this.provisionProject(project)))
-      this.logger.verbose(`Provisioned projects`)
+      this.logger.verbose(`Provisioned FAQ items`)
     }
   }
 

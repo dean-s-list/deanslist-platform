@@ -1,7 +1,6 @@
 import { Community, Project } from '@prisma/client'
 
-export class ProjectCreatedEvent {
-  static readonly event = 'project.created'
-  userId!: string
+export class ProjectClosedEvent {
+  static readonly event = 'project.closed'
   project!: Project & { community: Community }
 }

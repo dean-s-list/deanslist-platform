@@ -1,10 +1,12 @@
 import { AdminUpdateProjectInput, Project, ProjectRole, sdk } from '@deanslist-platform/sdk'
 import { toastError, toastSuccess } from '@pubkey-ui/core'
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 export function useAdminFindOneProject({ projectId }: { projectId: string }) {
+  const client = useQueryClient()
+  const queryKey = ['admin', 'find-one-project', projectId]
   const query = useQuery({
-    queryKey: ['admin', 'find-one-project', projectId],
+    queryKey,
     queryFn: () => sdk.adminFindOneProject({ projectId }).then((res) => res.data),
     retry: 0,
   })
@@ -54,12 +56,13 @@ export function useAdminFindOneProject({ projectId }: { projectId: string }) {
         .then(async (res) => {
           if (res.updated) {
             if (toast) {
-              toastSuccess('Project updated')
+              toastSuccess('Project updated 1')
             }
-            await query.refetch()
             return res.updated
           }
           toastError('Project not updated')
+          await query.refetch()
+          await client.invalidateQueries({ queryKey })
           return null
         })
         .catch((err) => {

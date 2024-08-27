@@ -3,19 +3,25 @@ import { ApiCoreService, slugifyId } from '@deanslist-platform/api-core-data-acc
 import { Injectable, Logger } from '@nestjs/common'
 import { OnEvent } from '@nestjs/event-emitter'
 import { ApiProjectDataService } from './api-project-data.service'
+import { ApiProjectEventService } from './api-project-event.service'
 import { ProjectProvisionInput, provisionProjects } from './api-project-provision-data'
 
 @Injectable()
 export class ApiProjectProvisionService {
   private readonly logger = new Logger(ApiProjectProvisionService.name)
 
-  constructor(private readonly core: ApiCoreService, private readonly data: ApiProjectDataService) {}
+  constructor(
+    private readonly core: ApiCoreService,
+    private readonly data: ApiProjectDataService,
+    private readonly event: ApiProjectEventService,
+  ) {}
 
   @OnEvent(COMMUNITIES_PROVISIONED)
   async onApplicationStarted() {
     if (this.core.config.databaseProvision) {
       await Promise.all(provisionProjects.map((project) => this.provisionProject(project)))
       this.logger.verbose(`Provisioned projects`)
+      this.event.emitProjectsProvisioned()
     }
   }
 

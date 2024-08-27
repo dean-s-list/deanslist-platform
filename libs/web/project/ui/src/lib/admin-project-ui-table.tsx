@@ -40,6 +40,7 @@ export function AdminProjectUiTable({
             accessor: 'community',
             render: (item) => (item?.community ? <CommunityUiItem community={item.community} to={item.id} /> : null),
           },
+          { accessor: 'status' },
           {
             accessor: 'actions',
             title: 'Actions',
