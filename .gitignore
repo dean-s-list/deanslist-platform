@@ -37,13 +37,5 @@ nx-cloud.env
 Thumbs.db
 .nx/cache
 .nx/workspace-data
-.anchor
-libs/anchor/target/deploy
-libs/anchor/target/debug
-libs/anchor/target/release
-libs/anchor/target/sbf-solana-solana
-libs/anchor/target/.rustc_info.json
-!libs/anchor/target/idl/*.json
-!libs/anchor/target/types/*.ts
 test-ledger
 .yarn

@@ -1,5 +1,4 @@
 export * from './core-ui-back'
-export * from './core-ui-bignumber'
 export * from './core-ui-button'
 export * from './core-ui-card'
 export * from './core-ui-constants'
