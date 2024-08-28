@@ -509,6 +509,7 @@ enum ProjectOrderBy {
   Amount
   CreatedAt
   EndDate
+  UpdatedAt
 }
 
 type ProjectPaging {

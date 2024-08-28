@@ -828,6 +828,7 @@ export enum ProjectOrderBy {
   Amount = 'Amount',
   CreatedAt = 'CreatedAt',
   EndDate = 'EndDate',
+  UpdatedAt = 'UpdatedAt',
 }
 
 export type ProjectPaging = {
