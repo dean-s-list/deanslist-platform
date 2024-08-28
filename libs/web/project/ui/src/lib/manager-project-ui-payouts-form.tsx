@@ -1,4 +1,10 @@
-import { ManagerUpdateProjectMemberInput, Project, ProjectMember, ProjectRole } from '@deanslist-platform/sdk'
+import {
+  ManagerUpdateProjectMemberInput,
+  Project,
+  ProjectMember,
+  ProjectRole,
+  ProjectStatus,
+} from '@deanslist-platform/sdk'
 import { CoreUiButton, CoreUiDivider, CoreUiProgress } from '@deanslist-platform/web-core-ui'
 import { Group, Text } from '@mantine/core'
 import { UiGroup, UiStack } from '@pubkey-ui/core'
@@ -15,11 +21,9 @@ export function ManagerProjectUiPayoutsForm({
   project: Project
   members: ProjectMember[]
 }) {
-  const managers = project.managers ?? []
-  const referral = project.referral ?? undefined
-  const percentageLeft = ((project.amountTotalUsdLeft ?? 0) / (project.amountTotalUsd ?? 0)) * 100
-
-  const roles: ProjectRole[] = [ProjectRole.Reviewer, ProjectRole.Manager, ProjectRole.Referral]
+  const disabled = project.status !== ProjectStatus.Closed
+  const divided = (project.amountTotalUsdLeft ?? 0) / (project.amountTotalUsd ?? 0)
+  const percentageLeft = divided ? divided * 100 : 0
 
   const amountTotal = project.amountTotalUsd ?? 0
   const amountManager = project.amountManagerUsd ?? 0
@@ -52,11 +56,11 @@ export function ManagerProjectUiPayoutsForm({
             Total: {project.amountTotalUsd} USDC
           </Text>
           <Group gap="xs">
-            <Text size="sm">{project.amountTotalUsdLeft} left</Text>
+            <Text size="sm">{project.amountTotalUsdLeft ?? 0} left</Text>
             <CoreUiProgress w={200} h={12} value={percentageLeft} tooltip={`${percentageLeft}% left`} />
           </Group>
         </Group>
-        <CoreUiButton outline onClick={() => splitByRating()}>
+        <CoreUiButton disabled={disabled} outline onClick={() => splitByRating()}>
           Split by rating
         </CoreUiButton>
       </UiGroup>
@@ -76,6 +80,7 @@ export function ManagerProjectUiPayoutsForm({
               <UiStack key={member.id}>
                 {member.user ? (
                   <ManagerProjectUiPayoutItemForm
+                    disabled={disabled}
                     key={member.id}
                     update={(input) => update(member.id, input)}
                     item={member}
@@ -87,54 +92,6 @@ export function ManagerProjectUiPayoutsForm({
             ))}
         </UiStack>
       ))}
-
-      {/*{members.map((member) => (*/}
-      {/*  <UiStack key={member.id}>*/}
-      {/*    <ManagerProjectUiPayoutItemForm*/}
-      {/*      key={member.id}*/}
-      {/*      update={(input) => update(member.id, input)}*/}
-      {/*      item={member}*/}
-      {/*      user={member?.user as User}*/}
-      {/*    />*/}
-      {/*    <CoreUiDivider />*/}
-      {/*  </UiStack>*/}
-      {/*))}*/}
-      {/*{managers.length ? (*/}
-      {/*  <UiStack>*/}
-      {/*    <Text size="lg" fw={700}>*/}
-      {/*      Managers*/}
-      {/*    </Text>*/}
-      {/*    {managers.map((manager) => (*/}
-      {/*      <UiStack key={manager.id}>*/}
-      {/*        {manager.user ? (*/}
-      {/*          <ManagerProjectUiPayoutItemForm*/}
-      {/*            key={manager.id}*/}
-      {/*            item={{ amount: project.amountManagerUsd, bonus: 0 }}*/}
-      {/*            user={manager.user}*/}
-      {/*          />*/}
-      {/*        ) : null}*/}
-      {/*        <CoreUiDivider />*/}
-      {/*      </UiStack>*/}
-      {/*    ))}*/}
-      {/*  </UiStack>*/}
-      {/*) : null}*/}
-      {/*{referral ? (*/}
-      {/*  <UiStack>*/}
-      {/*    <Text size="lg" fw={700}>*/}
-      {/*      Referral*/}
-      {/*    </Text>*/}
-      {/*    {referral.user ? (*/}
-      {/*      <ManagerProjectUiPayoutItemForm*/}
-      {/*        item={{ amount: project.amountReferralUsd, bonus: 0 }}*/}
-      {/*        user={referral.user}*/}
-      {/*      />*/}
-      {/*    ) : null}*/}
-      {/*  </UiStack>*/}
-      {/*) : (*/}
-      {/*  <Text size="lg" fw={700}>*/}
-      {/*    No referral*/}
-      {/*  </Text>*/}
-      {/*)}*/}
     </UiStack>
   )
 }

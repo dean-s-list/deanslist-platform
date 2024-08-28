@@ -5,10 +5,12 @@ import { Group } from '@mantine/core'
 import { useForm } from '@mantine/form'
 
 export function ManagerProjectUiPayoutItemForm({
+  disabled,
   update,
   item,
   user,
 }: {
+  disabled?: boolean
   update?: (input: ManagerUpdateProjectMemberInput) => Promise<boolean>
   item: ProjectMember & { amount?: MaybeNumber; bonus?: MaybeNumber; ratingAverage?: MaybeNumber }
   user: User
@@ -16,7 +18,7 @@ export function ManagerProjectUiPayoutItemForm({
   const ratingAverage = item.review?.ratingAverage ?? 0
   const amount = item.amount ?? 0
   const bonus = item.bonus ?? 0
-  const disabled = !update
+  const disabledForm = disabled || !update
   const form = useForm<ManagerUpdateProjectMemberInput>({
     initialValues: {
       amount,
@@ -52,8 +54,8 @@ export function ManagerProjectUiPayoutItemForm({
           />
         </Group>
         <Group>
-          <CoreUiCurrencyInput readOnly={disabled} min={0} label="Amount" {...form.getInputProps('amount')} />
-          <CoreUiCurrencyInput readOnly={disabled} min={0} label="Bonus" {...form.getInputProps('bonus')} />
+          <CoreUiCurrencyInput readOnly={disabledForm} min={0} label="Amount" {...form.getInputProps('amount')} />
+          <CoreUiCurrencyInput readOnly={disabledForm} min={0} label="Bonus" {...form.getInputProps('bonus')} />
         </Group>
       </Group>
     </form>

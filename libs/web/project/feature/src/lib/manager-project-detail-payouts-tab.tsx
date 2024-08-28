@@ -1,6 +1,7 @@
+import { ProjectStatus } from '@deanslist-platform/sdk'
 import { useManagerFindOneProject, useManagerUpdateProjectMember } from '@deanslist-platform/web-project-data-access'
 import { ManagerProjectUiPayoutsForm } from '@deanslist-platform/web-project-ui'
-import { UiError, UiInfo, UiLoader, UiStack } from '@pubkey-ui/core'
+import { UiError, UiInfo, UiLoader, UiStack, UiWarning } from '@pubkey-ui/core'
 
 export function ManagerProjectDetailPayoutsTab({ projectId }: { projectId: string }) {
   const { item, query, invalidate, splitByRating } = useManagerFindOneProject({ projectId })
@@ -19,7 +20,9 @@ export function ManagerProjectDetailPayoutsTab({ projectId }: { projectId: strin
         message="After a session has concluded and the managers have rated all the provided feedback, they can see the total payout pool available for the given session and allocate earnings respectively based on user performance (by manually typing the amount in each user's earnings field. Alternatively, they can click on the ‘Split by Payment’ button which automatically splits the total payout pool to the participating users based on their average star score."
         variant="outline"
       />
-
+      {item.status !== ProjectStatus.Closed ? (
+        <UiWarning variant="outline" message="You can manage payouts once the project is closed." />
+      ) : null}
       <ManagerProjectUiPayoutsForm
         project={item}
         splitByRating={async () => {
