@@ -1,5 +1,5 @@
 import { User } from '@deanslist-platform/api-user-data-access'
-import { Prisma } from '@prisma/client'
+import { Prisma, ProjectRole } from '@prisma/client'
 import { ManagerFindManyProjectInput } from '../dto/manager-find-many-project.input'
 import { getProjectWhereManagerAccessInput } from './get-project-where-manager-access-input'
 
@@ -8,6 +8,15 @@ export function getProjectWhereManagerInput(user: User, input: ManagerFindManyPr
     communityId: input.communityId ?? undefined,
     status: input.status,
     ...getProjectWhereManagerAccessInput(user),
+  }
+
+  if (input.mineOnly) {
+    where.OR = [
+      ...(where.OR ?? []),
+      {
+        members: { some: { userId: user.id, role: ProjectRole.Manager } },
+      },
+    ]
   }
 
   if (input.search) {

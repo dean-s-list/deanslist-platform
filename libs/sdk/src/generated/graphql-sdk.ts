@@ -345,6 +345,7 @@ export type ManagerFindManyCommunityInput = {
 export type ManagerFindManyProjectInput = {
   communityId?: InputMaybe<Scalars['String']['input']>
   limit?: InputMaybe<Scalars['Int']['input']>
+  mineOnly?: InputMaybe<Scalars['Boolean']['input']>
   orderBy?: InputMaybe<ProjectOrderBy>
   orderDirection?: InputMaybe<OrderDirection>
   page?: InputMaybe<Scalars['Int']['input']>
@@ -9557,6 +9558,7 @@ export function ManagerFindManyProjectInputSchema(): z.ZodObject<Properties<Mana
   return z.object({
     communityId: z.string().nullish(),
     limit: z.number().nullish(),
+    mineOnly: z.boolean().nullish(),
     orderBy: ProjectOrderBySchema.nullish(),
     orderDirection: OrderDirectionSchema.nullish(),
     page: z.number().nullish(),

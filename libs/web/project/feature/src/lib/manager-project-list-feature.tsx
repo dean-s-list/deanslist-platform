@@ -9,7 +9,7 @@ import {
 } from '@deanslist-platform/web-core-ui'
 import { useManagerFindManyProject } from '@deanslist-platform/web-project-data-access'
 import { ProjectUiEmptyState, ProjectUiGrid } from '@deanslist-platform/web-project-ui'
-import { Button, Group } from '@mantine/core'
+import { Button, Group, Switch } from '@mantine/core'
 import { modals } from '@mantine/modals'
 import { UiError, UiGroup, UiLoader, UiPage, UiStack } from '@pubkey-ui/core'
 import { IconArrowsUpDown, IconChairDirector, IconFilter, IconPlus } from '@tabler/icons-react'
@@ -18,11 +18,10 @@ import { OrderOptionLabel } from './reviewer-project-list.feature'
 
 export function ManagerProjectListFeature({ communityId }: { communityId?: string }) {
   const { items: communities } = useManagerFindManyCommunity({ limit: 1000 })
-  const { items, pagination, query, search, setSearch, status, setStatus, order, setOrder } = useManagerFindManyProject(
-    {
+  const { items, pagination, query, mineOnly, setMineOnly, search, setSearch, status, setStatus, order, setOrder } =
+    useManagerFindManyProject({
       communityId,
-    },
-  )
+    })
   const searchField = (
     <CoreUiSearchField
       miw={300}
@@ -84,6 +83,11 @@ export function ManagerProjectListFeature({ communityId }: { communityId?: strin
           >
             Add Project
           </Button>
+          <Switch
+            label="Show my projects only"
+            checked={mineOnly}
+            onChange={(e) => setMineOnly(e.currentTarget.checked)}
+          />
         </Group>
       </UiGroup>
 

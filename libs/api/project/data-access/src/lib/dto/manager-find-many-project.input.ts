@@ -8,6 +8,8 @@ export class ManagerFindManyProjectInput extends PagingInput() {
   @Field({ nullable: true })
   communityId?: string
   @Field({ nullable: true })
+  mineOnly?: boolean
+  @Field({ nullable: true })
   search?: string
   @Field(() => ProjectStatus, { nullable: true })
   status?: ProjectStatus

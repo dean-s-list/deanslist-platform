@@ -14,6 +14,7 @@ import { useState } from 'react'
 export function useManagerFindManyProject(props?: Partial<ManagerFindManyProjectInput>) {
   const [limit, setLimit] = useState(props?.limit ?? 24)
   const [page, setPage] = useState(props?.page ?? 1)
+  const [mineOnly, setMineOnly] = useState(props?.mineOnly ?? true)
   const [search, setSearch] = useState<string>(props?.search ?? '')
   const [orderBy, setOrderBy] = useState<ProjectOrderBy>(ProjectOrderBy.UpdatedAt)
   const [orderDirection, setOrderDirection] = useState<OrderDirection>(OrderDirection.Desc)
@@ -21,6 +22,7 @@ export function useManagerFindManyProject(props?: Partial<ManagerFindManyProject
   const input: ManagerFindManyProjectInput = {
     page,
     limit,
+    mineOnly,
     search,
     status,
     orderBy,
@@ -37,6 +39,8 @@ export function useManagerFindManyProject(props?: Partial<ManagerFindManyProject
   return {
     items,
     query,
+    mineOnly,
+    setMineOnly,
     pagination: {
       page,
       setPage,
