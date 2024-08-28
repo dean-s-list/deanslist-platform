@@ -14,7 +14,7 @@ export function CoreUiCustomSelect({
   smIcon,
 }: {
   label: string
-  value: string
+  value?: string
   data: ComboboxItem[]
   onChange: (value: string) => void
   renderOption?: (value: string) => ReactNode
@@ -45,7 +45,7 @@ export function CoreUiCustomSelect({
             <Text size="sm" c="dimmed">
               {label}:
             </Text>
-            <Text size="sm">{renderOption(value)}</Text>
+            <Text size="sm">{value ? renderOption(value) : 'Select...'}</Text>
           </Group>
         </Button>
       </Popover.Target>

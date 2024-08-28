@@ -17,7 +17,7 @@ export function useManagerFindManyProject(props?: Partial<ManagerFindManyProject
   const [search, setSearch] = useState<string>(props?.search ?? '')
   const [orderBy, setOrderBy] = useState<ProjectOrderBy>(ProjectOrderBy.UpdatedAt)
   const [orderDirection, setOrderDirection] = useState<OrderDirection>(OrderDirection.Desc)
-  const [status, setStatus] = useState<ProjectStatus>(props?.status ?? ProjectStatus.Active)
+  const [status, setStatus] = useState<ProjectStatus | undefined>(props?.status ?? undefined)
   const input: ManagerFindManyProjectInput = {
     page,
     limit,

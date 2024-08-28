@@ -1,12 +1,12 @@
 import { User } from '@deanslist-platform/api-user-data-access'
-import { Prisma, ProjectStatus } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { ManagerFindManyProjectInput } from '../dto/manager-find-many-project.input'
 import { getProjectWhereManagerAccessInput } from './get-project-where-manager-access-input'
 
 export function getProjectWhereManagerInput(user: User, input: ManagerFindManyProjectInput): Prisma.ProjectWhereInput {
   const where: Prisma.ProjectWhereInput = {
     communityId: input.communityId ?? undefined,
-    status: input.status ?? ProjectStatus.Active,
+    status: input.status,
     ...getProjectWhereManagerAccessInput(user),
   }
 
