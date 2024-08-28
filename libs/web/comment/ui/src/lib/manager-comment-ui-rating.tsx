@@ -29,7 +29,7 @@ export function ManagerCommentUiRating({
             author={rating.author}
             disabled
             content={rating.content}
-            rating={rating.rating}
+            rating={rating}
             submit={(input) => update(rating.id, input)}
           />
         ))}
@@ -37,7 +37,7 @@ export function ManagerCommentUiRating({
         <ManagerRatingUiForm
           author={user}
           content={userRating.content}
-          rating={userRating.rating}
+          rating={userRating}
           submit={(input) => update(userRating.id, input)}
           delete={() => deleteRating(userRating.id)}
         />

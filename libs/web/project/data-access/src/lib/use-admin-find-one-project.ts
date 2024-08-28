@@ -56,7 +56,7 @@ export function useAdminFindOneProject({ projectId }: { projectId: string }) {
         .then(async (res) => {
           if (res.updated) {
             if (toast) {
-              toastSuccess('Project updated 1')
+              toastSuccess('Project updated')
             }
             return res.updated
           }

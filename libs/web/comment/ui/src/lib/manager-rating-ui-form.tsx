@@ -1,13 +1,12 @@
-import { User } from '@deanslist-platform/sdk'
+import { Rating, User } from '@deanslist-platform/sdk'
 import { cardGradient, CoreUiRating } from '@deanslist-platform/web-core-ui'
 import { UserUiAvatar } from '@deanslist-platform/web-user-ui'
-import { ActionIcon, Flex, Textarea } from '@mantine/core'
+import { ActionIcon, Box, Flex, Textarea, Tooltip } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { IconCheck, IconTrash } from '@tabler/icons-react'
 
 export function ManagerRatingUiForm({
   author,
-  content,
   delete: deleteRating,
   disabled = false,
   rating,
@@ -16,14 +15,14 @@ export function ManagerRatingUiForm({
   author?: User | null
   disabled?: boolean
   content?: string | null
-  rating?: number
+  rating?: Rating
   delete?: () => Promise<boolean>
   submit: (input: { rating: number; content: string }) => Promise<boolean>
 }) {
   const form = useForm<{ rating: number; content: string }>({
     initialValues: {
-      content: content ?? '',
-      rating: rating ?? 0,
+      content: rating?.content ?? '',
+      rating: rating?.rating ?? 0,
     },
   })
 
@@ -42,7 +41,13 @@ export function ManagerRatingUiForm({
           placeholder="Write a comment about the rating."
           {...form.getInputProps('content')}
         />
-        <CoreUiRating fractions={1} readOnly={disabled} {...form.getInputProps('rating')} />
+        <Tooltip
+          label={rating ? `Rating created ${new Date(rating?.createdAt ?? '0').toLocaleString()}` : 'Rate this content'}
+        >
+          <Box>
+            <CoreUiRating fractions={1} readOnly={disabled} {...form.getInputProps('rating')} />
+          </Box>
+        </Tooltip>
         {disabled ? null : (
           <ActionIcon type="submit" disabled={!form.isDirty()}>
             <IconCheck size={16} stroke={1.5} />
