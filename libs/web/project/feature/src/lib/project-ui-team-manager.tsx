@@ -1,7 +1,7 @@
 import { AdminUpdateProjectInput, ManagerUpdateProjectInput, Project } from '@deanslist-platform/sdk'
 import { ProjectUiMemberManager, ProjectUiToggleReviewsOpen } from '@deanslist-platform/web-project-ui'
 import { SimpleGrid, Text } from '@mantine/core'
-import { UiStack } from '@pubkey-ui/core'
+import { UiInfo, UiStack } from '@pubkey-ui/core'
 
 export function ProjectUiTeamManager({
   project,
@@ -29,6 +29,10 @@ export function ProjectUiTeamManager({
           <Text size="xl" fw={700}>
             Managers
           </Text>
+          <UiInfo
+            message="The managers are in charge of rating feedback, calculating payouts and delivering the end report to the client."
+            variant="outline"
+          />
           <ProjectUiMemberManager
             placeholder="Add a manager"
             members={project.managers ?? []}
@@ -40,6 +44,10 @@ export function ProjectUiTeamManager({
           <Text size="xl" fw={700}>
             Referral
           </Text>
+          <UiInfo
+            message="The user who made the sale for the given project and brought work to the community."
+            variant="outline"
+          />
           <ProjectUiMemberManager
             placeholder="Add a referral"
             max={1}
