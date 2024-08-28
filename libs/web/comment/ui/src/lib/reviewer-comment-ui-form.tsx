@@ -10,14 +10,20 @@ export function ReviewerCommentUiForm({
   createComment,
   placeholder,
   description,
+  label,
 }: {
   cancel?: () => void
   createComment: (res: ReviewerCreateCommentInput) => Promise<boolean>
   placeholder: string
   description?: string
+  label: string
 }) {
   const [loading, setLoading] = useState(false)
-  const { editor } = useCoreUiEditor({ content: '', placeholder })
+  const { editor } = useCoreUiEditor({
+    content: '',
+    placeholder,
+    editorProps: { attributes: { class: 'core-ui-editor' } },
+  })
 
   return (
     <UiStack>
@@ -48,7 +54,7 @@ export function ReviewerCommentUiForm({
             })
           }}
         >
-          Comment
+          {label}
         </CoreUiButton>
         {cancel ? (
           <Button radius="xl" size="xs" variant="light" onClick={cancel}>

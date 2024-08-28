@@ -29,6 +29,7 @@ export function CommentUiFormButtons({
       </UiGroup>
       <Collapse in={opened}>
         <ReviewerCommentUiForm
+          label="Comment"
           description="Each point of feedback should be a separate comment."
           placeholder="Write your comment here..."
           createComment={async (res) => {

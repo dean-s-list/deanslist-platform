@@ -34,3 +34,7 @@ body,
   max-height: 600px;
   max-width: 100%;
 }
+
+.core-ui-editor {
+  min-height: 200px;
+}

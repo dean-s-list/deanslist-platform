@@ -27,6 +27,7 @@ export function CommentUiTimelineItem({
         {showReplyForm ? (
           <UiStack ml="xl" pl="xl" pt="sm" pb="xs">
             <ReviewerCommentUiForm
+              label="Reply"
               placeholder="Write your reply here..."
               cancel={() => setShowReplyForm(false)}
               createComment={async (res) =>
