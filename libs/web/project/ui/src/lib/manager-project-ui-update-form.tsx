@@ -123,7 +123,7 @@ export function ManagerProjectUiUpdateForm({
               minRows={10}
               autosize
               label="Instructions"
-              placeholder="Write instructions for the project. You can use markdown."
+              description="Write instructions for the project. You can use markdown syntax for formatting."
               {...form.getInputProps('instructions')}
             />
           </UiStack>
