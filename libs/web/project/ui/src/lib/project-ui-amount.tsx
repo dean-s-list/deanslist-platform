@@ -1,3 +1,4 @@
+import { formatUsd } from '@deanslist-platform/sdk'
 import { Group, Text } from '@mantine/core'
 
 export function ProjectUiAmount({ amount, label }: { amount?: number | null; label: string }) {
@@ -5,7 +6,7 @@ export function ProjectUiAmount({ amount, label }: { amount?: number | null; lab
   return (
     <Group gap={4} align="baseline">
       <Text size="xl" fw="bold">
-        {amount} USDC
+        {formatUsd(amount)} USDC
       </Text>
       {label ? (
         <Text size="sm" fw={400}>
