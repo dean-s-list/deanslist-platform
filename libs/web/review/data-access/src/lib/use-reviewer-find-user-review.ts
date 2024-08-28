@@ -1,7 +1,7 @@
 import { sdk } from '@deanslist-platform/sdk'
 import { useQuery } from '@tanstack/react-query'
 
-export function useUserFindUserProjectReview({ projectId }: { projectId: string }) {
+export function useReviewerFindUserProjectReview({ projectId }: { projectId: string }) {
   const query = useQuery({
     queryKey: ['reviewer', 'find-reviewer-review', projectId],
     queryFn: () => sdk.reviewerFindUserProjectReview({ projectId }).then((res) => res.data),

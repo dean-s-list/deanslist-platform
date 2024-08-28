@@ -6,6 +6,7 @@ export function getReviewerReviewByProjectWhereInput(
 ): Prisma.ReviewWhereInput {
   const where: Prisma.ReviewWhereInput = {
     projectMember: { projectId: input.projectId },
+    comments: { some: {} },
   }
 
   if (input.search) {

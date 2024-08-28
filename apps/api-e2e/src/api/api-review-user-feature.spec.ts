@@ -1,5 +1,11 @@
 import { ManagerFindManyReviewByProjectInput } from '@deanslist-platform/sdk'
-import { adminUpdateProjectStatusActive, getAliceCookie, managerCreateCommunityWithProject, sdk } from '../support'
+import {
+  adminUpdateProjectStatusActive,
+  getAliceCookie,
+  managerCreateCommunityWithProject,
+  sdk,
+  uniqueId,
+} from '../support'
 
 describe('api-review-feature', () => {
   describe('api-review-user-resolver', () => {
@@ -29,6 +35,7 @@ describe('api-review-feature', () => {
       it('should find a list of reviews (find all)', async () => {
         const createdRes = await sdk.reviewerCreateReview({ projectId }, { cookie: alice })
         const reviewId = createdRes.data.created.id
+        await sdk.reviewerCreateComment({ input: { reviewId, content: uniqueId('comment') } }, { cookie: alice })
 
         const input: ManagerFindManyReviewByProjectInput = { projectId }
 
@@ -47,11 +54,26 @@ describe('api-review-feature', () => {
           projectId,
           search: reviewId,
         }
-
+        await sdk.reviewerCreateComment({ input: { reviewId, content: uniqueId('comment') } }, { cookie: alice })
         const res = await sdk.reviewerFindManyReviewByProject({ input }, { cookie: alice })
 
         expect(res.data.items.length).toBe(1)
         expect(res.data.items.find((item) => item.id === reviewId)).toBeTruthy()
+      })
+
+      it('should find a list of reviews (do not find new one without a comment)', async () => {
+        const createdRes = await sdk.reviewerCreateReview({ projectId }, { cookie: alice })
+        const reviewId = createdRes.data.created.id
+
+        const input: ManagerFindManyReviewByProjectInput = {
+          projectId,
+          search: reviewId,
+        }
+
+        const res = await sdk.reviewerFindManyReviewByProject({ input }, { cookie: alice })
+
+        expect(res.data.items.length).toBe(0)
+        expect(res.data.items.find((item) => item.id === reviewId)).toBeFalsy()
       })
 
       it('should find a review by id', async () => {
