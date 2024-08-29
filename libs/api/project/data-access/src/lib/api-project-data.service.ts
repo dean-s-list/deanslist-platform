@@ -42,7 +42,7 @@ export class ApiProjectDataService {
     }
 
     if (!beforeToday(project.endDate)) {
-      throw new Error(`Project {project.name} end date is not in the past`)
+      throw new Error(`Project ${project.name} end date is not in the past`)
     }
 
     const updated = await this.updateProjectStatus(project.id, ProjectStatus.Closed)
