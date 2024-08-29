@@ -1,4 +1,5 @@
 import {
+  formatUsd,
   ManagerUpdateProjectMemberInput,
   Project,
   ProjectMember,
@@ -53,10 +54,10 @@ export function ManagerProjectUiPayoutsForm({
       <UiGroup>
         <Group gap="xl">
           <Text size="lg" fw={700}>
-            Total: {project.amountTotalUsd} USDC
+            Total: {formatUsd(project.amountTotalUsd)} USDC
           </Text>
           <Group gap="xs">
-            <Text size="sm">{project.amountTotalUsdLeft ?? 0} left</Text>
+            <Text size="sm">{formatUsd(project.amountTotalUsdLeft)} left</Text>
             <CoreUiProgress w={200} h={12} value={percentageLeft} tooltip={`${percentageLeft}% left`} />
           </Group>
         </Group>
@@ -71,7 +72,7 @@ export function ManagerProjectUiPayoutsForm({
             <Text size="lg" fw={700}>
               {role}
             </Text>
-            <Text size="sm">{amount} USDC</Text>
+            <Text size="sm">{formatUsd(amount)} USDC</Text>
           </UiStack>
 
           {filtered
