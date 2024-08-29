@@ -14,7 +14,6 @@ env:
   HOST: 127.0.0.1
   JWT_SECRET: 1dfe5003518560c6362eab48f8220edf8708bbc67efbd4ed8cdf621965e938ee
   PORT: 3000
-  SESSION_SECRET: 1dfe5003518560c6362eab48f8220edf8708bbc67efbd4ed8cdf621965e938ee
   SOLANA_MAINNET_URL: 'https://api.mainnet-beta.solana.com'
 
 jobs:

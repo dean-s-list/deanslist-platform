@@ -3,7 +3,6 @@ import { Logger } from '@nestjs/common'
 import { NestFactory } from '@nestjs/core'
 import cookieParser from 'cookie-parser'
 import { json } from 'express'
-import session from 'express-session'
 import { exec } from 'node:child_process'
 import { AppModule } from './app/app.module'
 
@@ -13,14 +12,6 @@ async function bootstrap() {
   app.setGlobalPrefix(core.config.prefix)
   app.use(cookieParser())
   app.use(json({ limit: '10mb' }))
-  app.use(
-    session({
-      secret: core.config.sessionSecret,
-      resave: false,
-      saveUninitialized: false,
-      cookie: { secure: !core.config.isDevelopment },
-    }),
-  )
 
   const host = `http://${core.config.host}:${core.config.port}`
   await app.listen(core.config.port, core.config.host)

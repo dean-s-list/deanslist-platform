@@ -42,7 +42,7 @@ Copy the `.env.example` file to `.env` and fill in the missing values.
 cp .env.example .env
 ```
 
-Create a `JWT_SECRET` and a `SESSION_SECRET`, using the command below, and update them in `.env` file:
+Create the `JWT_SECRET` using the command below, and update it in `.env` file:
 
 ```shell
 openssl rand -hex 32
